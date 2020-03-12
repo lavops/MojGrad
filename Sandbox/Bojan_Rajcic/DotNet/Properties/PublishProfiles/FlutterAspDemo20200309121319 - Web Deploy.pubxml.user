@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAmYysVhE1cUiGWTogbMSXfAAAAAACAAAAAAAQZgAAAAEAACAAAAAZUrN4s02Ol5ZQKJnO/m2xx8mTh3gyNlDR5eeFJgNvRQAAAAAOgAAAAAIAACAAAACV/v4byGETlBhM2ZxZODtoUL1q2W19yPnU6Hp2UCdkr4AAAADwKieXDTsB3cVoqjF78+xxoxDknzswWlLsE+OY2MXuJ0FBcFAcB+OGKEi9sgf9SDUpkLFU5kYYyxNaQ0PWGnI4wfdobLDuGnNJJCSSRUwvIAlsCpD3zGi89E3nIvEpknWfJlDpUCp088hDvJkl29ePqaSMKOG5klE7b1k3GIa0QUAAAABueTbxSrCzixynRFkLlqmIuV1+x5jjkhfiejiczuUkjxMNyZ7ckK9CM6zwfjp+9LNOi57c+pOw6ORq+E/oKu/r</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=%28localdb%29\flutterbaza%3bDatabase=FlutterDb2%3bTrusted_Connection=True%3bMultipleActiveResultSets=true</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
