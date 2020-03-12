@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:probaweb/models/user.dart';
@@ -19,20 +18,10 @@ class _LoginPageState extends State<LoginPage>{
 
   final formKey = GlobalKey<FormState>();
 
+  String pogresanLoginText = '';
+
   String mail, sifra;
   User user;
-
-  loginUser(mail, sifra){
-    APIServices.login(mail, sifra).then((response){
-      Map<String, dynamic> jsonObject = json.decode(response.body);
-      User extractedUser = new User();
-      extractedUser = User.fromObject(jsonObject);
-
-      setState(() {
-        user = extractedUser;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context){
@@ -88,15 +77,28 @@ class _LoginPageState extends State<LoginPage>{
             onPressed: (){
               formKey.currentState.save();
 
-              loginUser(mail, sifra);
-
-              if(user != null){
-                print('Prijavio se user');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(user)),
-                );
-              }
+              APIServices.login(mail, sifra).then((response){
+                if (response.statusCode == 200) {
+                  Map<String, dynamic> jsonObject = json.decode(response.body);
+                  User extractedUser = new User();
+                  extractedUser = User.fromObject(jsonObject);
+                  setState(() {
+                    user = extractedUser;
+                    pogresanLoginText = "";
+                  });
+                  if(user != null){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage(user)),
+                    );
+                  }
+                } else {
+                  setState(() {
+                    pogresanLoginText = "Podaci nisu ispravni";
+                  });
+                  throw  Exception('Bad username/password');
+                }
+              });
             },
             color: Colors.lightBlueAccent,
             child: Text(
@@ -124,6 +126,12 @@ class _LoginPageState extends State<LoginPage>{
       },
     );
 
+    final pogresanLogin = Center( child: Text(
+      '$pogresanLoginText',
+      style: TextStyle(color: Colors.red),
+    ));
+
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -147,7 +155,8 @@ class _LoginPageState extends State<LoginPage>{
                     ],
                   ),
                 ),
-                registerLabel
+                registerLabel,
+                pogresanLogin
               ],
             ),
           )

@@ -19,17 +19,7 @@ class _RegisterPageState extends State<RegisterPage>{
 
   String mail, sifra, ime, prezime, korisnickoIme;
   User userRcv;
-
-  registerUser(mail, sifra, korisnickoIme, ime, prezime){
-    APIServices.register(mail, sifra, korisnickoIme, ime, prezime).then((response){
-      Map<String, dynamic> jsonObject = json.decode(response.body);
-      User extractedUser = new User();
-      extractedUser = User.fromObject(jsonObject);
-      setState(() {
-        userRcv = extractedUser;
-      });
-    });
-  }
+  String pogresanRegisterText = '';
 
   @override
   Widget build(BuildContext context){
@@ -126,15 +116,35 @@ class _RegisterPageState extends State<RegisterPage>{
             ),
             onPressed: (){
               formKey.currentState.save();
-              
-              registerUser(mail, sifra, korisnickoIme, ime, prezime);
-
-              if(userRcv != null){
-                print('Prijavio se user');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(userRcv)),
-                );
+              if(emailText != '' && sifra != '' && korisnickoIme != '' && ime != '' && prezime != '')
+              {
+                APIServices.register(mail, sifra, korisnickoIme, ime, prezime).then((response){
+                  if (response.statusCode == 200) {
+                    Map<String, dynamic> jsonObject = json.decode(response.body);
+                    User extractedUser = new User();
+                    extractedUser = User.fromObject(jsonObject);
+                    setState(() {
+                      userRcv = extractedUser;
+                      pogresanRegisterText = '';
+                    });
+                    if(userRcv != null){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage(userRcv)),
+                      );
+                    }
+                  } else {
+                    setState(() {
+                      pogresanRegisterText = 'Postoji korisnik sa tim mail-om u bazi!';
+                    });
+                    throw  Exception('Already Exists');
+                  }
+                });
+              }
+              else{
+                setState(() {
+                  pogresanRegisterText = 'Pogresni podaci!';
+                });
               }
             },
             color: Colors.lightBlueAccent,
@@ -163,6 +173,11 @@ class _RegisterPageState extends State<RegisterPage>{
       },
     );
 
+    final pogresanRegister = Center( child: Text(
+      '$pogresanRegisterText',
+      style: TextStyle(color: Colors.red),
+    ));
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -189,6 +204,7 @@ class _RegisterPageState extends State<RegisterPage>{
                         prezimeText,
                         SizedBox(height: 24.0,),
                         registerButton,
+                        pogresanRegister
                       ],
                     ),
                   ),

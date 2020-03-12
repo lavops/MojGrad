@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage>{
                     child: Text(
                       '' + user.ime + ' ' + user.prezime,
                       style: Theme.of(context)
-                      .textTheme.headline2.copyWith(color: Colors.white),
+                      .textTheme.headline2.copyWith(color: Colors.black),
                     )
                   ),
                 ),
@@ -108,12 +108,14 @@ class _ProfilePageState extends State<ProfilePage>{
 
     return Scaffold(
       appBar: appBarObject,
-      body: Container(
-        width: 500,
-        child: ListView(
-          children: <Widget>[
-            cardObject
-          ],
+      body: Center(
+        child: Container(
+          width: 500,
+          child: ListView(
+            children: <Widget>[
+              cardObject
+            ],
+          ),
         ),
       )
     );
