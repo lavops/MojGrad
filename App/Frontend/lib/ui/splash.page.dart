@@ -16,7 +16,7 @@ class _SplashPageState extends State<SplashPage>{
   void initState(){
     super.initState();
     Future.delayed(
-      Duration(seconds: 3),
+      Duration(seconds: 5),
       () {
         Navigator.pushReplacement(
           context,
@@ -34,49 +34,41 @@ class _SplashPageState extends State<SplashPage>{
     final logo = Hero(
       tag: 'hero',
       child: Center(
-        child: Image.asset('assets/mojGrad3.png', width: 300),
+        child: Image.asset('assets/mojGrad4.png', width: 300),
       ),
     );
 
-    // Text element with alignment
-    final from = Align(
-      alignment: Alignment.center,
-      child: Text(
-        'from',
-      ),
+    final fromAnts = Align(
+      alignment: Alignment.bottomCenter,
+      child: Image.asset('assets/fromAnts1.png', width: 150)
     );
-
-    // Text element with alignment
-    final ants = Align(
-      alignment: Alignment.center,
-      child: Text(
-        'A N T S',
-        style: TextStyle(
-          fontSize: 30.0,
-          color: Colors.orange
-        ),
-      ),
-    );
-
-    // Returning how page should look
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child:Container(
           width: 400,
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              logo,
-              SizedBox(height: 48.0,),
-              from,
-              ants
+              Expanded(
+                child: Container(color: Colors.white),
+                flex: 1,
+              ),
+              Expanded(
+                child: logo,
+                flex: 3,
+              ),
+              Expanded(
+                child: fromAnts,
+                flex: 1,
+              ),
             ],
           ),
         )
       )
     );
-    
   }
 }
