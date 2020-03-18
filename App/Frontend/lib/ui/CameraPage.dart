@@ -10,6 +10,7 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+	backgroundColor: Colors.transparent,
         title: Text('Kamera'),
       ),
       body: Center(

@@ -74,11 +74,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       drawer: NavDrawer(),
-      appBar: new AppBar(
+      appBar: new AppBar(    
+        backgroundColor: Colors.white,
         leading: Builder(
             builder: (BuildContext context){
               return IconButton(
                 icon: Icon(Icons.menu),
+                color: Colors.black87,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -100,6 +102,7 @@ class _HomePageState extends State<HomePage> {
         // action button
           IconButton(
             icon: Icon(Icons.search),
+            color: Colors.black87,
             onPressed: () {
 
           },
@@ -108,12 +111,14 @@ class _HomePageState extends State<HomePage> {
          
           IconButton(
             icon: Icon(Icons.notifications),
+            color: Colors.black87,
             onPressed: () {
 
             },
           ),
           IconButton(
             icon: Icon(Icons.person),
+            color: Colors.black87,
             onPressed: () {
 
             },

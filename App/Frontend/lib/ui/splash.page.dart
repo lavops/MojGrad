@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/login.dart';
+import 'package:frontend/ui/homePage.dart';
 
 class SplashPage extends StatefulWidget{
 
