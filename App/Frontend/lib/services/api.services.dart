@@ -37,7 +37,49 @@ class APIServices
       return true;
     }
   }
- 
+	
+  
+    //this method returns list of post types
+    static Future<List<String>> getPostTypes() async{
+    String postTypeURL = serverURL + 'postType';
+    
+    var data = await http.get(postTypeURL);
+
+    var jsonBody = convert.jsonDecode(data.body);
+
+    List<String> categories = [];
+
+    for(var type in jsonBody)
+    {
+      categories.add(type['typeName']);
+    }
+
+    return categories;
+  } 
+
+
+/*
+  static Future<int> getPostType(String type) async
+  {
+    String postTypeURL = serverURL + 'postType';
+    //var data = Map();
+    //data['postType'] = type;
+
+    //var jsonBody = convert.jsonEncode(data);
+    
+
+
+  }
+  */
+
+  static Future setPost(Post post) async
+  {
+    String postURL = serverURL + 'Posts';
+    var postMap = post.toMap();
+    var jsonBody = convert.jsonEncode(postMap);
+
+    var res = await http.post(postURL, headers: header, body: jsonBody);
+  }
 
  
 }
