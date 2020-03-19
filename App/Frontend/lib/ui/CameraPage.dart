@@ -17,6 +17,7 @@ class _CameraPageState extends State<CameraPage> {
   Category category;
   File imageFile;
 
+  // Function for opening a camera
   _openGalery() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
@@ -24,6 +25,7 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  // Function for opening a gallery
   _openCamera() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
@@ -34,6 +36,7 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     
+    // Chosing what post type should be
     final vrstaObjave = Row(
       children: <Widget>[
         Align(alignment: Alignment.topLeft, child: Text("Vrsta objave: ", style: TextStyle(fontWeight: FontWeight.bold),)),
@@ -64,6 +67,7 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
+    // Chosing who will do that assigment
     final problemResava = Row(
       children: <Widget>[
         Align(alignment: Alignment.topLeft, child: Text("Problem resava: ", style: TextStyle(fontWeight: FontWeight.bold))),
@@ -94,6 +98,7 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
+    // Chosing type of assigment
     final _dropDown = Row(
       children: <Widget>[
         Align(alignment: Alignment.topLeft, child: Text("Kategoriju: ",style: TextStyle(fontWeight: FontWeight.bold))),
@@ -115,6 +120,7 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
     
+    // Pick image from your camera live
     final cameraPhone = RaisedButton(
       child: Text('Kamera'),
       onPressed: (){
@@ -122,6 +128,7 @@ class _CameraPageState extends State<CameraPage> {
       },
     );
 
+    // Pick image from your gallery
     final cameraGalery = RaisedButton(
       child: Text('Galerija'),
       onPressed: (){
@@ -129,6 +136,7 @@ class _CameraPageState extends State<CameraPage> {
       },
     );
 
+    // Row with camera buttons
     final izaberiKameru = Row(
       children: <Widget>[
         Expanded(
@@ -146,6 +154,7 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
+    // Description of assigment or praise
     final opis = TextField(
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -163,6 +172,7 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
 
+    // Submit it
     final submitObjavu = RaisedButton(
       child: Text('Obajavi'),
       onPressed: (){
