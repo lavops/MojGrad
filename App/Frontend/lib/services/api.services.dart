@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'package:frontend/models/like.dart';
+import 'package:frontend/models/post.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -89,6 +90,8 @@ class APIServices
     var jsonBody = convert.jsonEncode(postMap);
 
     var res = await http.post(postURL, headers: header, body: jsonBody);
+
+    return res;
   }
 
  
