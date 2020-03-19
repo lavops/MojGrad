@@ -58,19 +58,29 @@ class APIServices
   } 
 
 
-/*
   static Future<int> getPostType(String type) async
   {
     String postTypeURL = serverURL + 'postType';
-    //var data = Map();
-    //data['postType'] = type;
+    var data = await http.get(postTypeURL);
+    var jsonBody = convert.jsonDecode(data.body);
 
-    //var jsonBody = convert.jsonEncode(data);
-    
+    /*
+    var data = Map();
+    data['postType'] = type;
 
+    var jsonBody = convert.jsonEncode(data);
+    */
 
+    for(var pt in jsonBody)
+    {
+      if( pt['typeName'] == type )
+      {
+        return pt['id'];
+      }
+    }
+
+    return -1;
   }
-  */
 
   static Future setPost(Post post) async
   {
