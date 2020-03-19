@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/NavDrawer.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
+import 'package:frontend/ui/commentsPage.dart';
+
 
 class MyBottomBar extends StatefulWidget {
   @override
@@ -84,6 +86,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
+                   // MaterialPageRoute(builder: (context) => CommentsPage(1)),
                     MaterialPageRoute(builder: (context) => NavDrawer()),
                   );
                 },
@@ -120,7 +123,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.person),
             color: Colors.black87,
             onPressed: () {
-
+              
             },
           ),
        ],
