@@ -14,7 +14,7 @@ namespace Backend.Models
         public string password { get; set; }
         public string email { get; set; }
         public string phone { get; set; }
-        public string createdAt { get; set; }
+        public DateTime createdAt { get; set; }
         public string cityName { get; set; }
 
         public FullUser(user u, string name)

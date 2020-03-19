@@ -22,17 +22,17 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.format_list_numbered),
             title: Text('Nerešeni slučajevi'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => { },
           ),
           ListTile(
             leading: Icon(Icons.done_outline),
             title: Text('Rešeni slučajevi'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {},
           ),
           ListTile(
             leading: Icon(Icons.filter_vintage),
             title: Text('Ostalo'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {},
           ),
         ],
       ),

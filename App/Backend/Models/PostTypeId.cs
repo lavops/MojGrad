@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Backend.Models
 {
-    public class City
+    public class PostTypeId
     {
         public long id { get; set; }
-        public string name { get; set; }
+        public string typeName { get; set; }
 
-        public IList<user> users { get; set; }
+        public IList<Post> posts { get; set; }
     }
 }
