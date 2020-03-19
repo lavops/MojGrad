@@ -35,7 +35,6 @@ class APIServices
     return res.body.toString();
     
   }
-<<<<<<< HEAD
 	
   
     //this method returns list of post types
@@ -81,7 +80,7 @@ class APIServices
     return -1;
   }
 
-  static Future setPost(Post post) async
+  static Future<String> setPost(Post post) async
   {
     String postURL = serverURL + 'Posts';
     var postMap = post.toMap();
@@ -89,9 +88,8 @@ class APIServices
 
     var res = await http.post(postURL, headers: header, body: jsonBody);
 
-    return res;
+    return res.body.toString();
   }
-=======
 
 
   static Future getComments(int id) async
@@ -115,7 +113,6 @@ class APIServices
     return data2;
   }
 
->>>>>>> 5c5cd5d546e1d783a589e20fb9b16c428be47ef7
 
  
 }
