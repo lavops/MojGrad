@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
   List<FullPost> listPosts;
   getPosts() {
-    APIServices.getPost().then((res) {  
+    APIServices.getPost().then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
