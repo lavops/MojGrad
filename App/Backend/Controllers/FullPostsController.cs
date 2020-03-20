@@ -23,7 +23,7 @@ namespace Backend.Controllers
         public  ActionResult<IEnumerable<FullPost>> GetPosts()
         {
             //  return await _context.user.ToListAsync();
-            var posts =  _context.post.Include(u => u.user).Include(s=> s.status).Include(po => po.postType).Include(l=> l.likes).ToList(); //postovi jednog korisnika
+            var posts =  _context.post.Include(u => u.user).Include(s=> s.status).Include(po => po.postType).Include(l=> l.likes).Include(c=>c.comments).ToList(); //postovi jednog korisnika
             List<FullPost> post = new List<FullPost>();
             foreach (var p in posts)
             {

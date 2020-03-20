@@ -84,6 +84,7 @@ class StateComents extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('Komentari', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,

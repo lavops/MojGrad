@@ -16,6 +16,7 @@ namespace Backend
         public DbSet<user> user { get; set; }
         public DbSet<City> city { get; set; }
         public DbSet<Comment> comment { get; set; }
+        public DbSet<Like> like { get; set; }
 
         public DbSet<LikeType> likeType { get; set; }
         public DbSet<Post> post { get; set; }

@@ -1,12 +1,10 @@
 import 'dart:convert' as convert;
-import 'package:frontend/models/comment.dart';
-import 'package:frontend/models/like.dart';
 import 'package:http/http.dart' as http;
-
 
 
 class APIServices
 {
+
   static String serverURL = 'http://10.0.2.2:52739/api/';
 
 
@@ -16,34 +14,35 @@ class APIServices
     'Accept': 'application/json'
   };
 
-  //the function returns class FullPost
-   static Future getPost() async
-  {
+  //function returns class FullPost
+  static Future getPost() async{
     return await http.get(serverURL +'FullPosts');
     
   }
 
-   static Future<String> insertLike(Like like) async
-  {
-    String url = serverURL+'Likes';
+  //function for new like
+  static Future<String> addLike( int postId, int userId, int typeId) async {
+    String url = serverURL + 'Like';
 
-    var likeMap = like.toMap();
-    var jsonBody = convert.jsonEncode(likeMap);
-    print(jsonBody);
+    var data = Map();
+    data["postId"] = postId;
+    data["userId"] = userId;
+    data["likeTypeId"] = typeId;
+
+    var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: header, body: jsonBody);
-    return res.body.toString();
-    
+    String data2 = res.body.toString();
+    return data2;
   }
 
-
+  //function returns class comment
   static Future getComments(int id) async
   {
     return await http.get(serverURL +'FullComment/'+id.toString());
     
   }
 
- static Future<String> addComment(
-    String comm, int userId, int postId) async {
+ static Future<String> addComment( String comm, int userId, int postId) async {
     String url = serverURL + 'FullComment';
 
     var data = Map();
@@ -57,6 +56,12 @@ class APIServices
     return data2;
   }
 
+  static Future getPostType() async
+  {
+    return await http.get(serverURL +'postType');
+    
+
+  }
 
  
 }
