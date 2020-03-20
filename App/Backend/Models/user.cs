@@ -18,6 +18,7 @@ namespace Backend.Models
         public long cityId { get; set; }
         public string location { get; set; }
         public string photo { get; set; }
+        public string token { get; set; }
 
         public virtual City city { get; set; }
         public IList<Like> likes { get; set; }

@@ -13,8 +13,9 @@ class FullPost
   String _status; // 'reseno' or 'nereseno'
   int _likeNum; //number of likes
   int _dislikeNum; //number of dislikes
+  int _commNum;
   
-  FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum );
+  FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum );
  
 
   int get postId => _postId;
@@ -29,6 +30,7 @@ class FullPost
   String get status => _status;
   int get likeNum => _likeNum;
   int get dislikeNum => _dislikeNum;
+  int get commNum => _commNum;
   
 
  //saljemo kao json fajl
@@ -48,6 +50,7 @@ class FullPost
     map["status"] = _status;
     map["likeNum"] = _likeNum;
     map["dislikeNum"] = _dislikeNum;
+    map["commNum"] = _commNum;
     
    
     return map;
@@ -68,6 +71,7 @@ class FullPost
     this._status = data["status"];
     this._likeNum = data["likeNum"];
     this._dislikeNum = data["dislikeNum"];
+    this._commNum = data["commNum"];
     
 
   }
