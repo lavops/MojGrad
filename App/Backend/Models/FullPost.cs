@@ -20,14 +20,15 @@ namespace Backend.Models
         public string status { get; set; }
         public int likeNum { get; set; }
         public int dislikeNum { get; set; }
+        public int commNum { get; set; }
 
         public FullPost(Post p) //post se posalje
         {
             this.username = p.user.username;
             this.createdAt = p.createdAt;
             this.description = p.description;
-            this.dislikeNum = p.likes.Count(x => x.likeTypeId == 1);
-            this.likeNum = p.likes.Count(x => x.likeTypeId == 2);
+            this.dislikeNum = p.likes.Where(x => x.likeTypeId == 1 && x.postId==p.id).Count();
+            this.likeNum = p.likes.Where(x => x.likeTypeId == 2 && x.postId == p.id).Count();
             this.photoPath = p.photoPath;
             this.postId = p.id;
             this.postTypeId = p.postTypeId;
@@ -35,9 +36,9 @@ namespace Backend.Models
             this.statusId = p.statusId;
             this.userId = p.userId;
             this.typeName = p.postType.typeName;
-          
-            
-           
+            this.commNum = p.comments.Where(x => x.postId == p.id).Count();
+
+
         }
 
 

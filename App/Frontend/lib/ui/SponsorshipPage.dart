@@ -10,7 +10,7 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar:  AppBar(
-	backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         title:Text("Sponzorstvo"),
       ),
       body: Container(
