@@ -174,7 +174,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // Submit it
     final submitObjavu = RaisedButton(
-      child: Text('Obajavi'),
+      child: Text('Objavi'),
       onPressed: (){
         Navigator.pushReplacement(
           context,
@@ -197,7 +197,6 @@ class _CameraPageState extends State<CameraPage> {
             ],
             SizedBox(height: 20.0,),
             Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
-            Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 20.0,),
             izaberiKameru,
             if(imageFile != null)
