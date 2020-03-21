@@ -6,6 +6,8 @@ import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class MyBottomBar extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class MyBottomBar extends StatefulWidget {
 
 class _MyBottomBarState extends State<MyBottomBar> {
   int _currentIndex=0;
+  String token = '';
   final List<Widget> _pages=[
     HomePage(),
     HomePage(),
@@ -21,6 +24,14 @@ class _MyBottomBarState extends State<MyBottomBar> {
     SponsorshipPage(),
     
   ];
+
+  _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString('token');
+    setState(() {
+      token=_token;
+    });
+  }
 
   void onTappedBar(int index)
   {
@@ -34,6 +45,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
   }
 
   Widget build(BuildContext context) {
+    _getToken();
     return Scaffold(
       body:_pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

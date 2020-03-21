@@ -3,6 +3,7 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -16,9 +17,13 @@ class _LoginPageState extends State<LoginPage>{
 
   User user;
 
+  _saveToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', user.token);
+  }
+
   @override
   Widget build(BuildContext context){
-
 
     //logo
     final logo = Hero(
@@ -98,6 +103,7 @@ class _LoginPageState extends State<LoginPage>{
                     pogresanLoginText = "";
                   });
                   if(user != null){
+                    _saveToken();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => MyBottomBar()),
