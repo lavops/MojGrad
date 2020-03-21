@@ -6,6 +6,7 @@ import 'package:frontend/ui/NavDrawer.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
+import 'package:frontend/ui/user_profile_page.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -307,7 +308,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.person), 
             color: Colors.black87,
             onPressed: () {
-              
+              Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserProfilePage()),
+                    );
             },
           ),
        ],
