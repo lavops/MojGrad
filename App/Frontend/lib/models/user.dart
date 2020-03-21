@@ -3,25 +3,29 @@ class User{
   int _userType;
   String _firstName;  
   String _lastName;
-  DateTime _createdAt;
+  String _createdAt;
   String _username;
   String _password;
   String _email;
   String _phone;  
   int _cityId;
+  String _token;
 
-  User(this._id, this._userType, this._firstName, this._lastName, this._createdAt, this._username, this._password, this._email, this._phone, this._cityId);
+  User();
+  //User(this._id, this._userType, this._firstName, this._lastName, this._createdAt, this._username, this._password, this._email, this._phone, this._cityId);
+  
 
   int get id => _id;
   int get userType => _userType;
   String get firstName => _firstName;
   String get lastName => _lastName;
-  DateTime get createdAt => _createdAt;
+  String get createdAt => _createdAt;
   String get username => _username;
   String get password => _password;
   String get email => _email;
   String get phone => _phone;
   int get cityId => _cityId;
+  String get token => _token;
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
@@ -36,6 +40,7 @@ class User{
     data["email"] = _email;
     data["phone"] = _phone;
     data["cityId"] = _cityId;
+    data["token"] = _token;
  
     if(_id != null){
       data["id"] = _id;
@@ -55,6 +60,7 @@ class User{
     this._email = data["email"];
     this._phone = data["phone"];
     this._cityId = data["cityId"];
+    this._token = data["token"];
   }
 
 }

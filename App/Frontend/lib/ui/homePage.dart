@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/CameraPage.dart';
@@ -7,7 +5,7 @@ import 'package:frontend/ui/NavDrawer.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
-
+import 'dart:convert';
 
 class MyBottomBar extends StatefulWidget {
   @override

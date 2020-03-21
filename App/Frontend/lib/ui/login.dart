@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
+import 'package:frontend/ui/homePage.dart';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -10,6 +13,8 @@ class _LoginPageState extends State<LoginPage>{
   final formKey = GlobalKey<FormState>();
   String _email, _password;
   String pogresanLoginText = '';
+
+  User user;
 
   @override
   Widget build(BuildContext context){
@@ -80,6 +85,32 @@ class _LoginPageState extends State<LoginPage>{
                 pogresanLoginText = "Podaci nisu ispravni";
               });
               throw Exception('Los email/sifra');
+            }
+            else{
+              // Checks for status code if is ok then it goes to homepage
+              APIServices.login(_email, _password).then((response){
+                if (response.statusCode == 200) {
+                  Map<String, dynamic> jsonObject = json.decode(response.body);
+                  User extractedUser = new User();
+                  extractedUser = User.fromObject(jsonObject);
+                  setState(() {
+                    user = extractedUser;
+                    pogresanLoginText = "";
+                  });
+                  if(user != null){
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyBottomBar()),
+                    );
+                  }
+                } else {
+                  setState(() {
+                    pogresanLoginText = "Podaci nisu ispravni";
+                  });
+                  throw  Exception('Bad username/password');
+                }
+              });
+
             }
           },
           color: Colors.green[800],

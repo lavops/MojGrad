@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 
@@ -61,6 +62,16 @@ class APIServices
     return await http.get(serverURL +'postType');
 
   }
+
+  // Login funtion
+  static Future login(String mail, String password) async{
+    String url = serverURL + 'User/Login';
+
+    var body = jsonEncode({ 'email': mail, 'password': password });
+
+    return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
+  }
+
 
  
 }
