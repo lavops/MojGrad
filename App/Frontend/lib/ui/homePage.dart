@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/NavDrawer.dart';
@@ -17,6 +18,7 @@ class MyBottomBar extends StatefulWidget {
 class _MyBottomBarState extends State<MyBottomBar> {
   int _currentIndex=0;
   String token = '';
+  User user;
   final List<Widget> _pages=[
     HomePage(),
     HomePage(),
@@ -28,8 +30,12 @@ class _MyBottomBarState extends State<MyBottomBar> {
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
+    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
+     User extractedUser = new User();
+     extractedUser = User.fromObject(jsonObject);
     setState(() {
-      token=_token;
+      token = _token;
+      user = extractedUser;
     });
   }
 
@@ -43,9 +49,14 @@ class _MyBottomBarState extends State<MyBottomBar> {
     else 
       _currentIndex=0;
   }
-
-  Widget build(BuildContext context) {
+  @override
+  void initState() {
+    super.initState();
     _getToken();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body:_pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
