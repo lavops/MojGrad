@@ -18,9 +18,10 @@ namespace Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private AppDbContext contex = new AppDbContext();
+        private AppDbContext _context = new AppDbContext();
         private readonly AppSettings _appSettings;
 
+       
         public UserController(IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
@@ -29,14 +30,14 @@ namespace Backend.Controllers
         [HttpGet]
         public IEnumerable<user> GetUsers()
         {
-            return contex.user.ToList();
+            return _context.user.ToList();
         }
 
 
         [HttpPost("Login")]
         public IActionResult Login([FromBody] user userParam)
         {
-            var user = contex.user.SingleOrDefault(x => x.email == userParam.email);
+            var user = _context.user.SingleOrDefault(x => x.email == userParam.email);
 
             if (user == null)
             {
@@ -75,6 +76,44 @@ namespace Backend.Controllers
             user.password = null;
 
             return Ok(user);
+        }
+
+        [HttpPost("Register")]
+        public IActionResult Register(user u)
+        {
+            var exist = _context.user.Where(x=> x.email==u.email);
+            if (!exist.Any())
+            {
+                var existUsername = _context.user.Where(x => x.username == u.username);
+                if (!existUsername.Any())
+                {
+                    user u1 = new user();
+                    u1.email = u.email;
+                    u1.createdAt = DateTime.Now;
+                    u1.cityId = u.cityId;
+                    u1.firstName = u.firstName;
+                    u1.lastName = u.lastName;
+                    u1.password = u.password;
+                    u1.phone = u.phone;
+                    u1.username = u.username;
+                    u1.photo = "default.png";
+                    u1.token = null;
+
+                    _context.user.Add(u1);
+                    _context.SaveChanges();
+
+                    return Ok(u1);
+                }
+                else
+                {
+                    return BadRequest(new { poruka = "Username vec postoji" });
+                }
+
+            }
+            else
+            {
+                return BadRequest(new { poruka = "Email vec postoji" });
+            }
         }
     }
 }
