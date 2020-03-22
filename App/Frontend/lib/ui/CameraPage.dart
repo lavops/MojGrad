@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/models/categories.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:frontend/services/images.dart';
 import 'dart:io';
+import 'package:frontend/services/api.services.dart';
+import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -10,12 +17,36 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  
+  String token = '';
+  User user;
+  int postTypeId;
+  var description = TextEditingController();
+  int statusId;
   int _vrstaObjave = 1;
   int _problemResava = 1;
   List<Category> _categories = Category.getCategories();
   Category category;
   File imageFile;
+
+   _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString('token');
+    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
+     User extractedUser = new User();
+     extractedUser = User.fromObject(jsonObject);
+    setState(() {
+      token = _token;
+      user = extractedUser;
+    });
+  }
+
+   @override
+  void initState() {
+    super.initState();
+    _getToken();
+  }
+  
+
 
   // Function for opening a camera
   _openGalery() async{
@@ -156,6 +187,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // Description of assigment or praise
     final opis = TextField(
+      controller: description,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black)
@@ -176,6 +208,19 @@ class _CameraPageState extends State<CameraPage> {
     final submitObjavu = RaisedButton(
       child: Text('Objavi'),
       onPressed: (){
+        imageUpload(imageFile);
+        if(_problemResava==1) 
+          statusId=2;
+        else 
+          statusId=1;
+        
+        if(_vrstaObjave == 2) //pohvala
+          postTypeId=1;
+        else  
+          postTypeId = category.id;
+        
+        APIServices.addPost(token,user.id, postTypeId, description.text, basename(imageFile.path), statusId);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MyBottomBar()),

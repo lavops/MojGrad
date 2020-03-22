@@ -1,13 +1,14 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:52739/api/';
-  static String serverURL = 'http://127.0.0.1:52739/api/';
+  static String serverURL = 'http://10.0.2.2:52739/api/';
+  //static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -19,6 +20,23 @@ class APIServices
   static Future getPost() async{
     return await http.get(serverURL +'FullPosts');
     
+  }
+
+  static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId) async {
+    String url = serverURL + 'FullPosts';
+
+    var data = Map();
+    data["userId"] = userId;
+    data["postTypeId"] = postTypeId;
+    data["description"] = description;
+    data["photoPath"] = photoPath;
+    data["statusId"] = statusId;
+
+    var jsonBody = convert.jsonEncode(data);
+    var res = await http.post(url, headers: header, body: jsonBody);
+    String data2 = res.body.toString();
+    print(data2);
+    return data2;
   }
 
   //function for new like
