@@ -14,7 +14,15 @@ namespace Backend.Models
         public string password { get; set; }
         public string email { get; set; }
         public string phone { get; set; }
-        public string createdAt { get; set; }
+        public DateTime createdAt { get; set; }
         public long cityId { get; set; }
+        public string photo { get; set; }
+        public string token { get; set; }
+
+        public virtual City city { get; set; }
+        public IList<Like> likes { get; set; }
+        public IList<Post> posts { get; set; }
+        public IList<Comment> comments { get; set; }
+
     }
 }
