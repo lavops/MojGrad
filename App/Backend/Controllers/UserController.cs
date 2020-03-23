@@ -33,6 +33,20 @@ namespace Backend.Controllers
             return _context.user.ToList();
         }
 
+         [HttpGet("{id}")]
+        public async Task<ActionResult<FullUser>> Getuser(long id)
+        {
+            var user = await _context.user.FindAsync(id);
+            var c = await _context.city.FindAsync(user.cityId);
+            var userWhitCity = new FullUser(user, c.name);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return userWhitCity;
+        }
 
         [HttpPost("Login")]
         public IActionResult Login([FromBody] user userParam)

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/categories.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
@@ -30,6 +31,8 @@ class _CameraPageState extends State<CameraPage> {
   File imageFile;
   double latitude1 = 0;
   double longitude2 = 0;
+  var first;
+  String addres='';
 
    _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,6 +59,23 @@ class _CameraPageState extends State<CameraPage> {
       imageFile = picture;
     });
   }
+
+   getUserLocation(double latitude, double longitude) async {
+     if(latitude != 0.0 && longitude != 0.0)
+     {
+       print(latitude.toString()+" "+ longitude.toString());
+      final coordinates = new Coordinates(latitude, longitude);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      first = addresses.first;
+      print("${first.featureName} : ${first.addressLine}");
+
+      setState(() {
+        addres="${first.featureName} : ${first.addressLine}";
+       
+    });
+      }
+   
+    }
 
   // Function for opening a gallery
   _openCamera() async{
@@ -92,7 +112,9 @@ class _CameraPageState extends State<CameraPage> {
     setState(() {
       latitude1 = _locationData.latitude;
       longitude2 = _locationData.longitude;
+       
     });
+    first = getUserLocation(latitude1, longitude2);
   }
 
   @override
@@ -221,6 +243,7 @@ class _CameraPageState extends State<CameraPage> {
       child: Text('Trenutna lokacija'),
       onPressed: (){
         currentLocationFunction();
+        getUserLocation(latitude1, longitude2);
       },
     );
 
@@ -314,7 +337,8 @@ class _CameraPageState extends State<CameraPage> {
               
             ],locationRow,
               if(latitude1 != 0 && longitude2 != 0)
-                Align(alignment: Alignment.topCenter, child: Text(latitude1.toString() + ' , ' + longitude2.toString())),
+                Align(alignment: Alignment.topCenter, child: Text(addres)),
+              
             SizedBox(height: 20.0,),
             opis,
             SizedBox(height: 20.0,),

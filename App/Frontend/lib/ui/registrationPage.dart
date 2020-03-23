@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/ui/login.dart';
 
 
 class registrationPage extends StatefulWidget {
@@ -265,12 +266,10 @@ class _registrationPageState extends State<registrationPage> {
                             child: GestureDetector(
                                 child: Text("Već imate nalog? Prijavite se.", style: TextStyle(decoration: TextDecoration.underline, color: Colors.green)),
                                 onTap: () {
-                                  Navigator.push(
+                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
-                                       // builder: (context) => loginPage()
-                                    ),
-                                   );
+                                    MaterialPageRoute(builder: (context) => LoginPage()),
+                                  );
                                   }
                                  )
                           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/registrationPage.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -148,6 +149,12 @@ class _LoginPageState extends State<LoginPage>{
           decoration: TextDecoration.underline
           ),
         ),
+        onTap: (){
+           Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => registrationPage()),
+        );
+        },
       ),
     ],
   );

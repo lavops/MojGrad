@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:52739/api/';
-  static String serverURL = 'http://127.0.0.1:52739/api/';
+  static String serverURL = 'http://10.0.2.2:52739/api/';
+  //static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -16,13 +16,28 @@ class APIServices
     'Accept': 'application/json'
   };
 
-  //function returns class FullPost
+  //return all posts
   static Future getPost() async{
     return await http.get(serverURL +'FullPosts');
     
   }
 
-  static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
+  //return all posts from a specific user
+   static Future getPostsForUser(int userId) async{
+    String url = serverURL + 'FullPosts/UsersPosts';
+    var data = Map();
+    data["id"] = userId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url,headers:header,body: jsonBody);
+  }
+
+  static Future getUser(int userId) async{
+    return await http.get(serverURL +'User/'+userId.toString());
+    
+  }
+
+  //send a new post to the database
+   static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
     String url = serverURL + 'FullPosts';
 
     var data = Map();
@@ -34,6 +49,7 @@ class APIServices
     data["latitude"] = latitude;
     data["longitude"] = longitude;
 
+
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: header, body: jsonBody);
     String data2 = res.body.toString();
@@ -41,7 +57,7 @@ class APIServices
     return data2;
   }
 
-  //function for new like
+  //send a new like to the database
   static Future<String> addLike( int postId, int userId, int typeId) async {
     String url = serverURL + 'Like';
 
@@ -56,14 +72,15 @@ class APIServices
     return data2;
   }
 
-  //function returns class comment
-  static Future getComments(int id) async
+  //return all comments on one post
+  static Future getComments(int postId) async
   {
-    return await http.get(serverURL +'FullComment/'+id.toString());
+    return await http.get(serverURL +'FullComment/'+postId.toString());
     
   }
 
- static Future<String> addComment( String comm, int userId, int postId) async {
+  //send a new comment to the database
+  static Future<String> addComment( String comm, int userId, int postId) async {
     String url = serverURL + 'FullComment';
 
     var data = Map();
@@ -77,6 +94,7 @@ class APIServices
     return data2;
   }
 
+  //return types of posts (example smeće, rupe...)
   static Future getPostType() async
   {
     return await http.get(serverURL +'postType');
@@ -91,6 +109,7 @@ class APIServices
 
     return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
   }
+
 
 
  
