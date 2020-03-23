@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
-  final  String imageUploadURL = 'http://10.0.2.2:52739/api/ImageUpload';
- // final String imageUploadURL = 'http://127.0.0.1:52739/api/ImageUpload';
+  //final  String imageUploadURL = 'http://10.0.2.2:52739/api/ImageUpload';
+  final String imageUploadURL = 'http://127.0.0.1:52739/api/ImageUpload';
 
 
 

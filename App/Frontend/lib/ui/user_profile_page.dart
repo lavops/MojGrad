@@ -122,7 +122,8 @@ class HeaderSection extends State<UserProfilePage> {
                             ],
                           )
                         ],
-                      ))
+                      ),
+                  ),
                 ],
               ),
             ),

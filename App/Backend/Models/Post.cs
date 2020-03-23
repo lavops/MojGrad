@@ -14,6 +14,8 @@ namespace Backend.Models
         public string description { get; set; }
         public string photoPath { get; set; }
         public long statusId { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
         public virtual Status status { get; set; }
         public virtual PostType postType { get; set; }
         public virtual user user { get; set; }

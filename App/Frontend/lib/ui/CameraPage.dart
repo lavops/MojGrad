@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
 import 'package:frontend/services/api.services.dart';
+import 'package:location/location.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +28,8 @@ class _CameraPageState extends State<CameraPage> {
   List<Category> _categories = Category.getCategories();
   Category category;
   File imageFile;
+  double latitude1 = 0;
+  double longitude2 = 0;
 
    _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,8 +48,6 @@ class _CameraPageState extends State<CameraPage> {
     super.initState();
     _getToken();
   }
-  
-
 
   // Function for opening a camera
   _openGalery() async{
@@ -61,6 +62,36 @@ class _CameraPageState extends State<CameraPage> {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile = picture;
+    });
+  }
+
+  // Funciton to get current location
+  currentLocationFunction() async{
+    Location location = new Location();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.DENIED) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.GRANTED) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    setState(() {
+      latitude1 = _locationData.latitude;
+      longitude2 = _locationData.longitude;
     });
   }
 
@@ -185,6 +216,40 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
+    // button for current location
+    final currentLocation = RaisedButton(
+      child: Text('Trenutna lokacija'),
+      onPressed: (){
+        currentLocationFunction();
+      },
+    );
+
+    // button for choosing location
+    final chooseLocation = RaisedButton(
+      child: Text('Izaberi lokaciju'),
+      onPressed: (){
+        currentLocationFunction();
+      },
+    );
+
+    // row with location's buttons
+    final locationRow = Row(
+      children: <Widget>[
+        Expanded(
+          child: currentLocation,
+          flex: 2,
+        ),
+        Expanded(
+          child: Container(color: Colors.white),
+          flex: 1,
+        ),
+        Expanded(
+          child: chooseLocation,
+          flex: 2,
+        ),
+      ],
+    );
+
     // Description of assigment or praise
     final opis = TextField(
       controller: description,
@@ -219,7 +284,7 @@ class _CameraPageState extends State<CameraPage> {
         else  
           postTypeId = category.id;
         
-        APIServices.addPost(token,user.id, postTypeId, description.text, basename(imageFile.path), statusId);
+        APIServices.addPost(token,user.id, postTypeId, description.text, basename(imageFile.path), statusId, latitude1, longitude2);
 
         Navigator.pushReplacement(
           context,
@@ -238,14 +303,18 @@ class _CameraPageState extends State<CameraPage> {
             vrstaObjave,
             if(_vrstaObjave == 1)...[
               problemResava,
-              _dropDown
+              _dropDown,
             ],
             SizedBox(height: 20.0,),
             Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(height: 20.0,),
             izaberiKameru,
-            if(imageFile != null)
+            if(imageFile != null)...[
               Image.file(imageFile,width: 300,height: 300,),
+              
+            ],locationRow,
+              if(latitude1 != 0 && longitude2 != 0)
+                Align(alignment: Alignment.topCenter, child: Text(latitude1.toString() + ' , ' + longitude2.toString())),
             SizedBox(height: 20.0,),
             opis,
             SizedBox(height: 20.0,),
