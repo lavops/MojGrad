@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-//import 'edit_profile.dart';
-
 class UserProfilePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -10,122 +8,125 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class HeaderSection extends State<UserProfilePage> {
+  final Color green = Color(0xFF1E8161);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-              child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.mode_edit, size: 36),
-                  onPressed: () {
-                    /*
-                    Navigator.push(
-                      context,
-                      //MaterialPageRoute(builder: (context) => EditProfile()),
-                    );
-                    */
-                  },
-                )
-              ],
+    return new Scaffold(
+        appBar: AppBar(
+          title: Text('Profil'),
+          elevation: 0,
+          backgroundColor: green,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {}, //dodati
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {}, //edit profile
             )
-          ])),
-          Container(
-            child: Icon(Icons.account_circle, size: 110),
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    "Ime i prezime",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 26),
+          ],
+        ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(top: 3, bottom: 16),
+              width: MediaQuery.of(context).size.width,
+              height: 280,
+              decoration: BoxDecoration(
+                color: green,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16)),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Icon(Icons.account_circle, color: Colors.white, size: 110),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "korisnicko ime",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
-          Container(
-            margin: EdgeInsets.only(left: 36),
-            child: Row(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "17",
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      'Ime i prezime',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
                     ),
-                    SizedBox(width: 10),
-                    ClipOval(
-                      child: Material(
-                          color: Colors.green[300],
-                          child: InkWell(
-                              child: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.photo,
-                                color: Colors.black,
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16, top: 25),
+                      child: Row(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "17",
+                                style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {},
-                            ),
-                          ))),
-                    ),
-                    SizedBox(width: 10),
-                  ],
-                ),
-                SizedBox(width: 36),
-                CustomRow(Icon(Icons.check)),
-                SizedBox(width: 36),
-                CustomRow(Icon(Icons.star_border)),
-              ],
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          Column(
+                            children: <Widget>[
+                              Icon(Icons.image, color: Colors.white, size: 36),
+                              Text(
+                                'Objave',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 56),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "77",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          Column(
+                            children: <Widget>[
+                              Icon(Icons.check, color: Colors.white, size: 36),
+                              Text(
+                                'Poeni',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ],
+                          ),
+                          SizedBox(width: 56),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "7",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          Column(
+                            children: <Widget>[
+                              Icon(Icons.star_border,
+                                  color: Colors.white, size: 36),
+                              Text(
+                                'Nivo',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ],
+                          )
+                        ],
+                      ))
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-    ));
+          ],
+        ));
   }
-}
-
-class CustomClipOval extends ClipOval {
-  Icon _iconn;
-  CustomClipOval(Icon iconn) {
-    _iconn = iconn;
-  }
-  get child => Material(
-      color: Colors.green[300],
-      child: InkWell(
-          child: SizedBox(
-        width: 40,
-        height: 40,
-        child: IconButton(
-          icon: _iconn,
-          onPressed: () {},
-        ),
-      )));
-}
-
-class CustomRow extends Row {
-  Icon _iconn;
-  CustomRow(Icon iconn) {
-    _iconn = iconn;
-  }
-  get children => [
-        Text(
-          "10",
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        SizedBox(width: 10),
-        CustomClipOval(_iconn),
-      ];
 }
