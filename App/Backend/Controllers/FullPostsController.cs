@@ -54,6 +54,8 @@ namespace Backend.Controllers
             post1.description = post.description;
             post1.photoPath = post.photoPath;
             post1.statusId = post.statusId;
+            post1.latitude = post.latitude;
+            post1.longitude = post.longitude;
 
             if(post != null)
             {

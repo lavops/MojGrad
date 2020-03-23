@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 class APIServices
 {
 
-  static String serverURL = 'http://10.0.2.2:52739/api/';
-  //static String serverURL = 'http://127.0.0.1:52739/api/';
+  //static String serverURL = 'http://10.0.2.2:52739/api/';
+  static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -22,7 +22,7 @@ class APIServices
     
   }
 
-  static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId) async {
+  static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
     String url = serverURL + 'FullPosts';
 
     var data = Map();
@@ -31,6 +31,8 @@ class APIServices
     data["description"] = description;
     data["photoPath"] = photoPath;
     data["statusId"] = statusId;
+    data["latitude"] = latitude;
+    data["longitude"] = longitude;
 
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: header, body: jsonBody);

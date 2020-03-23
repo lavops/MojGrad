@@ -6,10 +6,12 @@ class Post{
   String _description;
   String _photoPath;
   int _statusId;
+  double _latitude;
+  double _longitude;
 
 
-  Post(this._id, this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId);
-  Post.WithoutId(this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId);
+  Post(this._id, this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
+  Post.WithoutId(this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
 
   int get id => _id;
   String get userId => _userId;
@@ -18,6 +20,8 @@ class Post{
   String get description => _description;
   String get photoPath => _photoPath;
   int get statusId => _statusId;
+  double get latitude => _latitude;
+  double get longitude => _longitude;  
 
 
   //Convert a Post object into a Map object
@@ -30,6 +34,8 @@ class Post{
     data["description"] = _description;
     data["photoPath"] = _photoPath;
     data["statusId"] = _statusId;
+    data["latitude"] = _latitude;
+    data["longitude"] =_longitude;
  
     if(_id != null){
       data["id"] = _id;
@@ -47,6 +53,8 @@ class Post{
     this._description = data["description"];
     this._photoPath = data["photoPath"];
     this._statusId = data["statusId"];
+    this._latitude = data["latitude"];
+    this._longitude = data["longitude"];
   }
 
 }
