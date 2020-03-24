@@ -332,7 +332,7 @@ class _HomePageState extends State<HomePage> {
               if(user!=null){
                 Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UserProfilePage(user.id)),
+                        MaterialPageRoute(builder: (context) => UserProfilePage(user)),
                       );
               }
             },
