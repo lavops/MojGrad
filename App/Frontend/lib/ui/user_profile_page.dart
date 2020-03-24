@@ -1,27 +1,37 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:post/models/fullPost.dart';
-import 'package:post/models/user.dart';
-import 'package:post/services/api.services.dart';
+import 'package:frontend/services/api.services.dart';
+import 'package:frontend/models/fullPost.dart';
+import 'package:frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfilePage extends StatefulWidget {
+  final int userId;
+
+  UserProfilePage(this.userId);
+
   @override
   State<StatefulWidget> createState() {
-    return HeaderSection();
+    return HeaderSection(userId);
   }
 }
 
 class HeaderSection extends State<UserProfilePage> {
+  int userId;
+  HeaderSection(int id)
+  {
+    userId=id;
+  }
+
   final Color green = Color(0xFF1E8161);
+  User user1;
+  //Map<String, dynamic> realUser;
+  List<FullPost> posts;
 
-  String token = '';
-  User user;
-  Map<String, dynamic> realUser;
-  List<FullPost> posts = new List<FullPost>();
+  
   //var postCnt = posts.length;
-
+/*
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
@@ -31,42 +41,46 @@ class HeaderSection extends State<UserProfilePage> {
     setState(() {
       token = _token;
       user = extractedUser;
-      //postCount = postCnt;
+      
+    });
+  }
+  */
+
+
+  getUserData() {
+
+    APIServices.getUser(userId).then((res) {
+      Map<String, dynamic> map = jsonDecode(res.body);
+      User u = User.fromObject(map);
+      if(mounted){
+      setState(() {
+        user1 = u;
+      
+      });
+      }
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _getToken();
-    this.getUserData();
-    this.getPostData();
-  }
-
-  Future<String> getUserData() async {
-    var response = await APIServices.getUser(user.id);
-
-    setState(() {
-      var convertDataToJson = json.decode(response.body);
-      realUser = convertDataToJson;
+  getPosts() {
+   
+    APIServices.getPostsForUser(userId).then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if(mounted){
+      setState(() {
+        posts = listP;
+      
+      });
+      }
     });
-
-    return "Success";
-  }
-
-  Future<String> getPostData() async {
-    var response = await APIServices.getPostsForUser(user.id);
-
-    setState(() {
-      var convertDataToJson = json.decode(response.body);
-      posts = convertDataToJson;
-    });
-
-    return "Success";
+    
   }
 
   @override
   Widget build(BuildContext context) {
+    getUserData();
+    getPosts();
     return new Scaffold(
       appBar: AppBar(
         title: Text('Profil'),
@@ -102,14 +116,14 @@ class HeaderSection extends State<UserProfilePage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
-                      realUser["username"],
+                      user1.username,
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      realUser["firstName"] + " " + realUser["lastName"],
+                      user1.firstName + " " + user1.lastName,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -187,7 +201,7 @@ class HeaderSection extends State<UserProfilePage> {
             ),
             Expanded(
               child: new ListView.builder(
-                  itemCount: posts.length,
+                  itemCount: posts == null ? 0 : posts.length,
                   itemBuilder: (BuildContext ctxt, int index) {
                     return PostItem(
                       post: posts[index],
@@ -202,7 +216,7 @@ class HeaderSection extends State<UserProfilePage> {
 }
 
 class PostItem extends StatelessWidget {
-  final dynamic post;
+  final FullPost post;
 
   const PostItem({
     this.post,
@@ -240,11 +254,7 @@ class PostItem extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(30),
               ),
-              child: Image.asset(
-                post["photoPath"],
-                height: 150,
-                fit: BoxFit.fitWidth,
-              ),
+              child: Image.asset("assets/post1.jpg",width: 300,height: 250, ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 8.0),
@@ -256,7 +266,7 @@ class PostItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          post["description"],
+                          post.description,
                         ),
                         SizedBox(
                           height: 10,

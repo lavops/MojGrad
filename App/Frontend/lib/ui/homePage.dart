@@ -104,6 +104,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+   String token = '';
+  User user;
+    _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString('token');
+    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
+     User extractedUser = new User();
+     extractedUser = User.fromObject(jsonObject);
+    setState(() {
+      token = _token;
+      user = extractedUser;
+    });
+  }
+
+
+   @override
+  void initState() {
+    super.initState();
+    _getToken();
+  }
+
   List<FullPost> listPosts;
   getPosts() {
     APIServices.getPost().then((res) {
@@ -168,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   SizedBox(width: 80,),
-                  Text("Kategorija problema: "+listPosts[index].typeName, style: TextStyle(fontSize: 15),),
+                  Text("Kategorija problema: " + listPosts[index].typeName, style: TextStyle(fontSize: 15),),
                  ],
               ),
               Align(
@@ -308,10 +329,12 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.person), 
             color: Colors.black87,
             onPressed: () {
-              Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => UserProfilePage()),
-                    );
+              if(user!=null){
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserProfilePage(user.id)),
+                      );
+              }
             },
           ),
        ],
