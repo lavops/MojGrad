@@ -20,7 +20,7 @@ namespace Backend
 
         public DbSet<LikeType> likeType { get; set; }
         public DbSet<Post> post { get; set; }
-        public DbSet<PostTypeId> postTypeId { get; set; }
+        public DbSet<PostType> postType { get; set; }
         public DbSet<Status> status { get; set; }
        
        

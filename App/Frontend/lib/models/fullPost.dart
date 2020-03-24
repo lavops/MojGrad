@@ -14,8 +14,10 @@ class FullPost
   int _likeNum; //number of likes
   int _dislikeNum; //number of dislikes
   int _commNum;
+  double _latitude;
+  double _longitude;
   
-  FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum );
+  FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum, this._latitude, this._longitude);
  
 
   int get postId => _postId;
@@ -31,7 +33,8 @@ class FullPost
   int get likeNum => _likeNum;
   int get dislikeNum => _dislikeNum;
   int get commNum => _commNum;
-  
+  double get latitude => _latitude;
+  double get longitude => _longitude;  
 
  //saljemo kao json fajl
   Map<String, dynamic> toMap()
@@ -51,7 +54,8 @@ class FullPost
     map["likeNum"] = _likeNum;
     map["dislikeNum"] = _dislikeNum;
     map["commNum"] = _commNum;
-    
+    map["latitude"] = _latitude;
+    map["longitude"] =_longitude;
    
     return map;
   }
@@ -72,7 +76,7 @@ class FullPost
     this._likeNum = data["likeNum"];
     this._dislikeNum = data["dislikeNum"];
     this._commNum = data["commNum"];
-    
-
+    this._latitude = data["latitude"];
+    this._longitude = data["longitude"];
   }
 }

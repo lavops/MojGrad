@@ -1,8 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/models/categories.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:frontend/services/images.dart';
 import 'dart:io';
+import 'package:frontend/services/api.services.dart';
+import 'package:location/location.dart';
+import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -10,12 +19,38 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  
+  String token = '';
+  User user;
+  int postTypeId;
+  var description = TextEditingController();
+  int statusId;
   int _vrstaObjave = 1;
   int _problemResava = 1;
   List<Category> _categories = Category.getCategories();
   Category category;
   File imageFile;
+  double latitude1 = 0;
+  double longitude2 = 0;
+  var first;
+  String addres='';
+
+   _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString('token');
+    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
+     User extractedUser = new User();
+     extractedUser = User.fromObject(jsonObject);
+    setState(() {
+      token = _token;
+      user = extractedUser;
+    });
+  }
+
+   @override
+  void initState() {
+    super.initState();
+    _getToken();
+  }
 
   // Function for opening a camera
   _openGalery() async{
@@ -25,12 +60,61 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+   getUserLocation(double latitude, double longitude) async {
+     if(latitude != 0.0 && longitude != 0.0)
+     {
+       print(latitude.toString()+" "+ longitude.toString());
+      final coordinates = new Coordinates(latitude, longitude);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      first = addresses.first;
+      print("${first.featureName} : ${first.addressLine}");
+
+      setState(() {
+        addres="${first.featureName} : ${first.addressLine}";
+       
+    });
+      }
+   
+    }
+
   // Function for opening a gallery
   _openCamera() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile = picture;
     });
+  }
+
+  // Funciton to get current location
+  currentLocationFunction() async{
+    Location location = new Location();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.DENIED) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.GRANTED) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    setState(() {
+      latitude1 = _locationData.latitude;
+      longitude2 = _locationData.longitude;
+       
+    });
+    first = getUserLocation(latitude1, longitude2);
   }
 
   @override
@@ -154,8 +238,44 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
+    // button for current location
+    final currentLocation = RaisedButton(
+      child: Text('Trenutna lokacija'),
+      onPressed: (){
+        currentLocationFunction();
+        getUserLocation(latitude1, longitude2);
+      },
+    );
+
+    // button for choosing location
+    final chooseLocation = RaisedButton(
+      child: Text('Izaberi lokaciju'),
+      onPressed: (){
+        currentLocationFunction();
+      },
+    );
+
+    // row with location's buttons
+    final locationRow = Row(
+      children: <Widget>[
+        Expanded(
+          child: currentLocation,
+          flex: 2,
+        ),
+        Expanded(
+          child: Container(color: Colors.white),
+          flex: 1,
+        ),
+        Expanded(
+          child: chooseLocation,
+          flex: 2,
+        ),
+      ],
+    );
+
     // Description of assigment or praise
     final opis = TextField(
+      controller: description,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black)
@@ -176,6 +296,19 @@ class _CameraPageState extends State<CameraPage> {
     final submitObjavu = RaisedButton(
       child: Text('Objavi'),
       onPressed: (){
+        imageUpload(imageFile);
+        if(_problemResava==1) 
+          statusId=2;
+        else 
+          statusId=1;
+        
+        if(_vrstaObjave == 2) //pohvala
+          postTypeId=1;
+        else  
+          postTypeId = category.id;
+        
+        APIServices.addPost(token,user.id, postTypeId, description.text, basename(imageFile.path), statusId, latitude1, longitude2);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MyBottomBar()),
@@ -193,14 +326,19 @@ class _CameraPageState extends State<CameraPage> {
             vrstaObjave,
             if(_vrstaObjave == 1)...[
               problemResava,
-              _dropDown
+              _dropDown,
             ],
             SizedBox(height: 20.0,),
             Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(height: 20.0,),
             izaberiKameru,
-            if(imageFile != null)
+            if(imageFile != null)...[
               Image.file(imageFile,width: 300,height: 300,),
+              
+            ],locationRow,
+              if(latitude1 != 0 && longitude2 != 0)
+                Align(alignment: Alignment.topCenter, child: Text(addres)),
+              
             SizedBox(height: 20.0,),
             opis,
             SizedBox(height: 20.0,),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/registrationPage.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,9 +18,10 @@ class _LoginPageState extends State<LoginPage>{
 
   User user;
 
-  _saveToken() async {
+  _saveToken(Map<String, dynamic> jsonObject) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', user.token);
+    await prefs.setString('token', jsonObject['token']);
+    await prefs.setString('user', json.encode(jsonObject));
   }
 
   @override
@@ -96,6 +98,7 @@ class _LoginPageState extends State<LoginPage>{
               APIServices.login(_email, _password).then((response){
                 if (response.statusCode == 200) {
                   Map<String, dynamic> jsonObject = json.decode(response.body);
+                  _saveToken(jsonObject);
                   User extractedUser = new User();
                   extractedUser = User.fromObject(jsonObject);
                   setState(() {
@@ -103,7 +106,6 @@ class _LoginPageState extends State<LoginPage>{
                     pogresanLoginText = "";
                   });
                   if(user != null){
-                    _saveToken();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => MyBottomBar()),
@@ -147,6 +149,12 @@ class _LoginPageState extends State<LoginPage>{
           decoration: TextDecoration.underline
           ),
         ),
+        onTap: (){
+           Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => registrationPage()),
+        );
+        },
       ),
     ],
   );

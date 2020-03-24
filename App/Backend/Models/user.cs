@@ -16,7 +16,6 @@ namespace Backend.Models
         public string phone { get; set; }
         public DateTime createdAt { get; set; }
         public long cityId { get; set; }
-        public string location { get; set; }
         public string photo { get; set; }
         public string token { get; set; }
 

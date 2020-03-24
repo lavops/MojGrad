@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Models
 {
-    public class PostTypeId
+    public class PostType
     {
         public long id { get; set; }
         public string typeName { get; set; }
