@@ -7,31 +7,30 @@ import 'package:frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfilePage extends StatefulWidget {
-  final int userId;
+  final User user;
 
-  UserProfilePage(this.userId);
+  UserProfilePage(this.user);
 
   @override
   State<StatefulWidget> createState() {
-    return HeaderSection(userId);
+    return HeaderSection(user);
   }
 }
 
 class HeaderSection extends State<UserProfilePage> {
-  int userId;
-  HeaderSection(int id)
+  User user;
+  HeaderSection(User user1)
   {
-    userId=id;
+    user = user1;
   }
 
   final Color green = Color(0xFF1E8161);
-  User user1;
   //Map<String, dynamic> realUser;
   List<FullPost> posts;
 
   
   //var postCnt = posts.length;
-/*
+  /*
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
@@ -45,25 +44,9 @@ class HeaderSection extends State<UserProfilePage> {
     });
   }
   */
-
-
-  getUserData() {
-
-    APIServices.getUser(userId).then((res) {
-      Map<String, dynamic> map = jsonDecode(res.body);
-      User u = User.fromObject(map);
-      if(mounted){
-      setState(() {
-        user1 = u;
-      
-      });
-      }
-    });
-  }
-
   getPosts() {
    
-    APIServices.getPostsForUser(userId).then((res) {
+    APIServices.getPostsForUser(user.id).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -79,7 +62,6 @@ class HeaderSection extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    getUserData();
     getPosts();
     return new Scaffold(
       appBar: AppBar(
@@ -116,14 +98,14 @@ class HeaderSection extends State<UserProfilePage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
-                      user1.username,
+                      user.username,
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      user1.firstName + " " + user1.lastName,
+                      user.firstName + " " + user.lastName,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
