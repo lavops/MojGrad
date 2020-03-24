@@ -9,7 +9,7 @@ class APIServices
 
   static String serverURL = 'http://10.0.2.2:52739/api/';
   //static String serverURL = 'http://127.0.0.1:52739/api/';
-
+	//static String serverURL = 'http://10.0.2.2:53135/api/';
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',
@@ -34,6 +34,11 @@ class APIServices
   static Future getUser(int userId) async{
     return await http.get(serverURL +'User/'+userId.toString());
     
+  }
+  
+  static Future getPostsForUser(int userId) async {
+    return await http.get(serverURL + 'Posts/' + userId.toString(),
+        headers: {"Accept": "application/json"});
   }
 
   //send a new post to the database
