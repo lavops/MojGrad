@@ -104,6 +104,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
    String token = '';
   User user;
     _getToken() async {
@@ -291,10 +292,7 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.menu),
                 color: Colors.black87,
                 onPressed: () {
-                 // Navigator.push(
-                 //   context,
-                 //   MaterialPageRoute(builder: (context) => NavDrawer()),
-                 // );
+                  Scaffold.of(context).openDrawer();
                 },
               );
             }),
@@ -339,7 +337,7 @@ class _HomePageState extends State<HomePage> {
           ),
        ],
       ),
-
+      
 
       body: buildPostList() ,
     );
