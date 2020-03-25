@@ -205,19 +205,29 @@ class _CameraPageState extends State<CameraPage> {
     );
     
     // Pick image from your camera live
-    final cameraPhone = RaisedButton(
-      child: Text('Kamera'),
+    final cameraPhone = RaisedButton.icon(
+      label: Text('Kamera'),
       onPressed: (){
         _openCamera();
       },
+      icon: Icon(Icons.camera_alt),
+      //color: Colors.greenAccent,
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
     );
 
+
     // Pick image from your gallery
-    final cameraGalery = RaisedButton(
-      child: Text('Galerija'),
+    final cameraGalery = RaisedButton.icon(
+      label: FittedBox(
+        fit: BoxFit.fitWidth, 
+        child: Text('Galerija'),
+      ),
       onPressed: (){
         _openGalery();
       },
+      icon: Icon(Icons.photo_library),
+      //color: Colors.greenAccent,
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
     );
 
     // Row with camera buttons
@@ -225,7 +235,7 @@ class _CameraPageState extends State<CameraPage> {
       children: <Widget>[
         Expanded(
           child: cameraPhone,
-          flex: 2,
+          flex: 10,
         ),
         Expanded(
           child: Container(color: Colors.white),
@@ -233,26 +243,32 @@ class _CameraPageState extends State<CameraPage> {
         ),
         Expanded(
           child: cameraGalery,
-          flex: 2,
+          flex: 10,
         ),
       ],
     );
 
     // button for current location
-    final currentLocation = RaisedButton(
-      child: Text('Trenutna lokacija'),
+    final currentLocation = RaisedButton.icon(
+      label: Text('Trenutna lokacija', /*style: TextStyle(color: Colors.white),*/),
       onPressed: (){
         currentLocationFunction();
         getUserLocation(latitude1, longitude2);
       },
+     icon: Icon(Icons.my_location, /*color: Colors.white,*/),
+      //color: Colors.green[800],
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
     );
 
     // button for choosing location
-    final chooseLocation = RaisedButton(
-      child: Text('Izaberi lokaciju'),
+    final chooseLocation = RaisedButton.icon(
+      label: Text('Izaberi lokaciju'),
       onPressed: (){
         currentLocationFunction();
       },
+      icon: Icon(Icons.location_on),
+      //color: Colors.green[800],
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
     );
 
     // row with location's buttons
@@ -260,7 +276,7 @@ class _CameraPageState extends State<CameraPage> {
       children: <Widget>[
         Expanded(
           child: currentLocation,
-          flex: 2,
+          flex: 10,
         ),
         Expanded(
           child: Container(color: Colors.white),
@@ -268,7 +284,7 @@ class _CameraPageState extends State<CameraPage> {
         ),
         Expanded(
           child: chooseLocation,
-          flex: 2,
+          flex: 10,
         ),
       ],
     );
@@ -293,8 +309,8 @@ class _CameraPageState extends State<CameraPage> {
     );
 
     // Submit it
-    final submitObjavu = RaisedButton(
-      child: Text('Objavi'),
+    final submitObjavu = RaisedButton.icon(
+      label: Text('Objavi'),
       onPressed: (){
         imageUpload(imageFile);
         if(_problemResava==1) 
@@ -314,6 +330,8 @@ class _CameraPageState extends State<CameraPage> {
           MaterialPageRoute(builder: (context) => MyBottomBar()),
         );
       },
+      icon: Icon(Icons.nature_people),
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
     );
 
     return Center(
@@ -323,19 +341,20 @@ class _CameraPageState extends State<CameraPage> {
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 24.0),
           children: <Widget>[
-            vrstaObjave,
-            if(_vrstaObjave == 1)...[
-              problemResava,
-              _dropDown,
-            ],
-            SizedBox(height: 20.0,),
             Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(height: 20.0,),
             izaberiKameru,
             if(imageFile != null)...[
               Image.file(imageFile,width: 300,height: 300,),
               
-            ],locationRow,
+            ],
+            vrstaObjave,
+            if(_vrstaObjave == 1)...[
+              problemResava,
+              _dropDown,
+            ],
+            SizedBox(height: 20.0,),
+            locationRow,
               if(latitude1 != 0 && longitude2 != 0)
                 Align(alignment: Alignment.topCenter, child: Text(addres)),
               
