@@ -38,7 +38,8 @@ namespace Backend.Controllers
         {
             var user = await _context.user.FindAsync(id);
             var c = await _context.city.FindAsync(user.cityId);
-            var userWhitCity = new FullUser(user, c.name);
+            var type = await _context.typeOfUser.FindAsync(user.userTypeId);
+            var userWhitCity = new FullUser(user, c.name, type.typeName);
 
             if (user == null)
             {

@@ -33,6 +33,7 @@ class _CameraPageState extends State<CameraPage> {
   double longitude2 = 0;
   var first;
   String addres='';
+  var id=0;
 
    _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -70,7 +71,7 @@ class _CameraPageState extends State<CameraPage> {
       print("${first.featureName} : ${first.addressLine}");
 
       setState(() {
-        addres="${first.featureName} : ${first.addressLine}";
+        addres=" ${first.addressLine}";
        
     });
       }
@@ -117,6 +118,7 @@ class _CameraPageState extends State<CameraPage> {
     first = getUserLocation(latitude1, longitude2);
   }
 
+  bool notNull(Object o) => o != null;
   @override
   Widget build(BuildContext context) {
     
@@ -250,12 +252,15 @@ class _CameraPageState extends State<CameraPage> {
 
     // button for current location
     final currentLocation = RaisedButton.icon(
-      label: Text('Trenutna lokacija', /*style: TextStyle(color: Colors.white),*/),
+      label: FittedBox(
+        fit: BoxFit.fitWidth, 
+        child: Text('Trenutna lokacija'),
+      ),
       onPressed: (){
         currentLocationFunction();
         getUserLocation(latitude1, longitude2);
       },
-     icon: Icon(Icons.my_location, /*color: Colors.white,*/),
+     icon: Icon(Icons.my_location, size:20),
       //color: Colors.green[800],
       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
     );
@@ -335,35 +340,32 @@ class _CameraPageState extends State<CameraPage> {
     );
 
     return Center(
+      
       child:Container(
         width: 400,
-        child: ListView(
+        child: ListView(    
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 24.0),
           children: <Widget>[
             Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(height: 20.0,),
             izaberiKameru,
-            if(imageFile != null)...[
-              Image.file(imageFile,width: 300,height: 300,),
-              
-            ],
+            imageFile != null ? Image.file(imageFile,width: 300,height: 300,) : null ,
+
             vrstaObjave,
-            if(_vrstaObjave == 1)...[
-              problemResava,
-              _dropDown,
-            ],
+            _vrstaObjave == 1 ? Column(children: <Widget>[ problemResava,  _dropDown]) : null,
+            
             SizedBox(height: 20.0,),
             locationRow,
-              if(latitude1 != 0 && longitude2 != 0)
-                Align(alignment: Alignment.topCenter, child: Text(addres)),
-              
+             latitude1 != 0 && longitude2 != 0 ? Align(alignment: Alignment.topCenter, child: Text(addres)): null,
+            
             SizedBox(height: 20.0,),
             opis,
             SizedBox(height: 20.0,),
             submitObjavu
-          ],
+          ].where(notNull).toList(),
         ),
+      
       )
     );
   }

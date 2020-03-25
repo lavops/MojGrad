@@ -17,7 +17,9 @@ namespace Backend.Models
         public DateTime createdAt { get; set; }
         public string cityName { get; set; }
 
-        public FullUser(user u, string name)
+        public string userTypeName { get; set; }
+
+        public FullUser(user u, string name, string typeName)
         {
             this.firstName = u.firstName;
             this.lastName = u.lastName;
@@ -28,6 +30,7 @@ namespace Backend.Models
             this.createdAt = u.createdAt;
             this.id = u.id;
             this.cityName = name;
+            this.userTypeName = typeName;
         }
     }
 }
