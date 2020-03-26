@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import './navDrawer.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
+	  drawer: NavDrawer(),
       body: Center(
         child: Text('Admin: ' + user.firstName),
       ),
