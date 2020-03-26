@@ -130,6 +130,9 @@ class StateComents extends State<CommentsPage> {
                   onPressed: () {
                     
                     APIServices.addComment(myController.text, 1,postId); // this username - korisnik koji je prokomentarisao post, 1 primer - id posta
+                    setState(() {
+                      myController.text = '';
+                    });
                   },
                 )
               ],

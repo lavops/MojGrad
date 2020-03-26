@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/postType.dart';
 import 'package:frontend/ui/login.dart';
 
 import '../models/city.dart';
@@ -142,8 +143,11 @@ class _registrationPageState extends State<registrationPage> {
 
   }
 
-  List<String> _locations = [''];
-  String _selectedLocation;
+  //List<String> _locations = [''];
+  //String _selectedLocation;
+  List<City> _city;
+  City city;
+  
 
 
   //function that adds cities to list
@@ -158,9 +162,10 @@ class _registrationPageState extends State<registrationPage> {
       {
         locations.add(city.name);
       }
-        setState(() {
-          _locations = locations;
-        });
+      setState(() {
+        //_locations = locations;
+        _city = cities;
+      });
     });
     
   }
@@ -357,19 +362,25 @@ class _registrationPageState extends State<registrationPage> {
                             padding: new EdgeInsets.all(16.0),
                           ),
 
-                          new DropdownButton(
-                            value: _selectedLocation,
-                            onChanged: (newValue) {
+                          _city != null? new DropdownButton<City>(
+                            hint:  Text("Izaberi"),
+                            value: city, //_selectedLocation
+                            onChanged: (City newValue) { //newValue
                               setState(() {
-                                _selectedLocation = newValue;
+                                city = newValue; //_selectedLocation = newValue
                               });
                             },
-                            items: _locations.map((location) {
+                            items: _city.map((City option) { //_locations.map((location)
                               return DropdownMenuItem(
-                                child: new Text(location),
-                                value: location,
+                                child: new Text(option.name), //location
+                                value: option,
                               );
                             }).toList(),
+                          ):
+                          new DropdownButton<String>(
+                            hint:  Text("Izaberi"),
+                            onChanged: null,
+                            items: null,
                           ),
                         ]
                       ),
@@ -394,7 +405,7 @@ class _registrationPageState extends State<registrationPage> {
                                 color:  Colors.green[800],
                                 onPressed: () {
                                  check(firstName.text, lastName.text, email.text, mobile.text, password.text, username.text);
-                                  
+                                  // dodati u check city.id al nzm gde
                                 }),
                           ),
                           
