@@ -9,8 +9,8 @@ import '../models/user.dart';
 class APIServices
 {
 
-  static String serverURL = 'http://10.0.2.2:52739/api/';
-  //static String serverURL = 'http://127.0.0.1:52739/api/';
+  //static String serverURL = 'http://10.0.2.2:52739/api/';
+  static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -128,7 +128,7 @@ class APIServices
     return await http.post(url, headers: header, body: jsonBody);
   }
 
-  //fetch method for city names
+  //fetch method for cities
   static Future getCity() async
   {
     return await http.get(serverURL + 'City');

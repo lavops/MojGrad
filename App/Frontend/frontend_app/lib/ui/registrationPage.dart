@@ -152,19 +152,22 @@ class _registrationPageState extends State<registrationPage> {
     APIServices.getCity().then((res) {
       Iterable list = json.decode(res.body);
       List<City> cities = new List<City>();
+      List<String> locations = new List<String>();
       cities = list.map((model) => City.fromObject(model)).toList();
       for(var city in cities )
       {
-        _locations.add(city.name);
+        locations.add(city.name);
       }
+        setState(() {
+          _locations = locations;
+        });
     });
-
+    
   }
-  */
-
+*/
   @override
   Widget build(BuildContext context) {
-
+    //getLocations();
     final wrongReg = Center( child: Text(
       '$wrongRegText',
       style: TextStyle(color: Colors.red),
