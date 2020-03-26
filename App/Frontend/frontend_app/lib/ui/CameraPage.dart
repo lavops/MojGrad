@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/models/categories.dart';
+import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:geocoder/geocoder.dart';
@@ -26,8 +27,8 @@ class _CameraPageState extends State<CameraPage> {
   int statusId;
   int _vrstaObjave = 1;
   int _problemResava = 1;
-  List<Category> _categories = Category.getCategories();
-  Category category;
+  List<PostType> _postType;
+  PostType postType;
   File imageFile;
   double latitude1 = 0;
   double longitude2 = 0;
@@ -47,10 +48,26 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
-   @override
+  _getPostType()
+  {
+    APIServices.getPostType().then((res) {
+      Iterable list = json.decode(res.body);
+      List<PostType> postTypes = new List<PostType>();
+      postTypes = list.map((model) => PostType.fromObject(model)).toList();
+      if(mounted){
+        setState(() {
+          _postType = postTypes;
+        });
+      }
+    });
+    
+  }
+
+  @override
   void initState() {
     super.initState();
     _getToken();
+    _getPostType();
   }
 
   // Function for opening a camera
@@ -196,20 +213,25 @@ class _CameraPageState extends State<CameraPage> {
     final _dropDown = Row(
       children: <Widget>[
         Align(alignment: Alignment.topLeft, child: Text("Kategoriju: ",style: TextStyle(fontWeight: FontWeight.bold))),
-        DropdownButton<Category>(
+        _postType != null? DropdownButton<PostType>(
           hint:  Text("Izaberi"),
-          value: category,
-          onChanged: (Category value) {
+          value: postType,
+          onChanged: (PostType value) {
             setState(() {
-              category = value;
+              postType = value;
             });
           },
-          items: _categories.map((Category option) {
-            return  DropdownMenuItem<Category>(
+          items: _postType.map((PostType option) {
+            return  DropdownMenuItem<PostType>(
               value: option,
-              child: Text(option.name),
+              child: Text(option.typeName),
             );
           }).toList(),
+        ):
+        DropdownButton<String>(
+          hint:  Text("Izaberi"),
+          onChanged: null,
+          items: null,
         ),
       ],
     );
@@ -328,7 +350,7 @@ class _CameraPageState extends State<CameraPage> {
         if(_vrstaObjave == 2) //pohvala
           postTypeId=1;
         else  
-          postTypeId = category.id;
+          postTypeId = postType.id;
         
         APIServices.addPost(token,user.id, postTypeId, description.text, basename(imageFile.path), statusId, latitude1, longitude2);
 
@@ -355,7 +377,7 @@ class _CameraPageState extends State<CameraPage> {
             imageFile != null ? Image.file(imageFile,width: 300,height: 300,) : null ,
 
             vrstaObjave,
-            _vrstaObjave == 1 ? Column(children: <Widget>[ problemResava,  _dropDown]) : null,
+            _vrstaObjave == 1 ? Column(children: <Widget>[ problemResava, _dropDown]) : null,
             
             SizedBox(height: 20.0,),
             locationRow,
