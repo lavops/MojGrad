@@ -142,10 +142,10 @@ class _registrationPageState extends State<registrationPage> {
 
   }
 
-  List<String> _locations = ['Kragujevac', 'Beograd', 'Novi Sad', 'Niš'];
+  List<String> _locations = [''];
   String _selectedLocation;
 
-/*
+
   //function that adds cities to list
   getLocations()
   {
@@ -164,10 +164,16 @@ class _registrationPageState extends State<registrationPage> {
     });
     
   }
-*/
+
+  @override
+  void initState() {
+    super.initState();
+    getLocations();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //getLocations();
+    
     final wrongReg = Center( child: Text(
       '$wrongRegText',
       style: TextStyle(color: Colors.red),
