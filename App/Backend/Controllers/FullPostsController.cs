@@ -42,7 +42,30 @@ namespace Backend.Controllers
             return post;
         }
 
-       
+
+        [HttpPost("UsersPosts")]
+        public ActionResult<IEnumerable<FullPost>> UsersPosts(user user)
+        {
+
+            var posts = _context.post.Where(x => x.userId == user.id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).ToList(); //postovi jednog korisnika
+            List<FullPost> post = new List<FullPost>();
+            foreach (var p in posts)
+            {
+                post.Add(new FullPost(p));
+
+            }
+
+            if (posts == null)
+            {
+                return NotFound();
+            }
+
+            return post;
+        }
+
+
+
+
         [HttpPost]
         public IActionResult InsertPost(Post post)
         {
@@ -54,6 +77,8 @@ namespace Backend.Controllers
             post1.description = post.description;
             post1.photoPath = post.photoPath;
             post1.statusId = post.statusId;
+            post1.latitude = post.latitude;
+            post1.longitude = post.longitude;
 
             if(post != null)
             {
