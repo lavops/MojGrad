@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
+import 'edit_profile_page.dart';
+import 'homePage.dart';
 
 class UserProfilePage extends StatefulWidget {
   final User user;
@@ -19,8 +22,7 @@ class UserProfilePage extends StatefulWidget {
 
 class HeaderSection extends State<UserProfilePage> {
   User user;
-  HeaderSection(User user1)
-  {
+  HeaderSection(User user1) {
     user = user1;
   }
 
@@ -28,7 +30,6 @@ class HeaderSection extends State<UserProfilePage> {
   //Map<String, dynamic> realUser;
   List<FullPost> posts;
 
-  
   //var postCnt = posts.length;
   /*
   _getToken() async {
@@ -45,19 +46,16 @@ class HeaderSection extends State<UserProfilePage> {
   }
   */
   getPosts() {
-   
     APIServices.getPostsForUser(user.id).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
-      if(mounted){
-      setState(() {
-        posts = listP;
-      
-      });
+      if (mounted) {
+        setState(() {
+          posts = listP;
+        });
       }
     });
-    
   }
 
   @override
@@ -69,15 +67,69 @@ class HeaderSection extends State<UserProfilePage> {
         elevation: 0,
         backgroundColor: green,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {}, //dodati
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyBottomBar()));
+            }),
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: green,
+              ),
+              child: Text(
+                user.firstName + " " + user.lastName,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.edit, color: Colors.black),
+              trailing: Icon(Icons.arrow_right, color: Colors.black),
+              title: Text(
+                'Izmeni profil',
+                style: TextStyle(fontSize: 16),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditProfilePage(user)),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app, color: Colors.black),
+              //trailing: Icon(Icons.arrow_right, color: Colors.black),
+              title: Text(
+                'Odjavi se',
+                style: TextStyle(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            /*Container(
+                child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Divider(),
+                          ListTile(
+                              leading: Icon(Icons.settings),
+                              title: Text('Podešavanja')),
+                          ListTile(
+                              leading: Icon(Icons.help),
+                              title: Text('Pomoć i feedback'))
+                        ],
+                      ),
+                    ))),*/
+          ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {}, //edit profile
-          )
-        ],
       ),
       body: Stack(
         children: <Widget>[
@@ -236,7 +288,11 @@ class PostItem extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(30),
               ),
-              child: Image.asset("assets/post1.jpg",width: 300,height: 250, ),
+              child: Image.asset(
+                "assets/post1.jpg",
+                width: 300,
+                height: 250,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 8.0),
