@@ -3,6 +3,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/login.dart';
 
+import '../models/city.dart';
 import '../models/user.dart';
 import '../services/api.services.dart';
 
@@ -75,7 +76,6 @@ class _registrationPageState extends State<registrationPage> {
                 var pom = utf8.encode(password);
                 var pass = sha1.convert(pom);
                 User user = User.without(2, firstName, lastName, username, pass.toString(), email, mobile, 1); // visak 1
-
                    APIServices.registration(user).then((response){
                 if (response.statusCode == 200) {
                   Map<String, dynamic> jsonObject = json.decode(response.body);
@@ -144,6 +144,23 @@ class _registrationPageState extends State<registrationPage> {
 
   List<String> _locations = ['Kragujevac', 'Beograd', 'Novi Sad', 'Niš'];
   String _selectedLocation;
+
+/*
+  //function that adds cities to list
+  getLocations()
+  {
+    APIServices.getCity().then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> cities = new List<City>();
+      cities = list.map((model) => City.fromObject(model)).toList();
+      for(var city in cities )
+      {
+        _locations.add(city.name);
+      }
+    });
+
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
