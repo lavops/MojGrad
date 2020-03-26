@@ -127,28 +127,32 @@ class _CameraPageState extends State<CameraPage> {
       children: <Widget>[
         Align(alignment: Alignment.topLeft, child: Text("Vrsta objave: ", style: TextStyle(fontWeight: FontWeight.bold),)),
         Text("Problem"),
-        Radio(
-          value: 1,
-          groupValue: _vrstaObjave,
-          onChanged: (int value) {
-            setState(() {
-              _vrstaObjave = value;
-            });
-          },
-          focusColor: Colors.green[800],
-          activeColor: Colors.green[800],
+        Flexible(child:
+          Radio(
+            value: 1,
+            groupValue: _vrstaObjave,
+            onChanged: (int value) {
+              setState(() {
+                _vrstaObjave = value;
+              });
+            },
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
+          ),
         ),
         Text("Pohvala"),
-        Radio(
-          value: 2,
-          groupValue: _vrstaObjave,
-          onChanged: (int value) {
-            setState(() {
-              _vrstaObjave = value;
-            });
-          },
-          focusColor: Colors.green[800],
-          activeColor: Colors.green[800],
+        Flexible(child:
+          Radio(
+            value: 2,
+            groupValue: _vrstaObjave,
+            onChanged: (int value) {
+              setState(() {
+                _vrstaObjave = value;
+              });
+            },
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
+          ),
         ),
       ],
     );
@@ -158,28 +162,32 @@ class _CameraPageState extends State<CameraPage> {
       children: <Widget>[
         Align(alignment: Alignment.topLeft, child: Text("Problem resava: ", style: TextStyle(fontWeight: FontWeight.bold))),
         Text("Resicu sam"),
-        Radio(
-          value: 1,
-          groupValue: _problemResava,
-          onChanged: (int value) {
-            setState(() {
-              _problemResava = value;
-            });
-          },
-          focusColor: Colors.green[800],
-          activeColor: Colors.green[800],
+        Flexible(child: 
+          Radio(
+            value: 1,
+            groupValue: _problemResava,
+            onChanged: (int value) {
+              setState(() {
+                _problemResava = value;
+              });
+            },
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
+          ),
         ),
         Text("Neko drugi"),
-        Radio(
-          value: 2,
-          groupValue: _problemResava,
-          onChanged: (int value) {
-            setState(() {
-              _problemResava = value;
-            });
-          },
-          focusColor: Colors.green[800],
-          activeColor: Colors.green[800],
+        Flexible(child:
+          Radio(
+            value: 2,
+            groupValue: _problemResava,
+            onChanged: (int value) {
+              setState(() {
+                _problemResava = value;
+              });
+            },
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
+          ),
         ),
       ],
     );
@@ -208,7 +216,7 @@ class _CameraPageState extends State<CameraPage> {
     
     // Pick image from your camera live
     final cameraPhone = RaisedButton.icon(
-      label: Text('Kamera'),
+      label: Flexible(child: Text('Kamera'),),
       onPressed: (){
         _openCamera();
       },
@@ -220,10 +228,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // Pick image from your gallery
     final cameraGalery = RaisedButton.icon(
-      label: FittedBox(
-        fit: BoxFit.fitWidth, 
-        child: Text('Galerija'),
-      ),
+      label: Flexible(child: Text('Galerija'),),
       onPressed: (){
         _openGalery();
       },
@@ -252,10 +257,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // button for current location
     final currentLocation = RaisedButton.icon(
-      label: FittedBox(
-        fit: BoxFit.fitWidth, 
-        child: Text('Trenutna lokacija'),
-      ),
+      label: Flexible(child: Text('Trenutna lokacija'),),
       onPressed: (){
         currentLocationFunction();
         getUserLocation(latitude1, longitude2);
@@ -267,7 +269,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // button for choosing location
     final chooseLocation = RaisedButton.icon(
-      label: Text('Izaberi lokaciju'),
+      label: Flexible(child: Text('Izaberi lokaciju'),),
       onPressed: (){
         currentLocationFunction();
       },
@@ -315,7 +317,7 @@ class _CameraPageState extends State<CameraPage> {
 
     // Submit it
     final submitObjavu = RaisedButton.icon(
-      label: Text('Objavi'),
+      label: Flexible(child: Text('Objavi'),),
       onPressed: (){
         imageUpload(imageFile);
         if(_problemResava==1) 
@@ -345,7 +347,7 @@ class _CameraPageState extends State<CameraPage> {
         width: 400,
         child: ListView(    
           shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 24.0),
+          padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 24.0, bottom: 24.0),
           children: <Widget>[
             Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(height: 20.0,),

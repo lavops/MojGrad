@@ -9,8 +9,8 @@ import '../models/user.dart';
 class APIServices
 {
 
-  static String serverURL = 'http://10.0.2.2:52739/api/';
-  //static String serverURL = 'http://127.0.0.1:52739/api/';
+  //static String serverURL = 'http://10.0.2.2:52739/api/';
+  static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -122,12 +122,17 @@ class APIServices
     data["email"] = user.email;
     data["phone"] = user.phone;
     data["cityId"] = user.cityId;
-    data["userTypeId"] = user.userTypeId; 
+    //data["userTypeId"] = user.userTypeId; 
     var jsonBody = convert.jsonEncode(data);
     print(jsonBody);
     return await http.post(url, headers: header, body: jsonBody);
   }
 
+  //fetch method for cities
+  static Future getCity() async
+  {
+    return await http.get(serverURL + 'City');
+  }
  
  
 }
