@@ -122,7 +122,7 @@ class APIServices
     data["email"] = user.email;
     data["phone"] = user.phone;
     data["cityId"] = user.cityId;
-    //data["userTypeId"] = user.userTypeId; 
+    data["userTypeId"] = user.userTypeId; 
     var jsonBody = convert.jsonEncode(data);
     print(jsonBody);
     return await http.post(url, headers: header, body: jsonBody);
