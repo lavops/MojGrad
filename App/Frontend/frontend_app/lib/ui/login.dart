@@ -1,3 +1,4 @@
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
@@ -95,7 +96,9 @@ class _LoginPageState extends State<LoginPage>{
             }
             else{
               // Checks for status code if is ok then it goes to homepage
-              APIServices.login(_email, _password).then((response){
+              var pom = utf8.encode(_password);
+              var pass = sha1.convert(pom);
+              APIServices.login(_email, pass.toString()).then((response){
                 if (response.statusCode == 200) {
                   Map<String, dynamic> jsonObject = json.decode(response.body);
                   _saveToken(jsonObject);

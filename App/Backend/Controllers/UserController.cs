@@ -96,11 +96,11 @@ namespace Backend.Controllers
         [HttpPost("Register")]
         public IActionResult Register(user u)
         {
-            var exist = _context.user.Where(x=> x.email==u.email);
-            if (!exist.Any())
+            var exist = _context.user.Where(x=> x.email==u.email).FirstOrDefault();
+            if (exist == null)
             {
-                var existUsername = _context.user.Where(x => x.username == u.username);
-                if (!existUsername.Any())
+                var existUsername = _context.user.Where(x => x.username == u.username).FirstOrDefault();
+                if (existUsername == null)
                 {
                     user u1 = new user();
                     u1.email = u.email;
@@ -111,6 +111,7 @@ namespace Backend.Controllers
                     u1.password = u.password;
                     u1.phone = u.phone;
                     u1.username = u.username;
+                    u1.userTypeId = u.userTypeId;
                     u1.photo = "default.png";
                     u1.token = null;
 

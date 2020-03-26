@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/login.dart';
 
@@ -13,6 +14,7 @@ class registrationPage extends StatefulWidget {
 
 class _registrationPageState extends State<registrationPage> {
   final _key = new GlobalKey<FormState>();
+  String wrongRegText= "";
 
   TextEditingController firstName = new TextEditingController();
   TextEditingController lastName = new TextEditingController();
@@ -20,52 +22,6 @@ class _registrationPageState extends State<registrationPage> {
   TextEditingController mobile = new TextEditingController();
   TextEditingController password = new TextEditingController();
   TextEditingController username = new TextEditingController();
-
-  /*
-  @override
-  void dispose() {
-    firstName.dispose();
-    lastName.dispose();
-    email.dispose();
-    mobile.dispose();
-    password.dispose();
-    username.dispose();
-    super.dispose();
-  }
-*/
-  // dispose funkcije treba da se isprave
-
-  void disposeFirstName() {
-    firstName.dispose();
-    super.dispose();
-  }
-
-  void disposeLastName() {
-    lastName.dispose();
-    super.dispose();
-  }
-
-  void disposeEmail() {
-    email.dispose();
-    super.dispose();
-  }
-
-  void disposeMobile() {
-    mobile.dispose();
-    super.dispose();
-  }
-
-  void disposePassword() {
-    password.dispose();
-    super.dispose();
-  }
-
-  void disposeUsername() {
-    username.dispose();
-    super.dispose();
-  }
-
-
   bool _secureText = true;
 
   showHide() {
@@ -73,13 +29,41 @@ class _registrationPageState extends State<registrationPage> {
       _secureText = !_secureText;
     });
   }
+  showAlertDialog(BuildContext context) {
+      // set up the button
+      Widget okButton = FlatButton(
+        child: Text("OK", style: TextStyle(color: Colors.green),),
+        onPressed: () {
+          Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+         },
+      );
 
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text("Uspešna registracija"),
+        content: Text("Prijavi se da bi nastavio."),
+        actions: [
+          okButton,
+        ],
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
   check(String firstName, String lastName, String email, String mobile, String password, String username) {
     final flNameRegex = RegExp(r'^[a-zA-Z]{1,10}$');
-    final mobRegex = RegExp(r'^06[0-9]{9,10}$');
+    final mobRegex = RegExp(r'^06[0-9]{7,8}$');
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
-    final emailRegex = RegExp(r'^[a-z0-9]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
-    final usernameRegex = RegExp(r'^[a-z]{1,1}[._a-z]{1,}');
+    final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
+    final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
 
 
     if (flNameRegex.hasMatch(firstName)) {
@@ -88,48 +72,71 @@ class _registrationPageState extends State<registrationPage> {
           if (passRegex.hasMatch(password)) {
             if (emailRegex.hasMatch(email)) {
               if (usernameRegex.hasMatch(username)) {
+                var pom = utf8.encode(password);
+                var pass = sha1.convert(pom);
+                User user = User.without(2, firstName, lastName, username, pass.toString(), email, mobile, 1); // visak 1
 
-                // create user
-                var now = DateTime.now();
-                var data = Map();
-
-                data["userType"] = null; // ?
-                data["firstName"] = firstName;
-                data["lastName"] = lastName;
-                data["createdAt"] = now;
-                data["username"] = username;
-                data["password"] = password;
-                data["email"] = email;
-                data["phone"] = mobile;
-                data["cityId"] = 1;
-                data["token"] = null;
-
-                User user = User.fromObject(data); // visak 1
-
-                APIServices.registration(user);
+                   APIServices.registration(user).then((response){
+                if (response.statusCode == 200) {
+                  Map<String, dynamic> jsonObject = json.decode(response.body);
+                  User extractedUser = new User();
+                  extractedUser = User.fromObject(jsonObject);
+                  User user1;
+                  setState(() {
+                    user1 = extractedUser;
+                    wrongRegText = "";
+                  });
+                  if(user1 != null){
+                      showAlertDialog(context);        
+                  }
+                } else {
+                  setState(() {
+                    wrongRegText = "Podaci nisu ispravni";
+                  });
+                  throw  Exception('Email ili username već zauseti');
+                }
+              });
 
               }
               else {
+                setState(() {
+                wrongRegText = "Unesite ponovo korisnocko ime";
+              });
                 throw Exception("Unesite ponovo korisnocko ime");
               }
             }
             else {
+              setState(() {
+                wrongRegText = "Neispravan email.";
+              });
               throw Exception("Neispravan email.");
             }
           }
           else {
-            throw Exception("Losa sifra. Sifra mora imati najmanje 6 karaktera.");
+            setState(() {
+                wrongRegText = "Loša sifra. Sifra mora imati najmanje 6 karaktera.";
+              });
+            throw Exception("Loša sifra. Sifra mora imati najmanje 6 karaktera.");
           }
         }
         else {
+          setState(() {
+                wrongRegText = "Unesite ponovo broj telefona.";
+              });
           throw Exception("Unesite ponovo broj telefona.");
         }
       }
       else {
+        setState(() {
+                wrongRegText= "Unesite ispravno prezime";
+              });
         throw Exception("Unesite drugo prezime.");
       }
     }
     else {
+      setState(() {
+                wrongRegText = "Unestite ispravno ime";
+              });
       throw Exception("Unesite drugo ime.");
     }
 
@@ -140,6 +147,13 @@ class _registrationPageState extends State<registrationPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final wrongReg = Center( child: Text(
+      '$wrongRegText',
+      style: TextStyle(color: Colors.red),
+    )
+  );
+  
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -156,20 +170,7 @@ class _registrationPageState extends State<registrationPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-              /*        SizedBox(
-                        height: 40,
-                      ),
-                      SizedBox(
-                        height: 50,
-                        child: Text(
-                          "Registracija",
-                          style: TextStyle(color: Colors.green, fontSize: 15.0),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-              */
+                       SizedBox( height: 30,),                     
                       Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.0)),
@@ -193,36 +194,6 @@ class _registrationPageState extends State<registrationPage> {
                               labelText: "Ime"),
                         ),
                       ),
-
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0)),
-                        elevation: 6.0,
-                        child: TextField(
-                          controller: username,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                          ),
-                          decoration: InputDecoration(
-                              border:
-                              OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.only(left: 20, right: 15),
-                                child: Icon(Icons.person, color: Colors.grey
-                                ),
-                              ),
-                              contentPadding: EdgeInsets.all(18),
-                              labelText: "Korisnicko ime"),
-                        ),
-                      ),
-
-
-
-
-
-
                       Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0)),
@@ -243,6 +214,30 @@ class _registrationPageState extends State<registrationPage> {
                               ),
                               contentPadding: EdgeInsets.all(18),
                               labelText: "Prezime"),
+                        ),
+                      ),
+                      //card for username TextField
+                       Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0)),
+                        elevation: 6.0,
+                        child: TextField(
+                          controller: username,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                          decoration: InputDecoration(
+                              border:
+                              OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.only(left: 20, right: 15),
+                                child: Icon(Icons.person, color: Colors.grey
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.all(18),
+                              labelText: "Korisnicko ime"),
                         ),
                       ),
 
@@ -373,8 +368,10 @@ class _registrationPageState extends State<registrationPage> {
                                 color:  Colors.green[800],
                                 onPressed: () {
                                  check(firstName.text, lastName.text, email.text, mobile.text, password.text, username.text);
+                                  
                                 }),
                           ),
+                          
                           Padding(
                             padding: EdgeInsets.all(6.0),
                           ),
@@ -397,6 +394,7 @@ class _registrationPageState extends State<registrationPage> {
                 ),
               ),
             ),
+            wrongReg,
           ],
         ),
       ),
