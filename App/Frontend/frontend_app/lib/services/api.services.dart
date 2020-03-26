@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../models/user.dart';
+
 
 class APIServices
 {
@@ -110,7 +112,11 @@ class APIServices
     return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
   }
 
-
+  static Future registration(User user) async  {
+    String url = serverURL + 'User/Registration';
+    var body = convert.jsonEncode(user);
+    return await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
+}
 
  
 }
