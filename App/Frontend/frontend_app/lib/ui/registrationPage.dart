@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/login.dart';
 
+import '../models/user.dart';
+import '../services/api.services.dart';
+
 
 class registrationPage extends StatefulWidget {
   @override
@@ -9,8 +12,59 @@ class registrationPage extends StatefulWidget {
 }
 
 class _registrationPageState extends State<registrationPage> {
-  String firstName, lastName, email, mobile, password;
   final _key = new GlobalKey<FormState>();
+
+  TextEditingController firstName = new TextEditingController();
+  TextEditingController lastName = new TextEditingController();
+  TextEditingController email = new TextEditingController();
+  TextEditingController mobile = new TextEditingController();
+  TextEditingController password = new TextEditingController();
+  TextEditingController username = new TextEditingController();
+
+  /*
+  @override
+  void dispose() {
+    firstName.dispose();
+    lastName.dispose();
+    email.dispose();
+    mobile.dispose();
+    password.dispose();
+    username.dispose();
+    super.dispose();
+  }
+*/
+  // dispose funkcije treba da se isprave
+
+  void disposeFirstName() {
+    firstName.dispose();
+    super.dispose();
+  }
+
+  void disposeLastName() {
+    lastName.dispose();
+    super.dispose();
+  }
+
+  void disposeEmail() {
+    email.dispose();
+    super.dispose();
+  }
+
+  void disposeMobile() {
+    mobile.dispose();
+    super.dispose();
+  }
+
+  void disposePassword() {
+    password.dispose();
+    super.dispose();
+  }
+
+  void disposeUsername() {
+    username.dispose();
+    super.dispose();
+  }
+
 
   bool _secureText = true;
 
@@ -20,11 +74,65 @@ class _registrationPageState extends State<registrationPage> {
     });
   }
 
-  check() {
-    final form = _key.currentState;
-    if (form.validate()) {
-      form.save();
+  check(String firstName, String lastName, String email, String mobile, String password, String username) {
+    final flNameRegex = RegExp(r'^[a-zA-Z]{1,10}$');
+    final mobRegex = RegExp(r'^06[0-9]{9,10}$');
+    final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
+    final emailRegex = RegExp(r'^[a-z0-9]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
+    final usernameRegex = RegExp(r'^[a-z]{1,1}[._a-z]{1,}');
+
+
+    if (flNameRegex.hasMatch(firstName)) {
+      if (flNameRegex.hasMatch(lastName)) {
+        if (mobRegex.hasMatch(mobile)) {
+          if (passRegex.hasMatch(password)) {
+            if (emailRegex.hasMatch(email)) {
+              if (usernameRegex.hasMatch(username)) {
+
+                // create user
+                var now = DateTime.now();
+                var data = Map();
+
+                data["userType"] = null; // ?
+                data["firstName"] = firstName;
+                data["lastName"] = lastName;
+                data["createdAt"] = now;
+                data["username"] = username;
+                data["password"] = password;
+                data["email"] = email;
+                data["phone"] = mobile;
+                data["cityId"] = 1;
+                data["token"] = null;
+
+                User user = User.fromObject(data); // visak 1
+
+                APIServices.registration(user);
+
+              }
+              else {
+                throw Exception("Unesite ponovo korisnocko ime");
+              }
+            }
+            else {
+              throw Exception("Neispravan email.");
+            }
+          }
+          else {
+            throw Exception("Losa sifra. Sifra mora imati najmanje 6 karaktera.");
+          }
+        }
+        else {
+          throw Exception("Unesite ponovo broj telefona.");
+        }
+      }
+      else {
+        throw Exception("Unesite drugo prezime.");
+      }
     }
+    else {
+      throw Exception("Unesite drugo ime.");
+    }
+
   }
 
   List<String> _locations = ['Kragujevac', 'Beograd', 'Novi Sad', 'Niš'];
@@ -66,13 +174,8 @@ class _registrationPageState extends State<registrationPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.0)),
                         elevation: 6.0,
-                        child: TextFormField(
-                          validator: (e) {
-                            if (e.isEmpty) {
-                              return "  Unesite ime.";
-                            }
-                          },
-                          onSaved: (e) => firstName = e,
+                        child: TextField(
+                          controller: firstName,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -95,13 +198,37 @@ class _registrationPageState extends State<registrationPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0)),
                         elevation: 6.0,
-                        child: TextFormField(
-                          validator: (e) {
-                            if (e.isEmpty) {
-                              return "  Unesite prezime.";
-                            }
-                          },
-                          onSaved: (e) => lastName = e,
+                        child: TextField(
+                          controller: username,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                          decoration: InputDecoration(
+                              border:
+                              OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.only(left: 20, right: 15),
+                                child: Icon(Icons.person, color: Colors.grey
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.all(18),
+                              labelText: "Korisnicko ime"),
+                        ),
+                      ),
+
+
+
+
+
+
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0)),
+                        elevation: 6.0,
+                        child: TextField(
+                          controller: lastName,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -124,13 +251,8 @@ class _registrationPageState extends State<registrationPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0)),
                         elevation: 6.0,
-                        child: TextFormField(
-                          validator: (e) {
-                            if (e.isEmpty) {
-                              return "  Unesite e-mail.";
-                            }
-                          },
-                          onSaved: (e) => email = e,
+                        child: TextField(
+                          controller: email,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -148,18 +270,13 @@ class _registrationPageState extends State<registrationPage> {
                         ),
                       ),
 
-                      //card for Mobile TextFormField
+                      //card for Mobile TextField
                       Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0)),
                         elevation: 6.0,
-                        child: TextFormField(
-                          validator: (e) {
-                            if (e.isEmpty) {
-                              return "  Unesite broj mobilnog telefona.";
-                            }
-                          },
-                          onSaved: (e) => mobile = e,
+                        child: TextField(
+                          controller: mobile,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -184,9 +301,9 @@ class _registrationPageState extends State<registrationPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0)),
                         elevation: 6.0,
-                        child: TextFormField(
+                        child: TextField(
                           obscureText: _secureText,
-                          onSaved: (e) => password = e,
+                          controller: password,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -253,9 +370,9 @@ class _registrationPageState extends State<registrationPage> {
                                 ),
                                 padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                                 textColor: Colors.white,
-                                color: Color(0xff4caf50),
+                                color:  Colors.green[800],
                                 onPressed: () {
-                                  check();
+                                 check(firstName.text, lastName.text, email.text, mobile.text, password.text, username.text);
                                 }),
                           ),
                           Padding(
