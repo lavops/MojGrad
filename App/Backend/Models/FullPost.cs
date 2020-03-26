@@ -21,6 +21,8 @@ namespace Backend.Models
         public int likeNum { get; set; }
         public int dislikeNum { get; set; }
         public int commNum { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
 
         public FullPost(Post p) //post se posalje
         {
@@ -37,8 +39,8 @@ namespace Backend.Models
             this.userId = p.userId;
             this.typeName = p.postType.typeName;
             this.commNum = p.comments.Where(x => x.postId == p.id).Count();
-
-
+            this.latitude = p.latitude;
+            this.longitude = p.longitude;
         }
 
 
