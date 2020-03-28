@@ -38,16 +38,29 @@ class _SplashPageState extends State<SplashPage>{
     Future.delayed(
       Duration(seconds: 2),
       () {
-        if(token != '')
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        else 
+        if(token != ''){
+          var tokenSplit = token.split('.');
+          var payload = json.decode(ascii.decode(base64.decode(base64.normalize(tokenSplit[1]))));
+          var exp = payload["exp"] * 1000000;
+          if(DateTime.fromMicrosecondsSinceEpoch(exp).isAfter(DateTime.now())){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }
+          else{
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          }
+        }
+        else{
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => LoginPage()),
           );
+        }
       }
     );
   }
