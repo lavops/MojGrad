@@ -18,7 +18,7 @@ namespace Backend.Models
         public double longitude { get; set; }
         public virtual Status status { get; set; }
         public virtual PostType postType { get; set; }
-        public virtual user user { get; set; }
+        public virtual User user { get; set; }
         
         public IList<Like> likes { get; set; }
         public IList<Comment> comments { get; set; }

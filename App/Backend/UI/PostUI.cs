@@ -1,0 +1,49 @@
+﻿using Backend.BL.Interfaces;
+using Backend.Models;
+using Backend.UI.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Backend.UI
+{
+    public class PostUI : IPostUI
+    {
+        private readonly IPostBL _iPostBL;
+
+        public PostUI(IPostBL iPostBL)
+        {
+            _iPostBL = iPostBL;
+        }
+        public List<Post> getAllPosts()
+        {
+            return _iPostBL.getAllPosts();
+        }
+
+        public List<Post> getAllPostsForOneUser(long id)
+        {
+            return _iPostBL.getAllPostsForOneUser(id);
+        }
+
+        public List<Post> getAllSolvedPosts()
+        {
+            return _iPostBL.getAllSolvedPosts();
+        }
+
+        public List<Post> getAllUnsolvedPosts()
+        {
+            return _iPostBL.getAllUnsolvedPosts();
+        }
+
+        public Post getByID(long id)
+        {
+            return _iPostBL.getByID(id);
+        }
+
+        public Post insertPost(Post post)
+        {
+            return _iPostBL.insertPost(post);
+        }
+    }
+}

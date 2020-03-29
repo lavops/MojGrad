@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
+using Backend.Models.ViewsModel;
+using Backend.UI.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,45 +14,49 @@ namespace Backend.Controllers
     [ApiController]
     public class LikeController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public LikeController(AppDbContext context)
+        private readonly ILikeUI _iLikeUI;
+
+        public LikeController(ILikeUI iLikeUI)
         {
-            _context = context;
+            _iLikeUI = iLikeUI;
         }
 
         [HttpPost]
-        public IActionResult InsertLike(Like like)
+        public IActionResult InsertLike(Like l)
         {
-            Like like1 = new Like();
-
-            like1.likeTypeId = like.likeTypeId;
-            like1.userId = like.userId;
-            like1.postId = like.postId;
-            like1.time = DateTime.Now;
-
-            int typeId = like.likeTypeId == 1 ? 2 : 1;
-            Like like2 = _context.like.Where(x => x.likeTypeId == typeId && x.postId == like.postId && x.userId == like.userId).FirstOrDefault();
-
-            if(like2 != null) //korisnik e vec dao suprotni lajk -- obrisati suprotni lajk i dodati prvi
-            {
-                _context.like.Remove(like2);
-                _context.like.Add(like1);
-                 _context.SaveChangesAsync();
-            }
+            Like like = _iLikeUI.insertLike(l);
+            if (like != null)
+                return Ok(like);
             else
+                return BadRequest(new { message = "Unos nije uspeo" });
+        }
+
+        [HttpPost("DislikeInPost")]
+        public IEnumerable<LikeViewModel> DislikeInPost([FromBody] Post postParam)
+        {
+            var dislikes = _iLikeUI.getDislikeInPost(postParam.id);
+            List<LikeViewModel> likes = new List<LikeViewModel>();
+            foreach (var d in dislikes)
             {
-                Like like3 = _context.like.Where(x => x.postId == like.postId && x.userId == like.userId).FirstOrDefault();
-                if(like3 == null)//ne postoji isti lajk pa se moze dodati u bazu
-                {
-                    _context.like.Add(like1);
-                    _context.SaveChangesAsync();
-                }
+                likes.Add(new LikeViewModel(d));
             }
 
-
-            return Ok(like1);
-            
-
+            return likes;
         }
+
+        [HttpPost("LikeInPost")]
+        public IEnumerable<LikeViewModel> LikeInPost([FromBody] Post postParam)
+        {
+            var like = _iLikeUI.getLikeInPost(postParam.id);
+            List<LikeViewModel> likes = new List<LikeViewModel>();
+            foreach (var l in like)
+            {
+                likes.Add(new LikeViewModel(l));
+            }
+
+            return likes;
+        }
+
+
     }
 }

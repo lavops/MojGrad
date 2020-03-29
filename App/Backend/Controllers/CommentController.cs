@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Backend.Models;
+using Backend.Models.ViewsModel;
+using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Backend.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CommentController : ControllerBase
+    {
+        private readonly ICommentUI _iCommentUI;
+
+        public CommentController(ICommentUI iCommentUI)
+        {
+            _iCommentUI = iCommentUI;
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<CommentViewModel>> GetComm(long id) //vraca sve komentar za jedan post
+        {
+            var comments = _iCommentUI.getCommentsForPost(id);
+            List<CommentViewModel> listComm = new List<CommentViewModel>();
+            foreach (var comm in comments)
+            {
+                listComm.Add(new CommentViewModel(comm));
+            }
+
+            return listComm;
+
+        }
+
+
+        [HttpPost]
+        public IActionResult InsertComment(Comment k)
+        {
+            Comment comment = _iCommentUI.insertComment(k);
+            if (comment != null)
+                return Ok(comment);
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+   }
+}

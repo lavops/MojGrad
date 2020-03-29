@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Models
+namespace Backend.Models.ViewsModel
 {
-    public class FullUser
+    public class UserViewModel
     {
         public long id { get; set; }
         public string firstName { get; set; }
@@ -16,10 +16,14 @@ namespace Backend.Models
         public string phone { get; set; }
         public DateTime createdAt { get; set; }
         public string cityName { get; set; }
+        public long cityId { get; set; }
+        public long userTypeId { get; set; }
+        public int points { get; set; }
+        public int level { get; set; }
 
         public string userTypeName { get; set; }
 
-        public FullUser(user u, string name, string typeName)
+        public UserViewModel(User u)
         {
             this.firstName = u.firstName;
             this.lastName = u.lastName;
@@ -29,8 +33,12 @@ namespace Backend.Models
             this.phone = u.phone;
             this.createdAt = u.createdAt;
             this.id = u.id;
-            this.cityName = name;
-            this.userTypeName = typeName;
+            this.points = u.points;
+            this.level = u.level;
+            this.cityName = u.city.name;
+            this.cityId = u.cityId;
+            this.userTypeId = u.userTypeId;
+            this.userTypeName = u.userTypes.typeName;
         }
     }
 }

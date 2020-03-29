@@ -13,7 +13,7 @@ namespace Backend.Models
         public DateTime createdAt { get; set; }
         public string description { get; set; }
 
-        public virtual user user { get; set; }
+        public virtual User user { get; set; }
 
         public virtual Post post { get; set; }
     }

@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import './navDrawer.dart';
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   String token = '';
   User user;
 
@@ -17,8 +17,8 @@ class _HomePageState extends State<HomePage>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
     Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
-     User extractedUser = new User();
-     extractedUser = User.fromObject(jsonObject);
+    User extractedUser = new User();
+    extractedUser = User.fromObject(jsonObject);
     setState(() {
       token = _token;
       user = extractedUser;
@@ -32,9 +32,13 @@ class _HomePageState extends State<HomePage>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-	  drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Text("Moj Grad"),
+      ),
+      drawer: NavDrawer(),
       body: Center(
         child: Text('Admin: ' + user.firstName),
       ),
