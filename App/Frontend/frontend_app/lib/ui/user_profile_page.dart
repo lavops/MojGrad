@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/ui/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
 import 'edit_profile_page.dart';
@@ -58,6 +60,13 @@ class HeaderSection extends State<UserProfilePage> {
     });
   }
 
+  _removeToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('user');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     getPosts();
@@ -110,7 +119,14 @@ class HeaderSection extends State<UserProfilePage> {
                 'Odjavi se',
                 style: TextStyle(fontSize: 16),
               ),
-              onTap: () {},
+              onTap: () {
+                _removeToken();
+
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
             ),
             /*Container(
                 child: Align(
