@@ -135,6 +135,19 @@ class APIServices
   {
     return await http.get(serverURL + 'City');
   }
- 
- 
+  
+	static Future editUser(User user) async  {
+		String url = serverURL + 'User/Edit';
+		var data = Map();
+		data["id"] = user.id;
+		data["firstName"] = user.firstName;
+		data["lastName"] = user.lastName;
+		data["username"] = user.username;
+		data["password"] = user.password;
+		data["email"] = user.email;
+		data["phone"] = user.phone;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: header, body: jsonBody);
+	}
 }

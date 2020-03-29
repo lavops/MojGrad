@@ -1,38 +1,39 @@
-class User{
-  int _id;
-  int _userTypeId;
-  String _firstName;  
-  String _lastName;
-  String _createdAt;
-  String _username;
-  String _password;
-  String _email;
-  String _phone;  
-  int _cityId;
-  String _cityName;
-  String _token;
-  String _typeName;
+ value;
+  }
 
-  User();
-  User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId);
-  
-
-  int get id => _id;
-  int get userTypeId => _userTypeId;
-  String get firstName => _firstName;
   String get lastName => _lastName;
+  set lastName(String value) {
+    _lastName = value;
+  }
+
   String get createdAt => _createdAt;
+
   String get username => _username;
+  set username(String value) {
+    _username = value;
+  }
+
   String get password => _password;
+  set password(String value) {
+    _password = value;
+  }
+
   String get email => _email;
+  set email(String value) {
+    _email = value;
+  }
   String get phone => _phone;
+  set phone(String value) {
+    _phone = value;
+  }
+
   int get cityId => _cityId;
   String get cityName => _cityName;
   String get token => _token;
   String get typeName => _typeName;
 
   //Convert a User into a Map object
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     var data = Map<String, dynamic>();
 
     data["userTypeId"] = _userTypeId;
@@ -44,11 +45,11 @@ class User{
     data["email"] = _email;
     data["phone"] = _phone;
     data["cityId"] = _cityId;
-    data["cityName"]=_cityName;
+    data["cityName"] = _cityName;
     data["token"] = _token;
     data["typeName"] = _typeName;
- 
-    if(_id != null){
+
+    if (_id != null) {
       data["id"] = _id;
     }
 
@@ -56,7 +57,7 @@ class User{
   }
 
   //Extract a User object from a Map object
-  User.fromObject(dynamic data){
+  User.fromObject(dynamic data) {
     this._id = data["id"];
     this._firstName = data["firstName"];
     this._lastName = data["lastName"];
@@ -71,5 +72,4 @@ class User{
     this._typeName = data["typeName"];
     this._typeName = data["typeName"];
   }
-
 }
