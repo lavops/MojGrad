@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
+using Backend.UI.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -13,17 +13,18 @@ namespace Backend.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public CityController(AppDbContext context)
+        private readonly ICityUI _iCityUI;
+
+        public CityController(ICityUI iCityUI)
         {
-            _context = context;
+            _iCityUI = iCityUI;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCity()
+        public ActionResult<IEnumerable<City>> GetCity()
         {
-            return await _context.city.ToListAsync();
+            return  _iCityUI.getAllCities();
         }
 
-    }
+     }
 }

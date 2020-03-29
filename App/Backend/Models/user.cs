@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Models
 {
-    public class user
+    public class User
     {
         public long id { get; set; }
         public string firstName { get; set; }
@@ -18,6 +18,8 @@ namespace Backend.Models
         public long cityId { get; set; }
         public string photo { get; set; }
         public string token { get; set; }
+        public int points { get; set; }
+        public int level { get; set; }
 
         public long userTypeId { get; set; }
         public virtual UserType userTypes { get; set; }

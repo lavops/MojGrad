@@ -10,6 +10,6 @@ namespace Backend.Models
         public long id { get; set; }
         public string typeName { get; set; }
 
-        public IList<user> users { get; set; }
+        public IList<User> users { get; set; }
     }
 }

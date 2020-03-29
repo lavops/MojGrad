@@ -13,7 +13,7 @@ namespace Backend.Models
         public DateTime time { get; set; }
         public long likeTypeId { get; set; }
 
-        public virtual user user { get; set; }
+        public virtual User user { get; set; }
         public virtual LikeType LikeType { get; set; }
         public virtual Post post { get; set; }
 

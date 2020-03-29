@@ -13,7 +13,7 @@ namespace Backend
         {
             optionsBuilder.UseSqlite(@"Data source = database.db");
         }
-        public DbSet<user> user { get; set; }
+        public DbSet<User> user { get; set; }
         public DbSet<City> city { get; set; }
         public DbSet<Comment> comment { get; set; }
         public DbSet<Like> like { get; set; }

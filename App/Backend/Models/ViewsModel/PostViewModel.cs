@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Models
+namespace Backend.Models.ViewsModel
 {
-    public class FullPost
+    public class PostViewModel
     {
-       
         public long postId { get; set; }
         public long userId { get; set; }
         public string username { get; set; }
@@ -24,12 +23,12 @@ namespace Backend.Models
         public double latitude { get; set; }
         public double longitude { get; set; }
 
-        public FullPost(Post p) //post se posalje
+        public PostViewModel (Post p) 
         {
             this.username = p.user.username;
             this.createdAt = p.createdAt;
             this.description = p.description;
-            this.dislikeNum = p.likes.Where(x => x.likeTypeId == 1 && x.postId==p.id).Count();
+            this.dislikeNum = p.likes.Where(x => x.likeTypeId == 1 && x.postId == p.id).Count();
             this.likeNum = p.likes.Where(x => x.likeTypeId == 2 && x.postId == p.id).Count();
             this.photoPath = p.photoPath;
             this.postId = p.id;
@@ -42,7 +41,6 @@ namespace Backend.Models
             this.latitude = p.latitude;
             this.longitude = p.longitude;
         }
-
 
     }
 }

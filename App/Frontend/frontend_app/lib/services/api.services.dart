@@ -9,8 +9,8 @@ import '../models/user.dart';
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:52739/api/';
-  static String serverURL = 'http://127.0.0.1:52739/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -20,13 +20,13 @@ class APIServices
 
   //return all posts
   static Future getPost() async{
-    return await http.get(serverURL +'FullPosts');
+    return await http.get(serverURL +'Post');
     
   }
 
   //return all posts from a specific user
    static Future getPostsForUser(int userId) async{
-    String url = serverURL + 'FullPosts/UsersPosts';
+    String url = serverURL + 'Post/UsersPosts';
     var data = Map();
     data["id"] = userId;
     var jsonBody = convert.jsonEncode(data);
@@ -40,7 +40,7 @@ class APIServices
 
   //send a new post to the database
    static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
-    String url = serverURL + 'FullPosts';
+    String url = serverURL + 'Post';
 
     var data = Map();
     data["userId"] = userId;
@@ -77,13 +77,13 @@ class APIServices
   //return all comments on one post
   static Future getComments(int postId) async
   {
-    return await http.get(serverURL +'FullComment/'+postId.toString());
+    return await http.get(serverURL +'Comment/'+postId.toString());
     
   }
 
   //send a new comment to the database
   static Future<String> addComment( String comm, int userId, int postId) async {
-    String url = serverURL + 'FullComment';
+    String url = serverURL + 'Comment';
 
     var data = Map();
     data["description"] = comm;
@@ -99,7 +99,7 @@ class APIServices
   //return types of posts (example smeće, rupe...)
   static Future getPostType() async
   {
-    return await http.get(serverURL +'postType');
+    return await http.get(serverURL +'PostType');
 
   }
 
@@ -108,8 +108,10 @@ class APIServices
     String url = serverURL + 'User/Login';
 
     var body = jsonEncode({ 'email': mail, 'password': password });
-
-    return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
+  var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
+  print(res.statusCode);
+  return res;
+  //  return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
   }
 
   static Future registration(User user) async  {

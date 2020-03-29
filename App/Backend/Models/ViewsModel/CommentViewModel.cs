@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Models
+namespace Backend.Models.ViewsModel
 {
-    public class FullComment
+    public class CommentViewModel
     {
         public long id { get; set; }
         public long postId { get; set; }
@@ -14,7 +14,7 @@ namespace Backend.Models
         public string description { get; set; }
         public string username { get; set; }
 
-        public FullComment(Comment com)
+        public CommentViewModel (Comment com)
         {
             this.description = com.description;
             this.id = com.id;
@@ -22,6 +22,5 @@ namespace Backend.Models
             this.userId = com.userId;
             this.username = com.user.username;
         }
-
     }
 }
