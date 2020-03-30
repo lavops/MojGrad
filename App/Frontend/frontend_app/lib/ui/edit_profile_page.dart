@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import '../services/api.services.dart';
@@ -23,9 +25,8 @@ class EditProfile extends State<EditProfilePage> {
   final Color green = Color(0xFF1E8161);
   int _selectedOption = 0;
   int index = 6;
-  String _flname, _username, _password, _email, _number;
-  String firstName, lastName, username1, password1, email1, number1;
-  String wrongRegText = "";
+  String firstName = '', lastName = '', username1 = '', password1 = '', email1 = '', number1 = '';
+  var pass; 
 
   final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
@@ -72,41 +73,50 @@ class EditProfile extends State<EditProfilePage> {
 
                     SizedBox(height: 20),
 
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: Text(
-                          "Izmeni",
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      onTap: () {
-                        var check = customController.text;
-                        print(check);
+                    Row(
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            var check = customController.text;
+                            print(check);
 
-                        if (flNameRegex.hasMatch(check)) {
-                          var array = check.split(" ");
-                          firstName = array[0];
-                          lastName = array[1];
-                          print(check);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EditProfilePage(user)),
-                          );
-                        } 
-                        else {
-                          check = "Greska";
-                          print(check);
-                          Navigator.of(context).pop(check.toString());
-                        }
-                      },
+                            if (flNameRegex.hasMatch(check)) {
+                              var array = check.split(" ");
+
+                              print(check);
+
+                              setState(() {
+                                firstName = array[0];
+                                lastName = array[1]; 
+                              });
+                              Navigator.of(context).pop();
+                            }  
+                            else {
+                              check = "Greska";
+                              print(check);
+                              Navigator.of(context).pop(check.toString());
+                            }
+                          },
+                        ),
+
+                        SizedBox(width: 110),
+
+                        MaterialButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            Navigator.of(context).pop(); 
+                          },
+                        ),
+                      ],
                     )
                   ],
                 )),
@@ -154,38 +164,45 @@ class EditProfile extends State<EditProfilePage> {
 
                     SizedBox(height: 20),
 
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: Text(
-                          "Izmeni",
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      onTap: () {
-                        var check = customController.text;
+                    Row(
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            var check = customController.text;
+                            print(check);
 
-                        if (usernameRegex.hasMatch(check)) {
-                          username1 = check;
-                          print(check);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EditProfilePage(user)),
-                          );
-                        }
-                        else {
-                          check = "Greska";
-                          print(check);
-                          Navigator.of(context).pop(check.toString());
-                        }
-                      },
+                            if (usernameRegex.hasMatch(check)) {
+                              setState(() {
+                                username1 = check;
+                              });
+                              Navigator.of(context).pop();
+                            } 
+                            else {
+                              check = "Greska";
+                              print(check);
+                              Navigator.of(context).pop(check.toString());
+                            }
+                          },
+                        ),
+
+                        SizedBox(width: 110),
+
+                        MaterialButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            Navigator.of(context).pop(); 
+                          },
+                        ),
+                      ],
                     )
                   ],
                 )),
@@ -270,50 +287,63 @@ class EditProfile extends State<EditProfilePage> {
 
                     SizedBox(height: 20),
 
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: Text(
-                          "Izmeni",
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      onTap: () {
-                        var temp = customController.text;
-                        var check = customController2.text;
-                        var checkAgain = customController3.text;
+                     Row(
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            var temp2 = customController.text; //trenutna
+                            var check = customController2.text; //nova
+                            var checkAgain = customController3.text;
 
-                        print(temp);
-                        print(myPassword);
+                            print(temp2);
+                            print(myPassword);
 
-                        if (temp == myPassword) {
-                          if (check == checkAgain) {
-                            if (passRegex.hasMatch(check)) {
-                              password1 = check;
-                              print(check);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>EditProfilePage(user)),
-                              );
-                            } else {
-                              check = "Greska regEx";
-                              print(check);
-                              Navigator.of(context).pop(check.toString());
+                            var pom = utf8.encode(temp2);
+                            var temp = sha1.convert(pom);
+
+                            if (temp.toString() == myPassword) {
+                              if (check == checkAgain) {
+                                if (passRegex.hasMatch(check)) {
+                                  print(check);
+                                  setState(() {
+                                    password1 = check;
+                                  });
+                                  Navigator.of(context).pop();
+                                }
+                                else {
+                                  check = "Greska regEx";
+                                  print(check);
+                                  Navigator.of(context).pop(check.toString());
+                                }
+                              } 
+                              else {
+                                print("Nova i ponovljena nisu iste");
+                              }
+                            } 
+                            else {
+                              print("Trenutna nije dobra");
                             }
-                          } else {
-                            print("Nova i ponovljena nisu iste");
-                          }
-                        } else {
-                          print("Trenutna nije dobra");
-                        }
-                      },
+                          },
+                        ),
+
+                        SizedBox(width: 110),
+
+                        MaterialButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            Navigator.of(context).pop(); 
+                          },
+                        ),
+                      ],
                     )
                   ],
                 )),
@@ -360,38 +390,45 @@ class EditProfile extends State<EditProfilePage> {
 
                     SizedBox(height: 20),
 
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: Text(
-                          "Izmeni",
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      onTap: () {
-                        var check = customController.text;
+                    Row(
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            var check = customController.text;
+                            print(check);
 
-                        if (emailRegex.hasMatch(check)) {
-                          email1 = check;
-                          print(check);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EditProfilePage(user)),
-                          );
-                        }
-                        else {
-                          check = "Greska";
-                          print(check);
-                          Navigator.of(context).pop(check.toString());
-                        }
-                      },
+                            if (emailRegex.hasMatch(check)) {
+                              setState(() {
+                                email1 = check;
+                              });
+                              Navigator.of(context).pop();
+                            } 
+                            else {
+                              check = "Greska";
+                              print(check);
+                              Navigator.of(context).pop(check.toString());
+                            }
+                          },
+                        ),
+
+                        SizedBox(width: 110),
+
+                        MaterialButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            Navigator.of(context).pop(); 
+                          },
+                        ),
+                      ],
                     )
                   ],
                 )),
@@ -440,39 +477,45 @@ class EditProfile extends State<EditProfilePage> {
 
                     SizedBox(height: 20),
 
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: Text(
-                          "Izmeni",
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      onTap: () {
-                        var check = customController.text;
-                        print(check);
+                    Row(
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            var check = customController.text;
+                            print(check);
 
-                        if(mobRegex.hasMatch(check)) {
-                          number1 = check;
-                          print(check);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EditProfilePage(user)),
-                          );
-                        }
-                        else {
-                          check = "Greska";
-                          print(check);
-                          Navigator.of(context).pop(check.toString());
-                        }
-                      },
+                            if (mobRegex.hasMatch(check)) {
+                              setState(() {
+                                number1 = check;
+                              });
+                              Navigator.of(context).pop();
+                            } 
+                            else {
+                              check = "Greska";
+                              print(check);
+                              Navigator.of(context).pop(check.toString());
+                            }
+                          },
+                        ),
+
+                        SizedBox(width: 110),
+
+                        MaterialButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: (){
+                            Navigator.of(context).pop(); 
+                          },
+                        ),
+                      ],
                     )
                   ],
                 )),
@@ -509,7 +552,7 @@ class EditProfile extends State<EditProfilePage> {
                     color: Colors.black,
                     fontWeight: _selectedOption == index - 1 ? FontWeight.bold : FontWeight.normal,
                   )),
-              subtitle: Text(user.firstName + " " + user.lastName,
+              subtitle: Text(firstName == '' ? user.firstName : firstName + " " + lastName,
                   style: TextStyle(
                       color: _selectedOption == index - 1 ? Colors.black : Colors.grey)),
               selected: _selectedOption == index - 1,
@@ -536,8 +579,7 @@ class EditProfile extends State<EditProfilePage> {
                     color: Colors.black,
                     fontWeight: _selectedOption == index - 2 ? FontWeight.bold : FontWeight.normal,
                   )),
-              subtitle: Text(
-                user.username,
+              subtitle: Text(username1 == '' ? user.username : username1,
                 style: TextStyle(
                     color: _selectedOption == index - 2 ? Colors.black : Colors.grey),
               ),
@@ -590,7 +632,7 @@ class EditProfile extends State<EditProfilePage> {
                         ? FontWeight.bold
                         : FontWeight.normal,
                   )),
-              subtitle: Text(user.email,
+              subtitle: Text(email1 == '' ? user.email : email1,
                   style: TextStyle(
                       color: _selectedOption == index - 4
                           ? Colors.black
@@ -621,7 +663,7 @@ class EditProfile extends State<EditProfilePage> {
                         ? FontWeight.bold
                         : FontWeight.normal,
                   )),
-              subtitle: Text(user.phone,
+              subtitle: Text(number1 == '' ? user.phone : number1,
                   style: TextStyle(
                       color: _selectedOption == index - 5
                           ? Colors.black
@@ -653,7 +695,43 @@ class EditProfile extends State<EditProfilePage> {
             ),
             onPressed: () async {
               
-              var res = await APIServices.editUser(user.id, firstName, lastName, username1, password1, email1, number1);
+              if(firstName == '')
+              {
+                firstName = user.firstName;
+              }
+
+              if(lastName == '')
+              {
+                lastName = user.lastName;
+              }
+
+              if(username1 == '')
+              {
+                username1 = user.username;
+              }
+
+              if(password1 == '')
+              {
+                password1 = user.password;
+              }
+
+              if(email1 == '')
+              {
+                email1 = user.email;
+              }
+
+              if(number1 == '')
+              {
+                number1 = user.phone;
+              }
+
+              if(password1!='')
+              {
+                var pom = utf8.encode(password1);
+                pass = sha1.convert(pom);
+              } 
+              
+              var res = await APIServices.editUser(user.id, firstName, lastName, username1, pass.toString(), email1, number1);
             },
             color: green,
             child: Text(
