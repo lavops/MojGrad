@@ -24,6 +24,7 @@ class EditProfile extends State<EditProfilePage> {
   int _selectedOption = 0;
   int index = 6;
   String _flname, _username, _password, _email, _number;
+  String firstName, lastName, username1, password1, email1, number1;
   String wrongRegText = "";
 
   final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,}$');
@@ -92,8 +93,8 @@ class EditProfile extends State<EditProfilePage> {
 
                         if (flNameRegex.hasMatch(check)) {
                           var array = check.split(" ");
-                          user.firstName = array[0];
-                          user.lastName = array[1];
+                          firstName = array[0];
+                          lastName = array[1];
                           print(check);
                           Navigator.push(
                             context,
@@ -172,7 +173,7 @@ class EditProfile extends State<EditProfilePage> {
                         var check = customController.text;
 
                         if (usernameRegex.hasMatch(check)) {
-                          user.username = check;
+                          username1 = check;
                           print(check);
                           Navigator.push(
                             context,
@@ -295,7 +296,7 @@ class EditProfile extends State<EditProfilePage> {
                         if (temp == myPassword) {
                           if (check == checkAgain) {
                             if (passRegex.hasMatch(check)) {
-                              user.password = check;
+                              password1 = check;
                               print(check);
                               Navigator.push(
                                 context,
@@ -378,7 +379,7 @@ class EditProfile extends State<EditProfilePage> {
                         var check = customController.text;
 
                         if (emailRegex.hasMatch(check)) {
-                          user.email = check;
+                          email1 = check;
                           print(check);
                           Navigator.push(
                             context,
@@ -459,7 +460,7 @@ class EditProfile extends State<EditProfilePage> {
                         print(check);
 
                         if(mobRegex.hasMatch(check)) {
-                          user.phone = check;
+                          number1 = check;
                           print(check);
                           Navigator.push(
                             context,
@@ -651,7 +652,8 @@ class EditProfile extends State<EditProfilePage> {
               side: BorderSide(color: Colors.transparent)
             ),
             onPressed: () async {
-              var res = await APIServices.editUser(user);
+              
+              var res = await APIServices.editUser(user.id, firstName, lastName, username1, password1, email1, number1);
             },
             color: green,
             child: Text(
