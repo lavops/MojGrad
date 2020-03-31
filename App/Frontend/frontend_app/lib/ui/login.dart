@@ -13,8 +13,8 @@ class LoginPage extends StatefulWidget{
 }
 
 class _LoginPageState extends State<LoginPage>{
-  final formKey = GlobalKey<FormState>();
-  String _email, _password;
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
   String pogresanLoginText = '';
 
   User user;
@@ -25,6 +25,46 @@ class _LoginPageState extends State<LoginPage>{
     await prefs.setString('user', json.encode(jsonObject));
   }
 
+  _login(String _email, String _password){
+    if( _email == '' || _password == '' )
+    {
+      _emailController.text = "";
+      _passwordController.text = "";
+      setState(() {
+        pogresanLoginText = "Podaci nisu ispravni";
+      });
+      throw Exception('Los email/sifra');
+    }
+    else{
+      var pom = utf8.encode(_password);
+      var pass = sha1.convert(pom);
+      APIServices.login(_email, pass.toString()).then((response){
+        if (response.statusCode == 200) {
+          Map<String, dynamic> jsonObject = json.decode(response.body);
+          _saveToken(jsonObject);
+          User extractedUser = new User();
+          extractedUser = User.fromObject(jsonObject);
+          setState(() {
+            user = extractedUser;
+            pogresanLoginText = "";
+          });
+          if(user != null){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }
+        } else {
+          _passwordController.text = "";
+          setState(() {
+            pogresanLoginText = "PODACI NISU ISPRAVNI";
+          });
+          throw  Exception('Bad username/password');
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context){
 
@@ -32,41 +72,47 @@ class _LoginPageState extends State<LoginPage>{
     final logo = Hero(
       tag: 'hero',
       child: Center(
-        child: Image.asset('assets/mojGrad4.png', width: 200,)
+        child: Image.asset('assets/mojGrad4.png', width: 300,)
       ),
     );
 
     //text box for email
-    final emailText = TextFormField(
+    final emailText = TextField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
-      initialValue: '',
       decoration: InputDecoration(
-        hintText: 'Email',
+        prefixIcon: Icon(Icons.email,color: Colors.green[800]),
+        hintText: 'E-mail',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-        )
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0),
+          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+        ),
       ),
-      onSaved: (input) => _email = input,
+      controller: _emailController,
     );
-
 
     //text box for password
-    final passwordText = TextFormField(
+    final passwordText = TextField(
       autofocus: false,
-      initialValue: '',
       obscureText: true,
       decoration: InputDecoration(
-        hintText: 'Sifra',
+        prefixIcon: Icon(Icons.lock,color: Colors.green[800],),
+        hintText: 'Šifra',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-        )
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.0),
+          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+        ),
       ),
-      onSaved: (input) => _password = input,
+      controller: _passwordController,
     );
-
 
     //button for login
     final loginButton = Padding(
@@ -83,46 +129,9 @@ class _LoginPageState extends State<LoginPage>{
             side: BorderSide(color: Colors.transparent)
           ),
           onPressed: (){
-            formKey.currentState.save();
+            // Call login function
+            _login(_emailController.text, _passwordController.text);
             
-            //APIServices.login(_email, _password)
-            if( _email == '' || _password == '' )
-            {
-              print("object");
-              setState(() {
-                pogresanLoginText = "Podaci nisu ispravni";
-              });
-              throw Exception('Los email/sifra');
-            }
-            else{
-              // Checks for status code if is ok then it goes to homepage
-              var pom = utf8.encode(_password);
-              var pass = sha1.convert(pom);
-              APIServices.login(_email, pass.toString()).then((response){
-                if (response.statusCode == 200) {
-                  Map<String, dynamic> jsonObject = json.decode(response.body);
-                  _saveToken(jsonObject);
-                  User extractedUser = new User();
-                  extractedUser = User.fromObject(jsonObject);
-                  setState(() {
-                    user = extractedUser;
-                    pogresanLoginText = "";
-                  });
-                  if(user != null){
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyBottomBar()),
-                    );
-                  }
-                } else {
-                  setState(() {
-                    pogresanLoginText = "Podaci nisu ispravni";
-                  });
-                  throw  Exception('Bad username/password');
-                }
-              });
-
-            }
           },
           color: Colors.green[800],
           child: Text(
@@ -135,41 +144,37 @@ class _LoginPageState extends State<LoginPage>{
       ),
     );
 
-
-  //redirection to page for new users
-  final registerLabel = Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Text(
-        'Novi korisnik?'
-      ),
-      SizedBox(width: 5.0,),
-      InkWell(
-        child: Text('Registrujte se ovde',
-        style: TextStyle(
-          color: Colors.green[800],
-          fontWeight: FontWeight.bold,
-          decoration: TextDecoration.underline
-          ),
+    //redirection to page for new users
+    final registerLabel = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Novi korisnik?'
         ),
-        onTap: (){
-           Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => registrationPage()),
-        );
-        },
-      ),
-    ],
-  );
+        SizedBox(width: 5.0,),
+        InkWell(
+          child: Text('Registrujte se ovde.',
+          style: TextStyle(
+            color: Colors.green[800],
+            fontWeight: FontWeight.bold
+            ),
+          ),
+          onTap: (){
+            Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => registrationPage()),
+          );
+          },
+        ),
+      ],
+    );
 
-
-  //in case of wrong login
-  final pogresanLogin = Center( child: Text(
-      '$pogresanLoginText',
-      style: TextStyle(color: Colors.red),
-    )
-  );
-
+    //in case of wrong login
+    final pogresanLogin = Center( child: Text(
+        '$pogresanLoginText',
+        style: TextStyle(color: Colors.red),
+      )
+    );
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -181,20 +186,18 @@ class _LoginPageState extends State<LoginPage>{
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
               children: <Widget>[
                 logo,
-                Form(
-                  key: formKey,
-                  child: Column(
-                   children: <Widget>[
-                     SizedBox(height: 48.0,),
-                     emailText,
-                     SizedBox(height: 8.0,),
-                     passwordText,
-                     SizedBox(height: 24.0,),
-                     loginButton,
-                   ], 
-                  ),
+                Column(
+                  children: <Widget>[
+                    SizedBox(height: 48.0,),
+                    emailText,
+                    SizedBox(height: 8.0,),
+                    passwordText,
+                    SizedBox(height: 24.0,),
+                    loginButton,
+                  ], 
                 ),
                 registerLabel,
+                SizedBox(height: 8.0,),
                 pogresanLogin,
               ],
             ),
