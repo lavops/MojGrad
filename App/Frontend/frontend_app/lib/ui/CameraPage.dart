@@ -356,7 +356,7 @@ class _CameraPageState extends State<CameraPage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyBottomBar()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       },
       icon: Icon(Icons.nature_people),

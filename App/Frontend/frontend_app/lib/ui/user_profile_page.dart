@@ -5,6 +5,7 @@ import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/login.dart';
+import 'package:frontend/widgets/postWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,7 +48,7 @@ class HeaderSection extends State<UserProfilePage> {
     });
   }
   */
-  getPosts() {
+  _getPosts() {
     APIServices.getPostsForUser(user.id).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
@@ -66,10 +67,15 @@ class HeaderSection extends State<UserProfilePage> {
     prefs.remove('user');
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _getPosts();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    getPosts();
     return new Scaffold(
       appBar: AppBar(
         title: Text('Profil'),
@@ -79,7 +85,7 @@ class HeaderSection extends State<UserProfilePage> {
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyBottomBar()));
+                  MaterialPageRoute(builder: (context) => HomePage()));
             }),
       ),
       endDrawer: Drawer(
@@ -250,96 +256,15 @@ class HeaderSection extends State<UserProfilePage> {
               ),
             ),
             Expanded(
-              child: new ListView.builder(
-                  itemCount: posts == null ? 0 : posts.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return PostItem(
-                      post: posts[index],
-                    );
-                  }),
+              child: (posts != null)?
+              PostWidget(posts):
+              Center(child: CircularProgressIndicator(
+                valueColor:new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                ),
+              )
             )
           ]),
         ],
-      ),
-    );
-  }
-}
-
-class PostItem extends StatelessWidget {
-  final FullPost post;
-
-  const PostItem({
-    this.post,
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      elevation: 4,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16))),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 0, left: 20, right: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.location_on),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "lokacija",
-                  ),
-                ],
-              ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
-              ),
-              child: Image.asset(
-                "assets/post1.jpg",
-                width: 300,
-                height: 250,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          post.description,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
