@@ -79,7 +79,7 @@ class HeaderSection extends State<UserProfilePage> {
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyBottomBar()));
+                  MaterialPageRoute(builder: (context) => HomePage()));
             }),
       ),
       endDrawer: Drawer(
