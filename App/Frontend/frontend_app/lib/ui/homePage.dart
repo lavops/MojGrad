@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
+import 'package:frontend/ui/feedPage.dart';
+import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/user_profile_page.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-  int _currentTabIndex = 2;
+  int _currentTabIndex = 0;
   String token = '';
   User user;
 
@@ -39,8 +41,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context){
     final _kTabPages = <Widget>[
-      //FeedPage(user),
-      //MapPage(),
+      FeedPage(user),
+      MapPage(),
       CameraPage(),
       SponsorshipPage(),
       UserProfilePage(user),
