@@ -21,14 +21,16 @@ class _SplashPageState extends State<SplashPage>{
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
-    print(prefs.getString("user"));
-    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
-     User extractedUser = new User();
-     extractedUser = User.fromObject(jsonObject);
-    setState(() {
-      token = _token;
-      user = extractedUser;
-    });
+    //print(prefs.getString("user"));
+    if(_token != ''){
+      Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
+      User extractedUser = new User();
+      extractedUser = User.fromObject(jsonObject);
+      setState(() {
+        token = _token;
+        user = extractedUser;
+      });
+    }
   }
   // This function needs to be done again once we implement login & register
   // It will check if we have logged user in our session/memory

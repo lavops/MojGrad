@@ -1,6 +1,6 @@
 class User{
   int _id;
-  int _userType;
+  int _userTypeId;
   String _firstName;  
   String _lastName;
   String _createdAt;
@@ -9,14 +9,17 @@ class User{
   String _email;
   String _phone;  
   int _cityId;
+  String _cityName;
   String _token;
+  String _typeName;
+  String _photo;
 
   User();
-  //User(this._id, this._userType, this._firstName, this._lastName, this._createdAt, this._username, this._password, this._email, this._phone, this._cityId);
+  User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
   
 
   int get id => _id;
-  int get userType => _userType;
+  int get userTypeId => _userTypeId;
   String get firstName => _firstName;
   String get lastName => _lastName;
   String get createdAt => _createdAt;
@@ -25,13 +28,16 @@ class User{
   String get email => _email;
   String get phone => _phone;
   int get cityId => _cityId;
+  String get cityName => _cityName;
   String get token => _token;
+  String get typeName => _typeName;
+  String get photo => _photo;
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
     var data = Map<String, dynamic>();
 
-    data["userType"] = _userType;
+    data["userTypeId"] = _userTypeId;
     data["firstName"] = _firstName;
     data["lastName"] = _lastName;
     data["createdAt"] = _createdAt;
@@ -40,7 +46,10 @@ class User{
     data["email"] = _email;
     data["phone"] = _phone;
     data["cityId"] = _cityId;
+    data["cityName"]=_cityName;
     data["token"] = _token;
+    data["typeName"] = _typeName;
+    data["photo"] = _photo;
  
     if(_id != null){
       data["id"] = _id;
@@ -61,6 +70,10 @@ class User{
     this._phone = data["phone"];
     this._cityId = data["cityId"];
     this._token = data["token"];
+    this._userTypeId = data["userTypeId"];
+    this._typeName = data["typeName"];
+    this._typeName = data["typeName"];
+    this._photo = data["photo"];
   }
 
 }
