@@ -22,10 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString('token');   
-    print("homePage"+prefs.getString("user"));
-    print("homePage"+prefs.getString("user"));
-    print("homePage"+prefs.getString("user"));
+    String _token = prefs.getString('token');
     Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
      User extractedUser = new User();
      extractedUser = User.fromObject(jsonObject);
