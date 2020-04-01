@@ -9,8 +9,8 @@ import '../models/user.dart';
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://127.0.0.1:60676/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://127.0.0.1:52739/api/';
 
 
   static Map<String, String> header = { 
@@ -109,7 +109,9 @@ class APIServices
 
     var body = jsonEncode({ 'email': mail, 'password': password });
   var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
+  print("login"+ body);
   print(res.statusCode);
+  print("login "+res.body);
   return res;
   //  return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
   }
@@ -150,4 +152,24 @@ class APIServices
 		print(jsonBody);
 		return await http.post(url, headers: header, body: jsonBody);
 	}
+
+  static Future dislikeInPost(int postId) async {
+    String url = serverURL + 'Like/DislikeInPost';
+
+    var data = Map();
+    data["id"] = postId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: header, body: jsonBody);
+ 
+  }
+  static Future likeInPost(int postId) async {
+    String url = serverURL + 'Like/LikeInPost';
+
+    var data = Map();
+    data["id"] = postId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: header, body: jsonBody);
+ 
+  }
+
 }

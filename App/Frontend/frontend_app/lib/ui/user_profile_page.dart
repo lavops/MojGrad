@@ -5,6 +5,7 @@ import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/login.dart';
+import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
@@ -71,6 +72,7 @@ class HeaderSection extends State<UserProfilePage> {
   void initState() {
     super.initState();
     _getPosts();
+    print(user.photo);
   }
 
 
@@ -168,7 +170,13 @@ class HeaderSection extends State<UserProfilePage> {
               ),
               child: Column(
                 children: <Widget>[
-                  Icon(Icons.account_circle, color: Colors.white, size: 110),
+                  
+                 CircleImage(
+                      "http://10.0.2.2:60676//" + user.photo,
+                      imageSize: 90.0,
+                      whiteMargin: 2.0,
+                      imageMargin: 6.0,
+                    ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Text(

@@ -12,9 +12,10 @@ class User{
   String _cityName;
   String _token;
   String _typeName;
+  String _photo;
 
   User();
-  User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId);
+  User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
   
 
   int get id => _id;
@@ -30,6 +31,7 @@ class User{
   String get cityName => _cityName;
   String get token => _token;
   String get typeName => _typeName;
+  String get photo => _photo;
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
@@ -47,6 +49,7 @@ class User{
     data["cityName"]=_cityName;
     data["token"] = _token;
     data["typeName"] = _typeName;
+    data["photo"] = _photo;
  
     if(_id != null){
       data["id"] = _id;
@@ -70,6 +73,7 @@ class User{
     this._userTypeId = data["userTypeId"];
     this._typeName = data["typeName"];
     this._typeName = data["typeName"];
+    this._photo = data["photo"];
   }
 
 }

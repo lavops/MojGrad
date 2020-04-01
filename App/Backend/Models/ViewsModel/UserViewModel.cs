@@ -22,6 +22,7 @@ namespace Backend.Models.ViewsModel
         public int level { get; set; }
 
         public string userTypeName { get; set; }
+        public string photoPath { get; set; }
 
         public UserViewModel(User u)
         {
@@ -39,6 +40,7 @@ namespace Backend.Models.ViewsModel
             this.cityId = u.cityId;
             this.userTypeId = u.userTypeId;
             this.userTypeName = u.userTypes.typeName;
+            this.photoPath = u.photo;
         }
     }
 }

@@ -13,6 +13,7 @@ class CircleImage extends StatelessWidget {
     this.imageMargin = 4.0,
   });
 
+
   @override
   Widget build(BuildContext context) {
     // Gradient background container
@@ -32,7 +33,7 @@ class CircleImage extends StatelessWidget {
           color: Colors.white,
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(image),
+            image: NetworkImage(image),
           ),
         ),
       ),

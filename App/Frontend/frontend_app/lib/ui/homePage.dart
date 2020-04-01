@@ -22,7 +22,10 @@ class _HomePageState extends State<HomePage> {
 
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString('token');
+    String _token = prefs.getString('token');   
+    print("homePage"+prefs.getString("user"));
+    print("homePage"+prefs.getString("user"));
+    print("homePage"+prefs.getString("user"));
     Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
      User extractedUser = new User();
      extractedUser = User.fromObject(jsonObject);
@@ -30,6 +33,7 @@ class _HomePageState extends State<HomePage> {
       token = _token;
       user = extractedUser;
     });
+    
   }
   
   @override
@@ -40,6 +44,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context){
+    
     final _kTabPages = <Widget>[
       FeedPage(user),
       MapPage(),

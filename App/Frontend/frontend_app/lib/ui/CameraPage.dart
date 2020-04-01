@@ -352,7 +352,7 @@ class _CameraPageState extends State<CameraPage> {
         else  
           postTypeId = postType.id;
         
-        APIServices.addPost(token,user.id, postTypeId, description.text, basename(imageFile.path), statusId, latitude1, longitude2);
+        APIServices.addPost(token,user.id, postTypeId, description.text, "Upload//" + basename(imageFile.path), statusId, latitude1, longitude2);
 
         Navigator.pushReplacement(
           context,

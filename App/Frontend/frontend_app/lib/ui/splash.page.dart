@@ -17,9 +17,11 @@ class _SplashPageState extends State<SplashPage>{
   String token = '';
   User user;
 
+
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
+    print(prefs.getString("user"));
     Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
      User extractedUser = new User();
      extractedUser = User.fromObject(jsonObject);
@@ -64,7 +66,20 @@ class _SplashPageState extends State<SplashPage>{
       }
     );
   }
-
+/*
+ void initState(){
+    super.initState();
+    Future.delayed(
+      Duration(seconds: 2),
+      () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      }
+    );
+  }
+*/
   @override
   Widget build(BuildContext context){
 

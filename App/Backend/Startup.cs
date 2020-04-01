@@ -121,6 +121,8 @@ namespace Backend
 
             app.UseRouting();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
 
             app.UseAuthorization();
