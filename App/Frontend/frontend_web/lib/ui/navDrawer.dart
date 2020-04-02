@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/loginPage.dart';
+import 'package:frontend_web/ui/managementPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './managementPage.dart';
+
 import './homePage.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -26,9 +27,7 @@ class NavDrawer extends StatelessWidget {
             ),
             decoration: BoxDecoration(
                 color: Colors.white,
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/mg.png'))),
+             ),
           ),
           ListTile(
             leading: Icon(Icons.perm_identity),
@@ -52,7 +51,7 @@ class NavDrawer extends StatelessWidget {
             title: Text('Upravljanje'),
             onTap: () => { Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => managementPage()),
+            MaterialPageRoute(builder: (context) => ManagementPage()),
             ),},
           ),
           ListTile(

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/ui/registerAdminPage.dart';
 import './navDrawer.dart';
 import 'package:frontend_web/ui/usersProfilePage.dart';
 
 
-class managementPage extends StatefulWidget {
+class ManagementPage extends StatefulWidget {
   @override
-  _managementPageState createState() => _managementPageState();
+  _ManagementPageState createState() => _ManagementPageState();
 }
 
-class _managementPageState extends State<managementPage> {
+class _ManagementPageState extends State<ManagementPage> {
 
   @override
   Widget build(BuildContext context) =>
@@ -117,7 +118,9 @@ class _managementPageState extends State<managementPage> {
                       textColor: Colors.white,
                       color: Color(0xff4caf50),
                       onPressed: () {
-
+                         Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => RegisterAdminPage())
+                        );
                       }
                       ),
                 ),

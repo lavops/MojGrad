@@ -7,8 +7,7 @@ import 'package:http/http.dart' as http;
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:52739/api/';
-  static String serverURL = 'http://127.0.0.1:44732/api/';
+  static String serverURL = 'http://127.0.0.1:60676/api/';
 
 
   static Map<String, String> header = { 
@@ -67,15 +66,9 @@ class APIServices
 
 	
    static Future getUsers() async {
-    return await http.get(serverURL + 'Users');
+    return await http.get(serverURL + 'User');
   }
 
- //returns post with specific id for deletion
-  static Future deletePost(int id) async {
-    String url = serverURL + 'Post/Delete';
-    
-    return await http.post(url, headers: header,body: jsonEncode({ 'id': id, }),);
-  }
  //return all posts
   static Future getPost() async{
     return await http.get(serverURL +'Post');

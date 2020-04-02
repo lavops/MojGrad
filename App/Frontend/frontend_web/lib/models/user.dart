@@ -13,6 +13,9 @@ class User{
   String _token;
   String _typeName;
   String _photo;
+  int _postsNum;
+  int _points;
+  int _level;
 
   User();
   User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
@@ -32,6 +35,9 @@ class User{
   String get token => _token;
   String get typeName => _typeName;
   String get photo => _photo;
+  int get postsNum => _postsNum;
+  int get points => _points;
+  int get level => _level;
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
@@ -50,6 +56,9 @@ class User{
     data["token"] = _token;
     data["typeName"] = _typeName;
     data["photo"] = _photo;
+    data["postsNum"] = _postsNum;
+    data["points"] = _points;
+    data["level"] = _level;
  
     if(_id != null){
       data["id"] = _id;
@@ -74,6 +83,9 @@ class User{
     this._typeName = data["typeName"];
     this._typeName = data["typeName"];
     this._photo = data["photo"];
+    this._postsNum = data["postsNum"];
+    this._points = data["points"];
+    this._level = data["level"];
   }
 
 }
