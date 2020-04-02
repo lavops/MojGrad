@@ -52,17 +52,6 @@ class APIServices
     return await http.get(serverURL + 'City');
   }
 
-  //returns user with specific id for deletion
-  static Future deleteUser(int id) async {
-    String url = serverURL + 'User/Delete'+ id.toString();
-    return await http.post(url, headers: header, body: convert.jsonEncode({ 'id' : id, }));
-  }
-
-  //returns post with specific id for deletion
-  static Future deletePost(int id) async {
-    String url = serverURL + 'Post/Delete'+ id.toString();
-    
-    return await http.post(url, headers: header,body: jsonEncode({ 'id': id, }),);
-  }
+  
 
 }
