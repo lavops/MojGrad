@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/ui/loginPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './managementPage.dart';
 import './homePage.dart';
 
 class NavDrawer extends StatelessWidget {
+
+  _removeToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('user');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -48,7 +58,13 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Odjavite se'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              _removeToken(),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              )
+            },
           ),
         ],
       ),
