@@ -177,8 +177,8 @@ class _CameraPageState extends State<CameraPage> {
     // Chosing who will do that assigment
     final problemResava = Row(
       children: <Widget>[
-        Align(alignment: Alignment.topLeft, child: Text("Problem resava: ", style: TextStyle(fontWeight: FontWeight.bold))),
-        Text("Resicu sam"),
+        Align(alignment: Alignment.topLeft, child: Text("Problem rešava: ", style: TextStyle(fontWeight: FontWeight.bold))),
+        Text("Rešiću sam"),
         Flexible(child: 
           Radio(
             value: 1,

@@ -21,8 +21,10 @@ class _SplashPageState extends State<SplashPage>{
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
-    //print(prefs.getString("user"));
-    if(_token != ''){
+    
+    print(prefs.getString('token'));
+    if(_token != '' && prefs.getString('user') != null){
+      print(prefs.getString("user"));
       Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
       User extractedUser = new User();
       extractedUser = User.fromObject(jsonObject);

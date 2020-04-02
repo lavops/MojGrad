@@ -20,12 +20,11 @@ class APIServices
 
   //return all posts
   static Future getPost() async{
-    return await http.get(serverURL +'Post');
-    
+    return await http.get(serverURL +'Post');  
   }
 
   //return all posts from a specific user
-   static Future getPostsForUser(int userId) async{
+  static Future getPostsForUser(int userId) async{
     String url = serverURL + 'Post/UsersPosts';
     var data = Map();
     data["id"] = userId;
@@ -34,14 +33,12 @@ class APIServices
   }
 
   static Future getUser(int userId) async{
-    return await http.get(serverURL +'User/'+userId.toString());
-    
+    return await http.get(serverURL +'User/'+userId.toString()); 
   }
 
   //send a new post to the database
-   static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
+  static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
     String url = serverURL + 'Post';
-
     var data = Map();
     data["userId"] = userId;
     data["postTypeId"] = postTypeId;
@@ -50,8 +47,6 @@ class APIServices
     data["statusId"] = statusId;
     data["latitude"] = latitude;
     data["longitude"] = longitude;
-
-
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: header, body: jsonBody);
     String data2 = res.body.toString();
@@ -62,12 +57,10 @@ class APIServices
   //send a new like to the database
   static Future<String> addLike( int postId, int userId, int typeId) async {
     String url = serverURL + 'Like';
-
     var data = Map();
     data["postId"] = postId;
     data["userId"] = userId;
     data["likeTypeId"] = typeId;
-
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: header, body: jsonBody);
     String data2 = res.body.toString();
@@ -75,21 +68,17 @@ class APIServices
   }
 
   //return all comments on one post
-  static Future getComments(int postId) async
-  {
-    return await http.get(serverURL +'Comment/'+postId.toString());
-    
+  static Future getComments(int postId) async {
+    return await http.get(serverURL +'Comment/'+postId.toString());  
   }
 
   //send a new comment to the database
   static Future<String> addComment( String comm, int userId, int postId) async {
     String url = serverURL + 'Comment';
-
     var data = Map();
     data["description"] = comm;
     data["userId"] = userId;
     data["postId"] = postId;
-
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: header, body: jsonBody);
     String data2 = res.body.toString();
@@ -97,22 +86,16 @@ class APIServices
   }
 
   //return types of posts (example smeće, rupe...)
-  static Future getPostType() async
-  {
+  static Future getPostType() async{
     return await http.get(serverURL +'PostType');
-
   }
 
   // Login funtion
   static Future login(String mail, String password) async{
     String url = serverURL + 'User/Login';
-
     var body = jsonEncode({ 'email': mail, 'password': password });
-  var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
-  //print("login"+ body);
-  //print(res.statusCode);
-  //print("login "+res.body);
-  return res;
+    var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
+    return res;
   //  return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
   }
 
@@ -133,8 +116,7 @@ class APIServices
   }
 
   //fetch method for cities
-  static Future getCity() async
-  {
+  static Future getCity() async{
     return await http.get(serverURL + 'City');
   }
   
@@ -158,7 +140,6 @@ class APIServices
 		data["id"] = id;
 		data["password"] = password;
 		data["password1"] = password1;
-	
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
 		return await http.post(url, headers: header, body: jsonBody);
@@ -167,7 +148,6 @@ class APIServices
 
   static Future dislikeInPost(int postId) async {
     String url = serverURL + 'Like/DislikeInPost';
-
     var data = Map();
     data["id"] = postId;
     var jsonBody = convert.jsonEncode(data);
@@ -176,12 +156,19 @@ class APIServices
   }
   static Future likeInPost(int postId) async {
     String url = serverURL + 'Like/LikeInPost';
-
     var data = Map();
     data["id"] = postId;
     var jsonBody = convert.jsonEncode(data);
     return await http.post(url, headers: header, body: jsonBody);
- 
   }
+
+  static Future getSolvedPosts() async {
+     return await http.get(serverURL +'Post/SolvedPosts');
+  }
+
+  static Future getUnsolvedPosts() async {
+     return await http.get(serverURL +'Post/UnsolvedPosts');
+  }
+
 
 }

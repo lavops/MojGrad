@@ -9,6 +9,7 @@ import 'package:frontend/ui/user_profile_page.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+User publicUser;
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
+    print(prefs.getString('user'));
     Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
      User extractedUser = new User();
      extractedUser = User.fromObject(jsonObject);
@@ -38,6 +40,7 @@ class _HomePageState extends State<HomePage> {
     User user = User.fromObject(jsonUser);
     setState(() {
       user1 = user;
+      publicUser = user;
     });
   } 
 
@@ -61,7 +64,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     final _kBottomNavBarItems = <BottomNavigationBarItem>[
-      BottomNavigationBarItem(icon: Icon(Icons.list), title: Text("Pocetna")),
+      BottomNavigationBarItem(icon: Icon(Icons.list), title: Text("Početna")),
       BottomNavigationBarItem(icon: Icon(Icons.satellite), title: Text("Mapa")),
       BottomNavigationBarItem(icon: Icon(Icons.nature_people), title: Text("Kamera")),
       BottomNavigationBarItem(icon: Icon(Icons.attach_money), title: Text("Sponzorstva")),

@@ -4,6 +4,7 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/likesPage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class PostWidget extends StatefulWidget {
   final List<FullPost> listPosts;
@@ -46,6 +47,7 @@ class _PostWidgetState extends State<PostWidget> {
                 imageGallery(listPosts[index].photoPath),
                 SizedBox(height: 2.0),
                 actionsButtons(
+                    listPosts[index].statusId,
                     listPosts[index].postId,
                     listPosts[index].likeNum,
                     listPosts[index].dislikeNum,
@@ -100,7 +102,8 @@ class _PostWidgetState extends State<PostWidget> {
         child: Image(image: NetworkImage("http://10.0.2.2:60676//" + image)),
       );
 
-  Widget actionsButtons(int postId, int likeNum, int dislikeNum, int commNum) =>
+  Widget actionsButtons(
+          int statusId, int postId, int likeNum, int dislikeNum, int commNum) =>
       Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -108,34 +111,34 @@ class _PostWidgetState extends State<PostWidget> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.arrow_upward, color: Colors.green[800]),
+                icon: Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]),
                 onPressed: () {
                   APIServices.addLike(postId, 1, 2);
                 },
               ),
-              IconButton(
-                icon: Text(likeNum.toString()),
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => LikesPage(postId)),
                   );
                 },
+                child: Text(likeNum.toString()),
               ),
               IconButton(
-                icon: Icon(Icons.arrow_downward, color: Colors.red),
+                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
                 onPressed: () {
                   APIServices.addLike(postId, 1, 1);
                 },
               ),
-              IconButton(
-                icon: Text(dislikeNum.toString()),
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => LikesPage(postId)),
                   );
                 },
+                child: Text(dislikeNum.toString()),
               ),
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Colors.green[800]),
@@ -149,24 +152,32 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               Text(commNum.toString()),
               Expanded(child: SizedBox()),
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.green[800])),
-                color: Colors.green[800],
-                child: Text(
-                  "Reši",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {},
-              ),
+              statusId == 2
+                  ? FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(11.0),
+                          side: BorderSide(color: Colors.green[800])),
+                      color: Colors.green[800],
+                      child: Text(
+                        "Reši",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {},
+                    )
+                  : IconButton(
+                      icon: Icon(Icons.done_all, color: Colors.green[800]),
+                      onPressed: () {
+                        
+                      },
+                    ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
         ],
       );
 
-  Widget description(String username, String description) => Row(
+  Widget description(String username, String description) => Container(
+          child: Row(
         children: <Widget>[
           SizedBox(
             width: 10,
@@ -175,7 +186,9 @@ class _PostWidgetState extends State<PostWidget> {
           SizedBox(
             width: 10,
           ),
-          Text(description, maxLines: 3)
+          Flexible(
+            child: Text(description),
+          )
         ],
-      );
+      ));
 }

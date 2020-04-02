@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/solvedPostsPage.dart';
+import 'package:frontend/ui/unsolvedPostsPage.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -32,7 +34,7 @@ class NavDrawer extends StatelessWidget {
             onTap: () { 
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => UnsolvedPostsPage(publicUser)),
                   );
             },
           ),
@@ -42,7 +44,7 @@ class NavDrawer extends StatelessWidget {
             onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => SolvedPostsPage(publicUser)),
                     );
             },
           ),
