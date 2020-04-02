@@ -1,31 +1,26 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:frontend/services/api.services.dart';
-import 'package:frontend/models/fullPost.dart';
-import 'package:frontend/models/user.dart';
-import 'package:frontend/ui/NavDrawer.dart';
-import 'package:frontend/widgets/postWidget.dart';
+import 'package:web_frontend/services/api.services.dart';
+import 'package:web_frontend/models/fullPost.dart';
+import 'package:web_frontend/models/user.dart';
+import 'package:web_frontend/ui/NavDrawer.dart';
+import 'package:web_frontend/widgets/postWidget.dart';
 
-class FeedPage extends StatefulWidget {
+class postPage extends StatefulWidget {
   final User user;
-  FeedPage(this.user);
+  postPage(this.user);
   @override
-  _FeedPageState createState() => _FeedPageState(user);
+  _postPageState createState() => _postPageState(user);
 }
 
-class _FeedPageState extends State<FeedPage>{
+class _postPageState extends State<postPage>{
   String token = '';
   User user;
-
-  _FeedPageState(User user1){
+  _postPageState(User user1){
     this.user = user1;
   }
-  // mocking data for phone!
-  //static var mockdata = "[{\"postId\":1,\"userId\":1,\"username\":\"pera_p\",\"postTypeId\":2,\"typeName\":\"smece\",\"createdAt\":\"2020-02-03T08:50:18\",\"description\":\"Mnogo smeca\",\"photoPath\":\"post1\",\"statusId\":2,\"status\":\"nije jos reseno\",\"likeNum\":1,\"dislikeNum\":1,\"commNum\":2,\"latitude\":43.981748,\"longitude\":20.90406},{\"postId\":2,\"userId\":2,\"username\":\"ivana_mar\",\"postTypeId\":3,\"typeName\":\"rupa na putu\",\"createdAt\":\"2020-02-03T08:50:18\",\"description\":\"Problem je u smecu\",\"photoPath\":\"post2\",\"statusId\":1,\"status\":\"reseno\",\"likeNum\":0,\"dislikeNum\":0,\"commNum\":1,\"latitude\":43.981748,\"longitude\":20.90406},{\"postId\":3,\"userId\":8,\"username\":\"jovana_vukicevic\",\"postTypeId\":3,\"typeName\":\"rupa na putu\",\"createdAt\":\"2020-03-29T19:42:52.7033584\",\"description\":\"Rupa na putu. Lajkuj da bi nadlezna sluzba reagovala.\",\"photoPath\":\"9ddca26f-3ebc-4fe1-88a5-5416b426839c6233765055926557122.jpg\",\"statusId\":1,\"status\":\"reseno\",\"likeNum\":0,\"dislikeNum\":0,\"commNum\":0,\"latitude\":37.4219983,\"longitude\":-122.084}]";
- // static Iterable list = json.decode(mockdata);
- // List<FullPost> listPosts = list.map((model) => FullPost.fromObject(model)).toList();
-  List<FullPost> listPosts;
 
+  List<FullPost> listPosts;
   _getPosts() {
     APIServices.getPost().then((res) {
       Iterable list = json.decode(res.body);
