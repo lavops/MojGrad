@@ -8,7 +8,7 @@ class APIServices
 {
 
   //static String serverURL = 'http://10.0.2.2:52739/api/';
-  static String serverURL = 'http://127.0.0.1:60676/api/';
+  static String serverURL = 'http://127.0.0.1:44732/api/';
 
 
   static Map<String, String> header = { 
@@ -51,4 +51,18 @@ class APIServices
   {
     return await http.get(serverURL + 'City');
   }
+
+  //returns user with specific id for deletion
+  static Future deleteUser(int id) async {
+    String url = serverURL + 'User/Delete'+ id.toString();
+    return await http.post(url, headers: header, body: convert.jsonEncode({ 'id' : id, }));
+  }
+
+  //returns post with specific id for deletion
+  static Future deletePost(int id) async {
+    String url = serverURL + 'Post/Delete'+ id.toString();
+    
+    return await http.post(url, headers: header,body: jsonEncode({ 'id': id, }),);
+  }
+
 }
