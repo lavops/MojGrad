@@ -65,4 +65,11 @@ class APIServices
     return await http.post(url, headers: header,body: jsonEncode({ 'id': id, }),);
   }
 
+	
+   static Future getUsers() async {
+    return await http.get(serverURL + 'Users');
+  }
+
+
+
 }
