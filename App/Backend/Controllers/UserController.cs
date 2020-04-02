@@ -50,7 +50,10 @@ namespace Backend.Controllers
         {
             User user = _iUserUI.login(userParam);
             if (user != null)
+            {
+                user.password = null;
                 return Ok(user);
+            }
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
@@ -60,11 +63,45 @@ namespace Backend.Controllers
         {
             User user = _iUserUI.insertUser(u);
             if (user != null)
+            {
+                user.password = null;
                 return Ok(user);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+        [HttpPost("EditUserData")]
+        public IActionResult EditUserData(User u)
+        {
+            User user = _iUserUI.editUserData(u);
+            if (user != null)
+            {
+                user.password = null;
+                return Ok(user);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+        public class changePassword
+        {
+            public long id { get; set; }
+            public string password { get; set; }
+            public string password1 { get; set; }
+        }
+
+        [HttpPost("EditUserPassword")]
+        public IActionResult EditUserPassword(changePassword pass)
+        {
+            User user = _iUserUI.editUserPassword(pass.id, pass.password ,pass.password1);
+            if (user != null)
+            {
+                user.password = null;
+                return Ok(user);
+            }
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
 
 
-        }
+    }
 }

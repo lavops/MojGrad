@@ -13,6 +13,8 @@ namespace Backend.Models.ViewsModel
         public DateTime createdAt { get; set; }
         public string description { get; set; }
         public string username { get; set; }
+        public string photoPath { get; set; }
+        public string date { get; set; }
 
         public CommentViewModel (Comment com)
         {
@@ -21,6 +23,8 @@ namespace Backend.Models.ViewsModel
             this.postId = com.postId;
             this.userId = com.userId;
             this.username = com.user.username;
+            this.photoPath = com.user.photo;
+            this.date = com.createdAt.ToString("dd/MM/yyyy");
         }
     }
 }

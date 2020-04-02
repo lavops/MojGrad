@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/ui/feedPage.dart';
@@ -18,7 +19,9 @@ class _HomePageState extends State<HomePage> {
   
   int _currentTabIndex = 0;
   String token = '';
-  User user;
+  User user1;
+  int ind=0;
+  
 
   _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -28,11 +31,19 @@ class _HomePageState extends State<HomePage> {
      extractedUser = User.fromObject(jsonObject);
     setState(() {
       token = _token;
-      user = extractedUser;
+      ind=1;
     });
-    
-  }
+    var res = await APIServices.getUser(extractedUser.id);
+    Map<String, dynamic> jsonUser = jsonDecode(res.body);
+    User user = User.fromObject(jsonUser);
+    setState(() {
+      user1 = user;
+    });
+  } 
+
   
+
+
   @override
   void initState() {
     super.initState();
@@ -41,13 +52,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context){
-    
     final _kTabPages = <Widget>[
-      FeedPage(user),
+      FeedPage(user1),
       MapPage(),
       CameraPage(),
       SponsorshipPage(),
-      UserProfilePage(user),
+      UserProfilePage(user1),
     ];
 
     final _kBottomNavBarItems = <BottomNavigationBarItem>[

@@ -26,12 +26,12 @@ namespace Backend.DAL
 
         public List<User> getAllUsers()
         {
-            return _context.user.Include(x=> x.city).Include(s=> s.userTypes).ToList();
+            return _context.user.Include(x=> x.city).Include(s=> s.userTypes).Include(p=> p.posts).ToList();
         }
 
         public User getByID(long id)
         {
-            return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).FirstOrDefault();
+            return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault();
         }
 
 
@@ -75,6 +75,31 @@ namespace Backend.DAL
             }
         }
 
+        public User editUserData(User user)
+        {
+            var exist = _context.user.Where(x => x.id == user.id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.firstName = user.firstName;
+                    exist.lastName = user.lastName;
+                    exist.username = user.username;
+                    exist.email = user.email;
+                    exist.phone = user.phone;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return exist;
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
+        }
+
         public User login(User user2)
         {
             var user1 = _context.user.SingleOrDefault(x => x.email == user2.email);
@@ -116,6 +141,27 @@ namespace Backend.DAL
             user1.password = null;
 
             return user1;
+        }
+
+        public User editUserPassword(long id, string password, string newPassword)
+        {
+            var exist = _context.user.Where(x => x.id == id && x.password.Equals(password)).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.password = newPassword;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return exist;
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
         }
     }
 }

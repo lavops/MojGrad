@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/ui/user_profile_page.dart';
 import '../services/api.services.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -25,8 +26,15 @@ class EditProfile extends State<EditProfilePage> {
   final Color green = Color(0xFF1E8161);
   int _selectedOption = 0;
   int index = 6;
-  String firstName = '', lastName = '', username1 = '', password1 = '', email1 = '', number1 = '';
-  var pass; 
+  String firstName = '',
+      lastName = '',
+      username1 = '',
+      password1 = '',
+      email1 = '',
+      number1 = '',
+      oldPassword = '';
+  var newPass, oldPass;
+  int ind=0;
 
   final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
@@ -34,16 +42,47 @@ class EditProfile extends State<EditProfilePage> {
   final emailRegex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
   final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
 
+ showAlertDialog(BuildContext context) {
+      // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK", style: TextStyle(color: Colors.green),),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage(user)),
+        );
+        },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Izmena podataka"),
+      content: Text("Uspešno ste izmenili podatke."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   //dialog name
   Future<String> firstLastName(BuildContext context, String name) {
-    TextEditingController customController = new TextEditingController(text: "$name");
+    TextEditingController customController =
+        new TextEditingController(text: "$name");
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
                 width: 300,
                 child: Column(
@@ -58,9 +97,7 @@ class EditProfile extends State<EditProfilePage> {
                         Text("Ime i prezime", style: TextStyle(fontSize: 24))
                       ],
                     ),
-
                     SizedBox(height: 5),
-
                     TextField(
                       controller: customController,
                       decoration: InputDecoration(
@@ -70,9 +107,7 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 20),
-
                     Row(
                       children: <Widget>[
                         MaterialButton(
@@ -81,7 +116,7 @@ class EditProfile extends State<EditProfilePage> {
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
+                          onPressed: () {
                             var check = customController.text;
                             print(check);
 
@@ -92,28 +127,25 @@ class EditProfile extends State<EditProfilePage> {
 
                               setState(() {
                                 firstName = array[0];
-                                lastName = array[1]; 
+                                lastName = array[1];
                               });
-                              Navigator.of(context).pop();
-                            }  
-                            else {
+                              Navigator.of(context).pop(user);
+                            } else {
                               check = "Greska";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
                           },
                         ),
-
-                        SizedBox(width: 110),
-
+                        SizedBox(width: 85),
                         MaterialButton(
                           child: Text(
                             "Otkaži",
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
-                            Navigator.of(context).pop(); 
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -126,14 +158,15 @@ class EditProfile extends State<EditProfilePage> {
 
   //dialog username
   Future<String> username(BuildContext context, String username) {
-    TextEditingController customController = new TextEditingController(text: "$username");
+    TextEditingController customController =
+        new TextEditingController(text: "$username");
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
                 width: 300,
                 child: Column(
@@ -145,13 +178,12 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Korisničko ime",
-                            style: TextStyle(fontSize: 24))
+                        Text("Korisničko ime", style: TextStyle(fontSize: 24))
                       ],
                     ),
-
-                    SizedBox(height: 5,),
-
+                    SizedBox(
+                      height: 5,
+                    ),
                     TextFormField(
                       controller: customController,
                       decoration: InputDecoration(
@@ -161,9 +193,7 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 20),
-
                     Row(
                       children: <Widget>[
                         MaterialButton(
@@ -172,7 +202,7 @@ class EditProfile extends State<EditProfilePage> {
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
+                          onPressed: () {
                             var check = customController.text;
                             print(check);
 
@@ -181,25 +211,22 @@ class EditProfile extends State<EditProfilePage> {
                                 username1 = check;
                               });
                               Navigator.of(context).pop();
-                            } 
-                            else {
+                            } else {
                               check = "Greska";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
                           },
                         ),
-
-                        SizedBox(width: 110),
-
+                        SizedBox(width: 85),
                         MaterialButton(
                           child: Text(
                             "Otkaži",
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
-                            Navigator.of(context).pop(); 
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -210,7 +237,7 @@ class EditProfile extends State<EditProfilePage> {
         });
   }
 
-  //dialog password 
+  //dialog password
   Future<String> password(BuildContext context, String myPassword) {
     TextEditingController customController = new TextEditingController();
     TextEditingController customController2 = new TextEditingController();
@@ -220,8 +247,8 @@ class EditProfile extends State<EditProfilePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
                 width: 300,
                 child: Column(
@@ -236,9 +263,7 @@ class EditProfile extends State<EditProfilePage> {
                         Text("Šifra", style: TextStyle(fontSize: 24))
                       ],
                     ),
-
                     SizedBox(height: 5),
-
                     TextField(
                       controller: customController,
                       autofocus: false,
@@ -252,9 +277,7 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 5),
-
                     TextField(
                       controller: customController2,
                       autofocus: false,
@@ -268,9 +291,7 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 5),
-
                     TextField(
                       controller: customController3,
                       autofocus: false,
@@ -284,10 +305,8 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 20),
-
-                     Row(
+                    Row(
                       children: <Widget>[
                         MaterialButton(
                           child: Text(
@@ -295,7 +314,7 @@ class EditProfile extends State<EditProfilePage> {
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
+                          onPressed: () {
                             var temp2 = customController.text; //trenutna
                             var check = customController2.text; //nova
                             var checkAgain = customController3.text;
@@ -303,44 +322,33 @@ class EditProfile extends State<EditProfilePage> {
                             print(temp2);
                             print(myPassword);
 
-                            var pom = utf8.encode(temp2);
-                            var temp = sha1.convert(pom);
-
-                            if (temp.toString() == myPassword) {
-                              if (check == checkAgain) {
-                                if (passRegex.hasMatch(check)) {
-                                  print(check);
-                                  setState(() {
-                                    password1 = check;
-                                  });
-                                  Navigator.of(context).pop();
-                                }
-                                else {
-                                  check = "Greska regEx";
-                                  print(check);
-                                  Navigator.of(context).pop(check.toString());
-                                }
-                              } 
-                              else {
-                                print("Nova i ponovljena nisu iste");
+                            if (check == checkAgain) {
+                              if (passRegex.hasMatch(check)) {
+                                print(check);
+                                setState(() {
+                                  password1 = check;
+                                  oldPassword = temp2;
+                                });
+                                Navigator.of(context).pop();
+                              } else {
+                                check = "Greska regEx";
+                                print(check);
+                                Navigator.of(context).pop(check.toString());
                               }
-                            } 
-                            else {
-                              print("Trenutna nije dobra");
+                            } else {
+                              print("Nova i ponovljena nisu iste");
                             }
                           },
                         ),
-
-                        SizedBox(width: 110),
-
+                        SizedBox(width: 85),
                         MaterialButton(
                           child: Text(
                             "Otkaži",
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
-                            Navigator.of(context).pop(); 
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -353,13 +361,14 @@ class EditProfile extends State<EditProfilePage> {
 
   //dialog email
   Future<String> email(BuildContext context, String email) {
-    TextEditingController customController = new TextEditingController(text: "$email");
+    TextEditingController customController =
+        new TextEditingController(text: "$email");
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
                 width: 300,
                 child: Column(
@@ -371,13 +380,10 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Email adresa",
-                            style: TextStyle(fontSize: 24))
+                        Text("Email adresa", style: TextStyle(fontSize: 24))
                       ],
                     ),
-
-                    SizedBox( height: 5),
-
+                    SizedBox(height: 5),
                     TextField(
                       controller: customController,
                       decoration: InputDecoration(
@@ -387,9 +393,7 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 20),
-
                     Row(
                       children: <Widget>[
                         MaterialButton(
@@ -398,7 +402,7 @@ class EditProfile extends State<EditProfilePage> {
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
+                          onPressed: () {
                             var check = customController.text;
                             print(check);
 
@@ -407,25 +411,22 @@ class EditProfile extends State<EditProfilePage> {
                                 email1 = check;
                               });
                               Navigator.of(context).pop();
-                            } 
-                            else {
+                            } else {
                               check = "Greska";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
                           },
                         ),
-
-                        SizedBox(width: 110),
-
+                        SizedBox(width: 85),
                         MaterialButton(
                           child: Text(
                             "Otkaži",
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
-                            Navigator.of(context).pop(); 
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -438,14 +439,15 @@ class EditProfile extends State<EditProfilePage> {
 
   //dialog phone
   Future<String> phone(BuildContext context, String phone) {
-    TextEditingController customController = new TextEditingController(text: "$phone");
+    TextEditingController customController =
+        new TextEditingController(text: "$phone");
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
                 width: 300,
                 child: Column(
@@ -457,13 +459,10 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Kontakt telefon",
-                            style: TextStyle(fontSize: 24))
+                        Text("Kontakt telefon", style: TextStyle(fontSize: 24))
                       ],
                     ),
-
                     SizedBox(height: 5),
-
                     TextField(
                       controller: customController,
                       keyboardType: TextInputType.phone,
@@ -474,9 +473,7 @@ class EditProfile extends State<EditProfilePage> {
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
-
                     SizedBox(height: 20),
-
                     Row(
                       children: <Widget>[
                         MaterialButton(
@@ -485,7 +482,7 @@ class EditProfile extends State<EditProfilePage> {
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
+                          onPressed: () {
                             var check = customController.text;
                             print(check);
 
@@ -494,25 +491,22 @@ class EditProfile extends State<EditProfilePage> {
                                 number1 = check;
                               });
                               Navigator.of(context).pop();
-                            } 
-                            else {
+                            } else {
                               check = "Greska";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
                           },
                         ),
-
-                        SizedBox(width: 110),
-
+                        SizedBox(width: 85),
                         MaterialButton(
                           child: Text(
                             "Otkaži",
                             style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
-                          onPressed: (){
-                            Navigator.of(context).pop(); 
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
                         ),
                       ],
@@ -533,7 +527,6 @@ class EditProfile extends State<EditProfilePage> {
         backgroundColor: Colors.white,
         title: Text('Podešavanja', style: TextStyle(color: Colors.black)),
       ),
-
       body: ListView(
         children: <Widget>[
           Container(
@@ -550,18 +543,24 @@ class EditProfile extends State<EditProfilePage> {
               title: Text('Ime i prezime',
                   style: TextStyle(
                     color: Colors.black,
-                    fontWeight: _selectedOption == index - 1 ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: _selectedOption == index - 1
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   )),
-              subtitle: Text(firstName == '' ? user.firstName : firstName + " " + lastName,
+              subtitle: Text(
+                  firstName == '' ? user.firstName : firstName + " " + lastName == '' ? user.lastName : lastName,
                   style: TextStyle(
-                      color: _selectedOption == index - 1 ? Colors.black : Colors.grey)),
+                      color: _selectedOption == index - 1
+                          ? Colors.black
+                          : Colors.grey)),
               selected: _selectedOption == index - 1,
               onTap: () {
                 setState(() {
                   _selectedOption = index - 1;
                 });
 
-                firstLastName(context, user.firstName+" "+user.lastName).then((onValue) {
+                firstLastName(context, user.firstName + " " + user.lastName)
+                    .then((onValue) {
                   String newName = "$onValue";
                   SnackBar snackName = SnackBar(content: Text(newName));
                   Scaffold.of(context).showSnackBar(snackName);
@@ -577,11 +576,16 @@ class EditProfile extends State<EditProfilePage> {
               title: Text('Korisničko ime',
                   style: TextStyle(
                     color: Colors.black,
-                    fontWeight: _selectedOption == index - 2 ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: _selectedOption == index - 2
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   )),
-              subtitle: Text(username1 == '' ? user.username : username1,
+              subtitle: Text(
+                username1 == '' ? user.username : username1,
                 style: TextStyle(
-                    color: _selectedOption == index - 2 ? Colors.black : Colors.grey),
+                    color: _selectedOption == index - 2
+                        ? Colors.black
+                        : Colors.grey),
               ),
               selected: _selectedOption == index - 2,
               onTap: () {
@@ -605,7 +609,9 @@ class EditProfile extends State<EditProfilePage> {
               title: Text('Šifra',
                   style: TextStyle(
                     color: Colors.black,
-                    fontWeight: _selectedOption == index - 3 ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: _selectedOption == index - 3
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   )),
               selected: _selectedOption == index - 3,
               onTap: () {
@@ -686,52 +692,61 @@ class EditProfile extends State<EditProfilePage> {
           SizedBox(height: 20),
 
           Center(
-            child: MaterialButton(
+              child: MaterialButton(
             minWidth: 200.0,
             height: 50.0,
             shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(50.0),
-              side: BorderSide(color: Colors.transparent)
-            ),
+                borderRadius: new BorderRadius.circular(50.0),
+                side: BorderSide(color: Colors.transparent)),
             onPressed: () async {
-              
-              if(firstName == '')
-              {
+              if (firstName == '') {
                 firstName = user.firstName;
               }
 
-              if(lastName == '')
-              {
+              if (lastName == '') {
                 lastName = user.lastName;
               }
 
-              if(username1 == '')
-              {
+              if (username1 == '') {
                 username1 = user.username;
               }
 
-              if(password1 == '')
-              {
+              if (password1 == '') {
                 password1 = user.password;
               }
 
-              if(email1 == '')
-              {
+              if (email1 == '') {
                 email1 = user.email;
               }
 
-              if(number1 == '')
-              {
+              if (number1 == '') {
                 number1 = user.phone;
               }
 
-              if(password1!='')
-              {
+              if (password1 != '' && oldPassword != '') {
                 var pom = utf8.encode(password1);
-                pass = sha1.convert(pom);
-              } 
+                newPass = sha1.convert(pom);
+
+                var pom2 = utf8.encode(oldPassword);
+                oldPass = sha1.convert(pom2);
+
+                APIServices.editUserPassword( user.id, oldPass.toString(), newPass.toString())
+                    .then((response) {
+                  if (response.statusCode == 200) {
+                    showAlertDialog(context);
+                  } 
+                });
+              }
+            if(firstName != '' || lastName != '' || username1 != ''|| email1 != '' || number1 != ''){
+              APIServices.editUser(user.id, firstName, lastName, username1, email1, number1)
+                  .then((response) {
+                if (response.statusCode == 200 || password1 == '' && oldPassword == '') {
+                  showAlertDialog(context);
+                } 
+              });
+            }
+           
               
-              var res = await APIServices.editUser(user.id, firstName, lastName, username1, pass.toString(), email1, number1);
             },
             color: green,
             child: Text(
@@ -740,8 +755,7 @@ class EditProfile extends State<EditProfilePage> {
                 color: Colors.white,
               ),
             ),
-          )
-        )
+          ))
         ],
       ),
     );

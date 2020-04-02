@@ -16,6 +16,17 @@ namespace Backend.BL
         {
             _iUserDAL = iUserDAL;
         }
+
+        public User editUserData(User user)
+        {
+            return _iUserDAL.editUserData(user);
+        }
+
+        public User editUserPassword(long id, string password, string newPassword)
+        {
+            return _iUserDAL.editUserPassword(id,password, newPassword);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserDAL.getAllUsers();

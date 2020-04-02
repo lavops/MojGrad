@@ -9,8 +9,8 @@ import '../models/user.dart';
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://127.0.0.1:60676/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://127.0.0.1:60676/api/';
 
 
   static Map<String, String> header = { 
@@ -138,20 +138,32 @@ class APIServices
     return await http.get(serverURL + 'City');
   }
   
-	static Future editUser(int id, String firstName, String lastName, String username, String password, String email, String phone) async  {
-		String url = serverURL + 'User/Edit';
+	static Future editUser(int id, String firstName, String lastName, String username, String email, String phone) async  {
+		String url = serverURL + 'User/EditUserData';
 		var data = Map();
 		data["id"] = id;
 		data["firstName"] = firstName;
 		data["lastName"] = lastName;
 		data["username"] = username;
-		data["password"] = password;
 		data["email"] = email;
 		data["phone"] = phone;
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
 		return await http.post(url, headers: header, body: jsonBody);
 	}
+
+  static Future editUserPassword(int id, String password, String password1) async  {
+		String url = serverURL + 'User/EditUserPassword';
+		var data = Map();
+		data["id"] = id;
+		data["password"] = password;
+		data["password1"] = password1;
+	
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: header, body: jsonBody);
+	}
+
 
   static Future dislikeInPost(int postId) async {
     String url = serverURL + 'Like/DislikeInPost';

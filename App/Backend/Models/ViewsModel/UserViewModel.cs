@@ -22,14 +22,15 @@ namespace Backend.Models.ViewsModel
         public int level { get; set; }
 
         public string userTypeName { get; set; }
-        public string photoPath { get; set; }
+        public string photo { get; set; }
+        public int postsNum { get; set; }
 
         public UserViewModel(User u)
         {
             this.firstName = u.firstName;
             this.lastName = u.lastName;
             this.email = u.email;
-            this.password = u.password;
+            this.password = null;
             this.username = u.username;
             this.phone = u.phone;
             this.createdAt = u.createdAt;
@@ -40,7 +41,8 @@ namespace Backend.Models.ViewsModel
             this.cityId = u.cityId;
             this.userTypeId = u.userTypeId;
             this.userTypeName = u.userTypes.typeName;
-            this.photoPath = u.photo;
+            this.photo = u.photo;
+            this.postsNum = u.posts.Where(x => x.userId == u.id).Count();
         }
     }
 }

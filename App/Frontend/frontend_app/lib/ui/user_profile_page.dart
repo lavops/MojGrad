@@ -28,6 +28,7 @@ class HeaderSection extends State<UserProfilePage> {
   User user;
   HeaderSection(User user1) {
     user = user1;
+    print("korisnik ${user1.id}");
   }
 
   final Color green = Color(0xFF1E8161);
@@ -75,7 +76,6 @@ class HeaderSection extends State<UserProfilePage> {
     print(user.photo);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -86,8 +86,8 @@ class HeaderSection extends State<UserProfilePage> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
             }),
       ),
       endDrawer: Drawer(
@@ -131,7 +131,7 @@ class HeaderSection extends State<UserProfilePage> {
                 _removeToken();
 
                 Navigator.push(
-                  context, 
+                  context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
@@ -161,7 +161,7 @@ class HeaderSection extends State<UserProfilePage> {
             Container(
               padding: EdgeInsets.only(top: 3, bottom: 16),
               width: MediaQuery.of(context).size.width,
-              height: 280,
+              height: 220,
               decoration: BoxDecoration(
                 color: green,
                 borderRadius: BorderRadius.only(
@@ -170,30 +170,42 @@ class HeaderSection extends State<UserProfilePage> {
               ),
               child: Column(
                 children: <Widget>[
-                  
-                 CircleImage(
+                  Row(children: <Widget>[
+                    
+                    CircleImage(
                       "http://10.0.2.2:60676//" + user.photo,
                       imageSize: 90.0,
                       whiteMargin: 2.0,
-                      imageMargin: 6.0,
+                      imageMargin: 20.0,
                     ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Text(
-                      user.username,
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    
+                    Center(
+                      
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, left: 70),
+                            child: Text(
+                              user.username,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0, left: 70),
+                            child: Text(
+                              user.firstName + " " + user.lastName,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
+                            ),
+                          ),
+                        ]),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      user.firstName + " " + user.lastName,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24),
-                    ),
-                  ),
+                  ]),
                   Padding(
                       padding:
                           const EdgeInsets.only(left: 8, right: 16, top: 25),
@@ -204,7 +216,7 @@ class HeaderSection extends State<UserProfilePage> {
                             children: <Widget>[
                               Text(
                                 //postCount,
-                                "17",
+                                user.postsNum.toString(),
                                 style: TextStyle(color: Colors.white),
                               ),
                               SizedBox(width: 16),
@@ -223,7 +235,7 @@ class HeaderSection extends State<UserProfilePage> {
                           Row(
                             children: <Widget>[
                               Text(
-                                "77",
+                                user.points.toString(),
                                 style: TextStyle(color: Colors.white),
                               ),
                               SizedBox(width: 16),
@@ -242,7 +254,7 @@ class HeaderSection extends State<UserProfilePage> {
                           Row(
                             children: <Widget>[
                               Text(
-                                "7",
+                                user.level.toString(),
                                 style: TextStyle(color: Colors.white),
                               ),
                               SizedBox(width: 16),
@@ -264,13 +276,14 @@ class HeaderSection extends State<UserProfilePage> {
               ),
             ),
             Expanded(
-              child: (posts != null)?
-              PostWidget(posts):
-              Center(child: CircularProgressIndicator(
-                valueColor:new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                ),
-              )
-            )
+                child: (posts != null)
+                    ? PostWidget(posts)
+                    : Center(
+                        child: CircularProgressIndicator(
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                              Colors.green[800]),
+                        ),
+                      ))
           ]),
         ],
       ),

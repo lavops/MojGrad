@@ -16,6 +16,17 @@ namespace Backend.UI
         {
             _iUserBL = iUserBL;
         }
+
+        public User editUserData(User user)
+        {
+            return _iUserBL.editUserData(user);
+        }
+
+        public User editUserPassword(long id, string password, string newPassword)
+        {
+            return _iUserBL.editUserPassword(id, password, newPassword);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserBL.getAllUsers();
