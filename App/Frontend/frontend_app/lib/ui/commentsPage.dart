@@ -51,7 +51,7 @@ class StateComents extends State<CommentsPage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://10.0.2.2:60676//" + listComents[index].photo,
+                      "http://10.0.2.2:60676//" + listComents[index].photoPath,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
@@ -66,16 +66,17 @@ class StateComents extends State<CommentsPage> {
                             Text(listComents[index].username,
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             Expanded(child: SizedBox()),
-                            IconButton(
-                              icon: Icon(Icons.more_vert),
-                              onPressed: () {},
-                            ),
                           ]),
                           Text(listComents[index].description,
                               style: TextStyle( fontStyle: FontStyle.italic, fontSize: 15))
                         ],
                       ),
                     ),
+                    Expanded(child: SizedBox()),
+                    IconButton(
+                              icon: Icon(Icons.more_vert),
+                              onPressed: () {},
+                            ),
                   ])),
             ],
           ),
@@ -99,6 +100,7 @@ class StateComents extends State<CommentsPage> {
             Flexible(child: buildCommentList()),
             Row(
               children: <Widget>[
+                SizedBox(width:10),
                 Icon(
                   Icons.account_circle,
                   size: 36,
@@ -133,7 +135,8 @@ class StateComents extends State<CommentsPage> {
                       myController.text = '';
                     });
                   },
-                )
+                ),
+                SizedBox(width:10),
               ],
             )
           ])),

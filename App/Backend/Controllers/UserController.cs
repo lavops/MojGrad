@@ -101,7 +101,21 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
-
+        public class deleteUser
+        {
+            public long id { get; set; }
+        }
+        [HttpPost("Delete")]
+        public IActionResult DeleteUser(deleteUser user)
+        {
+            bool ind = _iUserUI.deleteUser(user.id);
+            if (ind ==true)
+            {
+                return Ok(new { message = "Obrisan" });
+            }
+            else
+                return BadRequest(new { message = "Greska" });
+        }
 
     }
 }

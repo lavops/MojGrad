@@ -16,6 +16,12 @@ namespace Backend.BL
         {
             _iPostDAL = iPostDAL;
         }
+
+        public bool deletePost(long id)
+        {
+            return _iPostDAL.deletePost(id);
+        }
+
         public List<Post> getAllPosts()
         {
             return _iPostDAL.getAllPosts();

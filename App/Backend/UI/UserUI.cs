@@ -17,6 +17,11 @@ namespace Backend.UI
             _iUserBL = iUserBL;
         }
 
+        public bool deleteUser(long id)
+        {
+            return _iUserBL.deleteUser(id);
+        }
+
         public User editUserData(User user)
         {
             return _iUserBL.editUserData(user);

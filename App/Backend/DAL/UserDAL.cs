@@ -163,5 +163,19 @@ namespace Backend.DAL
             }
             return null;
         }
+
+        public bool deleteUser(long id)
+        {
+            var user = _context.user.Where(x=> x.id == id).FirstOrDefault();
+            if (user == null)
+            {
+                return false;
+            }
+
+            _context.user.Remove(user);
+            _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

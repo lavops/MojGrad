@@ -14,5 +14,6 @@ namespace Backend.UI.Interfaces
         Post insertPost(Post post);
         List<Post> getAllSolvedPosts();
         List<Post> getAllUnsolvedPosts();
+        bool deletePost(long id);
     }
 }

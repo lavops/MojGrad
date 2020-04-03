@@ -16,6 +16,12 @@ namespace Backend.UI
         {
             _iPostBL = iPostBL;
         }
+
+        public bool deletePost(long id)
+        {
+            return _iPostBL.deletePost(id);
+        }
+
         public List<Post> getAllPosts()
         {
             return _iPostBL.getAllPosts();

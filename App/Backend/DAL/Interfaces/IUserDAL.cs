@@ -14,6 +14,7 @@ namespace Backend.DAL.Interfaces
         User login(User user);
         User editUserData(User user);
         User editUserPassword(long id, string password, string newPassword);
+        bool deleteUser(long id);
 
     }
 }

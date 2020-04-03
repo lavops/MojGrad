@@ -18,6 +18,20 @@ namespace Backend.DAL
             _context = context;
         }
 
+        public bool deletePost(long id)
+        {
+            var post = _context.post.Where(x => x.id == id).FirstOrDefault();
+            if (post == null)
+            {
+                return false;
+            }
+
+            _context.post.Remove(post);
+            _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public List<Post> getAllPosts()
         {
             return _context.post.Include(u => u.user).Include(c=> c.postType).Include(s=>s.status).Include(l => l.likes).Include(c => c.comments).ToList();

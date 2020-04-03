@@ -83,5 +83,22 @@ namespace Backend.Controllers
                 return BadRequest(new { message = "Unos nije uspeo" });
         }
 
+        public class deletePost
+        {
+            public long id { get; set; }
         }
+
+        [HttpPost("Delete")]
+        public IActionResult DeletePost(deletePost post)
+        {
+            bool ind = _iPostUI.deletePost(post.id);
+            if (ind == true)
+            {
+                return Ok(new { message = "Obrisan" });
+            }
+            else
+                return BadRequest(new { message = "Greska" });
+        }
+
+    }
 }

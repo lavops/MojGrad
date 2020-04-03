@@ -17,6 +17,7 @@ namespace Backend.DAL.Interfaces
         List<Post> getAllSolvedPosts();
         List<Post> getAllUnsolvedPosts();
 
+        bool deletePost(long id);
 
     }
 }

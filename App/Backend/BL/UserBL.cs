@@ -17,6 +17,11 @@ namespace Backend.BL
             _iUserDAL = iUserDAL;
         }
 
+        public bool deleteUser(long id)
+        {
+            return _iUserDAL.deleteUser(id);
+        }
+
         public User editUserData(User user)
         {
             return _iUserDAL.editUserData(user);
