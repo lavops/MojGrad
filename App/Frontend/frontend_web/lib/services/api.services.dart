@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:frontend_web/models/user.dart';
 import 'package:http/http.dart' as http;
 
+String userPhotoURL = "http://127.0.0.1:60676//";
 
 class APIServices
 {
@@ -148,5 +149,14 @@ class APIServices
     return await http.get(serverURL +'PostType');
 
   }
+
+  static Future getSolvedPosts() async {
+     return await http.get(serverURL +'Post/SolvedPosts');
+  }
+
+  static Future getUnsolvedPosts() async {
+     return await http.get(serverURL +'Post/UnsolvedPosts');
+  }
+
 
 }

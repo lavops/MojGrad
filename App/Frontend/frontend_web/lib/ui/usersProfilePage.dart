@@ -29,7 +29,49 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     });
   }
 
+  showAlertDialog(BuildContext context, int id) {
+      // set up the button
+    Widget okButton = FlatButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      onPressed: () {
+        APIServices.deleteUser(id);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => UsersProfilePage()),
+        );
+        },
+    );
+     Widget notButton = FlatButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => UsersProfilePage()),
+        );
+        },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Brisanje korisnika"),
+      content: Text("Da li ste sigurni da želite da obrišete korisnika?"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   Widget buildUserList() {
+     _getUsers();
     return ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
@@ -44,7 +86,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://127.0.0.1:60676//" + listUsers[index].photo,
+                      userPhotoURL + listUsers[index].photo,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
@@ -129,7 +171,9 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                         "Obriši korisnika",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        showAlertDialog(context, listUsers[index].id);
+                      },
                     )
                   ])),
             ],

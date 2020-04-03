@@ -1,32 +1,63 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:web_frontend/services/api.services.dart';
-import 'package:web_frontend/models/fullPost.dart';
-import 'package:web_frontend/models/user.dart';
-import 'package:web_frontend/ui/navDrawer.dart';
-import 'package:web_frontend/widgets/postWidget.dart';
+import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/models/fullPost.dart';
+import 'package:frontend_web/models/user.dart';
+import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/ui/managementPage.dart';
+import 'package:frontend_web/ui/navDrawer.dart';
+import 'package:frontend_web/widgets/postWidget.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class postPage extends StatefulWidget {
+class PostPage extends StatefulWidget {
   final User user;
-  postPage(this.user);
+  PostPage(this.user);
   @override
-  _postPageState createState() => _postPageState(user);
+  _PostPageState createState() => _PostPageState(user);
 }
 
-class _postPageState extends State<postPage>{
+class _PostPageState extends State<PostPage> {
   String token = '';
   User user;
-  _postPageState(User user1){
+  _PostPageState(User user1) {
     this.user = user1;
   }
 
   List<FullPost> listPosts;
-  _getPosts() {
+  List<FullPost> listSolvedPosts;
+  List<FullPost> listUnsolvedPosts;
+  _getSolvedPosts() {
+    APIServices.getSolvedPosts().then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listSolvedPosts = listP;
+        });
+      }
+    });
+  }
+
+  _getUnsolvedPosts() {
+    APIServices.getUnsolvedPosts().then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listUnsolvedPosts = listP;
+        });
+      }
+    });
+  }
+
+  _getAllPosts() {
     APIServices.getPost().then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
-      if(mounted){
+      if (mounted) {
         setState(() {
           listPosts = listP;
         });
@@ -37,51 +68,100 @@ class _postPageState extends State<postPage>{
   @override
   void initState() {
     super.initState();
-    _getPosts();
+    _getAllPosts();
+    _getSolvedPosts();
+    _getUnsolvedPosts();
+  }
+
+
+  Widget tabs() {
+    return TabBar(
+        labelColor: Colors.white,
+        indicatorColor: Colors.white,
+        unselectedLabelColor: Colors.black,
+        tabs: <Widget>[
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(MdiIcons.homeSearchOutline, color: Colors.white, size: 36),
+                Text(
+                  'Sve objave',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.done_all, color: Colors.white, size: 36),
+                Text(
+                  'Rešene objave',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.close, color: Colors.white, size: 36),
+                Text(
+                  'Nerešene objave',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ]);
   }
 
   @override
-  Widget build(BuildContext context){
-    return Scaffold(
-        drawer: NavDrawer(),
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.grey[50],
-          leading: Builder(
-              builder: (BuildContext context){
-                return IconButton(
-                  icon: Icon(Icons.menu),
-                  color: Colors.black87,
+  Widget build(BuildContext context) {
+    _getAllPosts();
+    return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+            appBar: AppBar(
+              iconTheme: IconThemeData(color: Colors.white),
+              title: Text('Upravljanje objavama',
+                  style: TextStyle(color: Colors.white)),
+              backgroundColor: Colors.lightGreen,
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                );
-              }),
-          title: Text(
-            "MOJ GRAD",
-            style: TextStyle(
-              color: Colors.green[800],
-              fontSize: 22.0,
-              fontStyle: FontStyle.normal,
-              fontFamily: 'pirulen rg',
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ManagementPage()));
+                  }),
+              bottom: tabs(),
             ),
-          ),
-          actions: <Widget>[
-            Icon(Icons.notifications,color: Colors.black,),
-            SizedBox(width: 16.0),
-          ],
-        ),
-        body: RefreshIndicator(
-            onRefresh: () async {
-              _getPosts();
-            },
-            child: (listPosts != null)?
-            PostWidget(listPosts):
-            Center(child: CircularProgressIndicator(
-              valueColor:new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-            ),
-            )
-        )
-    );
+            body: TabBarView(children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(left: 200, right: 200),
+                  padding: EdgeInsets.only(top: 0),
+                  color: Colors.grey[100],
+                  child: Column(children: [
+                    Flexible(child: PostWidget(listPosts)),
+                  ])),
+              Container(
+                  margin: EdgeInsets.only(left: 200, right: 200),
+                  padding: EdgeInsets.only(top: 0),
+                  color: Colors.grey[100],
+                  child: Column(children: [
+                    Flexible(child: PostWidget(listSolvedPosts)),
+                  ])),
+              Container(
+                  margin: EdgeInsets.only(left: 200, right: 200),
+                  padding: EdgeInsets.only(top: 0),
+                  color: Colors.grey[100],
+                  child: Column(children: [
+                    Flexible(child: PostWidget(listUnsolvedPosts)),
+                  ])),
+            ])));
   }
 }

@@ -8,6 +8,7 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
 }
+User globalUser;
 
 class _HomePageState extends State<HomePage> {
   String token = '';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       token = _token;
       user = extractedUser;
+      globalUser = extractedUser;
     });
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/ui/managementPage.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage>{
           if(DateTime.fromMicrosecondsSinceEpoch(exp).isAfter(DateTime.now())){
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => ManagementPage()),
             );
           }
         }
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage>{
           if(user != null){
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => ManagementPage()),
             );
           }
         } else {

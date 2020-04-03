@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/ui/postPage.dart';
 import 'package:frontend_web/ui/registerAdminPage.dart';
 import './navDrawer.dart';
 import 'package:frontend_web/ui/usersProfilePage.dart';
@@ -67,7 +69,9 @@ class _ManagementPageState extends State<ManagementPage> {
                       textColor: Colors.white,
                       color: Color(0xff1b5e20),
                       onPressed: () {
-
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => PostPage(globalUser))
+                        );
                       }
                       ),
                 ),
