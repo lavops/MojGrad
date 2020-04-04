@@ -24,6 +24,10 @@ namespace Backend.Models.ViewsModel
         public string userTypeName { get; set; }
         public string photo { get; set; }
         public int postsNum { get; set; }
+        public int reportsNum { get; set; }
+
+        private AppDbContext _context = new AppDbContext();
+
 
         public UserViewModel(User u)
         {
@@ -43,6 +47,7 @@ namespace Backend.Models.ViewsModel
             this.userTypeName = u.userTypes.typeName;
             this.photo = u.photo;
             this.postsNum = u.posts.Where(x => x.userId == u.id).Count();
+            this.reportsNum = _context.report.Where(x => x.reportedUserId == u.id).Count();
         }
     }
 }

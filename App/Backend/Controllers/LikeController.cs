@@ -53,10 +53,8 @@ namespace Backend.Controllers
             {
                 likes.Add(new LikeViewModel(l));
             }
-
             return likes;
         }
-
 
     }
 }

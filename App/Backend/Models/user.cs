@@ -27,6 +27,9 @@ namespace Backend.Models
         public IList<Like> likes { get; set; }
         public IList<Post> posts { get; set; }
         public IList<Comment> comments { get; set; }
+        public IList<Report> reportingUsers { get; set; }
+        //public IList<ReportUser> reportingUsers { get; set; }
+       
 
     }
 }

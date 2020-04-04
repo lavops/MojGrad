@@ -24,7 +24,7 @@ namespace Backend.DAL
 
         public List<Comment> getCommentsForPost(long id)
         {
-            return _context.comment.Include(x => x.user).Include(p => p.post).ToList();
+            return _context.comment.Where(x=> x.postId == id).Include(x => x.user).Include(p => p.post).ToList();
         }
 
         public Comment insertComment(Comment comment)
