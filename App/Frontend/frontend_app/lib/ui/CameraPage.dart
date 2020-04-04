@@ -5,7 +5,7 @@ import 'package:frontend/models/categories.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
-import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
@@ -35,7 +35,7 @@ class _CameraPageState extends State<CameraPage> {
   var first;
   String addres='';
   var id=0;
-
+  Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
    _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString('token');
@@ -78,23 +78,18 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
-   getUserLocation(double latitude, double longitude) async {
-     if(latitude != 0.0 && longitude != 0.0)
-     {
-       print(latitude.toString()+" "+ longitude.toString());
-      final coordinates = new Coordinates(latitude, longitude);
-      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      first = addresses.first;
-      print("${first.featureName} : ${first.addressLine}");
-
+  _getUserLocation() async{
+    try{
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(latitude1,longitude2);
+      Placemark place = p[0];
       setState(() {
-        addres=" ${first.addressLine}";
-       
-    });
-      }
-   
-    }
+        addres="${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
+      });
 
+    }catch(e){
+      print(e);
+    }
+  }
   // Function for opening a gallery
   _openCamera() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -132,7 +127,7 @@ class _CameraPageState extends State<CameraPage> {
       longitude2 = _locationData.longitude;
        
     });
-    first = getUserLocation(latitude1, longitude2);
+    first = _getUserLocation();
   }
 
   bool notNull(Object o) => o != null;
@@ -282,7 +277,7 @@ class _CameraPageState extends State<CameraPage> {
       label: Flexible(child: Text('Trenutna lokacija'),),
       onPressed: (){
         currentLocationFunction();
-        getUserLocation(latitude1, longitude2);
+        _getUserLocation();
       },
      icon: Icon(Icons.my_location, size:20),
       //color: Colors.green[800],
