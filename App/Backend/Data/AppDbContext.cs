@@ -23,9 +23,12 @@ namespace Backend
         public DbSet<PostType> postType { get; set; }
         public DbSet<UserType> typeOfUser { get; set; }
         public DbSet<Status> status { get; set; }
-       
-       
-        
+        public DbSet<Report> report { get; set; }
+        public DbSet<ReportType> reportType { get; set; }
+
+
+
+
 
 
     }

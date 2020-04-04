@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Backend.Models;
+using Backend.Models.ViewsModel;
+using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Backend.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ReportController : ControllerBase
+    {
+        private readonly IReportUI _iReportUI;
+
+        public ReportController(IReportUI iReportUI)
+        {
+            _iReportUI = iReportUI;
+        }
+
+
+        [HttpGet]
+        public IEnumerable<UserViewModel> GetReportedUsers()
+        {
+            var users = _iReportUI.getAllReportedUser();
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
+            {
+                UserViewModel newUser = new UserViewModel(u);
+                if (newUser.reportsNum >= 1)
+                    user.Add(newUser);
+            }
+            return user;
+        }
+
+        [HttpGet("{id}")]
+        public IEnumerable<ReportViewModel> GetReportingUser(long id)
+        {
+            var reports = _iReportUI.getAllUserWhoHaveReportedUser(id);
+            List<ReportViewModel> reportsView = new List<ReportViewModel>();
+            foreach (var r in reports)
+            {
+                reportsView.Add(new ReportViewModel(r));
+            }
+            return reportsView;
+        }
+        
+        [HttpPost("Insert")]
+        public IActionResult InsertPost(Report report)
+        {
+            Report r = _iReportUI.insertReport(report);
+            if (r != null)
+                return Ok(r);
+            else
+                return BadRequest(new { message = "Unos nije uspeo" });
+        }
+        
+    }
+}

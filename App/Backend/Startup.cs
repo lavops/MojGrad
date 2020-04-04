@@ -51,8 +51,13 @@ namespace Backend
             }
 
             );
-            
-            
+            /*
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                 
+            );
+            */
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -103,6 +108,14 @@ namespace Backend
             services.AddTransient<IPostTypeUI, PostTypeUI>();
             services.AddTransient<IPostTypeBL, PostTypeBL>();
             services.AddTransient<IPostTypeDAL, PostTypeDAL>();
+
+            services.AddTransient<IReportUI, ReportUI>();
+            services.AddTransient<IReportBL, ReportBL>();
+            services.AddTransient<IReportDAL, ReportDAL>();
+
+            services.AddTransient<IReportTypeUI, ReportTypeUI>();
+            services.AddTransient<IReportTypeBL, ReportTypeBL>();
+            services.AddTransient<IReportTypeDAL, ReportTypeDAL>();
 
 
         }
