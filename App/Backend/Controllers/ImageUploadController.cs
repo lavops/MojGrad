@@ -56,5 +56,37 @@ namespace Backend.Controllers
             }
 
         }
+
+        [HttpPost("ProfilePhoto")]
+        public async Task<string> PostProfilePhoto([FromForm]FileUploadApi objFile)
+        {
+            try
+            {
+                if (objFile.files.Length > 0)
+                {
+                    if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\ProfilePhoto\\"))
+                    {
+                        Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\ProfilePhoto\\");
+                    }
+                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\ProfilePhoto\\" + objFile.files.FileName))
+                    {
+                        objFile.files.CopyTo(fileStream);
+                        fileStream.Flush();
+                        return "\\Upload\\ProfilePhoto\\" + objFile.files.FileName;
+
+                    }
+                }
+                else
+                {
+                    return "Failed";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
+
+        }
     }
 }

@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/services/images.dart';
 import 'package:frontend/ui/user_profile_page.dart';
+import 'package:frontend/widgets/circleImageWidget.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import '../services/api.services.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -18,9 +23,23 @@ class EditProfilePage extends StatefulWidget {
 
 class EditProfile extends State<EditProfilePage> {
   User user;
-
+  File imageFile;
   EditProfile(User user1) {
     user = user1;
+  }
+
+  _openGalery() async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+  }
+
+  _openCamera() async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = picture;
+    });
   }
 
   final Color green = Color(0xFF1E8161);
@@ -34,7 +53,7 @@ class EditProfile extends State<EditProfilePage> {
       number1 = '',
       oldPassword = '';
   var newPass, oldPass;
-  int ind=0;
+  int ind = 0;
 
   final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
@@ -42,16 +61,146 @@ class EditProfile extends State<EditProfilePage> {
   final emailRegex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
   final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
 
- showAlertDialog(BuildContext context) {
-      // set up the button
+  editProfilePhotoo(BuildContext context) {
+     final cameraPhone = RaisedButton.icon(
+      label: Flexible(
+        child: Text('Kamera'),
+      ),
+      onPressed: () {
+        _openCamera();
+      },
+      icon: Icon(Icons.camera_alt),
+      //color: Colors.greenAccent,
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
+    );
+
+    // Pick image from your gallery
+    final cameraGalery = RaisedButton.icon(
+      label: Flexible(
+        child: Text('Galerija'),
+      ),
+      onPressed: () {
+        _openGalery();
+      },
+      icon: Icon(Icons.photo_library),
+      //color: Colors.greenAccent,
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
+    );
+
+    // Row with camera buttons
+    final izaberiKameru = Row(
+      children: <Widget>[
+        Expanded(
+          child: cameraPhone,
+          flex: 10,
+        ),
+        Expanded(
+          child: Container(color: Colors.white),
+          flex: 1,
+        ),
+        Expanded(
+          child: cameraGalery,
+          flex: 10,
+        ),
+      ],
+    );
+
+    // set up the button
     Widget okButton = FlatButton(
-      child: Text("OK", style: TextStyle(color: Colors.green),),
+      child: Text(
+        "Izmeni",
+        style: TextStyle(color: Colors.green),
+      ),
+      onPressed: () {
+        if (imageFile != null) {
+          imageUploadProfilePhoto(imageFile);
+          APIServices.editProfilePhoto(
+                  user.id, "Upload//ProfilePhoto//" + basename(imageFile.path))
+              .then((response) {
+            Map<String, dynamic> jsonUser = jsonDecode(response);
+            User user1 = User.fromObject(jsonUser);
+            if (user1 != null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => UserProfilePage(user1)),
+              );
+            }
+          });
+        }
+      },
+    );
+    Widget closeButton = FlatButton(
+      child: Text(
+        "Otkazi",
+        style: TextStyle(color: Colors.green),
+      ),
       onPressed: () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => UserProfilePage(user)),
         );
-        },
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Izmena slike"),
+      content: StatefulBuilder(  // You need this, notice the parameters below:
+        builder: (BuildContext context, StateSetter setState) {
+       return Container(
+      width: 300,
+      child: Column(
+      children: <Widget>[
+        izaberiKameru,
+        ClipOval(
+          child: imageFile != null
+              ? Image.file(
+                  imageFile,
+                  height: 150.0,
+                  width: 150.0,
+                  fit: BoxFit.cover,
+                )
+              : Image.network(
+                  "http://10.0.2.2:60676//" + user.photo,
+                  height: 150.0,
+                  width: 150.0,
+                  fit: BoxFit.cover,
+                ),
+        )
+      ],
+    ));
+    }),
+      actions: [
+        okButton,
+        closeButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.green),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage(user)),
+        );
+      },
     );
 
     // set up the AlertDialog
@@ -517,6 +666,11 @@ class EditProfile extends State<EditProfilePage> {
         });
   }
 
+  Widget editProfilePhoto(BuildContext context) {
+   
+   
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -533,8 +687,39 @@ class EditProfile extends State<EditProfilePage> {
             alignment: Alignment.center,
             margin: EdgeInsets.all(10),
             width: double.infinity,
-            height: 36,
+            height: 5,
           ),
+
+          //photo
+          Card(
+              child: Column(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  editProfilePhotoo(context);
+                },
+                child: CircleImage(
+                  "http://10.0.2.2:60676//" + user.photo,
+                  imageSize: 90.0,
+                  whiteMargin: 2.0,
+                  imageMargin: 20.0,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  editProfilePhotoo(context);
+                },
+                child: Text(
+                  "Promeni profilnu sliku",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.blue),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ],
+          )),
 
           //first name and last name
           Card(
@@ -548,7 +733,11 @@ class EditProfile extends State<EditProfilePage> {
                         : FontWeight.normal,
                   )),
               subtitle: Text(
-                  firstName == '' ? user.firstName : firstName + " " + lastName == '' ? user.lastName : lastName,
+                  firstName == ''
+                      ? user.firstName
+                      : firstName + " " + lastName == ''
+                          ? user.lastName
+                          : lastName,
                   style: TextStyle(
                       color: _selectedOption == index - 1
                           ? Colors.black
@@ -730,23 +919,28 @@ class EditProfile extends State<EditProfilePage> {
                 var pom2 = utf8.encode(oldPassword);
                 oldPass = sha1.convert(pom2);
 
-                APIServices.editUserPassword( user.id, oldPass.toString(), newPass.toString())
+                APIServices.editUserPassword(
+                        user.id, oldPass.toString(), newPass.toString())
                     .then((response) {
                   if (response.statusCode == 200) {
                     showAlertDialog(context);
-                  } 
+                  }
                 });
               }
-            if(firstName != '' || lastName != '' || username1 != ''|| email1 != '' || number1 != ''){
-              APIServices.editUser(user.id, firstName, lastName, username1, email1, number1)
-                  .then((response) {
-                if (response.statusCode == 200 || password1 == '' && oldPassword == '') {
-                  showAlertDialog(context);
-                } 
-              });
-            }
-           
-              
+              if (firstName != '' ||
+                  lastName != '' ||
+                  username1 != '' ||
+                  email1 != '' ||
+                  number1 != '') {
+                APIServices.editUser(user.id, firstName, lastName, username1,
+                        email1, number1)
+                    .then((response) {
+                  if (response.statusCode == 200 ||
+                      password1 == '' && oldPassword == '') {
+                    showAlertDialog(context);
+                  }
+                });
+              }
             },
             color: green,
             child: Text(

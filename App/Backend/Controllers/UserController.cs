@@ -89,6 +89,7 @@ namespace Backend.Controllers
             public string password1 { get; set; }
         }
 
+
         [HttpPost("EditUserPassword")]
         public IActionResult EditUserPassword(changePassword pass)
         {
@@ -115,6 +116,20 @@ namespace Backend.Controllers
             }
             else
                 return BadRequest(new { message = "Greska" });
+        }
+
+      
+        [HttpPost("EditUserPhoto")]
+        public IActionResult EditUserPhoto(User u)
+        {
+            User user = _iUserUI.editUserPhoto(u.id, u.photo);
+            if (user != null)
+            {
+                UserViewModel newUser = new UserViewModel(user);
+                return Ok(newUser);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
         }
 
     }
