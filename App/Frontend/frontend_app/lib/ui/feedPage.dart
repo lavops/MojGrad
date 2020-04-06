@@ -53,7 +53,6 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    _getPosts();
     return Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(

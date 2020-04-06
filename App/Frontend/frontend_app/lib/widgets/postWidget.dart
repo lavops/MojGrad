@@ -17,6 +17,8 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   List<FullPost> listPosts;
+  //static String serverURL = 'http://10.0.2.2:60676//';
+  static String serverURL = 'http://192.168.1.2:45455//';
 
   _PostWidgetState(List<FullPost> listPosts1) {
     this.listPosts = listPosts1;
@@ -62,7 +64,7 @@ class _PostWidgetState extends State<PostWidget> {
   Widget userInfoRow(String username, String category, String userPhoto) => Row(
         children: <Widget>[
           CircleImage(
-            "http://10.0.2.2:60676//" + userPhoto,
+            serverURL + userPhoto,
             imageSize: 36.0,
             whiteMargin: 2.0,
             imageMargin: 6.0,
@@ -99,7 +101,7 @@ class _PostWidgetState extends State<PostWidget> {
             ),
           ),
         ),
-        child: Image(image: NetworkImage("http://10.0.2.2:60676//" + image)),
+        child: Image(image: NetworkImage(serverURL + image)),
       );
 
   Widget actionsButtons(

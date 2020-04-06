@@ -28,6 +28,9 @@ class EditProfile extends State<EditProfilePage> {
     user = user1;
   }
 
+  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
+  static String serverURLPhoto = 'http://192.168.1.2:45455//';
+
   Future<File> _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
@@ -176,7 +179,7 @@ class EditProfile extends State<EditProfilePage> {
                               fit: BoxFit.cover,
                             )
                           : Image.network(
-                              "http://10.0.2.2:60676//" + user.photo,
+                              serverURLPhoto + user.photo,
                               height: 150.0,
                               width: 150.0,
                               fit: BoxFit.cover,
@@ -702,7 +705,7 @@ class EditProfile extends State<EditProfilePage> {
                   editProfilePhotoo(context);
                 },
                 child: CircleImage(
-                  "http://10.0.2.2:60676//" + user.photo,
+                  serverURLPhoto + user.photo,
                   imageSize: 90.0,
                   whiteMargin: 2.0,
                   imageMargin: 20.0,
