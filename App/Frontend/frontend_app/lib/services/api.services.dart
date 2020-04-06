@@ -9,9 +9,9 @@ import '../models/user.dart';
 class APIServices
 {
 
-  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://10.0.2.2:60676/api/';
   //static String serverURL = 'http://127.0.0.1:60676/api/';
-
+  static String serverURL = 'http://192.168.1.2:45455/api/';
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',

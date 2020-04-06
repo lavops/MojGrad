@@ -31,6 +31,9 @@ class HeaderSection extends State<UserProfilePage> {
     print("korisnik ${user1.id}");
   }
 
+  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
+  static String serverURLPhoto = 'http://192.168.1.2:45455//';
+
   final Color green = Color(0xFF1E8161);
   //Map<String, dynamic> realUser;
   List<FullPost> posts;
@@ -173,7 +176,7 @@ class HeaderSection extends State<UserProfilePage> {
                   Row(children: <Widget>[
                     
                     CircleImage(
-                      "http://10.0.2.2:60676//" + user.photo,
+                      serverURLPhoto + user.photo,
                       imageSize: 90.0,
                       whiteMargin: 2.0,
                       imageMargin: 20.0,

@@ -26,6 +26,9 @@ class StateLikes extends State<LikesPage> {
   List<Like> listLikes;
   List<Like> listDislikes;
 
+  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
+  static String serverURLPhoto = 'http://192.168.1.2:45455//';
+
   _getLikeInPost() {
     APIServices.likeInPost(postId).then((res) {
       //umesto 1 stavlja se idPosta
@@ -71,7 +74,7 @@ class StateLikes extends State<LikesPage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://10.0.2.2:60676//" + listLikes[index].photo,
+                      serverURLPhoto + listLikes[index].photo,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
@@ -117,7 +120,7 @@ class StateLikes extends State<LikesPage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://10.0.2.2:60676//" + listDislikes[index].photo,
+                      serverURLPhoto + listDislikes[index].photo,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
