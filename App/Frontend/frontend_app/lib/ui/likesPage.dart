@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/comment.dart';
 import 'package:frontend/models/like.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
-import 'dart:async';
-import 'package:http/http.dart' as http;
 
 class LikesPage extends StatefulWidget {
   final int postId;
@@ -25,9 +22,6 @@ class StateLikes extends State<LikesPage> {
   }
   List<Like> listLikes;
   List<Like> listDislikes;
-
-  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
-  static String serverURLPhoto = 'http://192.168.1.2:45455//';
 
   _getLikeInPost() {
     APIServices.likeInPost(postId).then((res) {
@@ -178,8 +172,20 @@ class StateLikes extends State<LikesPage> {
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    String jwt;
+                    APIServices.jwtOrEmpty().then((res) {
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  HomePage.fromBase64(jwt.toString())),
+                        );
+                      }
+                    });
                   }),
               bottom: tabs(),
             ),

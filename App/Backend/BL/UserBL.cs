@@ -52,7 +52,7 @@ namespace Backend.BL
             return _iUserDAL.insertUser(user);
         }
 
-        public User login(User user)
+        public string login(User user)
         {
             return _iUserDAL.login(user);
         }

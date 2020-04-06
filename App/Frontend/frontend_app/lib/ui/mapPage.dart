@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:frontend/models/fullPost.dart';
@@ -11,9 +10,7 @@ class MapPage extends StatefulWidget {
   _MapPageState createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage>{
-
-
+class _MapPageState extends State<MapPage> {
   List<FullPost> listPosts;
 
   _getPosts() {
@@ -36,51 +33,50 @@ class _MapPageState extends State<MapPage>{
   }
 
   @override
-  Widget build(BuildContext context){
-
+  Widget build(BuildContext context) {
     List<Marker> markers = [];
-    if(listPosts != null)
+    if (listPosts != null)
       for (var i = 0; i < listPosts.length; i++) {
-        markers.add(new Marker(
-          point: new LatLng(listPosts[i].latitude, listPosts[i].longitude),
-          builder: (ctx) =>
-          new Container(
-            child: IconButton(
+        markers.add(
+          new Marker(
+            point: new LatLng(listPosts[i].latitude, listPosts[i].longitude),
+            builder: (ctx) => new Container(
+                child: IconButton(
               icon: Icon(Icons.location_on),
               iconSize: 40.0,
               color: Colors.red,
-              onPressed: (){
+              onPressed: () {
                 showBottomSheet(
                   context: ctx,
-                  builder: (ctx){
-                    return Center(child: Text("Text"),);
+                  builder: (ctx) {
+                    return Center(
+                      child: Text("Text"),
+                    );
                   },
                 );
               },
-            )
+            )),
           ),
-        ),);
+        );
       }
 
     return Scaffold(
-      body: FlutterMap(
-        options: new MapOptions(
-          center: new LatLng(44.0126575, 20.9097934),
-          zoom: 15.0,
-        ),
-        layers: [
-          new TileLayerOptions(
-            urlTemplate: "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+        body: FlutterMap(
+      options: new MapOptions(
+        center: new LatLng(44.0126575, 20.9097934),
+        zoom: 15.0,
+      ),
+      layers: [
+        new TileLayerOptions(
+            urlTemplate:
+                "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
             additionalOptions: {
-              'accessToken':'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
-              'id':'mapbox.mapbox-streets-v7'
-            }
-          ),
-          new MarkerLayerOptions(
-            markers: markers
-          ),
-        ],
-      )
-    );
+              'accessToken':
+                  'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
+              'id': 'mapbox.mapbox-streets-v7'
+            }),
+        new MarkerLayerOptions(markers: markers),
+      ],
+    ));
   }
 }

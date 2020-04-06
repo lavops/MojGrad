@@ -28,19 +28,15 @@ class EditProfile extends State<EditProfilePage> {
     user = user1;
   }
 
-  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
-  static String serverURLPhoto = 'http://192.168.1.2:45455//';
-
   Future<File> _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
       imageFile = picture;
-       return picture;
+      return picture;
     });
-   
   }
 
-   Future<File> _openCamera() async {
+  Future<File> _openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile = picture;
@@ -128,8 +124,7 @@ class EditProfile extends State<EditProfilePage> {
                               child: Text('Kamera'),
                             ),
                             onPressed: () {
-                             _openCamera().then((res)
-                              {
+                              _openCamera().then((res) {
                                 setState(() {
                                   imageFilee = res;
                                 });
@@ -153,8 +148,7 @@ class EditProfile extends State<EditProfilePage> {
                               child: Text('Galerija'),
                             ),
                             onPressed: () {
-                              _openGalery().then((res)
-                              {
+                              _openGalery().then((res) {
                                 setState(() {
                                   imageFilee = res;
                                 });
@@ -933,16 +927,9 @@ class EditProfile extends State<EditProfilePage> {
                   }
                 });
               }
-              if (firstName != '' ||
-                  lastName != '' ||
-                  username1 != '' ||
-                  email1 != '' ||
-                  number1 != '') {
-                APIServices.editUser(user.id, firstName, lastName, username1,
-                        email1, number1)
-                    .then((response) {
-                  if (response.statusCode == 200 ||
-                      password1 == '' && oldPassword == '') {
+              if (firstName != '' || lastName != '' || username1 != '' || email1 != '' || number1 != '') {
+                APIServices.editUser(user.id, firstName, lastName, username1,email1, number1).then((response) {
+                  if (response.statusCode == 200 || password1 == '' && oldPassword == '') {
                     showAlertDialog(context);
                   }
                 });

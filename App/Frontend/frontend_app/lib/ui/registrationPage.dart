@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/postType.dart';
 import 'package:frontend/ui/login.dart';
-
 import '../models/city.dart';
 import '../models/user.dart';
 import '../services/api.services.dart';
-
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -15,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String wrongRegText= "";
+  String wrongRegText = "";
 
   TextEditingController firstName = new TextEditingController();
   TextEditingController lastName = new TextEditingController();
@@ -32,15 +29,18 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   showAlertDialog(BuildContext context) {
-      // set up the button
+    // set up the button
     Widget okButton = FlatButton(
-      child: Text("OK", style: TextStyle(color: Colors.green),),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.green),
+      ),
       onPressed: () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
-        },
+      },
     );
 
     // set up the AlertDialog
@@ -61,8 +61,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  _register(String firstName, String lastName, String email, String mobile, String password, String username, int cityId) {
-    
+  _register(String firstName, String lastName, String email, String mobile,
+      String password, String username, int cityId) {
     final flNameRegex = RegExp(r'^[a-zA-Z]{1,10}$');
     final mobRegex = RegExp(r'^06[0-9]{7,8}$');
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
@@ -75,13 +75,13 @@ class _RegisterPageState extends State<RegisterPage> {
           if (mobRegex.hasMatch(mobile)) {
             if (emailRegex.hasMatch(email)) {
               if (passRegex.hasMatch(password)) {
-
                 var pom = utf8.encode(password);
                 var pass = sha1.convert(pom);
-                User user = User.without(2, firstName, lastName, username, pass.toString(), email, mobile, cityId, "Upload//default.jpg");
-                APIServices.registration(user).then((response){
+                User user = User.without(2, firstName, lastName, username, pass.toString(), email, mobile, cityId,"Upload//ProfilePhoto//default.jpg");
+                APIServices.registration(user).then((response) {
                   if (response.statusCode == 200) {
-                    Map<String, dynamic> jsonObject = json.decode(response.body);
+                    Map<String, dynamic> jsonObject =
+                        json.decode(response.body);
                     User extractedUser = new User();
                     extractedUser = User.fromObject(jsonObject);
                     User user1;
@@ -89,54 +89,50 @@ class _RegisterPageState extends State<RegisterPage> {
                       user1 = extractedUser;
                       wrongRegText = "";
                     });
-                    if(user1 != null){
-                        showAlertDialog(context);        
+                    if (user1 != null) {
+                      showAlertDialog(context);
                     }
-                  }
-                  else {
+                  } else {
                     setState(() {
                       wrongRegText = "Podaci nisu ispravni".toUpperCase();
                     });
-                    throw  Exception('Email ili username već zauseti');
+                    throw Exception('Email ili username već zauseti');
                   }
                 });
-              }
-              else {
+              } else {
                 setState(() {
-                  wrongRegText = "Loša sifra. Sifra mora imati najmanje 6 karaktera.".toUpperCase();
+                  wrongRegText =
+                      "Loša sifra. Sifra mora imati najmanje 6 karaktera."
+                          .toUpperCase();
                 });
-                throw Exception("Loša sifra. Sifra mora imati najmanje 6 karaktera.");
+                throw Exception(
+                    "Loša sifra. Sifra mora imati najmanje 6 karaktera.");
               }
-            }
-            else {
+            } else {
               setState(() {
                 wrongRegText = "Neispravan email.".toUpperCase();
               });
               throw Exception("Neispravan email.");
             }
-          }
-          else {
+          } else {
             setState(() {
               wrongRegText = "Unesite ponovo broj telefona.".toUpperCase();
             });
             throw Exception("Unesite ponovo broj telefona.");
           }
-        }
-        else {
+        } else {
           setState(() {
             wrongRegText = "Unesite ponovo korisnocko ime.".toUpperCase();
           });
           throw Exception("Unesite ponovo korisnocko ime");
         }
-      }
-      else {
+      } else {
         setState(() {
-          wrongRegText= "Unesite ispravno prezime.".toUpperCase();
+          wrongRegText = "Unesite ispravno prezime.".toUpperCase();
         });
         throw Exception("Unesite drugo prezime.");
       }
-    }
-    else {
+    } else {
       setState(() {
         wrongRegText = "Unestite ispravno ime.".toUpperCase();
       });
@@ -148,8 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
   City city;
 
   //function that adds cities to list
-  _getCity()
-  {
+  _getCity() {
     APIServices.getCity().then((res) {
       Iterable list = json.decode(res.body);
       List<City> cities = new List<City>();
@@ -168,17 +163,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     final logoWidget = Hero(
       tag: 'hero',
       child: Center(
-        child: Image.asset('assets/mojGrad4.png', width: 300,)
-      ),
+          child: Image.asset(
+        'assets/mojGrad4.png',
+        width: 300,
+      )),
     );
 
     final firstNameWidget = Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
         controller: firstName,
@@ -197,15 +192,14 @@ class _RegisterPageState extends State<RegisterPage> {
           labelText: "Ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Colors.green[800]),
           ),
         ),
       ),
     );
 
     final lastNameWidget = Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
         controller: lastName,
@@ -215,8 +209,7 @@ class _RegisterPageState extends State<RegisterPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
             child: Icon(Icons.person, color: Colors.green[800]),
@@ -225,15 +218,14 @@ class _RegisterPageState extends State<RegisterPage> {
           labelText: "Prezime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Colors.green[800]),
           ),
         ),
       ),
     );
 
     final usernameWidget = Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
         controller: username,
@@ -243,8 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
             child: Icon(Icons.adb, color: Colors.green[800]),
@@ -253,15 +244,14 @@ class _RegisterPageState extends State<RegisterPage> {
           labelText: "Korisnicko ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Colors.green[800]),
           ),
         ),
       ),
     );
 
     final emailWidget = Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
         controller: email,
@@ -271,8 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
             child: Icon(Icons.email, color: Colors.green[800]),
@@ -281,15 +270,14 @@ class _RegisterPageState extends State<RegisterPage> {
           labelText: "E-mail",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Colors.green[800]),
           ),
         ),
       ),
     );
 
     final mobileNumberWidget = Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
         controller: mobile,
@@ -299,8 +287,7 @@ class _RegisterPageState extends State<RegisterPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
             child: Icon(Icons.phone, color: Colors.green[800]),
@@ -309,7 +296,7 @@ class _RegisterPageState extends State<RegisterPage> {
           labelText: "Mobilni telefon",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Colors.green[800]),
           ),
         ),
         keyboardType: TextInputType.number,
@@ -317,8 +304,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     final passwordWidget = Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
         obscureText: _secureText,
@@ -329,13 +315,11 @@ class _RegisterPageState extends State<RegisterPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           suffixIcon: IconButton(
             onPressed: showHide,
-            icon: Icon(_secureText
-                ? Icons.visibility_off
-                : Icons.visibility, color: Colors.green[800]),
+            icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility,
+                color: Colors.green[800]),
           ),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
@@ -345,94 +329,95 @@ class _RegisterPageState extends State<RegisterPage> {
           labelText: "Šifra",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Colors.green[800]),
           ),
         ),
       ),
     );
 
     final dropdownWidget = new Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        new Text("Izaberite svoj grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
-        new Container(
-          padding: new EdgeInsets.all(16.0),
-        ),
-
-        _city != null? new DropdownButton<City>(
-          hint:  Text("Izaberi"),
-          value: city,
-          onChanged: (City newValue) {
-            setState(() {
-              city = newValue;
-            });
-          },
-          items: _city.map((City option) {
-            return DropdownMenuItem(
-              child: new Text(option.name),
-              value: option,
-            );
-          }).toList(),
-        ):
-        new DropdownButton<String>(
-          hint:  Text("Izaberi"),
-          onChanged: null,
-          items: null,
-        ),
-      ]
-    );
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Izaberite svoj grad: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+          new Container(
+            padding: new EdgeInsets.all(16.0),
+          ),
+          _city != null
+              ? new DropdownButton<City>(
+                  hint: Text("Izaberi"),
+                  value: city,
+                  onChanged: (City newValue) {
+                    setState(() {
+                      city = newValue;
+                    });
+                  },
+                  items: _city.map((City option) {
+                    return DropdownMenuItem(
+                      child: new Text(option.name),
+                      value: option,
+                    );
+                  }).toList(),
+                )
+              : new DropdownButton<String>(
+                  hint: Text("Izaberi"),
+                  onChanged: null,
+                  items: null,
+                ),
+        ]);
 
     final registerButtonWidget = SizedBox(
       height: 48.0,
       child: RaisedButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           child: Text(
             "Registruj se",
             style: TextStyle(fontSize: 16.0),
           ),
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           textColor: Colors.white,
-          color:  Colors.green[800],
+          color: Colors.green[800],
           onPressed: () {
-            if(city != null)
-              _register(firstName.text, lastName.text, email.text, mobile.text, password.text, username.text, city.id);
+            if (city != null)
+              _register(firstName.text, lastName.text, email.text, mobile.text,
+                  password.text, username.text, city.id);
             else
-              _register(firstName.text, lastName.text, email.text, mobile.text, password.text, username.text, 1);
+              _register(firstName.text, lastName.text, email.text, mobile.text,
+                  password.text, username.text, 1);
           }),
     );
 
     final loginLabelWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-          'Vec imate nalog? '
+        Text('Vec imate nalog? '),
+        SizedBox(
+          width: 5.0,
         ),
-        SizedBox(width: 5.0,),
         InkWell(
-          child: Text('Prijavite se.',
-          style: TextStyle(
-            color: Colors.green[800],
-            fontWeight: FontWeight.bold
-            ),
+          child: Text(
+            'Prijavite se.',
+            style: TextStyle(
+                color: Colors.green[800], fontWeight: FontWeight.bold),
           ),
-          onTap: (){
+          onTap: () {
             Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
           },
         ),
       ],
     );
 
-    final wrongReg = Center( child: Text(
-        '$wrongRegText',
-        style: TextStyle(color: Colors.red),
-      )
-    );
-  
+    final wrongReg = Center(
+        child: Text(
+      '$wrongRegText',
+      style: TextStyle(color: Colors.red),
+    ));
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -448,7 +433,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     logoWidget,
-                    SizedBox( height: 30.0,),                     
+                    SizedBox(
+                      height: 30.0,
+                    ),
                     firstNameWidget,
                     lastNameWidget,
                     usernameWidget,
@@ -456,11 +443,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     emailWidget,
                     passwordWidget,
                     dropdownWidget,
-                    SizedBox( height: 12.0,),
+                    SizedBox(
+                      height: 12.0,
+                    ),
                     registerButtonWidget,
-                    SizedBox( height: 12.0,),
+                    SizedBox(
+                      height: 12.0,
+                    ),
                     loginLabelWidget,
-                    SizedBox( height: 12.0,),
+                    SizedBox(
+                      height: 12.0,
+                    ),
                   ],
                 ),
               ),
@@ -472,4 +465,3 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-

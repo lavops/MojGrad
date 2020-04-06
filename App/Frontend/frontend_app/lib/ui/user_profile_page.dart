@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
@@ -7,9 +6,6 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/login.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:frontend/widgets/postWidget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
-
 import 'edit_profile_page.dart';
 import 'homePage.dart';
 
@@ -31,28 +27,9 @@ class HeaderSection extends State<UserProfilePage> {
     print("korisnik ${user1.id}");
   }
 
-  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
-  static String serverURLPhoto = 'http://192.168.1.2:45455//';
-
   final Color green = Color(0xFF1E8161);
-  //Map<String, dynamic> realUser;
   List<FullPost> posts;
 
-  //var postCnt = posts.length;
-  /*
-  _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString('token');
-    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
-    User extractedUser = new User();
-    extractedUser = User.fromObject(jsonObject);
-    setState(() {
-      token = _token;
-      user = extractedUser;
-      
-    });
-  }
-  */
   _getPosts() {
     APIServices.getPostsForUser(user.id).then((res) {
       Iterable list = json.decode(res.body);
@@ -67,16 +44,13 @@ class HeaderSection extends State<UserProfilePage> {
   }
 
   _removeToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('token');
-    prefs.remove('user');
+    storage.delete(key: "jwt");
   }
 
   @override
   void initState() {
     super.initState();
     _getPosts();
-    print(user.photo);
   }
 
   @override
@@ -89,8 +63,18 @@ class HeaderSection extends State<UserProfilePage> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              String jwt;
+              APIServices.jwtOrEmpty().then((res) {
+                setState(() {
+                  jwt = res;
+                });
+                if (res != null) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePage.fromBase64(res)));
+                }
+              });
             }),
       ),
       endDrawer: Drawer(
@@ -139,22 +123,6 @@ class HeaderSection extends State<UserProfilePage> {
                 );
               },
             ),
-            /*Container(
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Divider(),
-                          ListTile(
-                              leading: Icon(Icons.settings),
-                              title: Text('Podešavanja')),
-                          ListTile(
-                              leading: Icon(Icons.help),
-                              title: Text('Pomoć i feedback'))
-                        ],
-                      ),
-                    ))),*/
           ],
         ),
       ),
@@ -174,39 +142,37 @@ class HeaderSection extends State<UserProfilePage> {
               child: Column(
                 children: <Widget>[
                   Row(children: <Widget>[
-                    
                     CircleImage(
                       serverURLPhoto + user.photo,
                       imageSize: 90.0,
                       whiteMargin: 2.0,
                       imageMargin: 20.0,
                     ),
-                    
                     Center(
-                      
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, left: 70),
-                            child: Text(
-                              user.username,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(top: 10, left: 70),
+                              child: Text(
+                                user.username,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0, left: 70),
-                            child: Text(
-                              user.firstName + " " + user.lastName,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, left: 70),
+                              child: Text(
+                                user.firstName + " " + user.lastName,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24),
+                              ),
                             ),
-                          ),
-                        ]),
+                          ]),
                     ),
                   ]),
                   Padding(

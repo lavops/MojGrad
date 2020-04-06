@@ -48,14 +48,13 @@ namespace Backend.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] User userParam)
         {
-            User user = _iUserUI.login(userParam);
-            if (user != null)
+            string tokenStr = _iUserUI.login(userParam);
+            if (tokenStr != null)
             {
-                user.password = null;
-                return Ok(user);
+                return Ok(new { token = tokenStr });
             }
             else
-                return BadRequest(new { message = "Nevalidni podaci" });
+                return Unauthorized();
         }
 
         [HttpPost("Register")]
