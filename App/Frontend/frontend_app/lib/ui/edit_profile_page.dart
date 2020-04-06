@@ -28,17 +28,20 @@ class EditProfile extends State<EditProfilePage> {
     user = user1;
   }
 
-  _openGalery() async {
+  Future<File> _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
       imageFile = picture;
+       return picture;
     });
+   
   }
 
-  _openCamera() async {
+   Future<File> _openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile = picture;
+      return picture;
     });
   }
 
@@ -62,53 +65,6 @@ class EditProfile extends State<EditProfilePage> {
   final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
 
   editProfilePhotoo(BuildContext context) {
-     final cameraPhone = RaisedButton.icon(
-      label: Flexible(
-        child: Text('Kamera'),
-      ),
-      onPressed: () {
-        _openCamera();
-      },
-      icon: Icon(Icons.camera_alt),
-      //color: Colors.greenAccent,
-      shape: new RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(50),
-      ),
-    );
-
-    // Pick image from your gallery
-    final cameraGalery = RaisedButton.icon(
-      label: Flexible(
-        child: Text('Galerija'),
-      ),
-      onPressed: () {
-        _openGalery();
-      },
-      icon: Icon(Icons.photo_library),
-      //color: Colors.greenAccent,
-      shape: new RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(50),
-      ),
-    );
-
-    // Row with camera buttons
-    final izaberiKameru = Row(
-      children: <Widget>[
-        Expanded(
-          child: cameraPhone,
-          flex: 10,
-        ),
-        Expanded(
-          child: Container(color: Colors.white),
-          flex: 1,
-        ),
-        Expanded(
-          child: cameraGalery,
-          flex: 10,
-        ),
-      ],
-    );
-
     // set up the button
     Widget okButton = FlatButton(
       child: Text(
@@ -146,44 +102,94 @@ class EditProfile extends State<EditProfilePage> {
       },
     );
 
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Izmena slike"),
-      content: StatefulBuilder(  // You need this, notice the parameters below:
-        builder: (BuildContext context, StateSetter setState) {
-       return Container(
-      width: 300,
-      child: Column(
-      children: <Widget>[
-        izaberiKameru,
-        ClipOval(
-          child: imageFile != null
-              ? Image.file(
-                  imageFile,
-                  height: 150.0,
-                  width: 150.0,
-                  fit: BoxFit.cover,
-                )
-              : Image.network(
-                  "http://10.0.2.2:60676//" + user.photo,
-                  height: 150.0,
-                  width: 150.0,
-                  fit: BoxFit.cover,
-                ),
-        )
-      ],
-    ));
-    }),
-      actions: [
-        okButton,
-        closeButton,
-      ],
-    );
     // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        File imageFilee;
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            title: Text("Promena profilne slike"),
+            content: Container(
+                width: 300,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: RaisedButton.icon(
+                            label: Flexible(
+                              child: Text('Kamera'),
+                            ),
+                            onPressed: () {
+                             _openCamera().then((res)
+                              {
+                                setState(() {
+                                  imageFilee = res;
+                                });
+                              });
+                            },
+                            icon: Icon(Icons.camera_alt),
+                            //color: Colors.greenAccent,
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50),
+                            ),
+                          ),
+                          flex: 10,
+                        ),
+                        Expanded(
+                          child: Container(color: Colors.white),
+                          flex: 1,
+                        ),
+                        Expanded(
+                          child: RaisedButton.icon(
+                            label: Flexible(
+                              child: Text('Galerija'),
+                            ),
+                            onPressed: () {
+                              _openGalery().then((res)
+                              {
+                                setState(() {
+                                  imageFilee = res;
+                                });
+                              });
+                            },
+                            icon: Icon(Icons.photo_library),
+                            //color: Colors.greenAccent,
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50),
+                            ),
+                          ),
+                          flex: 10,
+                        ),
+                      ],
+                    ),
+                    ClipOval(
+                      child: imageFile != null
+                          ? Image.file(
+                              imageFile,
+                              height: 150.0,
+                              width: 150.0,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              "http://10.0.2.2:60676//" + user.photo,
+                              height: 150.0,
+                              width: 150.0,
+                              fit: BoxFit.cover,
+                            ),
+                    )
+                  ],
+                )),
+            actions: [
+              closeButton,
+              okButton,
+            ],
+          );
+        });
       },
     );
   }
@@ -666,10 +672,7 @@ class EditProfile extends State<EditProfilePage> {
         });
   }
 
-  Widget editProfilePhoto(BuildContext context) {
-   
-   
-  }
+  Widget editProfilePhoto(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
