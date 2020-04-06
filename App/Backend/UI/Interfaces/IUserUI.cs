@@ -15,5 +15,6 @@ namespace Backend.UI.Interfaces
         User editUserData(User user);
         User editUserPassword(long id, string password, string newPassword);
         bool deleteUser(long id);
+        User editUserPhoto(long id, string photoPathn);
     }
 }

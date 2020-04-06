@@ -4,7 +4,11 @@ import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/NavDrawer.dart';
+import 'package:frontend/ui/commentsPage.dart';
+import 'package:frontend/ui/likesPage.dart';
+import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:frontend/widgets/postWidget.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class FeedPage extends StatefulWidget {
   final User user;
@@ -39,6 +43,8 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
+  
+ 
   @override
   void initState() {
     super.initState();
@@ -47,6 +53,7 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    _getPosts();
     return Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(

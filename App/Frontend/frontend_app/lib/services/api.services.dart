@@ -9,8 +9,8 @@ import '../models/user.dart';
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://127.0.0.1:60676/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://127.0.0.1:60676/api/';
 
 
   static Map<String, String> header = { 
@@ -170,5 +170,16 @@ class APIServices
      return await http.get(serverURL +'Post/UnsolvedPosts');
   }
 
+   static Future editProfilePhoto(int userId, String photo) async {
+    String url = serverURL + 'User/EditUserPhoto';
+    var data = Map();
+    data["id"] = userId;
+    data["photo"] = photo;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: header, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
 
 }

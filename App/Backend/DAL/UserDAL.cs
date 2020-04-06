@@ -153,7 +153,7 @@ namespace Backend.DAL
                     exist.password = newPassword;
                     _context.Update(exist);
                     _context.SaveChanges();
-                    return exist;
+                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault(); ;
                 }
                 catch (DbUpdateException ex)
                 {
@@ -176,6 +176,27 @@ namespace Backend.DAL
             _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public User editUserPhoto(long id, string photoPathn)
+        {
+            var exist = _context.user.Where(x => x.id == id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.photo = photoPathn;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
         }
     }
 }
