@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/likesPage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:frontend/models/constants.dart';
+import 'dart:convert';
+import '../services/api.services.dart';
+import '../services/api.services.dart';
 
 class PostWidget extends StatefulWidget {
   final List<FullPost> listPosts;
@@ -17,16 +24,47 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   List<FullPost> listPosts;
+  List<ReportType> reportTypes;
 
+  ReportType _selectedReport;
+  List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
 
   _PostWidgetState(List<FullPost> listPosts1) {
     this.listPosts = listPosts1;
   }
 
+  getReportTypes() async {
+     APIServices.getReportType().then((res) {
+      Iterable list = json.decode(res.body);
+      List<ReportType> listRepTypes = List<ReportType>();
+      listRepTypes = list.map((model) => ReportType.fromObject(model)).toList();
+      setState(() {
+        reportTypes = listRepTypes;        
+        _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
+        _selectedReport = _dropdownMenuItems[0].value;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    this.getReportTypes();
   }
+
+  List<DropdownMenuItem<ReportType>> buildDropDownMenuItems(List reports) {
+    List<DropdownMenuItem<ReportType>> newReports = List();
+    for (ReportType item in reports) {
+      newReports.add(DropdownMenuItem(
+        value: item,
+        child: Text(item.typeName),
+      ));
+    }
+
+    return newReports;
+  }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +116,72 @@ class _PostWidgetState extends State<PostWidget> {
             icon: Icon(Icons.location_on),
             onPressed: () {},
           ),
-          IconButton(
+          /*IconButton(
             icon: Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+            onPressed: () {
+
+            },
+          ),*/
+          PopupMenuButton<String> (
+            onSelected: choiceAction,
+            itemBuilder: (BuildContext context) {
+              return Constants.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );      
+              }).toList();
+            },
+          )
         ],
       );
+
+      void choiceAction(String choice)
+      {
+        if(choice == Constants.PrijaviKorisnika)
+        {
+          showReportDialog(context); //potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
+        }
+      }
+
+      showReportDialog(BuildContext context) {
+        // set up the button
+        Widget sendButton = FlatButton(
+          child: Text(
+            "Prijavi",
+            style: TextStyle(color: Colors.green),
+          ),
+          onPressed: () {
+            //var res = await APIServices.addReport(userId, reportedUserId, _selectedReport.id)  - userId, reportedUserId poslati..
+            print('Uspesno ste prijavili korisnika.');
+            Navigator.of(context).pop();
+          },
+        );
+
+          // set up the AlertDialog
+          AlertDialog alert = AlertDialog(
+            title: Text("Prijavljivanje korisnika"),
+            content: DropdownButton(
+                      value: _selectedReport,
+                      items: _dropdownMenuItems,
+                      onChanged: (ReportType selectedReport) {
+                        _selectedReport = selectedReport;
+                      },
+                      focusColor: Colors.green[800],
+                    ),
+            actions: [
+              sendButton
+            ],
+          );
+
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
+        }
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(

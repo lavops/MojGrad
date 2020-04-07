@@ -193,5 +193,21 @@ class APIServices
     if(jwt == null) return "";
     return jwt;
   }
+  
+  static Future getReportType() async{
+    return await http.get(serverURL +'ReportType');  
+  }
+
+  static Future<String> addReport(int userId, int reportedUserId, int reportTypeId) async {
+    String url = serverURL + 'Report/Insert';
+    var data = Map();
+    data["reportingUserId"] = userId;
+    data["reportedUserId"] = reportedUserId;
+    data["reportTypeId"] = reportTypeId;
+    var jsonBody = convert.jsonEncode(data);
+    var res = await http.post(url, headers: header, body: jsonBody);
+    String data2 = res.body.toString();    
+    return data2;
+  }
 
 }
