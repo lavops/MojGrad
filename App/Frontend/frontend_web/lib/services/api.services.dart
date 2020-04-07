@@ -170,4 +170,12 @@ class APIServices
      return await http.get(serverURL +'Post/UnsolvedPosts');
   }
 
+<<<<<<< HEAD
+  //returns comment with specific id for deletion
+  static Future deleteComment(int id) async {
+    String url = serverURL + 'Comment/Delete';
+    return await http.post(url, headers: header, body: convert.jsonEncode({ 'id' : id, }));
+  }
+=======
+>>>>>>> 4af88a1e064648516f589d753ddc69b84aeae420
 }
