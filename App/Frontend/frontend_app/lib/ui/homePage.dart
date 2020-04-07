@@ -35,8 +35,9 @@ class _HomePageState extends State<HomePage> {
   int ind = 0;
 
   _getUser() async {
+     var jwt = await APIServices.jwtOrEmpty();
     userId = int.parse(payload['sub']);
-    var res = await APIServices.getUser(userId);
+    var res = await APIServices.getUser(jwt, userId);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     User user = User.fromObject(jsonUser);
     setState(() {

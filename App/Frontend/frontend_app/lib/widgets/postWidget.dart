@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
@@ -34,7 +33,8 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   getReportTypes() async {
-     APIServices.getReportType().then((res) {
+     var jwt = await APIServices.jwtOrEmpty();
+     APIServices.getReportType(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<ReportType> listRepTypes = List<ReportType>();
       listRepTypes = list.map((model) => ReportType.fromObject(model)).toList();
@@ -212,7 +212,16 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]),
                 onPressed: () {
-                  APIServices.addLike(postId, 1, 2);
+                    APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                       APIServices.addLike(jwt,postId, 1, 2);
+                      }
+                    });
+                  
                 },
               ),
               GestureDetector(
@@ -227,7 +236,16 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
                 onPressed: () {
-                  APIServices.addLike(postId, 1, 1);
+                   APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        APIServices.addLike(jwt,postId, 1, 1);
+                      }
+                    });
+                 
                 },
               ),
               GestureDetector(

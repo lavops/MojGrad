@@ -14,7 +14,6 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  String token = '';
   User user;
   List<FullPost> listPosts;
 
@@ -22,8 +21,9 @@ class _FeedPageState extends State<FeedPage> {
     this.user = user1;
   }
 
-  _getPosts() {
-    APIServices.getPost().then((res) {
+  _getPosts() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getPost(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();

@@ -73,16 +73,25 @@ class EditProfile extends State<EditProfilePage> {
       onPressed: () {
         if (imageFile != null) {
           imageUploadProfilePhoto(imageFile);
-          APIServices.editProfilePhoto(
-                  user.id, "Upload//ProfilePhoto//" + basename(imageFile.path))
-              .then((response) {
-            Map<String, dynamic> jsonUser = jsonDecode(response);
-            User user1 = User.fromObject(jsonUser);
-            if (user1 != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => UserProfilePage(user1)),
-              );
+          APIServices.jwtOrEmpty().then((res) {
+            String jwt;
+            setState(() {
+              jwt = res;
+            });
+            if (res != null) {
+              APIServices.editProfilePhoto(jwt, user.id,
+                      "Upload//ProfilePhoto//" + basename(imageFile.path))
+                  .then((response) {
+                Map<String, dynamic> jsonUser = jsonDecode(response);
+                User user1 = User.fromObject(jsonUser);
+                if (user1 != null) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserProfilePage(user1)),
+                  );
+                }
+              });
             }
           });
         }
@@ -918,19 +927,35 @@ class EditProfile extends State<EditProfilePage> {
 
                 var pom2 = utf8.encode(oldPassword);
                 oldPass = sha1.convert(pom2);
-
-                APIServices.editUserPassword(
-                        user.id, oldPass.toString(), newPass.toString())
-                    .then((response) {
-                  if (response.statusCode == 200) {
-                    showAlertDialog(context);
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.editUserPassword(jwt, user.id, oldPass.toString(), newPass.toString())
+                        .then((response) {
+                      if (response.statusCode == 200) {
+                        showAlertDialog(context);
+                      }
+                    });
                   }
                 });
               }
-              if (firstName != '' || lastName != '' || username1 != '' || email1 != '' || number1 != '') {
-                APIServices.editUser(user.id, firstName, lastName, username1,email1, number1).then((response) {
-                  if (response.statusCode == 200 || password1 == '' && oldPassword == '') {
-                    showAlertDialog(context);
+              if (firstName != '' || lastName != '' ||  username1 != '' || email1 != '' ||   number1 != '') {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.editUser(jwt, user.id, firstName, lastName, username1, email1, number1)
+                        .then((response) {
+                      if (response.statusCode == 200 ||
+                          password1 == '' && oldPassword == '') {
+                        showAlertDialog(context);
+                      }
+                    });
                   }
                 });
               }

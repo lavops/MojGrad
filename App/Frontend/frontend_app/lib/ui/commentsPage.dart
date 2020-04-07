@@ -21,8 +21,9 @@ class StateComents extends State<CommentsPage> {
   }
 
   List<Comment> listComents;
-  _getComms() {
-    APIServices.getComments(postId).then((res) {
+  _getComms() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getComments(jwt, postId).then((res) {
       //umesto 1 stavlja se idPosta
       Iterable list = json.decode(res.body);
       List<Comment> listComms = List<Comment>();
@@ -46,7 +47,7 @@ class StateComents extends State<CommentsPage> {
       itemBuilder: (BuildContext context, int index) {
         return Container(
             child: Center(
-            child: Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
@@ -134,8 +135,15 @@ class StateComents extends State<CommentsPage> {
                   ),
                   //post comment
                   onPressed: () {
-                    APIServices.addComment(myController.text, 1,
-                        postId); // this username - korisnik koji je prokomentarisao post, 1 primer - id posta
+                    APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        APIServices.addComment(jwt, myController.text, 1, postId); // this username - korisnik koji je prokomentarisao post, 1 primer - id posta
+                      }
+                    });
                     _getComms();
                     setState(() {
                       myController.text = '';

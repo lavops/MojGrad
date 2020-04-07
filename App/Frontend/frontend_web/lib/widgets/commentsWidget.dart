@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/comment.dart';
 import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/postPage.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +28,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   List<Comment> listComments;
   //get comments for specific post id
   _getComments(int postId) {
-    APIServices.getComments(postId).then((res) {
+    APIServices.getComments(TokenSession.getToken, postId).then((res) {
       Iterable list = json.decode(res.body);
       List<Comment> listComms = List<Comment>();
       listComms = list.map((model) => Comment.fromObject(model)).toList();
@@ -54,7 +55,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.green),),
       onPressed: () {
-        APIServices.deleteComment(id);
+        APIServices.deleteComment(TokenSession.getToken, id);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => PostPage(globalUser)),

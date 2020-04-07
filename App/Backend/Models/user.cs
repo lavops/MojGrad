@@ -17,7 +17,6 @@ namespace Backend.Models
         public DateTime createdAt { get; set; }
         public long cityId { get; set; }
         public string photo { get; set; }
-        public string token { get; set; }
         public int points { get; set; }
         public int level { get; set; }
 

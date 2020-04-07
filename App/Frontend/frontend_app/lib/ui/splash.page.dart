@@ -1,34 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
 
-class SplashPage extends StatefulWidget{
-
+class SplashPage extends StatefulWidget {
+  String jwt;
+  SplashPage(this.jwt);
   @override
   _SplashPageState createState() => new _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage>{
-
+class _SplashPageState extends State<SplashPage> {
   // This function needs to be done again once we implement login & register
   // It will check if we have logged user in our session/memory
   // If we have user in memory we will redirect to Homescreen
   // If not it will be reddirected to Login Page
-  void initState(){
+  void initState() {
     super.initState();
-    Future.delayed(
-      Duration(seconds: 2),
-      () {
+    Future.delayed(Duration(seconds: 2), () {
+      if (widget.jwt == "") {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage.fromBase64(widget.jwt)),
+        );
       }
-    );
+    });
   }
 
   @override
-  Widget build(BuildContext context){
-
+  Widget build(BuildContext context) {
     // Image element with our logo
     // If we get new logo we will just change it here
     final logo = Hero(
@@ -39,14 +44,13 @@ class _SplashPageState extends State<SplashPage>{
     );
 
     final fromAnts = Align(
-      alignment: Alignment.bottomCenter,
-      child: Image.asset('assets/fromAnts1.png', width: 150)
-    );
-    
+        alignment: Alignment.bottomCenter,
+        child: Image.asset('assets/fromAnts1.png', width: 150));
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child:Container(
+        backgroundColor: Colors.white,
+        body: Center(
+            child: Container(
           width: 400,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -67,8 +71,6 @@ class _SplashPageState extends State<SplashPage>{
               ),
             ],
           ),
-        )
-      )
-    );
+        )));
   }
 }

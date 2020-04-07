@@ -30,19 +30,18 @@ class MyApp extends StatelessWidget {
           if(snapshot.data != "") {
             var str = snapshot.data;
             var jwt = str.split(".");
-
             if(jwt.length !=3) {
-              return LoginPage();
+              return SplashPage("");
             } else {
               var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
-                return HomePage(str, payload);
+                return SplashPage(str);
               } else {
-                return LoginPage();
+                return SplashPage("");
               }
             }
           } else {
-            return LoginPage();
+            return SplashPage("");
           }
         }
       ),

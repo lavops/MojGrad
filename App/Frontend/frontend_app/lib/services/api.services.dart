@@ -24,25 +24,45 @@ class APIServices
   };
 
   //return all posts
-  static Future getPost() async{
-    return await http.get(serverURL +'Post');  
+  static Future getPost(String jwt) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
   }
 
   //return all posts from a specific user
-  static Future getPostsForUser(int userId) async{
+  static Future getPostsForUser(String jwt, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Post/UsersPosts';
     var data = Map();
     data["id"] = userId;
     var jsonBody = convert.jsonEncode(data);
-    return await http.post(url,headers:header,body: jsonBody);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    },body: jsonBody);
   }
 
-  static Future getUser(int userId) async{
-    return await http.get(serverURL +'User/'+userId.toString()); 
+  static Future getUser(String jwt, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL +'User/'+userId.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }); 
   }
 
   //send a new post to the database
-  static Future<String> addPost (String token, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
+  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Post';
     var data = Map();
     data["userId"] = userId;
@@ -53,46 +73,74 @@ class APIServices
     data["latitude"] = latitude;
     data["longitude"] = longitude;
     var jsonBody = convert.jsonEncode(data);
-    var res = await http.post(url, headers: header, body: jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
     String data2 = res.body.toString();
     print(data2);
     return data2;
   }
 
   //send a new like to the database
-  static Future<String> addLike( int postId, int userId, int typeId) async {
+  static Future<String> addLike(String jwt, int postId, int userId, int typeId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Like';
     var data = Map();
     data["postId"] = postId;
     data["userId"] = userId;
     data["likeTypeId"] = typeId;
     var jsonBody = convert.jsonEncode(data);
-    var res = await http.post(url, headers: header, body: jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
     String data2 = res.body.toString();
     return data2;
   }
 
   //return all comments on one post
-  static Future getComments(int postId) async {
-    return await http.get(serverURL +'Comment/'+postId.toString());  
+  static Future getComments(String jwt, int postId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL +'Comment/'+postId.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
   }
 
   //send a new comment to the database
-  static Future<String> addComment( String comm, int userId, int postId) async {
+  static Future<String> addComment(String jwt, String comm, int userId, int postId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Comment';
     var data = Map();
     data["description"] = comm;
     data["userId"] = userId;
     data["postId"] = postId;
     var jsonBody = convert.jsonEncode(data);
-    var res = await http.post(url, headers: header, body: jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
     String data2 = res.body.toString();
     return data2;
   }
 
   //return types of posts (example smeće, rupe...)
-  static Future getPostType() async{
-    return await http.get(serverURL +'PostType');
+  static Future getPostType(String jwt) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL +'PostType', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
   }
 
   // Login funtion
@@ -122,12 +170,16 @@ class APIServices
   }
 
   //fetch method for cities
-  static Future getCity() async{
+  static Future getCity(String jwt) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     return await http.get(serverURL + 'City');
   }
   
-	static Future editUser(int id, String firstName, String lastName, String username, String email, String phone) async  {
-		String url = serverURL + 'User/EditUserData';
+	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'User/EditUserData';
 		var data = Map();
 		data["id"] = id;
 		data["firstName"] = firstName;
@@ -137,10 +189,16 @@ class APIServices
 		data["phone"] = phone;
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
-		return await http.post(url, headers: header, body: jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
 	}
 
-  static Future editUserPassword(int id, String password, String password1) async  {
+  static Future editUserPassword(String jwt, int id, String password, String password1) async  {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
 		String url = serverURL + 'User/EditUserPassword';
 		var data = Map();
 		data["id"] = id;
@@ -148,42 +206,76 @@ class APIServices
 		data["password1"] = password1;
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
-		return await http.post(url, headers: header, body: jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
 	}
 
 
-  static Future dislikeInPost(int postId) async {
+  static Future dislikeInPost(String jwt, int postId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Like/DislikeInPost';
     var data = Map();
     data["id"] = postId;
     var jsonBody = convert.jsonEncode(data);
-    return await http.post(url, headers: header, body: jsonBody);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
  
   }
-  static Future likeInPost(int postId) async {
+  static Future likeInPost(String jwt, int postId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Like/LikeInPost';
     var data = Map();
     data["id"] = postId;
     var jsonBody = convert.jsonEncode(data);
-    return await http.post(url, headers: header, body: jsonBody);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
   }
 
-  static Future getSolvedPosts() async {
-     return await http.get(serverURL +'Post/SolvedPosts');
+  static Future getSolvedPosts(String jwt) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+     return await http.get(serverURL +'Post/SolvedPosts', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
   }
 
-  static Future getUnsolvedPosts() async {
-     return await http.get(serverURL +'Post/UnsolvedPosts');
+  static Future getUnsolvedPosts(String jwt) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+     return await http.get(serverURL +'Post/UnsolvedPosts', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
   }
 
-   static Future editProfilePhoto(int userId, String photo) async {
+   static Future editProfilePhoto(String jwt, int userId, String photo) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'User/EditUserPhoto';
     var data = Map();
     data["id"] = userId;
     data["photo"] = photo;
     var jsonBody = convert.jsonEncode(data);
     print(jsonBody);
-    var res = await http.post(url, headers: header, body: jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
     print(res.statusCode);
     return res.body;
   }
@@ -194,18 +286,30 @@ class APIServices
     return jwt;
   }
   
-  static Future getReportType() async{
-    return await http.get(serverURL +'ReportType');  
+  static Future getReportType(String jwt) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL +'ReportType', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
   }
 
-  static Future<String> addReport(int userId, int reportedUserId, int reportTypeId) async {
+  static Future<String> addReport(String jwt, int userId, int reportedUserId, int reportTypeId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
     String url = serverURL + 'Report/Insert';
     var data = Map();
     data["reportingUserId"] = userId;
     data["reportedUserId"] = reportedUserId;
     data["reportTypeId"] = reportTypeId;
     var jsonBody = convert.jsonEncode(data);
-    var res = await http.post(url, headers: header, body: jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
     String data2 = res.body.toString();    
     return data2;
   }

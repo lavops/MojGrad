@@ -17,7 +17,6 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  String token = '';
   User user;
   int postTypeId;
   var description = TextEditingController();
@@ -35,16 +34,18 @@ class _CameraPageState extends State<CameraPage> {
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
  
   _getUser() async {
-    var res = await APIServices.getUser(userId);
+    var jwt = await APIServices.jwtOrEmpty();
+    var res = await APIServices.getUser(jwt, userId);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
-    User user = User.fromObject(jsonUser);
+    User user1 = User.fromObject(jsonUser);
     setState(() {
-      user = user;
+      user = user1;
     });
   }
 
-  _getPostType() {
-    APIServices.getPostType().then((res) {
+  _getPostType() async {
+     var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getPostType(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<PostType> postTypes = new List<PostType>();
       postTypes = list.map((model) => PostType.fromObject(model)).toList();
@@ -366,10 +367,19 @@ class _CameraPageState extends State<CameraPage> {
           postTypeId = 1;
         else
           postTypeId = postType.id;
+          APIServices.jwtOrEmpty().then((res) {
+            String jwt;
+          setState(() {
+            jwt = res;
+          });
+          if (res != null) {
+             APIServices.addPost(jwt,user.id, postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2);
+          }
+        });
+       
 
-        APIServices.addPost(token,user.id,postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2);
-        String jwt;
         APIServices.jwtOrEmpty().then((res) {
+          String jwt;
           setState(() {
             jwt = res;
           });

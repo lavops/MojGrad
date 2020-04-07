@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/user.dart';
-import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/managementPage.dart';
-import 'package:frontend_web/ui/navDrawer.dart';
 import 'package:frontend_web/widgets/postWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -27,7 +26,7 @@ class _PostPageState extends State<PostPage> {
   List<FullPost> listSolvedPosts;
   List<FullPost> listUnsolvedPosts;
   _getSolvedPosts() {
-    APIServices.getSolvedPosts().then((res) {
+    APIServices.getSolvedPosts(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -40,7 +39,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   _getUnsolvedPosts() {
-    APIServices.getUnsolvedPosts().then((res) {
+    APIServices.getUnsolvedPosts(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -52,8 +51,8 @@ class _PostPageState extends State<PostPage> {
     });
   }
 
-  _getAllPosts() {
-    APIServices.getPost().then((res) {
+  _getAllPosts() async {
+    APIServices.getPost(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -64,15 +63,19 @@ class _PostPageState extends State<PostPage> {
       }
     });
   }
+  Future<void> _doAsync() async {
+  await _getAllPosts();
+  await _getSolvedPosts();
+  await _getUnsolvedPosts();
+
+}
 
   @override
-  void initState() {
+  initState() {
     super.initState();
-    _getAllPosts();
-    _getSolvedPosts();
-    _getUnsolvedPosts();
-  }
+    _doAsync();
 
+  }
 
   Widget tabs() {
     return TabBar(
@@ -121,7 +124,6 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-    _getAllPosts();
     return DefaultTabController(
         length: 3,
         child: Scaffold(

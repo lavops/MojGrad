@@ -32,8 +32,9 @@ class HeaderSection extends State<UserProfilePage> {
   final Color green = Color(0xFF1E8161);
   List<FullPost> posts;
 
-  _getPosts() {
-    APIServices.getPostsForUser(user.id).then((res) {
+  _getPosts() async {
+     var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getPostsForUser(jwt, user.id).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();

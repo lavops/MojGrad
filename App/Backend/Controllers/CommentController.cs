@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.ViewsModel;
 using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace Backend.Controllers
             _iCommentUI = iCommentUI;
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<CommentViewModel>> GetComm(long id) //vraca sve komentar za jedan post
         {
@@ -35,7 +37,7 @@ namespace Backend.Controllers
 
         }
 
-
+        [Authorize]
         [HttpPost]
         public IActionResult InsertComment(Comment k)
         {

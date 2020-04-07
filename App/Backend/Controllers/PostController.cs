@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.ViewsModel;
 using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace Backend.Controllers
             _iPostUI = iPostUI;
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<PostViewModel>> GetPosts()
         {
@@ -34,6 +36,7 @@ namespace Backend.Controllers
             return listPosts;
         }
 
+        [Authorize]
         [HttpPost("UsersPosts")]
         public ActionResult<IEnumerable<PostViewModel>> UsersPosts(User user)
         {
@@ -47,6 +50,7 @@ namespace Backend.Controllers
             return listPosts;
         }
 
+        [Authorize]
         [HttpGet("SolvedPosts")]
         public ActionResult<IEnumerable<PostViewModel>> SolvedPosts()
         {
@@ -60,6 +64,7 @@ namespace Backend.Controllers
             return listPosts;
         }
 
+        [Authorize]
         [HttpGet("UnsolvedPosts")]
         public ActionResult<IEnumerable<PostViewModel>> UnsolvedPosts()
         {
@@ -73,6 +78,7 @@ namespace Backend.Controllers
             return listPosts;
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult InsertPost(Post post)
         {
@@ -88,6 +94,7 @@ namespace Backend.Controllers
             public long id { get; set; }
         }
 
+        [Authorize]
         [HttpPost("Delete")]
         public IActionResult DeletePost(deletePost post)
         {

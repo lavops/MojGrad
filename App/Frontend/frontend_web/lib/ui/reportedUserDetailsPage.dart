@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/usersProfilePage.dart';
 import 'package:frontend_web/models/report.dart';
 import 'package:frontend_web/services/api.services.dart';
@@ -21,7 +22,7 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
   List<Report> listReports;
 
   _getReportedUser(int id) {
-    APIServices.getReportedUser(id).then((res) {
+    APIServices.getReportedUser(TokenSession.getToken,id).then((res) {
       Iterable list = json.decode(res.body);
       List<Report> listR = List<Report>();
       listR = list.map((model) => Report.fromObject(model)).toList();

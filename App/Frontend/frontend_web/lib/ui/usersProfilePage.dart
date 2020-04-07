@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/managementPage.dart';
 import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'dart:convert';
@@ -19,7 +20,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
   TextEditingController searchController = new TextEditingController();
 
   _getUsers() {
-    APIServices.getUsers().then((res) {
+    APIServices.getUsers(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
       List<User> listU = List<User>();
       listU = list.map((model) => User.fromObject(model)).toList();
@@ -32,7 +33,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
   }
 
   _getReportedUsers() {
-    APIServices.getReportedUsers().then((res) {
+    APIServices.getReportedUsers(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
       List<User> listU = List<User>();
       listU = list.map((model) => User.fromObject(model)).toList();
@@ -44,12 +45,18 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     });
   }
 
+    void initState() {
+    super.initState();
+    _getUsers();
+    _getReportedUsers();
+  }
+
   showAlertDialog(BuildContext context, int id) {
       // set up the button
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.green),),
       onPressed: () {
-        APIServices.deleteUser(id);
+        APIServices.deleteUser(TokenSession.getToken,id);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => UsersProfilePage()),
@@ -86,7 +93,6 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
   }
 
   Widget buildUserList() {
-     _getUsers();
     return ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
@@ -199,7 +205,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
   }
 
   Widget buildReportedUserList() {
-    _getReportedUsers();
+
     return ListView.builder(
       itemCount: listRepUsers == null ? 0 : listRepUsers.length,
       itemBuilder: (BuildContext context, int index) {
@@ -274,19 +280,27 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                               style: TextStyle(color: Colors.grey),
                             )
                           ],
-                        ),  SizedBox(width: 10),
+                        ),  SizedBox(width: 5),
+                        Container(
+                              margin: const EdgeInsets.all(15.0),
+                              padding: const EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.red),
+                                borderRadius:  BorderRadius.all(Radius.circular(7.0))
+                              ),
+                              child:
                         Column(
                           children: <Widget>[
                             Text(
                               listRepUsers[index].reportsNum.toString(),
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.red),
                             ),
                             Text(
                               'Broj prijava',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.red),
                             )
                           ],
-                        ),
+                        ),),
                         Expanded(child: SizedBox()),
                         FlatButton(
                           shape: RoundedRectangleBorder(
@@ -340,11 +354,6 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
             ));
       },
     );
-  }
-
-  void initState() {
-    super.initState();
-    _getUsers();
   }
 
   Widget search() {

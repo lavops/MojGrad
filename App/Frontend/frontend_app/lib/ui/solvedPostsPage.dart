@@ -22,7 +22,8 @@ class _SolvedPostsPageState extends State<SolvedPostsPage> {
   }
 
   _getPosts() async {
-    var res = await APIServices.getSolvedPosts();
+     var jwt = await APIServices.jwtOrEmpty();
+    var res = await APIServices.getSolvedPosts(jwt);
     print(res.body);
     Iterable list = json.decode(res.body);
     List<FullPost> listP = List<FullPost>();

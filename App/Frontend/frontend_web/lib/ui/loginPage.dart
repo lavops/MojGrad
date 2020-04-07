@@ -1,11 +1,10 @@
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/api.services.dart';
-import 'package:frontend_web/ui/managementPage.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -16,9 +15,8 @@ class _LoginPageState extends State<LoginPage>{
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   String pogresanLoginText = '';
-  String token = '';
   User user;
-
+/*
   _saveToken(Map<String, dynamic> jsonObject) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', jsonObject['token']);
@@ -38,11 +36,11 @@ class _LoginPageState extends State<LoginPage>{
         user = extractedUser;
       });
     }
-  }
+  }*/
 
   void initState(){
     super.initState();
-    _getToken();
+  /*  _getToken();
     Future(
       () {
         if(token != ''){
@@ -58,6 +56,7 @@ class _LoginPageState extends State<LoginPage>{
         }
       }
     );
+    */
   }
 
   _login(String _email, String _password){
@@ -74,27 +73,19 @@ class _LoginPageState extends State<LoginPage>{
       var pom = utf8.encode(_password);
       var pass = sha1.convert(pom);
       APIServices.login(_email, pass.toString()).then((response){
-        if (response.statusCode == 200) {
-          Map<String, dynamic> jsonObject = json.decode(response.body);
-          _saveToken(jsonObject);
-          User extractedUser = new User();
-          extractedUser = User.fromObject(jsonObject);
-          setState(() {
-            user = extractedUser;
-            pogresanLoginText = "";
-          });
-          if(user != null){
-            Navigator.pushReplacement(
+         if (response != null) {
+          TokenSession.setToken = response;
+          print(response);
+          Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ManagementPage()),
-            );
-          }
+              MaterialPageRoute(
+                  builder: (context) => HomePage.fromBase64(response)));
         } else {
           _passwordController.text = "";
           setState(() {
             pogresanLoginText = "PODACI NISU ISPRAVNI";
           });
-          throw  Exception('Bad username/password');
+          throw Exception('Bad username/password');
         }
       });
     }

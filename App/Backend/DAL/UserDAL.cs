@@ -54,7 +54,6 @@ namespace Backend.DAL
                     u1.username = user.username;
                     u1.userTypeId = user.userTypeId;
                     u1.photo = "default.png";
-                    u1.token = null;
                     u1.points = 0;
                     u1.level = 1;
 

@@ -23,8 +23,9 @@ class StateLikes extends State<LikesPage> {
   List<Like> listLikes;
   List<Like> listDislikes;
 
-  _getLikeInPost() {
-    APIServices.likeInPost(postId).then((res) {
+  _getLikeInPost() async {
+     var jwt = await APIServices.jwtOrEmpty();
+    APIServices.likeInPost(jwt, postId).then((res) {
       //umesto 1 stavlja se idPosta
       Iterable list = json.decode(res.body);
       List<Like> listLike = List<Like>();
@@ -35,8 +36,9 @@ class StateLikes extends State<LikesPage> {
     });
   }
 
-  _getDislikeInPost() {
-    APIServices.dislikeInPost(postId).then((res) {
+  _getDislikeInPost() async {
+     var jwt = await APIServices.jwtOrEmpty();
+    APIServices.dislikeInPost(jwt, postId).then((res) {
       //umesto 1 stavlja se idPosta
       Iterable list = json.decode(res.body);
       List<Like> listDislike = List<Like>();

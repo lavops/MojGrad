@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/loginPage.dart';
 import 'package:frontend_web/ui/managementPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import './homePage.dart';
 
 class NavDrawer extends StatelessWidget {
-
   _removeToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('token');
-    prefs.remove('user');
+    TokenSession.setToken = "";
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +22,23 @@ class NavDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             decoration: BoxDecoration(
-                color: Colors.white,
-             ),
+              color: Colors.white,
+            ),
           ),
           ListTile(
             leading: Icon(Icons.perm_identity),
             title: Text('Administrator'),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Početna strana'),
-            onTap: () =>{ Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            ),},
-          ),
+              leading: Icon(Icons.home),
+              title: Text('Početna strana'),
+              onTap: () {
+                String jwt = TokenSession.getToken;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage.fromBase64(jwt)),
+                );
+              }),
           ListTile(
             leading: Icon(Icons.timer),
             title: Text('Zadavanje misija'),
@@ -49,10 +47,12 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Upravljanje'),
-            onTap: () => { Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ManagementPage()),
-            ),},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ManagementPage()),
+              ),
+            },
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),

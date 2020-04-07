@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.ViewsModel;
 using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ namespace Backend.Controllers
             _iReportUI = iReportUI;
         }
 
-
+        [Authorize]
         [HttpGet]
         public IEnumerable<UserViewModel> GetReportedUsers()
         {
@@ -35,7 +36,7 @@ namespace Backend.Controllers
             }
             return user;
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public IEnumerable<ReportViewModel> GetReportingUser(long id)
         {
@@ -47,9 +48,10 @@ namespace Backend.Controllers
             }
             return reportsView;
         }
-        
+
+        [Authorize]
         [HttpPost("Insert")]
-        public IActionResult InsertPost(Report report)
+        public IActionResult InsertReport(Report report)
         {
             Report r = _iReportUI.insertReport(report);
             if (r != null)

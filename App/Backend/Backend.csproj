@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="wwwroot\Upload\Post\" />
   </ItemGroup>
 
 </Project>

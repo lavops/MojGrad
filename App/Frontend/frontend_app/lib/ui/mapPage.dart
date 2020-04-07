@@ -13,8 +13,9 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   List<FullPost> listPosts;
 
-  _getPosts() {
-    APIServices.getUnsolvedPosts().then((res) {
+  _getPosts() async {
+     var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getUnsolvedPosts(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();

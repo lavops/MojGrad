@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.ViewsModel;
 using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ namespace Backend.Controllers
             _iUserUI = iUserUI;
         }
 
-
+        [Authorize]
         [HttpGet]
         public IEnumerable<UserViewModel> GetUsers()
         {
@@ -35,7 +36,7 @@ namespace Backend.Controllers
             return user;
 
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public UserViewModel GetUser(long id)
         {
@@ -69,6 +70,7 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
+        [Authorize]
         [HttpPost("EditUserData")]
         public IActionResult EditUserData(User u)
         {
@@ -88,7 +90,7 @@ namespace Backend.Controllers
             public string password1 { get; set; }
         }
 
-
+        [Authorize]
         [HttpPost("EditUserPassword")]
         public IActionResult EditUserPassword(changePassword pass)
         {
@@ -105,6 +107,7 @@ namespace Backend.Controllers
         {
             public long id { get; set; }
         }
+        [Authorize]
         [HttpPost("Delete")]
         public IActionResult DeleteUser(deleteUser user)
         {
@@ -117,7 +120,7 @@ namespace Backend.Controllers
                 return BadRequest(new { message = "Greska" });
         }
 
-      
+        [Authorize]
         [HttpPost("EditUserPhoto")]
         public IActionResult EditUserPhoto(User u)
         {

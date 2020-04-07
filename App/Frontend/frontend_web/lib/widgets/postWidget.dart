@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/postPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
@@ -38,7 +39,7 @@ class _PostWidgetState extends State<PostWidget> {
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.green),),
       onPressed: () {
-        APIServices.deletePost(id);
+        APIServices.deletePost(TokenSession.getToken,id);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => PostPage(globalUser)),
@@ -48,7 +49,7 @@ class _PostWidgetState extends State<PostWidget> {
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: Colors.green),),
       onPressed: () {
-          Navigator.pop(context);
+        Navigator.pop(context);
         },
     );
 
@@ -94,7 +95,6 @@ class _PostWidgetState extends State<PostWidget> {
                 description(
                     listPosts[index].username, listPosts[index].description),
                 SizedBox(height: 10.0),
-                CommentsWidget(listPosts[index].postId),
               ]));
         });
   }
@@ -160,7 +160,7 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]),
                 onPressed: () {
-                  APIServices.addLike(postId, 1, 2);
+                  APIServices.addLike(TokenSession.getToken,postId, 1, 2);
                 },
               ),
               GestureDetector(
@@ -170,7 +170,7 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
                 onPressed: () {
-                  APIServices.addLike(postId, 1, 1);
+                  APIServices.addLike(TokenSession.getToken,postId, 1, 1);
                 },
               ),
               GestureDetector(
@@ -179,7 +179,8 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Colors.green[800]),
-                onPressed: () {},
+                onPressed: () {
+                },
               ),
               Text(commNum.toString()),
               Expanded(child: SizedBox()),
