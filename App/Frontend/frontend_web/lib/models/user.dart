@@ -16,10 +16,11 @@ class User{
   int _postsNum;
   int _points;
   int _level;
+  int _reportsNum;
 
   User();
   User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
-  
+ 
 
   int get id => _id;
   int get userTypeId => _userTypeId;
@@ -38,6 +39,7 @@ class User{
   int get postsNum => _postsNum;
   int get points => _points;
   int get level => _level;
+  int get reportsNum => _reportsNum;
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
@@ -59,6 +61,7 @@ class User{
     data["postsNum"] = _postsNum;
     data["points"] = _points;
     data["level"] = _level;
+    data["reportsNum"] = _reportsNum;
  
     if(_id != null){
       data["id"] = _id;
@@ -86,6 +89,7 @@ class User{
     this._postsNum = data["postsNum"];
     this._points = data["points"];
     this._level = data["level"];
+    this._reportsNum = data["reportsNum"];
   }
 
 }

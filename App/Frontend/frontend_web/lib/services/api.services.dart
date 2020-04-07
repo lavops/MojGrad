@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:frontend_web/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 String userPhotoURL = "http://127.0.0.1:60676//";
 
@@ -16,10 +17,21 @@ class APIServices
     'Accept': 'application/json'
   };
 
+  // returns reported users
+  static Future getReportedUsers() async {
+    return await http.get(serverURL + 'Report');
+  }
+
+  // reported users with id
+  static Future getReportedUser(int userId) async {
+    return await http.get(serverURL + 'Report/' + userId.toString());
+  }
+
+
   static Future getUser(int userId) async{
     return await http.get(serverURL +'User/'+userId.toString());
-    
   }
+
 
   // Login funtion
   static Future login(String mail, String password) async{
@@ -65,7 +77,7 @@ class APIServices
     return await http.post(url, headers: header,body: jsonEncode({ 'id': id, }),);
   }
 
-	
+ 
    static Future getUsers() async {
     return await http.get(serverURL + 'User');
   }
@@ -157,6 +169,5 @@ class APIServices
   static Future getUnsolvedPosts() async {
      return await http.get(serverURL +'Post/UnsolvedPosts');
   }
-
 
 }
