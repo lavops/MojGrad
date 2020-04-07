@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/ui/managementPage.dart';
+import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'dart:convert';
 
 import 'package:frontend_web/widgets/circleImageWidget.dart';
@@ -14,6 +15,7 @@ class UsersProfilePage extends StatefulWidget {
 
 class _UsersProfilePageState extends State<UsersProfilePage> {
   List<User> listUsers;
+  List<User> listRepUsers;
   TextEditingController searchController = new TextEditingController();
 
   _getUsers() {
@@ -24,6 +26,19 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
       if (mounted) {
         setState(() {
           listUsers = listU;
+        });
+      }
+    });
+  }
+
+  _getReportedUsers() {
+    APIServices.getReportedUsers().then((res) {
+      Iterable list = json.decode(res.body);
+      List<User> listU = List<User>();
+      listU = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState( () {
+          listRepUsers = listU;
         });
       }
     });
@@ -183,6 +198,150 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     );
   }
 
+  Widget buildReportedUserList() {
+    _getReportedUsers();
+    return ListView.builder(
+      itemCount: listRepUsers == null ? 0 : listRepUsers.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top: 5),
+                      child: Row(children: [
+                        CircleImage(
+                          userPhotoURL + listRepUsers[index].photo,
+                          imageSize: 56.0,
+                          whiteMargin: 2.0,
+                          imageMargin: 6.0,
+                        ),
+                        Container(
+                          width: 180,
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(listRepUsers[index].username,
+                                  style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text(
+                                  listRepUsers[index].firstName +
+                                      " " +
+                                      listRepUsers[index].lastName,
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic, fontSize: 15))
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              listRepUsers[index].postsNum.toString(),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              'Broj objava',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              listRepUsers[index].points.toString(),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              'Broj poena',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              listRepUsers[index].level.toString(),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              'Nivo',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),  SizedBox(width: 10),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              listRepUsers[index].reportsNum.toString(),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              'Broj prijava',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        Expanded(child: SizedBox()),
+                        FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(11.0),
+                              side: BorderSide(color: Colors.grey)),
+                          color: Colors.grey,
+                          child: Text(
+                            "Detalji prijave",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ReportedUserDetailsPage(id:listRepUsers[index].id, firstName: listRepUsers[index].firstName, lastName: listRepUsers[index].lastName,)),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(11.0),
+                              side: BorderSide(color: Colors.green[800])),
+                          color: Colors.green[800],
+                          child: Text(
+                            "Poseti profil",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {},
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(11.0),
+                              side: BorderSide(color: Colors.redAccent)),
+                          color: Colors.redAccent,
+                          child: Text(
+                            "Obriši korisnika",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            showAlertDialog(context, listRepUsers[index].id);
+                          },
+                        )
+                      ])),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
   void initState() {
     super.initState();
     _getUsers();
@@ -256,12 +415,12 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                     Flexible(child: buildUserList()),
                   ])),
               Container(
+                  margin: EdgeInsets.only(left:80, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
                     search(),
-                    Center(child: Text("Trenutno nema prijavljenih korisnika")),
-                    //TODO repotredUsers
+                    Flexible(child: buildReportedUserList()),
                   ])),
             ])));
   }

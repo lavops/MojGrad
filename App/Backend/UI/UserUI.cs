@@ -32,6 +32,11 @@ namespace Backend.UI
             return _iUserBL.editUserPassword(id, password, newPassword);
         }
 
+        public User editUserPhoto(long id, string photoPathn)
+        {
+            return _iUserBL.editUserPhoto(id, photoPathn);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserBL.getAllUsers();
@@ -47,7 +52,7 @@ namespace Backend.UI
             return _iUserBL.insertUser(user);
         }
 
-        public User login(User user)
+        public string login(User user)
         {
             return _iUserBL.login(user);
         }

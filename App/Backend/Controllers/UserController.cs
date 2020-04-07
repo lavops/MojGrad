@@ -48,14 +48,13 @@ namespace Backend.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] User userParam)
         {
-            User user = _iUserUI.login(userParam);
-            if (user != null)
+            string tokenStr = _iUserUI.login(userParam);
+            if (tokenStr != null)
             {
-                user.password = null;
-                return Ok(user);
+                return Ok(new { token = tokenStr });
             }
             else
-                return BadRequest(new { message = "Nevalidni podaci" });
+                return Unauthorized();
         }
 
         [HttpPost("Register")]
@@ -89,6 +88,7 @@ namespace Backend.Controllers
             public string password1 { get; set; }
         }
 
+
         [HttpPost("EditUserPassword")]
         public IActionResult EditUserPassword(changePassword pass)
         {
@@ -115,6 +115,20 @@ namespace Backend.Controllers
             }
             else
                 return BadRequest(new { message = "Greska" });
+        }
+
+      
+        [HttpPost("EditUserPhoto")]
+        public IActionResult EditUserPhoto(User u)
+        {
+            User user = _iUserUI.editUserPhoto(u.id, u.photo);
+            if (user != null)
+            {
+                UserViewModel newUser = new UserViewModel(user);
+                return Ok(newUser);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
         }
 
     }

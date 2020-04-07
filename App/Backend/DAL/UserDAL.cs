@@ -100,47 +100,45 @@ namespace Backend.DAL
             return null;
         }
 
-        public User login(User user2)
+        public string login(User user2)
         {
-            var user1 = _context.user.SingleOrDefault(x => x.email == user2.email);
+            var user = AuthenticateUser(user2);
 
-            if (user1 == null)
+            if (user != null)
             {
-                return null;
+                var tokenStr = GenerateJSONWebToken(user);
+                return tokenStr;
             }
+            return null;
+        }
+        public User AuthenticateUser(User user)
+        {
+            var existingUser = _context.user.
+                Where(k => k.email.Equals(user.email)
+                    && k.password.Equals(user.password)).FirstOrDefault();
+            return existingUser;
+        }
 
-            bool validPassword = false;
+        public string GenerateJSONWebToken(User user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            if (user1 != null)
+            var claims = new[]
             {
-                if (user2.password == user1.password)
-                    validPassword = true;
-            }
-
-            if (validPassword == false)
-            {
-                return null;
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user1.id.ToString()),
-                    new Claim("idUser", user1.id.ToString()),
-
-                }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            user1.token = tokenHandler.WriteToken(token);
-            user1.password = null;
+            var token = new JwtSecurityToken(
+                issuer: _appSettings.Secret,
+                audience: _appSettings.Secret,
+                claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials);
 
-            return user1;
+            var encodeToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return encodeToken;
         }
 
         public User editUserPassword(long id, string password, string newPassword)
@@ -153,7 +151,7 @@ namespace Backend.DAL
                     exist.password = newPassword;
                     _context.Update(exist);
                     _context.SaveChanges();
-                    return exist;
+                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault(); ;
                 }
                 catch (DbUpdateException ex)
                 {
@@ -176,6 +174,27 @@ namespace Backend.DAL
             _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public User editUserPhoto(long id, string photoPathn)
+        {
+            var exist = _context.user.Where(x => x.id == id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.photo = photoPathn;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
         }
     }
 }

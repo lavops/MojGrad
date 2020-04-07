@@ -11,10 +11,14 @@ namespace Backend.DAL.Interfaces
         List<User> getAllUsers();
         User getByID(long id);
         User insertUser(User user);
-        User login(User user);
+        string login(User user);
         User editUserData(User user);
         User editUserPassword(long id, string password, string newPassword);
+        User editUserPhoto(long id, string photoPathn);
         bool deleteUser(long id);
+        public string GenerateJSONWebToken(User user);
+        public User AuthenticateUser(User user);
+
 
     }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
-import 'package:frontend/ui/NavDrawer.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/postWidget.dart';
 
@@ -15,14 +14,12 @@ class UnsolvedPostsPage extends StatefulWidget {
 }
 
 class _UnsolvedPostsPageState extends State<UnsolvedPostsPage> {
-  String token = '';
   User user;
   List<FullPost> listPosts;
 
   _UnsolvedPostsPageState(User user1) {
     this.user = user1;
   }
-
 
   _getPosts() {
     APIServices.getUnsolvedPosts().then((res) {
@@ -46,17 +43,30 @@ class _UnsolvedPostsPageState extends State<UnsolvedPostsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.black87),
-              title: Text('Nerešeni slučajevi', style: TextStyle(color: Colors.green)),
-              backgroundColor: Colors.white,
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  }),
-            ),
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black87),
+          title:
+              Text('Nerešeni slučajevi', style: TextStyle(color: Colors.green)),
+          backgroundColor: Colors.white,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                String jwt;
+                APIServices.jwtOrEmpty().then((res) {
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage.fromBase64(jwt.toString())),
+                    );
+                  }
+                });
+              }),
+        ),
         body: RefreshIndicator(
             onRefresh: () async {
               _getPosts();

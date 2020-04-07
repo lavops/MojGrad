@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/models/categories.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
@@ -12,7 +10,6 @@ import 'dart:io';
 import 'package:frontend/services/api.services.dart';
 import 'package:location/location.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -33,65 +30,63 @@ class _CameraPageState extends State<CameraPage> {
   double latitude1 = 0;
   double longitude2 = 0;
   var first;
-  String addres='';
-  var id=0;
+  String addres = '';
+  var id = 0;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
-   _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString('token');
-    Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
-     User extractedUser = new User();
-     extractedUser = User.fromObject(jsonObject);
+ 
+  _getUser() async {
+    var res = await APIServices.getUser(userId);
+    Map<String, dynamic> jsonUser = jsonDecode(res.body);
+    User user = User.fromObject(jsonUser);
     setState(() {
-      token = _token;
-      user = extractedUser;
+      user = user;
     });
   }
 
-  _getPostType()
-  {
+  _getPostType() {
     APIServices.getPostType().then((res) {
       Iterable list = json.decode(res.body);
       List<PostType> postTypes = new List<PostType>();
       postTypes = list.map((model) => PostType.fromObject(model)).toList();
-      if(mounted){
+      if (mounted) {
         setState(() {
           _postType = postTypes;
         });
       }
     });
-    
   }
 
   @override
   void initState() {
     super.initState();
-    _getToken();
+    _getUser();
     _getPostType();
   }
 
   // Function for opening a camera
-  _openGalery() async{
+  _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
       imageFile = picture;
     });
   }
 
-  _getUserLocation() async{
-    try{
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(latitude1,longitude2);
+  _getUserLocation() async {
+    try {
+      List<Placemark> p =
+          await geolocator.placemarkFromCoordinates(latitude1, longitude2);
       Placemark place = p[0];
       setState(() {
-        addres="${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
+        addres =
+            "${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
       });
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
+
   // Function for opening a gallery
-  _openCamera() async{
+  _openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile = picture;
@@ -99,7 +94,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   // Funciton to get current location
-  currentLocationFunction() async{
+  currentLocationFunction() async {
     Location location = new Location();
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
@@ -125,7 +120,6 @@ class _CameraPageState extends State<CameraPage> {
     setState(() {
       latitude1 = _locationData.latitude;
       longitude2 = _locationData.longitude;
-       
     });
     first = _getUserLocation();
   }
@@ -133,14 +127,18 @@ class _CameraPageState extends State<CameraPage> {
   bool notNull(Object o) => o != null;
   @override
   Widget build(BuildContext context) {
-    
     // Chosing what post type should be
     final vrstaObjave = Row(
       children: <Widget>[
-        Align(alignment: Alignment.topLeft, child: Text("Vrsta objave: ", style: TextStyle(fontWeight: FontWeight.bold),)),
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Vrsta objave: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
         Text("Problem"),
-        Flexible(child:
-          Radio(
+        Flexible(
+          child: Radio(
             value: 1,
             groupValue: _vrstaObjave,
             onChanged: (int value) {
@@ -153,8 +151,8 @@ class _CameraPageState extends State<CameraPage> {
           ),
         ),
         Text("Pohvala"),
-        Flexible(child:
-          Radio(
+        Flexible(
+          child: Radio(
             value: 2,
             groupValue: _vrstaObjave,
             onChanged: (int value) {
@@ -172,10 +170,13 @@ class _CameraPageState extends State<CameraPage> {
     // Chosing who will do that assigment
     final problemResava = Row(
       children: <Widget>[
-        Align(alignment: Alignment.topLeft, child: Text("Problem rešava: ", style: TextStyle(fontWeight: FontWeight.bold))),
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text("Problem rešava: ",
+                style: TextStyle(fontWeight: FontWeight.bold))),
         Text("Rešiću sam"),
-        Flexible(child: 
-          Radio(
+        Flexible(
+          child: Radio(
             value: 1,
             groupValue: _problemResava,
             onChanged: (int value) {
@@ -188,8 +189,8 @@ class _CameraPageState extends State<CameraPage> {
           ),
         ),
         Text("Neko drugi"),
-        Flexible(child:
-          Radio(
+        Flexible(
+          child: Radio(
             value: 2,
             groupValue: _problemResava,
             onChanged: (int value) {
@@ -207,51 +208,62 @@ class _CameraPageState extends State<CameraPage> {
     // Chosing type of assigment
     final _dropDown = Row(
       children: <Widget>[
-        Align(alignment: Alignment.topLeft, child: Text("Kategoriju: ",style: TextStyle(fontWeight: FontWeight.bold))),
-        _postType != null? DropdownButton<PostType>(
-          hint:  Text("Izaberi"),
-          value: postType,
-          onChanged: (PostType value) {
-            setState(() {
-              postType = value;
-            });
-          },
-          items: _postType.map((PostType option) {
-            return  DropdownMenuItem<PostType>(
-              value: option,
-              child: Text(option.typeName),
-            );
-          }).toList(),
-        ):
-        DropdownButton<String>(
-          hint:  Text("Izaberi"),
-          onChanged: null,
-          items: null,
-        ),
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text("Kategoriju: ",
+                style: TextStyle(fontWeight: FontWeight.bold))),
+        _postType != null
+            ? DropdownButton<PostType>(
+                hint: Text("Izaberi"),
+                value: postType,
+                onChanged: (PostType value) {
+                  setState(() {
+                    postType = value;
+                  });
+                },
+                items: _postType.map((PostType option) {
+                  return DropdownMenuItem<PostType>(
+                    value: option,
+                    child: Text(option.typeName),
+                  );
+                }).toList(),
+              )
+            : DropdownButton<String>(
+                hint: Text("Izaberi"),
+                onChanged: null,
+                items: null,
+              ),
       ],
     );
-    
+
     // Pick image from your camera live
     final cameraPhone = RaisedButton.icon(
-      label: Flexible(child: Text('Kamera'),),
-      onPressed: (){
+      label: Flexible(
+        child: Text('Kamera'),
+      ),
+      onPressed: () {
         _openCamera();
       },
       icon: Icon(Icons.camera_alt),
       //color: Colors.greenAccent,
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
     );
-
 
     // Pick image from your gallery
     final cameraGalery = RaisedButton.icon(
-      label: Flexible(child: Text('Galerija'),),
-      onPressed: (){
+      label: Flexible(
+        child: Text('Galerija'),
+      ),
+      onPressed: () {
         _openGalery();
       },
       icon: Icon(Icons.photo_library),
       //color: Colors.greenAccent,
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
     );
 
     // Row with camera buttons
@@ -274,25 +286,33 @@ class _CameraPageState extends State<CameraPage> {
 
     // button for current location
     final currentLocation = RaisedButton.icon(
-      label: Flexible(child: Text('Trenutna lokacija'),),
-      onPressed: (){
+      label: Flexible(
+        child: Text('Trenutna lokacija'),
+      ),
+      onPressed: () {
         currentLocationFunction();
         _getUserLocation();
       },
-     icon: Icon(Icons.my_location, size:20),
+      icon: Icon(Icons.my_location, size: 20),
       //color: Colors.green[800],
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
     );
 
     // button for choosing location
     final chooseLocation = RaisedButton.icon(
-      label: Flexible(child: Text('Izaberi lokaciju'),),
-      onPressed: (){
+      label: Flexible(
+        child: Text('Izaberi lokaciju'),
+      ),
+      onPressed: () {
         currentLocationFunction();
       },
       icon: Icon(Icons.location_on),
       //color: Colors.green[800],
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
     );
 
     // row with location's buttons
@@ -317,75 +337,100 @@ class _CameraPageState extends State<CameraPage> {
     final opis = TextField(
       controller: description,
       decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black)
-        ),
-        hintText: (_vrstaObjave == 1)? 'Opis problema': 'Opis pohvale',
+        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        hintText: (_vrstaObjave == 1) ? 'Opis problema' : 'Opis pohvale',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          borderSide: BorderSide(width: 2, color: Colors.green[800]),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 1,color: Colors.green[800]),
+          borderSide: BorderSide(width: 1, color: Colors.green[800]),
         ),
       ),
     );
 
     // Submit it
     final submitObjavu = RaisedButton.icon(
-      label: Flexible(child: Text('Objavi'),),
-      onPressed: (){
+      label: Flexible(
+        child: Text('Objavi'),
+      ),
+      onPressed: () {
         imageUpload(imageFile);
-        if(_problemResava==1) 
-          statusId=2;
-        else 
-          statusId=1;
-        
-        if(_vrstaObjave == 2) //pohvala
-          postTypeId=1;
-        else  
-          postTypeId = postType.id;
-        
-        APIServices.addPost(token,user.id, postTypeId, description.text, "Upload//" + basename(imageFile.path), statusId, latitude1, longitude2);
+        if (_problemResava == 1)
+          statusId = 2;
+        else
+          statusId = 1;
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+        if (_vrstaObjave == 2) //pohvala
+          postTypeId = 1;
+        else
+          postTypeId = postType.id;
+
+        APIServices.addPost(token,user.id,postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2);
+        String jwt;
+        APIServices.jwtOrEmpty().then((res) {
+          setState(() {
+            jwt = res;
+          });
+          if (res != null) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute( builder: (context) => HomePage.fromBase64(jwt.toString())),
+            );
+          }
+        });
       },
       icon: Icon(Icons.nature_people),
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50),),
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(50),
+      ),
     );
 
     return Center(
-      
-      child:Container(
-        width: 400,
-        child: ListView(    
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 24.0, bottom: 24.0),
-          children: <Widget>[
-            Align(alignment: Alignment.topCenter, child: Text("Izaberi fotografiju: ",style: TextStyle(fontWeight: FontWeight.bold))),
-            SizedBox(height: 20.0,),
-            izaberiKameru,
-            imageFile != null ? Image.file(imageFile,width: 300,height: 300,) : null ,
-
-            vrstaObjave,
-            _vrstaObjave == 1 ? Column(children: <Widget>[ problemResava, _dropDown]) : null,
-            
-            SizedBox(height: 20.0,),
-            locationRow,
-             latitude1 != 0 && longitude2 != 0 ? Align(alignment: Alignment.topCenter, child: Text(addres)): null,
-            
-            SizedBox(height: 20.0,),
-            opis,
-            SizedBox(height: 20.0,),
-            submitObjavu
-          ].where(notNull).toList(),
-        ),
-      
-      )
-    );
+        child: Container(
+      width: 400,
+      child: ListView(
+        shrinkWrap: true,
+        padding:
+            EdgeInsets.only(left: 15.0, right: 15.0, top: 24.0, bottom: 24.0),
+        children: <Widget>[
+          Align(
+              alignment: Alignment.topCenter,
+              child: Text("Izaberi fotografiju: ",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          SizedBox(
+            height: 20.0,
+          ),
+          izaberiKameru,
+          imageFile != null
+              ? Image.file(
+                  imageFile,
+                  width: 300,
+                  height: 300,
+                )
+              : null,
+          vrstaObjave,
+          _vrstaObjave == 1
+              ? Column(children: <Widget>[problemResava, _dropDown])
+              : null,
+          SizedBox(
+            height: 20.0,
+          ),
+          locationRow,
+          latitude1 != 0 && longitude2 != 0
+              ? Align(alignment: Alignment.topCenter, child: Text(addres))
+              : null,
+          SizedBox(
+            height: 20.0,
+          ),
+          opis,
+          SizedBox(
+            height: 20.0,
+          ),
+          submitObjavu
+        ].where(notNull).toList(),
+      ),
+    ));
   }
 }

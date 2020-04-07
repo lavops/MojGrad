@@ -3,8 +3,6 @@ import 'package:frontend/models/comment.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
-import 'dart:async';
-import 'package:http/http.dart' as http;
 
 class CommentsPage extends StatefulWidget {
   final int postId;
@@ -21,8 +19,9 @@ class StateComents extends State<CommentsPage> {
   StateComents(int id) {
     postId = id;
   }
+
   List<Comment> listComents;
-  getComms() {
+  _getComms() {
     APIServices.getComments(postId).then((res) {
       //umesto 1 stavlja se idPosta
       Iterable list = json.decode(res.body);
@@ -34,15 +33,20 @@ class StateComents extends State<CommentsPage> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _getComms();
+  }
+
   TextEditingController myController = new TextEditingController();
   Widget buildCommentList() {
-    getComms();
     return ListView.builder(
       itemCount: listComents == null ? 0 : listComents.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
             child: Center(
-          child: Column(
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
@@ -51,7 +55,7 @@ class StateComents extends State<CommentsPage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://10.0.2.2:60676//" + listComents[index].photoPath,
+                      serverURLPhoto + listComents[index].photoPath,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
@@ -68,15 +72,16 @@ class StateComents extends State<CommentsPage> {
                             Expanded(child: SizedBox()),
                           ]),
                           Text(listComents[index].description,
-                              style: TextStyle( fontStyle: FontStyle.italic, fontSize: 15))
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic, fontSize: 15))
                         ],
                       ),
                     ),
                     Expanded(child: SizedBox()),
                     IconButton(
-                              icon: Icon(Icons.more_vert),
-                              onPressed: () {},
-                            ),
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                    ),
                   ])),
             ],
           ),
@@ -100,7 +105,7 @@ class StateComents extends State<CommentsPage> {
             Flexible(child: buildCommentList()),
             Row(
               children: <Widget>[
-                SizedBox(width:10),
+                SizedBox(width: 10),
                 Icon(
                   Icons.account_circle,
                   size: 36,
@@ -131,12 +136,13 @@ class StateComents extends State<CommentsPage> {
                   onPressed: () {
                     APIServices.addComment(myController.text, 1,
                         postId); // this username - korisnik koji je prokomentarisao post, 1 primer - id posta
+                    _getComms();
                     setState(() {
                       myController.text = '';
                     });
                   },
                 ),
-                SizedBox(width:10),
+                SizedBox(width: 10),
               ],
             )
           ])),

@@ -1,17 +1,22 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  // String serverURL = 'http://192.168.1.2:45455//';
+  final storage = FlutterSecureStorage();
+  
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://127.0.0.1:60676/api/';
-
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  static String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //static String serverURL = 'http://127.0.0.1:60676/api/';
+  //static String serverURL = 'http://192.168.1.2:45455/api/';
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',
@@ -95,8 +100,9 @@ class APIServices
     String url = serverURL + 'User/Login';
     var body = jsonEncode({ 'email': mail, 'password': password });
     var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
-    return res;
-  //  return await http.post(url,headers: {"Content-Type": "application/json"},body: body);
+    if(res.statusCode == 200) return res.body;
+    return null;
+  
   }
 
   static Future registration(User user) async  {
@@ -170,5 +176,38 @@ class APIServices
      return await http.get(serverURL +'Post/UnsolvedPosts');
   }
 
+   static Future editProfilePhoto(int userId, String photo) async {
+    String url = serverURL + 'User/EditUserPhoto';
+    var data = Map();
+    data["id"] = userId;
+    data["photo"] = photo;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: header, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
+
+  static Future<String> jwtOrEmpty() async {
+    var jwt = await storage.read(key: "jwt");
+    if(jwt == null) return "";
+    return jwt;
+  }
+  
+  static Future getReportType() async{
+    return await http.get(serverURL +'ReportType');  
+  }
+
+  static Future<String> addReport(int userId, int reportedUserId, int reportTypeId) async {
+    String url = serverURL + 'Report/Insert';
+    var data = Map();
+    data["reportingUserId"] = userId;
+    data["reportedUserId"] = reportedUserId;
+    data["reportTypeId"] = reportTypeId;
+    var jsonBody = convert.jsonEncode(data);
+    var res = await http.post(url, headers: header, body: jsonBody);
+    String data2 = res.body.toString();    
+    return data2;
+  }
 
 }

@@ -32,6 +32,11 @@ namespace Backend.BL
             return _iUserDAL.editUserPassword(id,password, newPassword);
         }
 
+        public User editUserPhoto(long id, string photoPathn)
+        {
+            return _iUserDAL.editUserPhoto(id, photoPathn);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserDAL.getAllUsers();
@@ -47,7 +52,7 @@ namespace Backend.BL
             return _iUserDAL.insertUser(user);
         }
 
-        public User login(User user)
+        public string login(User user)
         {
             return _iUserDAL.login(user);
         }

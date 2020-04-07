@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/solvedPostsPage.dart';
 import 'package:frontend/ui/unsolvedPostsPage.dart';
@@ -8,7 +8,6 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      
       child: Column(
         children: <Widget>[
           Container(
@@ -21,8 +20,14 @@ class NavDrawer extends StatelessWidget {
                   Container(
                     width: 100,
                     height: 80,
-                    margin: EdgeInsets.only(top:60),
-                    child: Text("Moj Grad", style: TextStyle(color:Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                    margin: EdgeInsets.only(top: 60),
+                    child: Text(
+                      "Moj Grad",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   )
                 ],
               ),
@@ -30,32 +35,47 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.format_list_numbered),
-            title: Text('Nerešeni slučajevi', style: TextStyle(fontSize: 16),),
-            onTap: () { 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UnsolvedPostsPage(publicUser)),
-                  );
+            title: Text(
+              'Nerešeni slučajevi',
+              style: TextStyle(fontSize: 16),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UnsolvedPostsPage(publicUser)),
+              );
             },
           ),
           ListTile(
             leading: Icon(Icons.done_outline),
-            title: Text('Rešeni slučajevi', style: TextStyle(fontSize: 16),),
+            title: Text(
+              'Rešeni slučajevi',
+              style: TextStyle(fontSize: 16),
+            ),
             onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SolvedPostsPage(publicUser)),
-                    );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SolvedPostsPage(publicUser)),
+              );
             },
           ),
           ListTile(
             leading: Icon(Icons.filter_vintage),
-            title: Text('Ostalo', style: TextStyle(fontSize: 16),),
+            title: Text(
+              'Ostalo',
+              style: TextStyle(fontSize: 16),
+            ),
             onTap: () {
-              Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+              APIServices.jwtOrEmpty().then((res) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePage.fromBase64(res.toString())),
+                );
+              });
             },
           ),
         ],

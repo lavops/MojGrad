@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/comment.dart';
 import 'package:frontend/models/like.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
-import 'dart:async';
-import 'package:http/http.dart' as http;
 
 class LikesPage extends StatefulWidget {
   final int postId;
@@ -71,7 +68,7 @@ class StateLikes extends State<LikesPage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://10.0.2.2:60676//" + listLikes[index].photo,
+                      serverURLPhoto + listLikes[index].photo,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
@@ -117,7 +114,7 @@ class StateLikes extends State<LikesPage> {
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
-                      "http://10.0.2.2:60676//" + listDislikes[index].photo,
+                      serverURLPhoto + listDislikes[index].photo,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
@@ -175,8 +172,20 @@ class StateLikes extends State<LikesPage> {
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    String jwt;
+                    APIServices.jwtOrEmpty().then((res) {
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  HomePage.fromBase64(jwt.toString())),
+                        );
+                      }
+                    });
                   }),
               bottom: tabs(),
             ),
