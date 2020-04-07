@@ -4,6 +4,7 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/postPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
+import 'package:frontend_web/widgets/commentsWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class PostWidget extends StatefulWidget {
@@ -47,10 +48,7 @@ class _PostWidgetState extends State<PostWidget> {
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: Colors.green),),
       onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => PostPage(globalUser)),
-        );
+          Navigator.pop(context);
         },
     );
 
@@ -96,6 +94,7 @@ class _PostWidgetState extends State<PostWidget> {
                 description(
                     listPosts[index].username, listPosts[index].description),
                 SizedBox(height: 10.0),
+                CommentsWidget(listPosts[index].postId),
               ]));
         });
   }
