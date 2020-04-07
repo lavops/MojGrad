@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       APIServices.login(_email, pass.toString()).then((response) {
         if (response != null) {
           storage.write(key: "jwt", value: response);
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => HomePage.fromBase64(response)));
