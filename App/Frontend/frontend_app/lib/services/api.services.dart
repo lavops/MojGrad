@@ -60,7 +60,7 @@ class APIServices
   }
 
   //send a new post to the database
-  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude) async {
+  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Post';
@@ -72,6 +72,7 @@ class APIServices
     data["statusId"] = statusId;
     data["latitude"] = latitude;
     data["longitude"] = longitude;
+    data["address"] = address;
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: {
       'Content-type': 'application/json',

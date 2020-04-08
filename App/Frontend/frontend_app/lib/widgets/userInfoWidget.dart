@@ -75,7 +75,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget>{
                       ),
                       SizedBox(height: 4.0),
                       Text(
-                        'Lokacija: Kragujevac',
+                        'Lokacija: '+user.cityName,
                         style: TextStyle(color: Colors.black),
                       ),
                     ],

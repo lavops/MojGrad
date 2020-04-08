@@ -81,7 +81,7 @@ class User{
     this._token = data["token"];
     this._userTypeId = data["userTypeId"];
     this._typeName = data["typeName"];
-    this._typeName = data["typeName"];
+    this._cityName = data["cityName"];
     this._photo = data["photo"];
     this._postsNum = data["postsNum"];
     this._points = data["points"];

@@ -66,6 +66,7 @@ namespace Backend.DAL
             post1.createdAt = DateTime.Now;
             post1.description = post.description;
             post1.photoPath = post.photoPath;
+            post1.address = post.address;
             post1.statusId = post.statusId;
             post1.latitude = post.latitude;
             post1.longitude = post.longitude;

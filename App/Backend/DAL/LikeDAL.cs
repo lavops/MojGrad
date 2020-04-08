@@ -60,8 +60,13 @@ namespace Backend.DAL
                     _context.SaveChangesAsync();
                     return like1;
                 }
+                else
+                {
+                    _context.like.Remove(like3);
+                    _context.SaveChangesAsync();
+                    return null;
+                }
             }
-            return null;
 
             
         }

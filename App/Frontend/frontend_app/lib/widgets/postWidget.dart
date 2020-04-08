@@ -4,6 +4,7 @@ import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -191,7 +192,7 @@ class _PostWidgetState extends State<PostWidget> {
                         jwt = res;
                       });
                       if (res != null) {
-                       APIServices.addLike(jwt,postId, 1, 2);
+                       APIServices.addLike(jwt,postId, userId, 2);
                       }
                     });
                   
@@ -215,7 +216,7 @@ class _PostWidgetState extends State<PostWidget> {
                         jwt = res;
                       });
                       if (res != null) {
-                        APIServices.addLike(jwt,postId, 1, 1);
+                        APIServices.addLike(jwt,postId, userId, 1);
                       }
                     });
                  

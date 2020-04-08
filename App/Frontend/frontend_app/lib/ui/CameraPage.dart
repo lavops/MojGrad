@@ -78,8 +78,7 @@ class _CameraPageState extends State<CameraPage> {
           await geolocator.placemarkFromCoordinates(latitude1, longitude2);
       Placemark place = p[0];
       setState(() {
-        addres =
-            "${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
+        addres ="${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
       });
     } catch (e) {
       print(e);
@@ -373,7 +372,7 @@ class _CameraPageState extends State<CameraPage> {
             jwt = res;
           });
           if (res != null) {
-             APIServices.addPost(jwt,user.id, postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2);
+             APIServices.addPost(jwt,user.id, postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres);
           }
         });
        

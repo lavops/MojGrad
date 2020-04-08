@@ -22,6 +22,7 @@ namespace Backend.Models.ViewsModel
         public int commNum { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
+        public string address { get; set; }
         public String userPhoto { get; set; }
 
         public PostViewModel (Post p) 
@@ -42,6 +43,7 @@ namespace Backend.Models.ViewsModel
             this.latitude = p.latitude;
             this.longitude = p.longitude;
             this.userPhoto = p.user.photo;
+            this.address = p.address;
         }
 
     }
