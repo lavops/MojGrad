@@ -94,7 +94,7 @@ class _PostWidgetState extends State<PostWidget> {
                     listPosts[index].commNum),
                 description(
                     listPosts[index].username, listPosts[index].description),
-                SizedBox(height: 10.0),
+                SizedBox(height: 6.0),
                 CommentsWidget(listPosts[index].postId),
               ]));
         });

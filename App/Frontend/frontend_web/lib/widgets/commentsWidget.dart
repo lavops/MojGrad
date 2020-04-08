@@ -33,7 +33,13 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       List<Comment> listComms = List<Comment>();
       listComms = list.map((model) => Comment.fromObject(model)).toList();
       
-      listComments = listComms;
+      if(mounted)
+      {
+        setState(()
+        {
+          listComments = listComms;
+        });
+      }
     });
   }
 
@@ -105,12 +111,12 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                   padding: EdgeInsets.all(10),
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
-                    /*CircleImage(
+                    CircleImage(
                       "http://127.0.0.1:60676//" + listComments[index].photoPath,
                       imageSize: 56.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
-                    ),*/
+                    ),
                     Container(
                       width: 260,
                       padding: EdgeInsets.all(10),
