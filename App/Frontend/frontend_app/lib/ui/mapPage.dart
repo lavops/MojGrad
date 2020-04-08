@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:frontend/models/city.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/services/api.services.dart';
+import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/widgets/singlePostWidget.dart';
 import 'package:latlong/latlong.dart';
 
 class MapPage extends StatefulWidget {
@@ -12,6 +15,19 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   List<FullPost> listPosts;
+  City _city;
+  
+  _getCity() async {
+     var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getCityById(jwt,publicUser.cityId).then((res) {
+      Map<String, dynamic> list = json.decode(res.body);
+      City city = City();
+      city = City.fromObject(list);
+      setState(() {
+        _city = city;
+      });
+    });
+  }
 
   _getPosts() async {
      var jwt = await APIServices.jwtOrEmpty();
@@ -29,6 +45,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
+    _getCity();
     _getPosts();
     super.initState();
   }
@@ -50,8 +67,14 @@ class _MapPageState extends State<MapPage> {
                 showBottomSheet(
                   context: ctx,
                   builder: (ctx) {
-                    return Center(
-                      child: Text("Text"),
+                    return Container(
+                      constraints: BoxConstraints(
+                        maxHeight: 500.0, // changed to 400
+                        minHeight: 400.0, // changed to 200
+                        maxWidth: double.infinity,
+                        minWidth: double.infinity,
+                      ),
+                      child: SinglePostWidget(listPosts[i]),
                     );
                   },
                 );
@@ -62,22 +85,23 @@ class _MapPageState extends State<MapPage> {
       }
 
     return Scaffold(
-        body: FlutterMap(
-      options: new MapOptions(
-        center: new LatLng(44.0126575, 20.9097934),
-        zoom: 15.0,
-      ),
-      layers: [
-        new TileLayerOptions(
-            urlTemplate:
-                "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
-            additionalOptions: {
-              'accessToken':
-                  'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
-              'id': 'mapbox.mapbox-streets-v7'
-            }),
-        new MarkerLayerOptions(markers: markers),
-      ],
-    ));
+      body: (_city != null)?FlutterMap(
+        options: new MapOptions(
+          center: new LatLng(_city.latitude, _city.longitude),
+          zoom: 14.5,
+        ),
+        layers: [
+          new TileLayerOptions(
+              urlTemplate:
+                  "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+              additionalOptions: {
+                'accessToken':
+                    'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
+                'id': 'mapbox.mapbox-streets-v7'
+              }),
+          new MarkerLayerOptions(markers: markers),
+        ],
+      ):Center(),
+    );
   }
 }
