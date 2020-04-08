@@ -307,6 +307,25 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                           ),
                         ),
                         Expanded(child: SizedBox()),
+						FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(11.0),
+                              side: BorderSide(color: Colors.grey)),
+                          color: Colors.grey,
+                          child: Text(
+                            "Detalji prijave",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ReportedUserDetailsPage(id:listRepUsers[index].id, firstName: listRepUsers[index].firstName, lastName: listRepUsers[index].lastName,)),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
                         FlatButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(11.0),

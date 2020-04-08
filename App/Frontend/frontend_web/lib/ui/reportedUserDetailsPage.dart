@@ -97,7 +97,6 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
                               alignment: Alignment.center,
                               child: Text(
                                 'Razlog prijave',
-
                                 style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                               ),),
                             Align(
