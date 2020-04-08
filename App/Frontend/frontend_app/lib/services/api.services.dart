@@ -174,7 +174,11 @@ class APIServices
   static Future getCity(String jwt) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
-    return await http.get(serverURL + 'City');
+    return await http.get(serverURL + 'City', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
   }
   
 	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone) async  {
@@ -315,4 +319,13 @@ class APIServices
     return data2;
   }
 
+  static Future getCityById(String jwt, int cityId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'City/$cityId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
