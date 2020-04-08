@@ -88,21 +88,26 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
 							
                           ],
                         ),
-                        SizedBox(width: 90),
-                        Column(
+                  SizedBox(width: 30),
+                        Container(
+                          width:200,
+                        child:Column(
                           children: <Widget>[
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Razlog prijave',
 
-                            Text(
-                              'Razlog prijave',
-                              style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                            ),
-							
-							Text(
-                              listReports[index].reportTypeName,
-                              style: TextStyle(color: Colors.grey),
-                            ),
+                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                              ),),
+                            Align(
+                              alignment:Alignment.center,
+                              child:Text(
+                                listReports[index].reportTypeName,
+                                style: TextStyle(color: Colors.grey),
+                              ),),
                           ],
-                        ),
+                        ),),
                       ])),
                 ],
               ),
@@ -131,7 +136,7 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
       body: Container(
           margin: EdgeInsets.only(left:350, right: 350),
           padding: EdgeInsets.only(top: 0),
-          color: Colors.green,
+          color: Colors.grey[100],
           child: Column(children: [
             Flexible(child: buildReportsList()),
           ])),

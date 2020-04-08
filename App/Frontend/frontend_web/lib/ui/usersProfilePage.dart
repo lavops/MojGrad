@@ -280,47 +280,33 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                               style: TextStyle(color: Colors.grey),
                             )
                           ],
-                        ),  SizedBox(width: 5),
+                          ),  SizedBox(width: 10),
                         Container(
-                              margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.red),
-                                borderRadius:  BorderRadius.all(Radius.circular(7.0))
-                              ),
-                              child:
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              listRepUsers[index].reportsNum.toString(),
-                              style: TextStyle(color: Colors.red),
+                          margin:const
+                          EdgeInsets.all(10.0),
+                          padding: const
+                          EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.red,
                             ),
-                            Text(
-                              'Broj prijava',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          ],
-                        ),),
-                        Expanded(child: SizedBox()),
-                        FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(11.0),
-                              side: BorderSide(color: Colors.grey)),
-                          color: Colors.grey,
-                          child: Text(
-                            "Detalji prijave",
-                            style: TextStyle(color: Colors.white),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ReportedUserDetailsPage(id:listRepUsers[index].id, firstName: listRepUsers[index].firstName, lastName: listRepUsers[index].lastName,)),
-                            );
-                          },
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                listRepUsers[index].reportsNum.toString(),
+                                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'Broj prijava',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          width: 20,
-                        ),
+                        Expanded(child: SizedBox()),
                         FlatButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(11.0),
