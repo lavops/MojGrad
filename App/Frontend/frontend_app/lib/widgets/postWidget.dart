@@ -25,7 +25,7 @@ class _PostWidgetState extends State<PostWidget> {
   List<FullPost> listPosts;
   List<ReportType> reportTypes;
 
-  ReportType _selectedReport;
+  ReportType _selectedId;
   List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
 
   _PostWidgetState(List<FullPost> listPosts1) {
@@ -41,7 +41,7 @@ class _PostWidgetState extends State<PostWidget> {
       setState(() {
         reportTypes = listRepTypes;        
         _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
-        _selectedReport = _dropdownMenuItems[0].value;
+        _selectedId = _dropdownMenuItems[0].value;
       });
     });
   }
@@ -136,52 +136,25 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
 
-      void choiceAction(String choice)
+     void choiceAction(String choice)
       {
         if(choice == Constants.PrijaviKorisnika)
         {
-          showReportDialog(context); //potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
+           showDialog(
+                context: context,
+                child: new MyDialog(
+                  onValueChange: _onValueChange,
+                  initialValue: _selectedId,
+                  reportTypes: _dropdownMenuItems,
+                ));//potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
         }
       }
 
-      showReportDialog(BuildContext context) {
-        // set up the button
-        Widget sendButton = FlatButton(
-          child: Text(
-            "Prijavi",
-            style: TextStyle(color: Colors.green),
-          ),
-          onPressed: () {
-            //var res = await APIServices.addReport(userId, reportedUserId, _selectedReport.id)  - userId, reportedUserId poslati..
-            print('Uspesno ste prijavili korisnika.');
-            Navigator.of(context).pop();
-          },
-        );
-
-          // set up the AlertDialog
-          AlertDialog alert = AlertDialog(
-            title: Text("Prijavljivanje korisnika"),
-            content: DropdownButton(
-                      value: _selectedReport,
-                      items: _dropdownMenuItems,
-                      onChanged: (ReportType selectedReport) {
-                        _selectedReport = selectedReport;
-                      },
-                      focusColor: Colors.green[800],
-                    ),
-            actions: [
-              sendButton
-            ],
-          );
-
-          // show the dialog
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            },
-          );
-        }
+      void _onValueChange(ReportType value) {
+    setState(() {
+      _selectedId = value;
+    });
+    }
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
@@ -308,4 +281,70 @@ class _PostWidgetState extends State<PostWidget> {
           )
         ],
       ));
+}
+
+class MyDialog extends StatefulWidget {
+  const MyDialog({this.onValueChange, this.initialValue, this.reportTypes});
+
+  final ReportType initialValue;
+  final void Function(ReportType) onValueChange;
+  final List<DropdownMenuItem<ReportType>> reportTypes;
+
+  @override
+  State createState() => new MyDialogState();
+}
+
+class MyDialogState extends State<MyDialog> {
+  ReportType _selectedId;
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedId = widget.initialValue;
+  }
+
+
+  Widget build(BuildContext context) {
+    return new AlertDialog(
+      title: Text("Prijavljivanje korisnika"),
+      content: 
+        new Container(
+            padding: const EdgeInsets.all(10.0),
+            child: new DropdownButton<ReportType>(
+              value: _selectedId,
+              onChanged: (ReportType value) {
+                setState(() {
+                  _selectedId = value;
+                });
+                widget.onValueChange(value);
+              },
+              items: widget.reportTypes,
+            )),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(
+            "Prijavi",
+            style: TextStyle(color: Colors.green),
+          ),
+          
+          onPressed: () {
+            //var res = await APIServices.addReport(userId, reportedUserId, _selectedReport.id)  - userId, reportedUserId poslati..
+            print('Uspesno ste prijavili korisnika.');
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+        child: Text(
+          "Otkazi",
+          style: TextStyle(color: Colors.green),
+        ),
+         onPressed: () {
+            Navigator.of(context).pop();
+          },
+        )
+      ],      
+    );
+  }
+  
 }
