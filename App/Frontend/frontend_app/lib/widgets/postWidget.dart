@@ -6,6 +6,7 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
+import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/models/constants.dart';
@@ -82,7 +83,7 @@ class _PostWidgetState extends State<PostWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                userInfoRow(listPosts[index].username,
+                userInfoRow(listPosts[index].userId,listPosts[index].username,
                     listPosts[index].typeName, listPosts[index].userPhoto),
                 imageGallery(listPosts[index].photoPath),
                 SizedBox(height: 2.0),
@@ -99,13 +100,14 @@ class _PostWidgetState extends State<PostWidget> {
         });
   }
 
-  Widget userInfoRow(String username, String category, String userPhoto) => Row(
+  Widget userInfoRow(int userId, String username, String category, String userPhoto) => Row(
         children: <Widget>[
           CircleImage(
             serverURLPhoto + userPhoto,
             imageSize: 36.0,
             whiteMargin: 2.0,
             imageMargin: 6.0,
+            othersUserId: userId,
           ),
           Text(
             username,
@@ -115,7 +117,8 @@ class _PostWidgetState extends State<PostWidget> {
           Text(category),
           IconButton(
             icon: Icon(Icons.location_on),
-            onPressed: () {},
+            onPressed: () {
+            },
           ),
           /*IconButton(
             icon: Icon(Icons.more_vert),
