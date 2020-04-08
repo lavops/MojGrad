@@ -28,5 +28,14 @@ namespace Backend.Controllers
             return  _iCityUI.getAllCities();
         }
 
-     }
+        [Authorize]
+        [HttpGet("{id}")]
+        public City GetCityById(long id)
+        {
+            var city = _iCityUI.getByID(id);
+            return city;
+
+        }
+
+    }
 }

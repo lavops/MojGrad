@@ -89,14 +89,23 @@ namespace Backend.Controllers
                 return BadRequest(new { message = "Unos nije uspeo" });
         }
 
-        public class deletePost
+        [Authorize]
+        [HttpPost("editPost")]
+        public IActionResult EditPost(Post post)
         {
-            public long id { get; set; }
+            Post p = _iPostUI.editPost(post);
+            if (p != null)
+            {
+                PostViewModel post1 = new PostViewModel(p);
+                return Ok(post1);
+            }
+            else
+                return BadRequest(new { message = "Unos nije uspeo" });
         }
 
         [Authorize]
         [HttpPost("Delete")]
-        public IActionResult DeletePost(deletePost post)
+        public IActionResult DeletePost(Post post)
         {
             bool ind = _iPostUI.deletePost(post.id);
             if (ind == true)

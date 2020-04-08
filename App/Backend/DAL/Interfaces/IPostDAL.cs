@@ -10,14 +10,15 @@ namespace Backend.DAL.Interfaces
     public interface IPostDAL
     {
         List<Post> getAllPosts();
+       // List<Post> getAllPostsByLikesNumDistinct();
+        //List<Post> getAllPostsByLikesNum();
         List<Post> getAllPostsForOneUser(long id);
         Post getByID(long id);
         Post insertPost(Post post);
-
         List<Post> getAllSolvedPosts();
         List<Post> getAllUnsolvedPosts();
-
         bool deletePost(long id);
+        Post editPost(Post post);
 
     }
 }

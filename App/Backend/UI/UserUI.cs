@@ -47,6 +47,11 @@ namespace Backend.UI
             return _iUserBL.getByID(id);
         }
 
+        public List<User> getUsersByCityId(long cityId)
+        {
+            return _iUserBL.getUsersByCityId(cityId);
+        }
+
         public User insertUser(User user)
         {
             return _iUserBL.insertUser(user);

@@ -11,5 +11,6 @@ namespace Backend.UI.Interfaces
         List<Comment> getCommentsForPost(long id);
         Comment getByID(long id);
         Comment insertComment(Comment comment);
+        bool deleteCommentById(long id);
     }
 }

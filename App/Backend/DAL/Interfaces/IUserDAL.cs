@@ -18,6 +18,7 @@ namespace Backend.DAL.Interfaces
         bool deleteUser(long id);
         public string GenerateJSONWebToken(User user);
         public User AuthenticateUser(User user);
+        List<User> getUsersByCityId(long cityId);
 
 
     }

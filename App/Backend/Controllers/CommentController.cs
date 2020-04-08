@@ -47,5 +47,18 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
-   }
+
+        [Authorize]
+        [HttpPost("Delete")]
+        public IActionResult DeleteComment(Comment comment)
+        {
+            bool ind = _iCommentUI.deleteCommentById(comment.id);
+            if (ind == true)
+            {
+                return Ok(new { message = "Obrisan" });
+            }
+            else
+                return BadRequest(new { message = "Greska" });
+        }
+    }
 }

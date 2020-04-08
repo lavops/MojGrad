@@ -17,6 +17,11 @@ namespace Backend.UI
             _iCommentBL = iCommentBL;
         }
 
+        public bool deleteCommentById(long id)
+        {
+            return _iCommentBL.deleteCommentById(id);
+        }
+
         public Comment getByID(long id)
         {
             return _iCommentBL.getByID(id);

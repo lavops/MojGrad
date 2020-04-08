@@ -17,6 +17,20 @@ namespace Backend.DAL
             _context = context;
         }
 
+        public bool deleteCommentById(long id)
+        {
+            var comment = _context.comment.Where(x => x.id == id).FirstOrDefault();
+            if (comment == null)
+            {
+                return false;
+            }
+
+            _context.comment.Remove(comment);
+            _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public Comment getByID(long id)
         {
             return _context.comment.Where(c => c.id == id).FirstOrDefault();

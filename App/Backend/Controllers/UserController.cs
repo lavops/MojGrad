@@ -36,6 +36,8 @@ namespace Backend.Controllers
             return user;
 
         }
+
+
         [Authorize]
         [HttpGet("{id}")]
         public UserViewModel GetUser(long id)
@@ -132,6 +134,21 @@ namespace Backend.Controllers
             }
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
+        }
+
+        [Authorize]
+        [HttpPost("UsersByCityId")]
+        public IEnumerable<UserViewModel> GetUsersByCityId(User user1)
+        {
+            var users = _iUserUI.getUsersByCityId(user1.cityId);
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
+            {
+                user.Add(new UserViewModel(u));
+            }
+
+            return user;
+
         }
 
     }

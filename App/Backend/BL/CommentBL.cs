@@ -17,6 +17,11 @@ namespace Backend.BL
             _iCommentDAL = iCommentDAL;
         }
 
+        public bool deleteCommentById(long id)
+        {
+            return _iCommentDAL.deleteCommentById(id);
+        }
+
         public Comment getByID(long id)
         {
             return _iCommentDAL.getByID(id);

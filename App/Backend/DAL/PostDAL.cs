@@ -32,6 +32,27 @@ namespace Backend.DAL
             return true;
         }
 
+        public Post editPost(Post post)
+        {
+            var exist = _context.post.Where(x => x.id == post.id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.description = post.description;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return _context.post.Where((u) => u.id == post.id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).FirstOrDefault();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
+        }
+
         public List<Post> getAllPosts()
         {
             return _context.post.Include(u => u.user).Include(c=> c.postType).Include(s=>s.status).Include(l => l.likes).Include(c => c.comments).ToList();

@@ -47,6 +47,11 @@ namespace Backend.BL
             return _iUserDAL.getByID(id);
         }
 
+        public List<User> getUsersByCityId(long cityId)
+        {
+            return _iUserDAL.getUsersByCityId(cityId);
+        }
+
         public User insertUser(User user)
         {
             return _iUserDAL.insertUser(user);

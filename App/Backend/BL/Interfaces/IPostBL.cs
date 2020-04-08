@@ -15,5 +15,6 @@ namespace Backend.BL.Interfaces
         List<Post> getAllSolvedPosts();
         List<Post> getAllUnsolvedPosts();
         bool deletePost(long id);
+        Post editPost(Post post);
     }
 }

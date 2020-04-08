@@ -195,5 +195,10 @@ namespace Backend.DAL
             }
             return null;
         }
+
+        public List<User> getUsersByCityId(long cityId)
+        {
+            return _context.user.Where(u=> u.cityId == cityId).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).ToList();
+        }
     }
 }
