@@ -18,6 +18,7 @@ class FullPost
   double _longitude;
   String _userPhoto;
   String _address;
+  int _isLiked;
   
   FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum, this._latitude, this._longitude, this._userPhoto, this._address);
  
@@ -39,6 +40,7 @@ class FullPost
   double get longitude => _longitude;  
   String get userPhoto => _userPhoto;  
   String get address => _address;  
+  int get isLiked => _isLiked;  
 
  //saljemo kao json fajl
   Map<String, dynamic> toMap()
@@ -62,6 +64,7 @@ class FullPost
     map["longitude"] =_longitude;
     map["userPhoto"] =_userPhoto;
     map["address"] =_address;
+    map["isLiked"] =_isLiked;
    
     return map;
   }
@@ -86,5 +89,6 @@ class FullPost
     this._longitude = data["longitude"];
     this._userPhoto = data["userPhoto"];
     this._address = data["address"];
+    this._isLiked = data["isLiked"];
   }
 }

@@ -33,9 +33,13 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
       }
     });
   }
+   void initState() {
+    super.initState();
+    _getReportedUser(widget.id);
+  }
 
   Widget buildReportsList() {
-    _getReportedUser(widget.id);
+    //_getReportedUser(widget.id);
     return ListView.builder(
       itemCount: listReports == null ? 0 : listReports.length,
       itemBuilder: (BuildContext context, int index) {

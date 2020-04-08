@@ -45,7 +45,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     });
   }
 
-    void initState() {
+  void initState() {
     super.initState();
     _getUsers();
     _getReportedUsers();

@@ -22,9 +22,9 @@ namespace Backend.UI
             return _iPostBL.deletePost(id);
         }
 
-        public Post editPost(Post post)
+        public Post editPost(long id, string description)
         {
-            return _iPostBL.editPost(post);
+            return _iPostBL.editPost(id, description);
         }
 
         public List<Post> getAllPosts()

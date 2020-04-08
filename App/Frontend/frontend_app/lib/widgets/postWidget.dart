@@ -92,7 +92,7 @@ class _PostWidgetState extends State<PostWidget> {
                     listPosts[index].postId,
                     listPosts[index].likeNum,
                     listPosts[index].dislikeNum,
-                    listPosts[index].commNum),
+                    listPosts[index].commNum, listPosts[index].isLiked),
                 description(
                     listPosts[index].username, listPosts[index].description),
                 SizedBox(height: 10.0),
@@ -179,7 +179,7 @@ class _PostWidgetState extends State<PostWidget> {
       );
 
   Widget actionsButtons(
-          int statusId, int postId, int likeNum, int dislikeNum, int commNum) =>
+          int statusId, int postId, int likeNum, int dislikeNum, int commNum,  int isLiked) =>
       Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -187,7 +187,7 @@ class _PostWidgetState extends State<PostWidget> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]),
+                icon: isLiked == 1 ? Icon(MdiIcons.thumbUp, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) ,
                 onPressed: () {
                     APIServices.jwtOrEmpty().then((res) {
                       String jwt;
@@ -211,7 +211,7 @@ class _PostWidgetState extends State<PostWidget> {
                 child: Text(likeNum.toString()),
               ),
               IconButton(
-                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+                icon: isLiked == 2 ? Icon(MdiIcons.thumbDown, color: Colors.red) : Icon(MdiIcons.thumbDownOutline, color: Colors.red),
                 onPressed: () {
                    APIServices.jwtOrEmpty().then((res) {
                       String jwt;

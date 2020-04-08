@@ -2,21 +2,22 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  String serverURLPhoto = 'http://192.168.1.2:45455//';
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  // String serverURL = 'http://192.168.1.2:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
-  static String serverURL = 'http://192.168.1.2:45455/api/';
-  static String serverURLPhoto = 'http://192.168.1.2:45455//';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  static String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //static String serverURL = 'http://127.0.0.1:60676/api/';
+  //static String serverURL = 'http://192.168.1.2:45455/api/';
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',
@@ -27,7 +28,7 @@ class APIServices
   static Future getPost(String jwt) async{
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    return await http.get(serverURL +'Post',headers: {
+    return await http.get(serverURL +'Post/userID='+userId.toString(),headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -35,12 +36,13 @@ class APIServices
   }
 
   //return all posts from a specific user
-  static Future getPostsForUser(String jwt, int userId) async{
+  static Future getPostsForUser(String jwt, int userId1) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Post/UsersPosts';
     var data = Map();
-    data["id"] = userId;
+    data["id"] = userId1;
+    data["userID"] = userId;
     var jsonBody = convert.jsonEncode(data);
     return await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -181,6 +183,7 @@ class APIServices
     });
   }
   
+  
 	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
@@ -250,7 +253,7 @@ class APIServices
   static Future getSolvedPosts(String jwt) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
-     return await http.get(serverURL +'Post/SolvedPosts', headers: {
+     return await http.get(serverURL +'Post/SolvedPosts/userID='+userId.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -260,7 +263,7 @@ class APIServices
   static Future getUnsolvedPosts(String jwt) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
-     return await http.get(serverURL +'Post/UnsolvedPosts', headers: {
+     return await http.get(serverURL +'Post/UnsolvedPosts/userID='+userId.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -318,8 +321,7 @@ class APIServices
     String data2 = res.body.toString();    
     return data2;
   }
-
-  static Future getCityById(String jwt, int cityId) async{
+   static Future getCityById(String jwt, int cityId) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     return await http.get(serverURL + 'City/$cityId',headers: {
@@ -328,4 +330,6 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     });
   }
+
+
 }

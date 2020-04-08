@@ -23,61 +23,68 @@ namespace Backend.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        public ActionResult<IEnumerable<PostViewModel>> GetPosts()
+        [HttpGet("userId={userID}")]
+        public ActionResult<IEnumerable<PostViewModel>> GetPosts(int userId)
         {
             var posts = _iPostUI.getAllPosts();
             List<PostViewModel> listPosts = new List<PostViewModel>();
             foreach (var post in posts)
             {
-                listPosts.Add(new PostViewModel(post));
+                listPosts.Add(new PostViewModel(post,userId));
             }
 
             return listPosts;
         }
 
+        public class SubPost
+        {
+            public long id { get; set; }
+            public long userID { get; set; }
+            public string description { get; set; }
+        }
+       
         [Authorize]
         [HttpPost("UsersPosts")]
-        public ActionResult<IEnumerable<PostViewModel>> UsersPosts(User user)
+        public ActionResult<IEnumerable<PostViewModel>> UsersPosts(SubPost user)
         {
             var posts = _iPostUI.getAllPostsForOneUser(user.id);
             List<PostViewModel> listPosts = new List<PostViewModel>();
             foreach (var post in posts)
             {
-                listPosts.Add(new PostViewModel(post));
+                listPosts.Add(new PostViewModel(post, user.userID));
             }
 
             return listPosts;
         }
-
+        
         [Authorize]
-        [HttpGet("SolvedPosts")]
-        public ActionResult<IEnumerable<PostViewModel>> SolvedPosts()
+        [HttpGet("SolvedPosts/userId={userID}")]
+        public ActionResult<IEnumerable<PostViewModel>> SolvedPosts(int userId)
         {
             var posts = _iPostUI.getAllSolvedPosts();
             List<PostViewModel> listPosts = new List<PostViewModel>();
             foreach (var post in posts)
             {
-                listPosts.Add(new PostViewModel(post));
+                listPosts.Add(new PostViewModel(post,userId));
             }
 
             return listPosts;
         }
 
         [Authorize]
-        [HttpGet("UnsolvedPosts")]
-        public ActionResult<IEnumerable<PostViewModel>> UnsolvedPosts()
+        [HttpGet("UnsolvedPosts/userId={userID}")]
+        public ActionResult<IEnumerable<PostViewModel>> UnsolvedPosts(int userId)
         {
             var posts = _iPostUI.getAllUnsolvedPosts();
             List<PostViewModel> listPosts = new List<PostViewModel>();
             foreach (var post in posts)
             {
-                listPosts.Add(new PostViewModel(post));
+                listPosts.Add(new PostViewModel(post,userId));
             }
 
             return listPosts;
         }
-
+        
         [Authorize]
         [HttpPost]
         public IActionResult InsertPost(Post post)
@@ -91,12 +98,12 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("editPost")]
-        public IActionResult EditPost(Post post)
+        public IActionResult EditPost(SubPost pos)
         {
-            Post p = _iPostUI.editPost(post);
+            Post p = _iPostUI.editPost(pos.id, pos.description);
             if (p != null)
             {
-                PostViewModel post1 = new PostViewModel(p);
+                PostViewModel post1 = new PostViewModel(p, pos.userID);
                 return Ok(post1);
             }
             else

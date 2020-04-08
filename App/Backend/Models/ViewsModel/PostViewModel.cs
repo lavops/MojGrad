@@ -24,8 +24,9 @@ namespace Backend.Models.ViewsModel
         public double longitude { get; set; }
         public string address { get; set; }
         public String userPhoto { get; set; }
+        public int isLiked{ get; set; }
 
-        public PostViewModel (Post p) 
+        public PostViewModel (Post p, long userId) 
         {
             this.username = p.user.username;
             this.createdAt = p.createdAt;
@@ -44,6 +45,15 @@ namespace Backend.Models.ViewsModel
             this.longitude = p.longitude;
             this.userPhoto = p.user.photo;
             this.address = p.address;
+            Like like = p.likes.Where(x => x.userId == userId).FirstOrDefault();
+            if (like == null)
+                this.isLiked = 0;
+            else if (like.likeTypeId == 1)
+            {
+                this.isLiked = 2; //dislike
+            }
+            else
+                this.isLiked = 1; 
         }
 
     }

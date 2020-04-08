@@ -1,6 +1,8 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:frontend_web/models/user.dart';
+import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:http/http.dart' as http;
 
 String userPhotoURL = "http://127.0.0.1:60676//";
@@ -125,7 +127,7 @@ class APIServices {
   static Future getPost(String jwt) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    return await http.get(serverURL + 'Post', headers: {
+    return await http.get(serverURL + 'Post/userID='+globalUserId.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -139,6 +141,7 @@ class APIServices {
     String url = serverURL + 'Post/UsersPosts';
     var data = Map();
     data["id"] = userId;
+    data["userID"] = globalUserId;
     var jsonBody = convert.jsonEncode(data);
     return await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -221,9 +224,9 @@ class APIServices {
   }
 
   static Future getSolvedPosts(String jwt) async {
-    var data = jsonDecode(jwt);
-    jwt = data['token'].toString();
-    return await http.get(serverURL + 'Post/SolvedPosts',headers: {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+     return await http.get(serverURL +'Post/SolvedPosts/userID='+globalUserId.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -231,9 +234,9 @@ class APIServices {
   }
 
   static Future getUnsolvedPosts(String jwt) async {
-    var data = jsonDecode(jwt);
-    jwt = data['token'].toString();
-    return await http.get(serverURL + 'Post/UnsolvedPosts',headers: {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+     return await http.get(serverURL +'Post/UnsolvedPosts/userID='+ globalUserId.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'

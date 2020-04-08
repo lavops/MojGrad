@@ -22,9 +22,9 @@ namespace Backend.BL
             return _iPostDAL.deletePost(id);
         }
 
-        public Post editPost(Post post)
+        public Post editPost(long id, string description)
         {
-            return _iPostDAL.editPost(post);
+            return _iPostDAL.editPost(id, description);
         }
 
         public List<Post> getAllPosts()

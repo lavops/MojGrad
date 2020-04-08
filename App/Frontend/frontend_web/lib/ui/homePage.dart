@@ -5,6 +5,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'dart:convert';
 import './navDrawer.dart';
 
+int globalUserId;
 class HomePage extends StatefulWidget {
  HomePage(this.jwt, this.payload);
   factory HomePage.fromBase64(String jwt) => HomePage(
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState(jwt, payload);
 }
 User globalUser;
-int userId;
+
 
 class _HomePageState extends State<HomePage> {
     final String jwt;
@@ -28,12 +29,13 @@ class _HomePageState extends State<HomePage> {
   User user1;
 
   _getUser() async {
-    userId = int.parse(payload['sub']);
-    var res = await APIServices.getUser(TokenSession.getToken,userId);
+    int userId1 = int.parse(payload['sub']);
+    var res = await APIServices.getUser(TokenSession.getToken,userId1);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     User user = User.fromObject(jsonUser);
     setState(() {
       user1 = user;
+      globalUserId=userId1;
     });
   }
 

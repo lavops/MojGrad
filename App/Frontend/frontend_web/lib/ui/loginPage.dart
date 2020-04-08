@@ -16,47 +16,11 @@ class _LoginPageState extends State<LoginPage>{
   TextEditingController _passwordController = new TextEditingController();
   String pogresanLoginText = '';
   User user;
-/*
-  _saveToken(Map<String, dynamic> jsonObject) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', jsonObject['token']);
-    await prefs.setString('user', json.encode(jsonObject));
-  }
 
-  _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString('token');
-    //print(prefs.getString("user"));
-    if(_token != ''){
-      Map<String, dynamic> jsonObject = json.decode(prefs.getString('user'));
-      User extractedUser = new User();
-      extractedUser = User.fromObject(jsonObject);
-      setState(() {
-        token = _token;
-        user = extractedUser;
-      });
-    }
-  }*/
 
   void initState(){
     super.initState();
-  /*  _getToken();
-    Future(
-      () {
-        if(token != ''){
-          var tokenSplit = token.split('.');
-          var payload = json.decode(ascii.decode(base64.decode(base64.normalize(tokenSplit[1]))));
-          var exp = payload["exp"] * 1000000;
-          if(DateTime.fromMicrosecondsSinceEpoch(exp).isAfter(DateTime.now())){
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ManagementPage()),
-            );
-          }
-        }
-      }
-    );
-    */
+ 
   }
 
   _login(String _email, String _password){
