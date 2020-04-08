@@ -6,17 +6,17 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  String serverURLPhoto = 'http://10.0.2.2:60676//';
-  // String serverURL = 'http://192.168.1.2:45455//';
+  //String serverURLPhoto = 'http://10.0.2.2:60676//';
+  String serverURLPhoto = 'http://192.168.1.2:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURLPhoto = 'http://10.0.2.2:60676//';
-  //static String serverURL = 'http://127.0.0.1:60676/api/';
-  //static String serverURL = 'http://192.168.1.2:45455/api/';
+  //static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
+  static String serverURL = 'http://192.168.1.2:45455/api/';
+  static String serverURLPhoto = 'http://192.168.1.2:45455//';
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',
