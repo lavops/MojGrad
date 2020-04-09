@@ -73,9 +73,13 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget newPost() {
-    return ListView.builder(
+    return GridView.builder(
         padding: EdgeInsets.only(bottom: 30.0),
         itemCount: listPosts == null ? 0 : listPosts.length,
+       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio:  8.0 / 10.5
+        ),
         itemBuilder: (BuildContext context, int index) {
           return Card(
               child: Column(
@@ -134,7 +138,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
-          maxHeight: 500.0, // changed to 400
+          maxHeight: 400.0, // changed to 400
           minHeight: 200.0, // changed to 200
           maxWidth: double.infinity,
           minWidth: double.infinity,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/admin.dart';
+import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/widgets/postWidget.dart';
 import 'dart:convert';
 import './navDrawer.dart';
 
@@ -28,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   _HomePageState(this.jwt, this.payload);
 
   Admin admin1;
+  List<FullPost> listPosts;
 
   _getAdmin() async {
     int userId1 = int.parse(payload['sub']);
@@ -39,15 +42,29 @@ class _HomePageState extends State<HomePage> {
       globalAdminId=userId1;
     });
   }
+  _getPosts() async {
+     APIServices.getPost(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listPosts = listP;
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _getAdmin();
+    _getPosts();
   }
 
   @override
   Widget build(BuildContext context) {
+    double width1 = MediaQuery.of(context).size.width -300; //> 400 ? MediaQuery.of(context).size.width - 300 : MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -55,8 +72,22 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: NavDrawer(),
       body:  Center(
-        child: Text('Admin: ' + admin1.firstName),
-      ),
+        child: Container(
+          width: width1,
+          padding: EdgeInsets.all(10.0),
+        child: RefreshIndicator(
+            onRefresh: () async {
+              _getPosts();
+            },
+            child: (listPosts != null)
+                ? PostWidget(listPosts)
+                : Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    ),
+                  ))
+      ),)
     );
   }
 }

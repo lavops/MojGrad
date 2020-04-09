@@ -3,6 +3,8 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/loginPage.dart';
 import 'package:frontend_web/ui/managementPage.dart';
+import 'package:frontend_web/ui/statisticsPage.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './homePage.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -39,6 +41,15 @@ class NavDrawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => HomePage.fromBase64(jwt)),
                 );
               }),
+          ListTile(
+            leading: Icon(MdiIcons.chartAreaspline),
+            title: Text('Statistika'),
+            onTap: () {
+              Navigator.push(
+                context,
+                 MaterialPageRoute(builder: (context) => StatisticsPage()),
+              );
+            }),
           ListTile(
             leading: Icon(Icons.timer),
             title: Text('Zadavanje misija'),
