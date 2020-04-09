@@ -113,6 +113,10 @@ namespace Backend
             services.AddTransient<IReportBL, ReportBL>();
             services.AddTransient<IReportDAL, ReportDAL>();
 
+            services.AddTransient<IAdminUI, AdminUI>();
+            services.AddTransient<IAdminBL, AdminBL>();
+            services.AddTransient<IAdminDAL, AdminDAL>();
+
             services.AddTransient<IReportTypeUI, ReportTypeUI>();
             services.AddTransient<IReportTypeBL, ReportTypeBL>();
             services.AddTransient<IReportTypeDAL, ReportTypeDAL>();

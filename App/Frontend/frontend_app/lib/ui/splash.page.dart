@@ -3,7 +3,7 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
 
 class SplashPage extends StatefulWidget {
-  String jwt;
+  final String jwt;
   SplashPage(this.jwt);
   @override
   _SplashPageState createState() => new _SplashPageState();

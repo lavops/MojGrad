@@ -19,9 +19,6 @@ namespace Backend.Models
         public string photo { get; set; }
         public int points { get; set; }
         public int level { get; set; }
-
-        public long userTypeId { get; set; }
-        public virtual UserType userTypes { get; set; }
         public virtual City city { get; set; }
         public IList<Like> likes { get; set; }
         public IList<Post> posts { get; set; }

@@ -26,19 +26,20 @@ namespace Backend.DAL
 
         public List<User> getAllUsers()
         {
-            return _context.user.Include(x=> x.city).Include(s=> s.userTypes).Include(p=> p.posts).ToList();
+            return _context.user.Include(x=> x.city).Include(p=> p.posts).ToList();
         }
 
         public User getByID(long id)
         {
-            return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault();
+            return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(p => p.posts).FirstOrDefault();
         }
 
 
         public User insertUser(User user)
         {
-            var exist = _context.user.Where(x => x.email == user.email).FirstOrDefault();
-            if (exist == null)
+            var existInUser = _context.user.Where(x => x.email == user.email).FirstOrDefault();
+            var existInAdmin = _context.admin.Where(x => x.email == user.email).FirstOrDefault();
+            if (existInAdmin == null && existInUser == null)
             {
                 var existUsername = _context.user.Where(x => x.username == user.username).FirstOrDefault();
                 if (existUsername == null)
@@ -52,7 +53,6 @@ namespace Backend.DAL
                     u1.password = user.password;
                     u1.phone = user.phone;
                     u1.username = user.username;
-                    u1.userTypeId = user.userTypeId;
                     u1.photo = "default.png";
                     u1.points = 0;
                     u1.level = 1;
@@ -150,7 +150,7 @@ namespace Backend.DAL
                     exist.password = newPassword;
                     _context.Update(exist);
                     _context.SaveChanges();
-                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault(); ;
+                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(p => p.posts).FirstOrDefault(); ;
                 }
                 catch (DbUpdateException ex)
                 {
@@ -185,7 +185,7 @@ namespace Backend.DAL
                     exist.photo = photoPathn;
                     _context.Update(exist);
                     _context.SaveChanges();
-                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).FirstOrDefault();
+                    return _context.user.Where((u) => u.id == id).Include(x => x.city).Include(p => p.posts).FirstOrDefault();
                 }
                 catch (DbUpdateException ex)
                 {
@@ -198,7 +198,7 @@ namespace Backend.DAL
 
         public List<User> getUsersByCityId(long cityId)
         {
-            return _context.user.Where(u=> u.cityId == cityId).Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).ToList();
+            return _context.user.Where(u=> u.cityId == cityId).Include(x => x.city).Include(p => p.posts).ToList();
         }
     }
 }

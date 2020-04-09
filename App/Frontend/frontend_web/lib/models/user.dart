@@ -1,6 +1,5 @@
 class User{
   int _id;
-  int _userTypeId;
   String _firstName;  
   String _lastName;
   String _createdAt;
@@ -10,8 +9,6 @@ class User{
   String _phone;  
   int _cityId;
   String _cityName;
-  String _token;
-  String _typeName;
   String _photo;
   int _postsNum;
   int _points;
@@ -19,11 +16,10 @@ class User{
   int _reportsNum;
 
   User();
-  User.without(this._userTypeId, this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
+  User.without(this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
  
 
   int get id => _id;
-  int get userTypeId => _userTypeId;
   String get firstName => _firstName;
   String get lastName => _lastName;
   String get createdAt => _createdAt;
@@ -33,8 +29,6 @@ class User{
   String get phone => _phone;
   int get cityId => _cityId;
   String get cityName => _cityName;
-  String get token => _token;
-  String get typeName => _typeName;
   String get photo => _photo;
   int get postsNum => _postsNum;
   int get points => _points;
@@ -45,7 +39,6 @@ class User{
   Map<String, dynamic> toMap(){
     var data = Map<String, dynamic>();
 
-    data["userTypeId"] = _userTypeId;
     data["firstName"] = _firstName;
     data["lastName"] = _lastName;
     data["createdAt"] = _createdAt;
@@ -55,8 +48,6 @@ class User{
     data["phone"] = _phone;
     data["cityId"] = _cityId;
     data["cityName"]=_cityName;
-    data["token"] = _token;
-    data["typeName"] = _typeName;
     data["photo"] = _photo;
     data["postsNum"] = _postsNum;
     data["points"] = _points;
@@ -81,10 +72,7 @@ class User{
     this._email = data["email"];
     this._phone = data["phone"];
     this._cityId = data["cityId"];
-    this._token = data["token"];
-    this._userTypeId = data["userTypeId"];
-    this._typeName = data["typeName"];
-    this._typeName = data["typeName"];
+    this._cityName = data["cityName"];
     this._photo = data["photo"];
     this._postsNum = data["postsNum"];
     this._points = data["points"];

@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
+import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/token.session.dart';
@@ -36,10 +37,10 @@ class APIServices {
     });
   }
 
-  static Future getUser(String jwt, int userId) async {
+  static Future getAdmin(String jwt, int userId) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    return await http.get(serverURL + 'User/' + userId.toString(), headers: {
+    return await http.get(serverURL + 'Admin/' + userId.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -48,7 +49,7 @@ class APIServices {
 
   // Login funtion
   static Future login(String mail, String password) async {
-    String url = serverURL + 'User/Login';
+    String url = serverURL + 'Admin/Login';
     var body = jsonEncode({'email': mail, 'password': password});
     var res = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: body);
@@ -56,17 +57,13 @@ class APIServices {
     return null;
   }
 
-  static Future registration(User user) async {
-    String url = serverURL + 'User/Register';
+  static Future registration(Admin user) async {
+    String url = serverURL + 'Admin/Register';
     var data = Map();
     data["firstName"] = user.firstName;
     data["lastName"] = user.lastName;
-    data["username"] = user.username;
     data["password"] = user.password;
     data["email"] = user.email;
-    data["phone"] = user.phone;
-    data["cityId"] = user.cityId;
-    data["userTypeId"] = user.userTypeId;
     var jsonBody = convert.jsonEncode(data);
     print(jsonBody);
     return await http.post(url, headers: header, body: jsonBody);
@@ -127,7 +124,7 @@ class APIServices {
   static Future getPost(String jwt) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    return await http.get(serverURL + 'Post/userID='+globalUserId.toString(), headers: {
+    return await http.get(serverURL + 'Post/userID='+(0).toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -141,7 +138,7 @@ class APIServices {
     String url = serverURL + 'Post/UsersPosts';
     var data = Map();
     data["id"] = userId;
-    data["userID"] = globalUserId;
+    data["userID"] = 0;
     var jsonBody = convert.jsonEncode(data);
     return await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -226,7 +223,7 @@ class APIServices {
   static Future getSolvedPosts(String jwt) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
-     return await http.get(serverURL +'Post/SolvedPosts/userID='+globalUserId.toString(), headers: {
+     return await http.get(serverURL +'Post/SolvedPosts/userID='+0.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
@@ -236,7 +233,7 @@ class APIServices {
   static Future getUnsolvedPosts(String jwt) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
-     return await http.get(serverURL +'Post/UnsolvedPosts/userID='+ globalUserId.toString(), headers: {
+     return await http.get(serverURL +'Post/UnsolvedPosts/userID='+ 0.toString(), headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'

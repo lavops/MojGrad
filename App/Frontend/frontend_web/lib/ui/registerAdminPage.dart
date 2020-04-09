@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 
@@ -19,9 +20,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
   TextEditingController firstName = new TextEditingController();
   TextEditingController lastName = new TextEditingController();
   TextEditingController email = new TextEditingController();
-  TextEditingController mobile = new TextEditingController();
   TextEditingController password = new TextEditingController();
-  TextEditingController username = new TextEditingController();
   bool _secureText = true;
 
   showHide() {
@@ -65,33 +64,23 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
     );
   }
 
-  _register(String firstName, String lastName, String email, String mobile,
-      String password, String username, int cityId) {
+  _register(String firstName, String lastName, String email,String password) {
     final flNameRegex = RegExp(r'^[a-zA-Z]{1,10}$');
-    final mobRegex = RegExp(r'^06[0-9]{7,8}$');
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
     final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
-    final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
-
+   
     if (flNameRegex.hasMatch(firstName)) {
       if (flNameRegex.hasMatch(lastName)) {
-        if (usernameRegex.hasMatch(username)) {
-          if (mobRegex.hasMatch(mobile)) {
             if (emailRegex.hasMatch(email)) {
               if (passRegex.hasMatch(password)) {
                 var pom = utf8.encode(password);
                 var pass = sha1.convert(pom);
-                User user = User.without(
-                    1,
+                Admin adm = Admin.without(
                     firstName,
                     lastName,
-                    username,
                     pass.toString(),
-                    email,
-                    mobile,
-                    cityId,
-                    "Upload//default.jpg");
-                APIServices.registration(user).then((response) {
+                    email);
+                APIServices.registration(adm).then((response) {
                   if (response.statusCode == 200) {
                     Map<String, dynamic> jsonObject =
                         json.decode(response.body);
@@ -115,7 +104,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
               } else {
                 setState(() {
                   wrongRegText =
-                      "Loša sifra. Sifra mora imati najmanje 6 karaktera."
+                      "Loša šifra. Šifra mora imati najmanje 6 karaktera."
                           .toUpperCase();
                 });
                 throw Exception(
@@ -126,19 +115,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
                 wrongRegText = "Neispravan email.".toUpperCase();
               });
               throw Exception("Neispravan email.");
-            }
-          } else {
-            setState(() {
-              wrongRegText = "Unesite ponovo broj telefona.".toUpperCase();
-            });
-            throw Exception("Unesite ponovo broj telefona.");
-          }
-        } else {
-          setState(() {
-            wrongRegText = "Unesite ponovo korisnocko ime.".toUpperCase();
-          });
-          throw Exception("Unesite ponovo korisnocko ime");
-        }
+            }  
       } else {
         setState(() {
           wrongRegText = "Unesite ispravno prezime.".toUpperCase();
@@ -151,27 +128,6 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
       });
       throw Exception("Unesite drugo ime.");
     }
-  }
-
-  List<City> _city;
-  City city;
-
-  //function that adds cities to list
-  _getCity() {
-    APIServices.getCity(TokenSession.getToken).then((res) {
-      Iterable list = json.decode(res.body);
-      List<City> cities = new List<City>();
-      cities = list.map((model) => City.fromObject(model)).toList();
-      setState(() {
-        _city = cities;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCity();
   }
 
   @override
@@ -228,32 +184,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
       ),
     );
 
-    final usernameWidget = Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-      elevation: 6.0,
-      child: TextField(
-        controller: username,
-        style: TextStyle(
-          //color: Colors.grey,
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
-          prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.adb, color: Colors.green[800]),
-          ),
-          contentPadding: EdgeInsets.all(18),
-          labelText: "Korisnicko ime",
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
-          ),
-        ),
-      ),
-    );
-
+    
     final emailWidget = Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
@@ -280,32 +211,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
       ),
     );
 
-    final mobileNumberWidget = Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-      elevation: 6.0,
-      child: TextField(
-        controller: mobile,
-        style: TextStyle(
-          //color: Colors.grey,
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
-          prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phone, color: Colors.green[800]),
-          ),
-          contentPadding: EdgeInsets.all(18),
-          labelText: "Mobilni telefon",
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
-          ),
-        ),
-        keyboardType: TextInputType.number,
-      ),
-    );
+    
 
     final passwordWidget = Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
@@ -339,38 +245,6 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
       ),
     );
 
-    final dropdownWidget = new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Text("Izaberite svoj grad: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
-          new Container(
-            padding: new EdgeInsets.all(16.0),
-          ),
-          _city != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                    setState(() {
-                      city = newValue;
-                    });
-                  },
-                  items: _city.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
-        ]);
-
     final registerButtonWidget = SizedBox(
       height: 48.0,
       child: RaisedButton(
@@ -384,12 +258,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
           textColor: Colors.white,
           color: Colors.green[800],
           onPressed: () {
-            if (city != null)
-              _register(firstName.text, lastName.text, email.text, mobile.text,
-                  password.text, username.text, city.id);
-            else
-              _register(firstName.text, lastName.text, email.text, mobile.text,
-                  password.text, username.text, 1);
+               _register(firstName.text, lastName.text, email.text, password.text);
           }),
     );
 
@@ -416,11 +285,8 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
               ),
               firstNameWidget,
               lastNameWidget,
-              usernameWidget,
-              mobileNumberWidget,
               emailWidget,
               passwordWidget,
-              dropdownWidget,
               SizedBox(
                 height: 12.0,
               ),

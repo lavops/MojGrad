@@ -34,6 +34,7 @@ class EditProfile extends State<EditProfilePage> {
       imageFile = picture;
       return picture;
     });
+    return null;
   }
 
   Future<File> _openCamera() async {
@@ -42,6 +43,7 @@ class EditProfile extends State<EditProfilePage> {
       imageFile = picture;
       return picture;
     });
+     return null;
   }
 
   final Color green = Color(0xFF1E8161);
@@ -677,8 +679,6 @@ class EditProfile extends State<EditProfilePage> {
           );
         });
   }
-
-  Widget editProfilePhoto(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {

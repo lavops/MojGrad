@@ -8,7 +8,7 @@ import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SinglePostWidget extends StatefulWidget {
-  FullPost post;
+  final FullPost post;
 
   SinglePostWidget(this.post);
 

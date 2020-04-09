@@ -12,7 +12,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:frontend/models/constants.dart';
 import 'dart:convert';
 import '../services/api.services.dart';
-import '../services/api.services.dart';
 
 class PostWidget extends StatefulWidget {
   final List<FullPost> listPosts;

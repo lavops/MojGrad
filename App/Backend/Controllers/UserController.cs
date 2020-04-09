@@ -37,7 +37,6 @@ namespace Backend.Controllers
 
         }
 
-
         [Authorize]
         [HttpGet("{id}")]
         public UserViewModel GetUser(long id)
@@ -72,6 +71,7 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
+
         [Authorize]
         [HttpPost("EditUserData")]
         public IActionResult EditUserData(User u)

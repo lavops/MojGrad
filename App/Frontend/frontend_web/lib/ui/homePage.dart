@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'dart:convert';
 import './navDrawer.dart';
 
-int globalUserId;
+int globalAdminId;
 class HomePage extends StatefulWidget {
  HomePage(this.jwt, this.payload);
   factory HomePage.fromBase64(String jwt) => HomePage(
@@ -26,23 +27,23 @@ class _HomePageState extends State<HomePage> {
   final Map<String, dynamic> payload;
   _HomePageState(this.jwt, this.payload);
 
-  User user1;
+  Admin admin1;
 
-  _getUser() async {
+  _getAdmin() async {
     int userId1 = int.parse(payload['sub']);
-    var res = await APIServices.getUser(TokenSession.getToken,userId1);
+    var res = await APIServices.getAdmin(TokenSession.getToken,userId1);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
-    User user = User.fromObject(jsonUser);
+    Admin admin = Admin.fromObject(jsonUser);
     setState(() {
-      user1 = user;
-      globalUserId=userId1;
+      admin1 = admin;
+      globalAdminId=userId1;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _getUser();
+    _getAdmin();
   }
 
   @override
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: NavDrawer(),
       body:  Center(
-        child: Text('Admin: ' + user1.firstName),
+        child: Text('Admin: ' + admin1.firstName),
       ),
     );
   }

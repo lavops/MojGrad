@@ -20,7 +20,7 @@ namespace Backend.DAL
 
         public List<User> getAllReportedUser()
         {
-           return _context.user.Include(x => x.city).Include(s => s.userTypes).Include(p => p.posts).ToList();
+           return _context.user.Include(x => x.city).Include(p => p.posts).ToList();
            
         }
 

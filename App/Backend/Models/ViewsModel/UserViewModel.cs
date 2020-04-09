@@ -17,11 +17,8 @@ namespace Backend.Models.ViewsModel
         public DateTime createdAt { get; set; }
         public string cityName { get; set; }
         public long cityId { get; set; }
-        public long userTypeId { get; set; }
         public int points { get; set; }
         public int level { get; set; }
-
-        public string userTypeName { get; set; }
         public string photo { get; set; }
         public int postsNum { get; set; }
         public int reportsNum { get; set; }
@@ -43,8 +40,6 @@ namespace Backend.Models.ViewsModel
             this.level = u.level;
             this.cityName = u.city.name;
             this.cityId = u.cityId;
-            this.userTypeId = u.userTypeId;
-            this.userTypeName = u.userTypes.typeName;
             this.photo = u.photo;
             this.postsNum = u.posts.Where(x => x.userId == u.id).Count();
             this.reportsNum = _context.report.Where(x => x.reportedUserId == u.id).Count();

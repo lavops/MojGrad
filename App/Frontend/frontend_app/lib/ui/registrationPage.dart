@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
               if (passRegex.hasMatch(password)) {
                 var pom = utf8.encode(password);
                 var pass = sha1.convert(pom);
-                User user = User.without(2, firstName, lastName, username, pass.toString(), email, mobile, cityId,"Upload//ProfilePhoto//default.jpg");
+                User user = User.without(firstName, lastName, username, pass.toString(), email, mobile, cityId,"Upload//ProfilePhoto//default.jpg");
                 APIServices.registration(user).then((response) {
                   if (response.statusCode == 200) {
                     Map<String, dynamic> jsonObject =
