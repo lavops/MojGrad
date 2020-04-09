@@ -70,18 +70,6 @@ class HeaderSection extends State<OthersProfilePage> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.grey[50],
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              APIServices.jwtOrEmpty().then((res) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HomePage.fromBase64(res.toString())),
-                );
-              });
-            }),
       ),
       body: (otherUser != null)?NestedScrollView(
           controller: _scrollController,

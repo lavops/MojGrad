@@ -29,7 +29,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
     return Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               userInfoRow(post.userId, post.username,
                     post.typeName, post.userPhoto),
@@ -40,7 +40,8 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
                     post.postId,
                     post.likeNum,
                     post.dislikeNum,
-                    post.commNum),
+                    post.commNum,
+                    post.isLiked),
                 description(
                     post.username, post.description),
                 SizedBox(height: 10.0),
@@ -97,7 +98,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
       );
 
   Widget actionsButtons(
-          int statusId, int postId, int likeNum, int dislikeNum, int commNum) =>
+          int statusId, int postId, int likeNum, int dislikeNum, int commNum, int isLiked) =>
       Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -105,7 +106,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]),
+                icon: isLiked == 1 ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
                     APIServices.jwtOrEmpty().then((res) {
                       String jwt;
@@ -129,7 +130,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
                 child: Text(likeNum.toString()),
               ),
               IconButton(
-                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+                icon: isLiked == 2 ? Icon(MdiIcons.thumbDownOutline, color: Colors.red) : Icon(MdiIcons.thumbDownOutline, color: Colors.grey),
                 onPressed: () {
                    APIServices.jwtOrEmpty().then((res) {
                       String jwt;
