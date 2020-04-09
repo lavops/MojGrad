@@ -93,24 +93,34 @@ class _PostWidgetState extends State<PostWidget> {
                     listPosts[index].dislikeNum,
                     listPosts[index].commNum, listPosts[index].isLiked),
                 description(
-                    listPosts[index].username, listPosts[index].description),
+                    listPosts[index].userId, listPosts[index].username, listPosts[index].description),
                 SizedBox(height: 10.0),
               ]));
         });
   }
 
-  Widget userInfoRow(int userId, String username, String category, String userPhoto) => Row(
+  Widget userInfoRow(int otherUserId, String username, String category, String userPhoto) => Row(
         children: <Widget>[
           CircleImage(
             serverURLPhoto + userPhoto,
             imageSize: 36.0,
             whiteMargin: 2.0,
             imageMargin: 6.0,
-            othersUserId: userId,
+            othersUserId: otherUserId,
           ),
-          Text(
-            username,
-            style: TextStyle(fontWeight: FontWeight.bold),
+          InkWell(
+            onTap: (){
+              if(userId != otherUserId)
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OthersProfilePage(otherUserId)),
+              );
+            },
+            child: Text(
+              username,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )
           ),
           Expanded(child: SizedBox()),
           Text(category),
@@ -186,7 +196,7 @@ class _PostWidgetState extends State<PostWidget> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: isLiked == 1 ? Icon(MdiIcons.thumbUp, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) ,
+                icon: isLiked == 1 ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
                     APIServices.jwtOrEmpty().then((res) {
                       String jwt;
@@ -210,7 +220,7 @@ class _PostWidgetState extends State<PostWidget> {
                 child: Text(likeNum.toString()),
               ),
               IconButton(
-                icon: isLiked == 2 ? Icon(MdiIcons.thumbDown, color: Colors.red) : Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+                icon: isLiked == 2 ? Icon(MdiIcons.thumbDownOutline, color: Colors.red) : Icon(MdiIcons.thumbDownOutline, color: Colors.grey),
                 onPressed: () {
                    APIServices.jwtOrEmpty().then((res) {
                       String jwt;
@@ -269,13 +279,23 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
 
-  Widget description(String username, String description) => Container(
+  Widget description(int otherUserId, String username, String description,) => Container(
           child: Row(
         children: <Widget>[
           SizedBox(
             width: 10,
           ),
-          Text(username, style: TextStyle(fontWeight: FontWeight.bold)),
+          InkWell(
+            onTap:(){
+              if(userId != otherUserId)
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OthersProfilePage(otherUserId)),
+              );
+            },
+            child:Text(username, style: TextStyle(fontWeight: FontWeight.bold))
+          ),
           SizedBox(
             width: 10,
           ),
