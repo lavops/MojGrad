@@ -65,7 +65,7 @@ namespace Backend.DAL
                 {
                     _context.like.Remove(like3);
                     _context.SaveChangesAsync();
-                    return null;
+                    return _context.post.Where(x => x.id == like1.postId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).FirstOrDefault();
                 }
             }
 
