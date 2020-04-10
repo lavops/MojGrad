@@ -5,7 +5,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
-import 'package:frontend/widgets/singlePostWidget.dart';
+import 'package:frontend/widgets/postWidget.dart';
 import 'package:latlong/latlong.dart';
 
 class MapPage extends StatefulWidget {
@@ -70,11 +70,11 @@ class _MapPageState extends State<MapPage> {
                     return Container(
                       constraints: BoxConstraints(
                         maxHeight: 500.0, // changed to 400
-                        minHeight: 400.0, // changed to 200
+                        minHeight: 200.0, // changed to 200
                         maxWidth: double.infinity,
                         minWidth: double.infinity,
                       ),
-                      child: SinglePostWidget(listPosts[i]),
+                      child: PostWidget(listPosts[i]),
                     );
                   },
                 );

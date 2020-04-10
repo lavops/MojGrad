@@ -80,7 +80,13 @@ class HeaderSection extends State<OthersProfilePage> {
             ];
           },
           body: (posts != null)?
-            PostWidget(posts):
+            ListView.builder(
+              padding: EdgeInsets.only(bottom: 30.0),
+              itemCount: posts == null ? 0 : posts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return PostWidget(posts[index]);
+              }
+            ):
             Center(child: CircularProgressIndicator(
               valueColor:new AlwaysStoppedAnimation<Color>(Colors.green[800]),
               ),

@@ -44,41 +44,47 @@ class _SolvedPostsPageState extends State<SolvedPostsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black87),
-          title:
-              Text('Rešeni slučajevi', style: TextStyle(color: Colors.green)),
-          backgroundColor: Colors.white,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                String jwt;
-                APIServices.jwtOrEmpty().then((res) {
-                  setState(() {
-                    jwt = res;
-                  });
-                  if (res != null) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage.fromBase64(jwt.toString())),
-                    );
-                  }
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black87),
+        title:
+            Text('Rešeni slučajevi', style: TextStyle(color: Colors.green)),
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              String jwt;
+              APIServices.jwtOrEmpty().then((res) {
+                setState(() {
+                  jwt = res;
                 });
-              }),
-        ),
-        body: RefreshIndicator(
-            onRefresh: () async {
-              _getPosts();
-            },
-            child: (listPosts != null)
-                ? PostWidget(listPosts)
-                : Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                    ),
-                  )));
+                if (res != null) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            HomePage.fromBase64(jwt.toString())),
+                  );
+                }
+              });
+            }),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _getPosts();
+        },
+        child: (listPosts != null)
+        ? ListView.builder(
+          padding: EdgeInsets.only(bottom: 30.0),
+          itemCount: listPosts == null ? 0 : listPosts.length,
+          itemBuilder: (BuildContext context, int index) {
+            return PostWidget(listPosts[index]);
+          }
+        )
+        : Center(
+            child: CircularProgressIndicator(
+              valueColor:
+                  new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+            ),
+          )));
   }
 }
