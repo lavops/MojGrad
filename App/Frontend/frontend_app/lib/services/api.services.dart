@@ -330,5 +330,16 @@ class APIServices
     });
   }
 
-
+  static Future deletePost(String jwt, int postId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var map = Map();
+    map['id'] = postId;
+    var jsonBody = convert.jsonEncode(map);
+    return await http.post(serverURL + 'Post/Delete', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
 }
