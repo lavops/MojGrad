@@ -6,8 +6,6 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/NavDrawer.dart';
 import 'package:frontend/widgets/postWidget.dart';
 
-import 'filters.dart';
-
 class FeedPage extends StatefulWidget {
   final User user;
   FeedPage(this.user);
@@ -69,22 +67,11 @@ class _FeedPageState extends State<FeedPage> {
             ),
           ),
           actions: <Widget>[
-            SizedBox(width: 16.0),
-            PopupMenuButton<String>(
-              onSelected: choiceAction,
-              itemBuilder: (BuildContext context){
-                return Filters.choices.map((String choice){
-                  return PopupMenuItem<String>(
-                    value: choice,
-                  child: Text(choice),
-                );
-                }).toList();
-              }
-            ),
             Icon(
               Icons.notifications,
               color: Colors.black,
             ),
+            SizedBox(width: 16.0),
           ],
         ),
         body: RefreshIndicator(
@@ -99,20 +86,5 @@ class _FeedPageState extends State<FeedPage> {
                           new AlwaysStoppedAnimation<Color>(Colors.green[800]),
                     ),
                   )));
-  }
-}
-
-void choiceAction(String choice){
-  if(choice == Filters.kategorije){
-    print('Kategorije');
-  }
-  else if(choice == Filters.gradovi){
-    print('Gradovi');
-  }
-  else if(choice == Filters.brojlajkova){
-    print('Broj lajkova');
-  }
-  else if(choice == Filters.vreme){
-    print('Vreme');
   }
 }
