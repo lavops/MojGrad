@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
@@ -14,10 +16,29 @@ class UsersProfilePage extends StatefulWidget {
   _UsersProfilePageState createState() => new _UsersProfilePageState();
 }
 
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+ 
+  Debouncer({this.milliseconds});
+ 
+  run(VoidCallback action) {
+    if (null != _timer) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
+
 class _UsersProfilePageState extends State<UsersProfilePage> {
   List<User> listUsers;
   List<User> listRepUsers;
   TextEditingController searchController = new TextEditingController();
+  TextEditingController searchRepController = new TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 500);
+  List<User> filteredUsers;
+  List<User> filteredRepUsers;
 
   _getUsers() {
     APIServices.getUsers(TokenSession.getToken).then((res) {
@@ -50,6 +71,13 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     _getUsers();
     _getReportedUsers();
   }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
 
   showAlertDialog(BuildContext context, int id) {
       // set up the button
@@ -92,7 +120,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     );
   }
 
-  Widget buildUserList() {
+  Widget buildUserList(List<User> listUsers) {
     return ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
@@ -204,7 +232,7 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     );
   }
 
-  Widget buildReportedUserList() {
+  Widget buildReportedUserList(List<User> listRepUsers) {
 
     return ListView.builder(
       itemCount: listRepUsers == null ? 0 : listRepUsers.length,
@@ -366,26 +394,66 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
       margin: EdgeInsets.only(left: 100, right: 100, top:5, bottom: 5),
       padding: const EdgeInsets.all(8.0),
       child: TextField(
-      autofocus: false,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search,color: Colors.green[800]),
-        hintText: 'Pretraži...',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+        onChanged: (string) {
+          _debouncer.run(() { 
+            setState(() {
+              filteredUsers = listUsers.where((u) => (u.username.contains(string) 
+                || ((u.firstName.toString()+" "+u.lastName.toString()).contains(string)))).toList();
+            });
+          });
+        },
+        autofocus: false,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search,color: Colors.green[800]),
+          hintText: 'Pretraži...',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+        controller: searchController,
+      )
+    );
+  }
+
+  Widget searchRep() {
+    return Container(
+      margin: EdgeInsets.only(left: 100, right: 100, top:5, bottom: 5),
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        onChanged: (string) {
+          _debouncer.run(() { 
+            setState(() {
+              filteredRepUsers = listRepUsers.where((u) => (u.username.contains(string) 
+                || ((u.firstName.toString()+" "+u.lastName.toString()).contains(string)))).toList();
+            });
+          });
+        },
+        autofocus: false,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search,color: Colors.green[800]),
+          hintText: 'Pretraži...',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          ),
         ),
-      ),
-      controller: searchController,
-    )
+        controller: searchRepController,
+      )
     );
   }
 
   Widget tabs() {
     return TabBar(
+        //onTap
         labelColor: Colors.green,
         indicatorColor: Colors.green,
         unselectedLabelColor: Colors.black,
@@ -426,15 +494,15 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                   color: Colors.grey[100],
                   child: Column(children: [
                     search(),
-                    Flexible(child: buildUserList()),
+                    Flexible(child: filteredUsers==null ? buildUserList(listUsers) : buildUserList(filteredUsers)),
                   ])),
               Container(
                   margin: EdgeInsets.only(left:80, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
-                    search(),
-                    Flexible(child: buildReportedUserList()),
+                    searchRep(),
+                    Flexible(child: filteredRepUsers==null ? buildReportedUserList(listRepUsers) : buildReportedUserList(filteredRepUsers)),
                   ])),
             ])));
   }
