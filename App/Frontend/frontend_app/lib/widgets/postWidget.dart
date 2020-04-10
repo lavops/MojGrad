@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
@@ -135,6 +136,7 @@ class _PostWidgetState extends State<PostWidget> {
 
             },
           ),*/
+          (otherUserId != userId)?
           PopupMenuButton<String> (
             onSelected: choiceAction,
             itemBuilder: (BuildContext context) {
@@ -145,29 +147,90 @@ class _PostWidgetState extends State<PostWidget> {
                 );      
               }).toList();
             },
-          )
+          ):
+          PopupMenuButton<String> (
+            onSelected: choiceActionDeleteEdit,
+            itemBuilder: (BuildContext context) {
+              return ConstantsDeleteEdit.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );      
+              }).toList();
+            },
+          ),
         ],
       );
 
-     void choiceAction(String choice)
-      {
-        if(choice == Constants.PrijaviKorisnika)
-        {
-           showDialog(
-                context: context,
-                child: new MyDialog(
-                  onValueChange: _onValueChange,
-                  initialValue: _selectedId,
-                  reportTypes: _dropdownMenuItems,
-                ));//potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
-        }
-      }
+  //Choice for Report and other things
+  void choiceAction(String choice)
+  {
+    if(choice == Constants.PrijaviKorisnika)
+    {
+        showDialog(
+            context: context,
+            child: new MyDialog(
+              onValueChange: _onValueChange,
+              initialValue: _selectedId,
+              reportTypes: _dropdownMenuItems,
+            ));//potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
+    }
+  }
 
-      void _onValueChange(ReportType value) {
+  void _onValueChange(ReportType value) {
     setState(() {
       _selectedId = value;
     });
+  }
+
+  //Choice for Delete and Edit
+  void choiceActionDeleteEdit(String choice)
+  {
+    if(choice == ConstantsDeleteEdit.IzbrisiObjavu)
+    {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text("Brisanje objave?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Izbrisi",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  /*APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      APIServices.deletePost(jwt,postId);
+                    }
+                  });*/
+                  print('Uspesno ste izbrisali objavu.');
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          )
+        );
     }
+    else if(choice == ConstantsDeleteEdit.IzmeniObjavu)
+    {
+
+    }
+  }
+
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
