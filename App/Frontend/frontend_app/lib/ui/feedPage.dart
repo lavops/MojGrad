@@ -79,7 +79,13 @@ class _FeedPageState extends State<FeedPage> {
               _getPosts();
             },
             child: (listPosts != null)
-                ? PostWidget(listPosts)
+                ? ListView.builder(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  itemCount: listPosts == null ? 0 : listPosts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return PostWidget(listPosts[index]);
+                  }
+                )
                 : Center(
                     child: CircularProgressIndicator(
                       valueColor:

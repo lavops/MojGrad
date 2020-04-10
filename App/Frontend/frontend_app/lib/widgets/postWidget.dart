@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/constantsDeleteEdit.dart';
+import 'package:frontend/models/likeViewModel.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
@@ -15,23 +16,23 @@ import 'dart:convert';
 import '../services/api.services.dart';
 
 class PostWidget extends StatefulWidget {
-  final List<FullPost> listPosts;
+  final FullPost post;
 
-  PostWidget(this.listPosts);
+  PostWidget(this.post);
 
   @override
-  _PostWidgetState createState() => _PostWidgetState(listPosts);
+  _PostWidgetState createState() => _PostWidgetState(post);
 }
 
 class _PostWidgetState extends State<PostWidget> {
-  List<FullPost> listPosts;
+  FullPost post;
   List<ReportType> reportTypes;
 
   ReportType _selectedId;
   List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
 
-  _PostWidgetState(List<FullPost> listPosts1) {
-    this.listPosts = listPosts1;
+  _PostWidgetState(FullPost post1) {
+    this.post = post1;
   }
 
   getReportTypes() async {
@@ -70,44 +71,45 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return (listPosts == null) ? Center() : newPost(); //buildPostList()
+    return (post == null) ? Center() : newPost(); //buildPostList()
   }
 
   Widget newPost() {
-    return ListView.builder(
-        padding: EdgeInsets.only(bottom: 30.0),
-        itemCount: listPosts == null ? 0 : listPosts.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                userInfoRow(listPosts[index].userId,listPosts[index].username,
-                    listPosts[index].typeName, listPosts[index].userPhoto),
-                imageGallery(listPosts[index].photoPath),
-                SizedBox(height: 2.0),
-                actionsButtons(
-                    listPosts[index].statusId,
-                    listPosts[index].postId,
-                    listPosts[index].likeNum,
-                    listPosts[index].dislikeNum,
-                    listPosts[index].commNum, listPosts[index].isLiked),
-                description(
-                    listPosts[index].userId, listPosts[index].username, listPosts[index].description),
-                SizedBox(height: 10.0),
-              ]));
-        });
+   return Card(
+    child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          userInfoRow(post.userId, post.username, post.typeName, post.userPhoto),
+          imageGallery(post.photoPath),
+          SizedBox(height: 2.0),
+          actionsButtons(
+              post.statusId,
+              post.postId,
+              post.likeNum,
+              post.dislikeNum,
+              post.commNum, post.isLiked),
+          description(post.userId, post.username, post.description),
+          SizedBox(height: 10.0),
+        ]));
   }
 
   Widget userInfoRow(int otherUserId, String username, String category, String userPhoto) => Row(
         children: <Widget>[
-          CircleImage(
-            serverURLPhoto + userPhoto,
-            imageSize: 36.0,
-            whiteMargin: 2.0,
-            imageMargin: 6.0,
-            othersUserId: otherUserId,
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OthersProfilePage(otherUserId)),
+              );
+            },
+            child: CircleImage(
+              serverURLPhoto + userPhoto,
+              imageSize: 36.0,
+              whiteMargin: 2.0,
+              imageMargin: 6.0,
+            )
           ),
           InkWell(
             onTap: (){
@@ -199,17 +201,21 @@ class _PostWidgetState extends State<PostWidget> {
                   style: TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
-                  /*APIServices.jwtOrEmpty().then((res) {
+                  APIServices.jwtOrEmpty().then((res) {
                     String jwt;
                     setState(() {
                       jwt = res;
                     });
                     if (res != null) {
-                      APIServices.deletePost(jwt,postId);
+                      APIServices.deletePost(jwt,post.postId);
+                      setState(() {
+                        post = null;
+                      });
                     }
-                  });*/
+                  });
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
+                  
                 },
               ),
               FlatButton(
@@ -234,7 +240,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
-          maxHeight: 500.0, // changed to 400
+          maxHeight: 400.0, // changed to 400
           minHeight: 200.0, // changed to 200
           maxWidth: double.infinity,
           minWidth: double.infinity,
@@ -261,16 +267,25 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: isLiked == 1 ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
-                    APIServices.jwtOrEmpty().then((res) {
-                      String jwt;
-                      setState(() {
-                        jwt = res;
-                      });
-                      if (res != null) {
-                       APIServices.addLike(jwt,postId, userId, 2);
-                      }
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
                     });
-                  
+                    if (res != null) {
+                      APIServices.addLike(jwt,postId, userId, 2).then((res){
+                        Map<String, dynamic> list = json.decode(res);
+                        LikeViewModel likeVM = LikeViewModel();
+                        likeVM = LikeViewModel.fromObject(list);
+                        setState(() {
+                          post.likeNum = likeVM.likeNum;
+                          post.dislikeNum = likeVM.dislikeNum;
+                          post.commNum = likeVM.commNum;
+                          post.isLiked = likeVM.isLiked;
+                        });
+                      });
+                    }
+                  });
                 },
               ),
               GestureDetector(
@@ -291,7 +306,17 @@ class _PostWidgetState extends State<PostWidget> {
                         jwt = res;
                       });
                       if (res != null) {
-                        APIServices.addLike(jwt,postId, userId, 1);
+                        APIServices.addLike(jwt,postId, userId, 1).then((res){
+                        Map<String, dynamic> list = json.decode(res);
+                        LikeViewModel likeVM = LikeViewModel();
+                        likeVM = LikeViewModel.fromObject(list);
+                        setState(() {
+                          post.likeNum = likeVM.likeNum;
+                          post.dislikeNum = likeVM.dislikeNum;
+                          post.commNum = likeVM.commNum;
+                          post.isLiked = likeVM.isLiked;
+                        });
+                      });
                       }
                     });
                  
