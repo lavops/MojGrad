@@ -43,7 +43,7 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
     return ListView.builder(
       itemCount: listReports == null ? 0 : listReports.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
+        return Center(child: Container(
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +85,7 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
                               'Datum prijave',
                               style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                             ),
-							Text(
+							            Text(
                               listReports[index].time.toString(),
                               style: TextStyle(color: Colors.grey),
                             ),
@@ -114,13 +114,14 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
                       ])),
                 ],
               ),
-            ));
+            )));
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+     double width1 = MediaQuery.of(context).size.width - 100;
     return  Scaffold(
       appBar:  AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -136,13 +137,13 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
                       builder: (context) => UsersProfilePage()));
             }),
       ),
-      body: Container(
-          margin: EdgeInsets.only(left:350, right: 350),
-          padding: EdgeInsets.only(top: 0),
+      body: Center(
+        child: Container(
+          width: width1,
           color: Colors.grey[100],
           child: Column(children: [
-            Flexible(child: buildReportsList()),
+             Flexible(child: buildReportsList()),
           ])),
-    );
+    ),);
   }
 }
