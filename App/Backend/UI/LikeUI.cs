@@ -31,7 +31,7 @@ namespace Backend.UI
             return _iLikeBL.getLikeInPost(id);
         }
 
-        public Like insertLike(Like like)
+        public Post insertLike(Like like)
         {
             return _iLikeBL.insertLike(like);
         }

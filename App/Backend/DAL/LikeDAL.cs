@@ -32,7 +32,7 @@ namespace Backend.DAL
             return _context.like.Where(l => l.postId == id && l.likeTypeId == 2).Include(x => x.user).Include(t=> t.LikeType).Include(p=> p.post).ToList();
         }
 
-        public Like insertLike(Like like)
+        public Post insertLike(Like like)
         {
             Like like1 = new Like();
 
@@ -49,7 +49,7 @@ namespace Backend.DAL
                 _context.like.Remove(like2);
                 _context.like.Add(like1);
                 _context.SaveChangesAsync();
-                return like1;
+                return _context.post.Where(x => x.id == like1.postId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).FirstOrDefault();
             }
             else
             {
@@ -58,7 +58,8 @@ namespace Backend.DAL
                 {
                     _context.like.Add(like1);
                     _context.SaveChangesAsync();
-                    return like1;
+                    return _context.post.Where(x => x.id == like1.postId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).FirstOrDefault();
+                  
                 }
                 else
                 {

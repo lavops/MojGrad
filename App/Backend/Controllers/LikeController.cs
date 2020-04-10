@@ -26,9 +26,12 @@ namespace Backend.Controllers
         [HttpPost]
         public IActionResult InsertLike(Like l)
         {
-            Like like = _iLikeUI.insertLike(l);
-            if (like != null)
+            Post post = _iLikeUI.insertLike(l);
+            if (post != null)
+            {
+                LikeCountViewModel like = new LikeCountViewModel(post, l.userId);
                 return Ok(like);
+            }
             else
                 return BadRequest(new { message = "Unos nije uspeo" });
         }
