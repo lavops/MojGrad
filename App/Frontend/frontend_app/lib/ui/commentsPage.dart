@@ -79,10 +79,12 @@ class StateComents extends State<CommentsPage> {
                       ),
                     ),
                     Expanded(child: SizedBox()),
-                    IconButton(
-                      icon: Icon(Icons.more_vert),
-                      onPressed: () {},
-                    ),
+                    Flexible(
+                      child: IconButton(
+                        icon: Icon(Icons.more_vert),
+                        onPressed: () {},
+                      ),
+                    )
                   ])),
             ],
           ),
@@ -141,13 +143,18 @@ class StateComents extends State<CommentsPage> {
                         jwt = res;
                       });
                       if (res != null) {
-                        APIServices.addComment(jwt, myController.text, 1, postId); // this username - korisnik koji je prokomentarisao post, 1 primer - id posta
+                        print(myController.text);
+                        APIServices.addComment(jwt, myController.text, 1, postId).then((res){
+                          Map<String, dynamic> list = json.decode(res);
+                          Comment newComm = Comment();
+                          newComm = Comment.fromObject(list);
+                          setState(() {
+                            //
+                          });
+                        });
                       }
                     });
                     _getComms();
-                    setState(() {
-                      myController.text = '';
-                    });
                   },
                 ),
                 SizedBox(width: 10),

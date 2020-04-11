@@ -8,6 +8,7 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
+import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -77,12 +78,21 @@ class _PostWidgetState extends State<PostWidget> {
   Widget newPost() {
    return Card(
     child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
         //mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          userInfoRow(post.userId, post.username, post.typeName, post.userPhoto),
+          userInfoRow(post.userId, post.username, post.typeName, post.userPhoto, post.statusId),
           imageGallery(post.photoPath),
           SizedBox(height: 2.0),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 10.0,),
+                Text(post.address)
+              ],
+            )
+          ),
           actionsButtons(
               post.statusId,
               post.postId,
@@ -94,7 +104,7 @@ class _PostWidgetState extends State<PostWidget> {
         ]));
   }
 
-  Widget userInfoRow(int otherUserId, String username, String category, String userPhoto) => Row(
+  Widget userInfoRow(int otherUserId, String username, String category, String userPhoto, int statusId) => Row(
         children: <Widget>[
           InkWell(
             onTap: (){
@@ -127,11 +137,16 @@ class _PostWidgetState extends State<PostWidget> {
           ),
           Expanded(child: SizedBox()),
           Text(category),
-          IconButton(
+          (statusId == 2)?IconButton(
             icon: Icon(Icons.location_on),
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MapPage(postLatitude: post.latitude, postLongitude: post.longitude)),
+              );
             },
-          ),
+          ):Center(),
           /*IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () {
@@ -240,7 +255,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
-          maxHeight: 400.0, // changed to 400
+          maxHeight: 300.0, // changed to 400
           minHeight: 200.0, // changed to 200
           maxWidth: double.infinity,
           minWidth: double.infinity,
