@@ -29,6 +29,11 @@ namespace Backend.DAL
             return _context.report.Where(x => x.reportedUserId == id).Include(r=>r.reportType).Include(u=>u.reportingUser).ToList();
         }
 
+        public List<User> getReportedUsersByCityId(long cityId)
+        {
+            return _context.user.Where(u => u.cityId == cityId).Include(x => x.city).Include(p => p.posts).ToList();
+        }
+
         public Report insertReport(Report report)
         {
             Report report1 = new Report();
