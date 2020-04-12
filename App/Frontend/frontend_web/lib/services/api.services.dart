@@ -54,7 +54,7 @@ class APIServices {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
     var body = jsonEncode({'cityId' : cityId.toString()});
-    return await http.post(serverURL + 'Report/ReportedUsersByCityId', headers: {
+    return await http.post(serverURL + 'Report/ReportByCityId', headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'

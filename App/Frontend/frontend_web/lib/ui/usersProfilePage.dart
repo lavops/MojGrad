@@ -76,6 +76,8 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
       if (mounted) {
         setState(() {
           listCities = listC;
+          City allusers = new City(9999, "Svi korisnici");
+          listCities.add(allusers);
         });
       }
     });
@@ -433,7 +435,8 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
 
   Widget search() {
     return Container(
-      margin: EdgeInsets.only(left: 100, right: 100, top:5, bottom: 5),
+      margin: EdgeInsets.only(left: 100, right: 50, top:5, bottom: 5),
+      width:550,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         onChanged: (string) {
@@ -464,13 +467,14 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
 
    City city;
 
+
 Widget dropdownFU(List<City> listCities) {
         return new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Container(
-            padding: new EdgeInsets.all(50.0),
+          margin: EdgeInsets.only(left: 50, right: 10, top:10, bottom: 10),
           ),  
           new Text("Izaberite grad korisnika: ",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -482,7 +486,12 @@ Widget dropdownFU(List<City> listCities) {
                   hint: Text("Izaberi"),
                   value: city,
                   onChanged: (City newValue) {
-                    _getUsersFromCity(newValue.id);
+                    if (newValue.name == "Svi korisnici") {
+                      filteredUsers = null;
+                    } 
+                    else {
+                       _getUsersFromCity(newValue.id);
+                    }                          
                     setState(() {
                       city = newValue;               
                     });
@@ -508,7 +517,7 @@ Widget dropdownFRU(List<City> listCities) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Container(
-            padding: new EdgeInsets.all(50.0),
+          margin: EdgeInsets.only(left: 50, right: 10, top:10, bottom: 10),
           ),  
           new Text("Izaberite grad korisnika: ",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -520,8 +529,13 @@ Widget dropdownFRU(List<City> listCities) {
                   hint: Text("Izaberi"),
                   value: city,
                   onChanged: (City newValue) {
-                    _getReportedUsersFromCity(newValue.id);
-                    setState(() {
+                  if (newValue.name == "Svi korisnici") {
+                      filteredRepUsers = null;
+                    } 
+                    else {
+                       _getReportedUsersFromCity(newValue.id);
+                    }                    
+                      setState(() {
                       city = newValue;               
                     });
                   },
@@ -542,7 +556,8 @@ Widget dropdownFRU(List<City> listCities) {
 
   Widget searchRep() {
     return Container(
-      margin: EdgeInsets.only(left: 100, right: 100, top:5, bottom: 5),
+      margin: EdgeInsets.only(left: 100, right: 50, top:5, bottom: 5),
+      width: 550,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         onChanged: (string) {
@@ -613,8 +628,9 @@ Widget dropdownFRU(List<City> listCities) {
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
-                    dropdownFU(listCities),                 
-                    search(),
+                    new Row(children:[
+                      dropdownFU(listCities),                 
+                      search(),],),
                     Flexible(child: filteredUsers==null ?  buildUserList(listUsers) : buildUserList(filteredUsers)),
                   ])),
               Container(
@@ -622,8 +638,9 @@ Widget dropdownFRU(List<City> listCities) {
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
+                    new Row(children:[
                     dropdownFRU(listCities),                 
-                    searchRep(),
+                    searchRep(),],),
                     Flexible(child: filteredRepUsers==null ? buildReportedUserList(listRepUsers) : buildReportedUserList(filteredRepUsers)),
                   ])),
             ])));
