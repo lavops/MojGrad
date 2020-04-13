@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/comment.dart';
+import 'package:frontend/models/constants.dart';
+import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
+
+import 'homePage.dart';
 
 class CommentsPage extends StatefulWidget {
   final int postId;
@@ -16,6 +20,7 @@ class CommentsPage extends StatefulWidget {
 
 class StateComents extends State<CommentsPage> {
   int postId;
+  Comment comment;
   StateComents(int id) {
     postId = id;
   }
@@ -38,6 +43,102 @@ class StateComents extends State<CommentsPage> {
   void initState() {
     super.initState();
     _getComms();
+  }
+    void choiceActionDelete(String choice)
+  {
+    if(choice == ConstantsCommentDelete.ObrisiKomentar)
+    {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text("Brisanje komentara?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Izbrisi",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      print("Delete comment"+ comment.id.toString());
+                      APIServices.deleteComment(jwt, comment.id);
+                      setState(() {
+                        _getComms();
+                      });
+                    }
+                  });
+                  print('Uspesno ste izbrisali objavu.');
+                  Navigator.of(context).pop();
+                  
+                },
+              ),
+              FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          )
+        );
+    }
+    
+  }
+   void choiceAction(String choice)
+  {
+    if(choice == ConstantsComment.PrijaviKomentar)
+    {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text("Želiš da prijaviš komentar?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Prijavi",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      print("Report comment"+ comment.id.toString());
+                      APIServices.addReportComment(jwt, comment.id, userId);
+                      setState(() {
+                        _getComms();
+                      });
+                    }
+                  });
+                  print('Uspesno ste prijavili komentar.');
+                  Navigator.of(context).pop();
+                  
+                },
+              ),
+              FlatButton(
+              child: Text(
+                "Otkaži",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          )
+        );
+    }
+    
   }
 
   TextEditingController myController = new TextEditingController();
@@ -80,10 +181,41 @@ class StateComents extends State<CommentsPage> {
                     ),
                     Expanded(child: SizedBox()),
                     Flexible(
-                      child: IconButton(
+                     child: /*IconButton(
                         icon: Icon(Icons.more_vert),
-                        onPressed: () {},
-                      ),
+                        onPressed: () {
+
+                        },
+                      ),*/
+                        (listComents[index].userId != userId)?
+                      PopupMenuButton<String> (
+                        onSelected: choiceAction,
+                        itemBuilder: (BuildContext context) {
+                          setState(() {
+                            comment = listComents[index];
+                          });
+                          return ConstantsComment.choices.map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );      
+                          }).toList();
+                        },
+                      ):
+                      PopupMenuButton<String> (
+                        onSelected: choiceActionDelete,
+                        itemBuilder: (BuildContext context) {
+                          setState(() {
+                            comment = listComents[index];
+                          });
+                          return ConstantsCommentDelete.choices.map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );      
+                          }).toList();
+                        },
+          ),
                     )
                   ])),
             ],

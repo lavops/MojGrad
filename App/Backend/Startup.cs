@@ -113,6 +113,10 @@ namespace Backend
             services.AddTransient<IReportBL, ReportBL>();
             services.AddTransient<IReportDAL, ReportDAL>();
 
+            services.AddTransient<IReportCommentUI, ReportCommentUI>();
+            services.AddTransient<IReportCommentBL, ReportCommentBL>();
+            services.AddTransient<IReportCommentDAL, ReportCommentDAL>();
+
             services.AddTransient<IBlockedUsersUI, BlockedUsersUI>();
             services.AddTransient<IBlockedUsersBL, BlockedUsersBL>();
             services.AddTransient<IBlockedUsersDAL, BlockedUsersDAL>();

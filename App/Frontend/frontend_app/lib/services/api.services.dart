@@ -15,9 +15,8 @@ class APIServices
 {
 
   //static String serverURL = 'http://10.0.2.2:60676/api/';
-  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
   static String serverURL = 'http://192.168.1.2:45455/api/';
-  static String serverURLPhoto = 'http://192.168.1.2:45455//';
+
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',
@@ -357,5 +356,34 @@ class APIServices
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
+  }
+
+  static Future deleteComment(String jwt, int id) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Comment/Delete';
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: convert.jsonEncode({ 'id' : id, }));
+  }
+
+  static Future addReportComment(String jwt, int commentId, int userId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'ReportComment/Insert';
+    var data = Map();
+    data["commentId"] = commentId;
+    data["userID"] = userId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
   }
 }
