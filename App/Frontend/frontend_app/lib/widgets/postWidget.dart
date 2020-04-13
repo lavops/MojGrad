@@ -28,7 +28,7 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   FullPost post;
   List<ReportType> reportTypes;
-
+  TextEditingController opisController = new TextEditingController();
   ReportType _selectedId;
   List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
 
@@ -248,7 +248,56 @@ class _PostWidgetState extends State<PostWidget> {
     }
     else if(choice == ConstantsDeleteEdit.IzmeniObjavu)
     {
-
+      opisController.text = post.description;
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text("Izmeni opis."),
+            content: Container(
+              height: 50.0,
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: opisController,
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Sacuvaj",
+                  style: TextStyle(color: Colors.green[800]),
+                ),
+                onPressed: () {
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      APIServices.editPost(jwt, post.postId, opisController.text);
+                      setState(() {
+                        post.description = opisController.text;
+                      });
+                    }
+                  });
+                  print('Uspesno ste izmenili objavu.');
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          )
+        );
     }
   }
 
@@ -432,6 +481,7 @@ class MyDialogState extends State<MyDialog> {
 
 
   Widget build(BuildContext context) {
+    TextEditingController messageController = new TextEditingController();
     return new AlertDialog(
       title: Text("Prijavljivanje korisnika"),
       content: 
