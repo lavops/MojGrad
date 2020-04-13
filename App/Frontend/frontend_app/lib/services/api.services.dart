@@ -303,7 +303,7 @@ class APIServices
     });  
   }
 
-  static Future<String> addReport(String jwt, int userId, int reportedUserId, int reportTypeId) async {
+   static Future<String> addReport(String jwt, int userId, int reportedUserId, int reportTypeId, String description) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Report/Insert';
@@ -311,6 +311,7 @@ class APIServices
     data["reportingUserId"] = userId;
     data["reportedUserId"] = reportedUserId;
     data["reportTypeId"] = reportTypeId;
+    data["description"] = description;
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -320,6 +321,7 @@ class APIServices
     String data2 = res.body.toString();    
     return data2;
   }
+  
    static Future getCityById(String jwt, int cityId) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();

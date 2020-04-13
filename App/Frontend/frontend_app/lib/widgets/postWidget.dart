@@ -435,7 +435,7 @@ class MyDialogState extends State<MyDialog> {
     return new AlertDialog(
       title: Text("Prijavljivanje korisnika"),
       content: 
-        new Container(
+          Column(children: <Widget>[Container(
             padding: const EdgeInsets.all(10.0),
             child: new DropdownButton<ReportType>(
               value: _selectedId,
@@ -447,6 +447,12 @@ class MyDialogState extends State<MyDialog> {
               },
               items: widget.reportTypes,
             )),
+            TextFormField(
+                maxLines: 2,
+                controller: messageController,
+                decoration: InputDecoration(labelText: "Komentar"),
+            )
+            ]),
       actions: <Widget>[
         FlatButton(
           child: Text(
@@ -455,7 +461,7 @@ class MyDialogState extends State<MyDialog> {
           ),
           
           onPressed: () {
-            //var res = await APIServices.addReport(userId, reportedUserId, _selectedReport.id)  - userId, reportedUserId poslati..
+            //var res = await APIServices.addReport(jwt, widget.userId, widget.otherUserId, _selectedId.id, messageController.text);
             print('Uspesno ste prijavili korisnika.');
             Navigator.of(context).pop();
           },
