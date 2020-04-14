@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:frontend/models/events.dart';
 import 'package:frontend/services/api.services.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 
 class EventsWidget extends StatefulWidget {
@@ -16,6 +18,7 @@ class EventsWidget extends StatefulWidget {
 
 class _EventsWidgetState extends State<EventsWidget> {
   Events event;
+  TextEditingController donateController = new TextEditingController();
 
   _EventsWidgetState(Events event1) {
     this.event = event1;
@@ -108,7 +111,7 @@ class _EventsWidgetState extends State<EventsWidget> {
       children: <Widget>[
         FlatButton(
           onPressed: (){
-
+            
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -121,7 +124,7 @@ class _EventsWidgetState extends State<EventsWidget> {
         (event.eventType == 1) ?
         RaisedButton(
           onPressed: (){
-
+            joinEventActionButton();
           },
           color: Colors.green[800],
           shape: RoundedRectangleBorder(
@@ -133,7 +136,7 @@ class _EventsWidgetState extends State<EventsWidget> {
         ) :
         RaisedButton(
           onPressed: (){
-
+            donateActionButton();
           },
           color: Colors.green[800],
           shape: RoundedRectangleBorder(
@@ -144,6 +147,81 @@ class _EventsWidgetState extends State<EventsWidget> {
           child: Text("Doniraj", style: TextStyle(color: Colors.white),),
         ),
       ],
+    );
+  }
+
+  joinEventActionButton(){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Pridruzi se dogadjaju!"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Pridruzi se",
+              style: TextStyle(color: Colors.green[800]),
+            ),
+            onPressed: () {
+              
+              print('Uspesno ste pridruzili dogadjaju.');
+              Navigator.of(context).pop();
+              
+            },
+          ),
+          FlatButton(
+          child: Text(
+            "Otkazi",
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
+    );
+  }
+
+  donateActionButton(){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Doniraj poene."),
+        content: Container(
+          height: 70.0,
+          child: Column(
+            children: <Widget>[
+              Text("Imate ukupno " + publicUser.points.toString() + " poena!"),
+              TextField(
+                controller: donateController,
+                keyboardType: TextInputType.number,
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Doniraj",
+              style: TextStyle(color: Colors.green[800]),
+            ),
+            onPressed: () {
+              
+              print('Uspesno ste donirali.');
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+          child: Text(
+            "Otkazi",
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
     );
   }
 }
