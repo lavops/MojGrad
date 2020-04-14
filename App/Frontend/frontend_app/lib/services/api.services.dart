@@ -351,7 +351,7 @@ class APIServices
     map['id'] = postId;
     map['description'] = description;
     var jsonBody = convert.jsonEncode(map);
-    return await http.post(serverURL + 'Post/Edit', headers: {
+    return await http.post(serverURL + 'Post/editPost', headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
