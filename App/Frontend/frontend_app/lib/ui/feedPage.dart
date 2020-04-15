@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/filters.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
@@ -67,11 +68,22 @@ class _FeedPageState extends State<FeedPage> {
             ),
           ),
           actions: <Widget>[
+            SizedBox(width: 16.0),
+            PopupMenuButton<String>(
+                onSelected: choiceAction,
+                icon: Icon(Icons.filter_list, color: Colors.black),
+                itemBuilder: (BuildContext context) {
+                  return Filteri.choices.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                }),
             Icon(
               Icons.notifications,
               color: Colors.black,
             ),
-            SizedBox(width: 16.0),
           ],
         ),
         body: RefreshIndicator(
@@ -80,17 +92,28 @@ class _FeedPageState extends State<FeedPage> {
             },
             child: (listPosts != null)
                 ? ListView.builder(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  itemCount: listPosts == null ? 0 : listPosts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return PostWidget(listPosts[index]);
-                  }
-                )
+                    padding: EdgeInsets.only(bottom: 30.0),
+                    itemCount: listPosts == null ? 0 : listPosts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return PostWidget(listPosts[index]);
+                    })
                 : Center(
                     child: CircularProgressIndicator(
                       valueColor:
                           new AlwaysStoppedAnimation<Color>(Colors.green[800]),
                     ),
                   )));
+  }
+}
+
+void choiceAction(String choice) {
+  if (choice == Filteri.kategorije) {
+    print('Kategorije');
+  } else if (choice == Filteri.gradovi) {
+    print('Gradovi');
+  } else if (choice == Filteri.brojlajkova) {
+    print('Broj lajkova');
+  } else if (choice == Filteri.vreme) {
+    print('Vreme');
   }
 }
