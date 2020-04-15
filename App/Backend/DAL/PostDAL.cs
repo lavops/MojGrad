@@ -55,22 +55,22 @@ namespace Backend.DAL
 
         public List<Post> getAllPosts()
         {
-            return _context.post.Include(u => u.user).Include(c=> c.postType).Include(s=>s.status).Include(l => l.likes).Include(c => c.comments).ToList();
+            return _context.post.Include(u => u.user).Include(c=> c.postType).Include(s=>s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x=>x.id).ToList();
         }
 
         public List<Post> getAllPostsForOneUser(long id)
         {
-            return _context.post.Where(x => x.userId == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).ToList();
+            return _context.post.Where(x => x.userId == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
 
         public List<Post> getAllSolvedPosts()
         {
-            return _context.post.Where(x=> x.statusId==1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).ToList();
+            return _context.post.Where(x=> x.statusId==1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
 
         public List<Post> getAllUnsolvedPosts()
         {
-            return _context.post.Where(x => x.statusId == 2).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).ToList();
+            return _context.post.Where(x => x.statusId == 2).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
 
         public Post getByID(long id)

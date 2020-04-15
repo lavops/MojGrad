@@ -24,23 +24,41 @@ class FullPost
  
 
   int get postId => _postId;
+  set postId(int postId){_postId = postId;}
   int get userId => _userId;
+  set userId(int userId){_userId = userId;}
   String get username => _username;
+  set username(String username){_username = username;}
   int get postTypeId => _postTypeId;
+  set postTypeId(int postTypeId){_postTypeId = postTypeId;}
   String get typeName => _typeName;
+  set typeName(String typeName){_typeName = typeName;}
   DateTime get createAt => _createAt;
+  set createAt(DateTime createAt){_createAt = createAt;}
   String get description => _description;
+  set description(String description){_description = description;}
   String get photoPath => _photoPath;
+  set photoPath(String photoPath){_photoPath = photoPath;}
   int get statusId => _statusId;
+  set statusId(int statusId){_statusId = statusId;}
   String get status => _status;
+  set status(String status){_status = status;}
   int get likeNum => _likeNum;
+  set likeNum(int likeNum){_likeNum = likeNum;}
   int get dislikeNum => _dislikeNum;
+  set dislikeNum(int dislikeNum){_dislikeNum = dislikeNum;}
   int get commNum => _commNum;
+  set commNum(int commNum){_commNum = commNum;}
   double get latitude => _latitude;
-  double get longitude => _longitude;  
-  String get userPhoto => _userPhoto;  
-  String get address => _address;  
-  int get isLiked => _isLiked;  
+  set latitude(double latitude){_latitude = latitude;}
+  double get longitude => _longitude;
+  set longitude(double longitude){_longitude = longitude;}
+  String get userPhoto => _userPhoto;
+  set userPhoto(String userPhoto){_userPhoto = userPhoto;}
+  String get address => _address;
+  set address(String address){_address = address;}
+  int get isLiked => _isLiked;
+  set isLiked(int isLiked){_isLiked = isLiked;}
 
  //saljemo kao json fajl
   Map<String, dynamic> toMap()

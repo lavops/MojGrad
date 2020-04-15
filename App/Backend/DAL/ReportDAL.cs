@@ -29,9 +29,15 @@ namespace Backend.DAL
             return _context.report.Where(x => x.reportedUserId == id).Include(r=>r.reportType).Include(u=>u.reportingUser).ToList();
         }
 
+        public List<User> getReportedUsersByCityId(long cityId)
+        {
+            return _context.user.Where(u => u.cityId == cityId).Include(x => x.city).Include(p => p.posts).ToList();
+        }
+
         public Report insertReport(Report report)
         {
             Report report1 = new Report();
+            var existReport = _context.report.Where(x => x.reportedUserId == report.reportedUserId && x.reportingUserId == report.reportingUserId).FirstOrDefault();
 
             report1.reportedUserId = report.reportedUserId;
             report1.reportingUserId = report.reportingUserId;
@@ -39,7 +45,7 @@ namespace Backend.DAL
             report1.time = DateTime.Now;
 
 
-            if (report1 != null)
+            if (report1 != null && existReport == null)
             {
                 _context.report.Add(report1);
                 _context.SaveChangesAsync();

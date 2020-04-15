@@ -7,6 +7,8 @@ class Report {
   String _photo;
   String _reportTypeName;
   String _time;
+  int _cityId;
+
 
   Report();
 
@@ -18,6 +20,8 @@ class Report {
   String get photo => _photo;
   String get reportTypeName => _reportTypeName;
   String get time => _time;
+  int get cityId => _cityId;
+
 
 
 // convert to map
@@ -30,6 +34,7 @@ class Report {
     data["photo"] = _photo;
     data["reportTypeName"] = _reportTypeName;
     data["time"] = _time;
+    data["cityId"] = _cityId;
 
     if(_id != null){
       data["id"] = _id;
@@ -47,6 +52,7 @@ class Report {
     this._photo = data["photo"];
     this._reportTypeName = data["reportTypeName"];
     this._time = data["time"];
+    this._cityId = data["cityId"];
   }
 
 

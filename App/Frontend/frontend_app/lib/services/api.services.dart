@@ -1,6 +1,5 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:http/http.dart' as http;
@@ -15,9 +14,8 @@ class APIServices
 {
 
   //static String serverURL = 'http://10.0.2.2:60676/api/';
-  //static String serverURLPhoto = 'http://10.0.2.2:60676//';
   static String serverURL = 'http://192.168.1.2:45455/api/';
-  static String serverURLPhoto = 'http://192.168.1.2:45455//';
+
 
   static Map<String, String> header = { 
     'Content-type': 'application/json',
@@ -303,7 +301,7 @@ class APIServices
     });  
   }
 
-  static Future<String> addReport(String jwt, int userId, int reportedUserId, int reportTypeId) async {
+   static Future<String> addReport(String jwt, int userId, int reportedUserId, int reportTypeId, String description) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Report/Insert';
@@ -311,6 +309,7 @@ class APIServices
     data["reportingUserId"] = userId;
     data["reportedUserId"] = reportedUserId;
     data["reportTypeId"] = reportTypeId;
+    data["description"] = description;
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -320,6 +319,7 @@ class APIServices
     String data2 = res.body.toString();    
     return data2;
   }
+  
    static Future getCityById(String jwt, int cityId) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
@@ -330,5 +330,59 @@ class APIServices
     });
   }
 
+  static Future deletePost(String jwt, int postId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var map = Map();
+    map['id'] = postId;
+    var jsonBody = convert.jsonEncode(map);
+    return await http.post(serverURL + 'Post/Delete', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
 
+  static Future editPost(String jwt, int postId, String description) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var map = Map();
+    map['id'] = postId;
+    map['description'] = description;
+    var jsonBody = convert.jsonEncode(map);
+    return await http.post(serverURL + 'Post/editPost', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
+  static Future deleteComment(String jwt, int id) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Comment/Delete';
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: convert.jsonEncode({ 'id' : id, }));
+  }
+
+  static Future addReportComment(String jwt, int commentId, int userId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'ReportComment/Insert';
+    var data = Map();
+    data["commentId"] = commentId;
+    data["userID"] = userId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
 }

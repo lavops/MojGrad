@@ -11,6 +11,6 @@ namespace Backend.UI.Interfaces
         List<Like> getLikeInPost(long id);
         List<Like> getDislikeInPost(long id);
         Like getByID(long id);
-        Like insertLike(Like like);
+        Post insertLike(Like like);
     }
 }

@@ -34,7 +34,8 @@ namespace Backend.Controllers
                 if (newUser.reportsNum >= 1)
                     user.Add(newUser);
             }
-            return user;
+            List<UserViewModel> newList = new List<UserViewModel>(user.OrderByDescending(x => x.reportsNum));
+            return newList;
         }
         [Authorize]
         [HttpGet("{id}")]
@@ -59,6 +60,23 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Unos nije uspeo" });
         }
-        
+
+        [Authorize]
+        [HttpPost("ReportByCityId")]
+        public IEnumerable<UserViewModel> GetReportedUsersByCityId(User user1)
+        {
+            var users = _iReportUI.getReportedUsersByCityId(user1.cityId);
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
+            {
+                UserViewModel newUser = new UserViewModel(u);
+                if (newUser.reportsNum >= 1)
+                    user.Add(newUser);
+            }
+           List<UserViewModel> newList = new List<UserViewModel>(user.OrderByDescending(x => x.reportsNum));
+            return newList;
+
+        }
+
     }
 }

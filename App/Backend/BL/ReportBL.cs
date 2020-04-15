@@ -27,6 +27,11 @@ namespace Backend.BL
             return _iReportDAL.getAllUserWhoHaveReportedUser(id);
         }
 
+        public List<User> getReportedUsersByCityId(long cityId)
+        {
+            return _iReportDAL.getReportedUsersByCityId(cityId);
+        }
+
         public Report insertReport(Report report)
         {
             return _iReportDAL.insertReport(report);

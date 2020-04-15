@@ -39,7 +39,8 @@ namespace Backend.DAL
         {
             var existInUser = _context.user.Where(x => x.email == user.email).FirstOrDefault();
             var existInAdmin = _context.admin.Where(x => x.email == user.email).FirstOrDefault();
-            if (existInAdmin == null && existInUser == null)
+            var existInst = _context.institution.Where(x => x.email == user.email).FirstOrDefault();
+            if (existInAdmin == null && existInUser == null && existInst == null)
             {
                 var existUsername = _context.user.Where(x => x.username == user.username).FirstOrDefault();
                 if (existUsername == null)

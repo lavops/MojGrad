@@ -5,15 +5,29 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
-import 'package:frontend/widgets/singlePostWidget.dart';
+import 'package:frontend/widgets/postWidget.dart';
 import 'package:latlong/latlong.dart';
 
 class MapPage extends StatefulWidget {
+  final double postLatitude;
+  final double postLongitude;
+  MapPage({
+    this.postLatitude = 0,
+    this.postLongitude = 0
+  });
   @override
-  _MapPageState createState() => _MapPageState();
+  _MapPageState createState() => _MapPageState(postLatitude, postLongitude);
 }
 
 class _MapPageState extends State<MapPage> {
+  double postLatitude;
+  double postLongitude;
+
+  _MapPageState(double postLatitude1, double postLongitude1){
+    postLatitude = postLatitude1;
+    postLongitude = postLongitude1;
+  }
+
   List<FullPost> listPosts;
   City _city;
   
@@ -70,11 +84,11 @@ class _MapPageState extends State<MapPage> {
                     return Container(
                       constraints: BoxConstraints(
                         maxHeight: 500.0, // changed to 400
-                        minHeight: 400.0, // changed to 200
+                        minHeight: 200.0, // changed to 200
                         maxWidth: double.infinity,
                         minWidth: double.infinity,
                       ),
-                      child: SinglePostWidget(listPosts[i]),
+                      child: PostWidget(listPosts[i]),
                     );
                   },
                 );
@@ -85,10 +99,14 @@ class _MapPageState extends State<MapPage> {
       }
 
     return Scaffold(
+      appBar: (postLatitude != 0 && postLongitude != 0)?
+      AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white) : null,
       body: (_city != null)?FlutterMap(
         options: new MapOptions(
-          center: new LatLng(_city.latitude, _city.longitude),
-          zoom: 14.5,
+          center: (postLatitude == 0 && postLongitude == 0)? new LatLng(_city.latitude, _city.longitude) : new LatLng(postLatitude, postLongitude),
+          zoom: (postLatitude == 0 && postLongitude == 0)? 14.5 : 16,
         ),
         layers: [
           new TileLayerOptions(

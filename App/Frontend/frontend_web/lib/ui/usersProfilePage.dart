@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
@@ -34,6 +35,7 @@ class Debouncer {
 class _UsersProfilePageState extends State<UsersProfilePage> {
   List<User> listUsers;
   List<User> listRepUsers;
+  List<City> listCities;
   TextEditingController searchController = new TextEditingController();
   TextEditingController searchRepController = new TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
@@ -65,11 +67,53 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
       }
     });
   }
+  
+  _getCities() {
+    APIServices.getCity(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> listC = List<City>();
+      listC = list.map((model) => City.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listCities = listC;
+          City allusers = new City(9999, "Svi korisnici");
+          listCities.add(allusers);
+        });
+      }
+    });
+  }
+
+  _getUsersFromCity(int cityId) {
+    APIServices.getUsersFromCity(TokenSession.getToken, cityId).then((res) {
+      Iterable list = json.decode(res.body);
+      List<User> listFU = List<User>();
+      listFU = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          filteredUsers = listFU;
+        });
+      }
+    });
+  }
+
+ _getReportedUsersFromCity(int cityId) {
+    APIServices.getReportedUsersFromCity(TokenSession.getToken, cityId).then((res) {
+      Iterable list = json.decode(res.body);
+      List<User> listFRU = List<User>();
+      listFRU = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          filteredRepUsers = listFRU;
+        });
+      }
+    });
+  }
 
   void initState() {
     super.initState();
-    _getUsers();
+    _getUsers(); 
     _getReportedUsers();
+    _getCities();
   }
 
   @override
@@ -391,7 +435,8 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
 
   Widget search() {
     return Container(
-      margin: EdgeInsets.only(left: 100, right: 100, top:5, bottom: 5),
+      margin: EdgeInsets.only(left: 100, right: 50, top:5, bottom: 5),
+      width:550,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         onChanged: (string) {
@@ -420,9 +465,99 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     );
   }
 
+   City city;
+
+
+Widget dropdownFU(List<City> listCities) {
+        return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+          margin: EdgeInsets.only(left: 50, right: 10, top:10, bottom: 10),
+          ),  
+          new Text("Izaberite grad korisnika: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          new Container(
+            padding: new EdgeInsets.all(20.0),
+          ),  
+          listCities != null
+              ? new DropdownButton<City>(
+                  hint: Text("Izaberi"),
+                  value: city,
+                  onChanged: (City newValue) {
+                    if (newValue.name == "Svi korisnici") {
+                      filteredUsers = null;
+                    } 
+                    else {
+                       _getUsersFromCity(newValue.id);
+                    }                          
+                    setState(() {
+                      city = newValue;               
+                    });
+                  },
+                  items: listCities.map((City option) {
+                    return DropdownMenuItem(
+                      child: new Text(option.name),
+                      value: option,
+                    );
+                  }).toList(),
+                )
+              : new DropdownButton<String>(
+                  hint: Text("Izaberi"),
+                  onChanged: null,
+                  items: null,
+                ),
+        ]);
+}
+
+Widget dropdownFRU(List<City> listCities) {
+        return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+          margin: EdgeInsets.only(left: 50, right: 10, top:10, bottom: 10),
+          ),  
+          new Text("Izaberite grad korisnika: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          new Container(
+            padding: new EdgeInsets.all(20.0),
+          ),  
+          listCities != null
+              ? new DropdownButton<City>(
+                  hint: Text("Izaberi"),
+                  value: city,
+                  onChanged: (City newValue) {
+                  if (newValue.name == "Svi korisnici") {
+                      filteredRepUsers = null;
+                    } 
+                    else {
+                       _getReportedUsersFromCity(newValue.id);
+                    }                    
+                      setState(() {
+                      city = newValue;               
+                    });
+                  },
+                  items: listCities.map((City option) {
+                    return DropdownMenuItem(
+                      child: new Text(option.name),
+                      value: option,
+                    );
+                  }).toList(),
+                )
+              : new DropdownButton<String>(
+                  hint: Text("Izaberi"),
+                  onChanged: null,
+                  items: null,
+                ),
+        ]);
+}
+
   Widget searchRep() {
     return Container(
-      margin: EdgeInsets.only(left: 100, right: 100, top:5, bottom: 5),
+      margin: EdgeInsets.only(left: 100, right: 50, top:5, bottom: 5),
+      width: 550,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         onChanged: (string) {
@@ -493,17 +628,20 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
-                    search(),
-                    Flexible(child: filteredUsers==null ? buildUserList(listUsers) : buildUserList(filteredUsers)),
+                    new Row(children:[
+                      dropdownFU(listCities),                 
+                      search(),],),
+                    Flexible(child: filteredUsers==null ?  buildUserList(listUsers) : buildUserList(filteredUsers)),
                   ])),
               Container(
                   margin: EdgeInsets.only(left:80, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
-                    searchRep(),
+                    new Row(children:[
+                    dropdownFRU(listCities),                 
+                    searchRep(),],),
                     Flexible(child: filteredRepUsers==null ? buildReportedUserList(listRepUsers) : buildReportedUserList(filteredRepUsers)),
                   ])),
             ])));
-  }
-}
+  }}

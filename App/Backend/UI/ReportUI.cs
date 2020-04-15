@@ -27,6 +27,11 @@ namespace Backend.UI
             return _iReportBL.getAllUserWhoHaveReportedUser(id);
         }
 
+        public List<User> getReportedUsersByCityId(long cityId)
+        {
+            return _iReportBL.getReportedUsersByCityId(cityId);
+        }
+
         public Report insertReport(Report report)
         {
             return _iReportBL.insertReport(report);

@@ -11,5 +11,6 @@ namespace Backend.BL.Interfaces
         List<User> getAllReportedUser(); 
         List<Report> getAllUserWhoHaveReportedUser(long id);
         Report insertReport(Report report);
+        List<User> getReportedUsersByCityId(long cityId);
     }
 }

@@ -14,7 +14,7 @@ namespace Backend.Models
         public string description { get; set; }
 
         public virtual User user { get; set; }
-
         public virtual Post post { get; set; }
+        public IList<ReportComment> reportComments { get; set; }
     }
 }

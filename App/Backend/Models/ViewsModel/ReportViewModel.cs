@@ -11,6 +11,7 @@ namespace Backend.Models.ViewsModel
         public long reportingUserId { get; set; }
         public long reportedUserId { get; set; }
         public string time { get; set; }
+        public string description { get; set; }
         public long reportTypeId { get; set; }
         public string username { get; set; }
         public string firstName { get; set; }
@@ -30,6 +31,7 @@ namespace Backend.Models.ViewsModel
             this.firstName = r.reportingUser.firstName;
             this.lastName = r.reportingUser.lastName;
             this.photo = r.reportingUser.photo;
+            this.description = r.description;
             
         }
     }

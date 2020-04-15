@@ -5,3 +5,19 @@ class Constants {
     PrijaviKorisnika
   ];
 }
+
+class ConstantsComment {
+  static const String PrijaviKomentar = 'Prijavi komentar';
+
+  static const List<String> choices = <String> [
+    PrijaviKomentar
+  ];
+}
+
+class ConstantsCommentDelete {
+  static const String ObrisiKomentar = 'Obriši komentar';
+
+  static const List<String> choices = <String> [
+    ObrisiKomentar
+  ];
+}

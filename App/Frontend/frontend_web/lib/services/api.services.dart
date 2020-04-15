@@ -37,6 +37,30 @@ class APIServices {
     });
   }
 
+  // users from cityId
+  static Future getUsersFromCity(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    var body = jsonEncode({'cityId' : cityId.toString()});
+    return await http.post(serverURL + 'User/UsersByCityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: body);
+  }
+  
+  //reported users from cityId
+  static Future getReportedUsersFromCity(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    var body = jsonEncode({'cityId' : cityId.toString()});
+    return await http.post(serverURL + 'Report/ReportByCityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: body);
+  }
+
   static Future getAdmin(String jwt, int userId) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();

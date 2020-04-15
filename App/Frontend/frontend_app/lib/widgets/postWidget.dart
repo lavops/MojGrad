@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/constantsDeleteEdit.dart';
+import 'package:frontend/models/likeViewModel.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
+import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -14,23 +17,23 @@ import 'dart:convert';
 import '../services/api.services.dart';
 
 class PostWidget extends StatefulWidget {
-  final List<FullPost> listPosts;
+  final FullPost post;
 
-  PostWidget(this.listPosts);
+  PostWidget(this.post);
 
   @override
-  _PostWidgetState createState() => _PostWidgetState(listPosts);
+  _PostWidgetState createState() => _PostWidgetState(post);
 }
 
 class _PostWidgetState extends State<PostWidget> {
-  List<FullPost> listPosts;
+  FullPost post;
   List<ReportType> reportTypes;
-
+  TextEditingController opisController = new TextEditingController();
   ReportType _selectedId;
   List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
 
-  _PostWidgetState(List<FullPost> listPosts1) {
-    this.listPosts = listPosts1;
+  _PostWidgetState(FullPost post1) {
+    this.post = post1;
   }
 
   getReportTypes() async {
@@ -69,44 +72,54 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return (listPosts == null) ? Center() : newPost(); //buildPostList()
+    return (post == null) ? Center() : newPost(); //buildPostList()
   }
 
   Widget newPost() {
-    return ListView.builder(
-        padding: EdgeInsets.only(bottom: 30.0),
-        itemCount: listPosts == null ? 0 : listPosts.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                userInfoRow(listPosts[index].userId,listPosts[index].username,
-                    listPosts[index].typeName, listPosts[index].userPhoto),
-                imageGallery(listPosts[index].photoPath),
-                SizedBox(height: 2.0),
-                actionsButtons(
-                    listPosts[index].statusId,
-                    listPosts[index].postId,
-                    listPosts[index].likeNum,
-                    listPosts[index].dislikeNum,
-                    listPosts[index].commNum, listPosts[index].isLiked),
-                description(
-                    listPosts[index].userId, listPosts[index].username, listPosts[index].description),
-                SizedBox(height: 10.0),
-              ]));
-        });
+   return Card(
+    child: Column(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          userInfoRow(post.userId, post.username, post.typeName, post.userPhoto, post.statusId),
+          imageGallery(post.photoPath),
+          SizedBox(height: 2.0),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 10.0,),
+                Text(post.address)
+              ],
+            )
+          ),
+          actionsButtons(
+              post.statusId,
+              post.postId,
+              post.likeNum,
+              post.dislikeNum,
+              post.commNum, post.isLiked),
+          description(post.userId, post.username, post.description),
+          SizedBox(height: 10.0),
+        ]));
   }
 
-  Widget userInfoRow(int otherUserId, String username, String category, String userPhoto) => Row(
+  Widget userInfoRow(int otherUserId, String username, String category, String userPhoto, int statusId) => Row(
         children: <Widget>[
-          CircleImage(
-            serverURLPhoto + userPhoto,
-            imageSize: 36.0,
-            whiteMargin: 2.0,
-            imageMargin: 6.0,
-            othersUserId: otherUserId,
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OthersProfilePage(otherUserId)),
+              );
+            },
+            child: CircleImage(
+              serverURLPhoto + userPhoto,
+              imageSize: 36.0,
+              whiteMargin: 2.0,
+              imageMargin: 6.0,
+            )
           ),
           InkWell(
             onTap: (){
@@ -124,17 +137,23 @@ class _PostWidgetState extends State<PostWidget> {
           ),
           Expanded(child: SizedBox()),
           Text(category),
-          IconButton(
+          (statusId == 2)?IconButton(
             icon: Icon(Icons.location_on),
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MapPage(postLatitude: post.latitude, postLongitude: post.longitude)),
+              );
             },
-          ),
+          ):Center(),
           /*IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () {
 
             },
           ),*/
+          (otherUserId != userId)?
           PopupMenuButton<String> (
             onSelected: choiceAction,
             itemBuilder: (BuildContext context) {
@@ -145,33 +164,147 @@ class _PostWidgetState extends State<PostWidget> {
                 );      
               }).toList();
             },
-          )
+          ):
+          PopupMenuButton<String> (
+            onSelected: choiceActionDeleteEdit,
+            itemBuilder: (BuildContext context) {
+              return ConstantsDeleteEdit.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );      
+              }).toList();
+            },
+          ),
         ],
       );
 
-     void choiceAction(String choice)
-      {
-        if(choice == Constants.PrijaviKorisnika)
-        {
-           showDialog(
-                context: context,
-                child: new MyDialog(
-                  onValueChange: _onValueChange,
-                  initialValue: _selectedId,
-                  reportTypes: _dropdownMenuItems,
-                ));//potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
-        }
-      }
+  //Choice for Report and other things
+  void choiceAction(String choice)
+  {
+    if(choice == Constants.PrijaviKorisnika)
+    {
+        showDialog(
+            context: context,
+            child: new MyDialog(
+              onValueChange: _onValueChange,
+              initialValue: _selectedId,
+              reportTypes: _dropdownMenuItems,
+            ));//potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
+    }
+  }
 
-      void _onValueChange(ReportType value) {
+  void _onValueChange(ReportType value) {
     setState(() {
       _selectedId = value;
     });
+  }
+
+  //Choice for Delete and Edit
+  void choiceActionDeleteEdit(String choice)
+  {
+    if(choice == ConstantsDeleteEdit.IzbrisiObjavu)
+    {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text("Brisanje objave?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Izbrisi",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      APIServices.deletePost(jwt,post.postId);
+                      setState(() {
+                        post = null;
+                      });
+                    }
+                  });
+                  print('Uspesno ste izbrisali objavu.');
+                  Navigator.of(context).pop();
+                  
+                },
+              ),
+              FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          )
+        );
     }
+    else if(choice == ConstantsDeleteEdit.IzmeniObjavu)
+    {
+      opisController.text = post.description;
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text("Izmeni opis."),
+            content: Container(
+              height: 50.0,
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: opisController,
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Sacuvaj",
+                  style: TextStyle(color: Colors.green[800]),
+                ),
+                onPressed: () {
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      APIServices.editPost(jwt, post.postId, opisController.text);
+                      setState(() {
+                        post.description = opisController.text;
+                      });
+                    }
+                  });
+                  print('Uspesno ste izmenili objavu.');
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          )
+        );
+    }
+  }
+
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
-          maxHeight: 500.0, // changed to 400
+          maxHeight: 300.0, // changed to 400
           minHeight: 200.0, // changed to 200
           maxWidth: double.infinity,
           minWidth: double.infinity,
@@ -198,16 +331,25 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: isLiked == 1 ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
-                    APIServices.jwtOrEmpty().then((res) {
-                      String jwt;
-                      setState(() {
-                        jwt = res;
-                      });
-                      if (res != null) {
-                       APIServices.addLike(jwt,postId, userId, 2);
-                      }
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
                     });
-                  
+                    if (res != null) {
+                      APIServices.addLike(jwt,postId, userId, 2).then((res){
+                        Map<String, dynamic> list = json.decode(res);
+                        LikeViewModel likeVM = LikeViewModel();
+                        likeVM = LikeViewModel.fromObject(list);
+                        setState(() {
+                          post.likeNum = likeVM.likeNum;
+                          post.dislikeNum = likeVM.dislikeNum;
+                          post.commNum = likeVM.commNum;
+                          post.isLiked = likeVM.isLiked;
+                        });
+                      });
+                    }
+                  });
                 },
               ),
               GestureDetector(
@@ -228,7 +370,17 @@ class _PostWidgetState extends State<PostWidget> {
                         jwt = res;
                       });
                       if (res != null) {
-                        APIServices.addLike(jwt,postId, userId, 1);
+                        APIServices.addLike(jwt,postId, userId, 1).then((res){
+                        Map<String, dynamic> list = json.decode(res);
+                        LikeViewModel likeVM = LikeViewModel();
+                        likeVM = LikeViewModel.fromObject(list);
+                        setState(() {
+                          post.likeNum = likeVM.likeNum;
+                          post.dislikeNum = likeVM.dislikeNum;
+                          post.commNum = likeVM.commNum;
+                          post.isLiked = likeVM.isLiked;
+                        });
+                      });
                       }
                     });
                  
@@ -329,10 +481,11 @@ class MyDialogState extends State<MyDialog> {
 
 
   Widget build(BuildContext context) {
+    TextEditingController messageController = new TextEditingController();
     return new AlertDialog(
       title: Text("Prijavljivanje korisnika"),
       content: 
-        new Container(
+          Column(children: <Widget>[Container(
             padding: const EdgeInsets.all(10.0),
             child: new DropdownButton<ReportType>(
               value: _selectedId,
@@ -344,6 +497,12 @@ class MyDialogState extends State<MyDialog> {
               },
               items: widget.reportTypes,
             )),
+            TextFormField(
+                maxLines: 2,
+                controller: messageController,
+                decoration: InputDecoration(labelText: "Komentar"),
+            )
+            ]),
       actions: <Widget>[
         FlatButton(
           child: Text(
@@ -352,7 +511,7 @@ class MyDialogState extends State<MyDialog> {
           ),
           
           onPressed: () {
-            //var res = await APIServices.addReport(userId, reportedUserId, _selectedReport.id)  - userId, reportedUserId poslati..
+            //var res = await APIServices.addReport(jwt, widget.userId, widget.otherUserId, _selectedId.id, messageController.text);
             print('Uspesno ste prijavili korisnika.');
             Navigator.of(context).pop();
           },
