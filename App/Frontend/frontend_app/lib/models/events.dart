@@ -13,7 +13,7 @@ class Events{
   int _pointsNeeded; //ako je skupljanje sredstava za nesto pa koliki je cilj
   int _pointsCollected; //ako je skupljanje sredstava za nesto pa koliko je skupljeno do sad
   int _status; //da li je gotovo ili ne
-
+  int _usersInEvent;
 
 
   Events();
@@ -45,6 +45,8 @@ class Events{
   set pointsCollected(int pointsCollected){_pointsCollected = pointsCollected;}
   int get status => _status;
   set status(int status){_status = status;}
+  int get usersInEvent => _usersInEvent;
+  set usersInEvent(int usersInEvent){_usersInEvent = usersInEvent;}
 
   Map<String, dynamic> toMap()
   {
@@ -63,7 +65,7 @@ class Events{
     map["address"] = _address;
     map["pointsNeeded"] = _pointsNeeded;
     map["pointsCollected"] = _pointsCollected;
-
+    map["usersInEvent"] = _usersInEvent;
     return map;
   }
 
@@ -71,17 +73,18 @@ class Events{
   Events.fromObject(dynamic data)
   {
     this._eventId = data["eventId"];
-    //this._sponsorId = data["sponsorId"];
-    //this._sponsorName = data["sponsorName"];
+    this._sponsorId = data["sponsorId"];
+    this._sponsorName = data["sponsorName"];
     this._eventType = data["eventType"];
-    //this._createDate = data["createDate"];
-    //this._endDate = data["endDate"];
-    //this._description = data["description"];
-    //this._status = data["status"];
-    //this._latitude = data["latitude"];
-    //this._longitude = data["longitude"];
-    //this._address = data["address"];
-    //this._pointsCollected = data["pointsCollected"];
-    //this._pointsNeeded = data["pointsNeeded"];
+    this._createDate = data["createDate"];
+    this._endDate = data["endDate"];
+    this._description = data["description"];
+    this._status = data["status"];
+    this._latitude = data["latitude"];
+    this._longitude = data["longitude"];
+    this._address = data["address"];
+    this._pointsCollected = data["pointsCollected"];
+    this._pointsNeeded = data["pointsNeeded"];
+    this._usersInEvent = data["usersInEvent"];
   }
 }

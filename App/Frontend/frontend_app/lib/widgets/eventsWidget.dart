@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:frontend/models/events.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
+import 'package:latlong/latlong.dart';
 
 class EventsWidget extends StatefulWidget {
   final Events event;
@@ -34,6 +36,8 @@ class _EventsWidgetState extends State<EventsWidget> {
       children: <Widget>[
         eventInfoRow(),
         startEndDate(),
+        SizedBox(height: 20.0,),
+        descriptionRow(),
         actionButtonRow()
       ],
     ),
@@ -44,6 +48,8 @@ class _EventsWidgetState extends State<EventsWidget> {
       children: <Widget>[
         eventInfoRow(),
         startEndDate(),
+        SizedBox(height: 20.0,),
+        descriptionRow(),
         eventProgressRow(),
         pointsRow(),
         actionButtonRow()
@@ -82,6 +88,17 @@ class _EventsWidgetState extends State<EventsWidget> {
     );
   }
 
+  Widget descriptionRow(){
+    return Container(
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 10.0,),
+          Flexible(child: Text("Ovo je opis dogadjaja / donacije trebalo bi biti ovako i nzm sta ce biti ako ovo predje u novi red ali sad ce da vidimo kako to izgleda"))
+        ],
+      )
+    );
+  }
+
   Widget eventProgressRow(){
     return IconRoundedProgressBar(
       icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
@@ -89,6 +106,16 @@ class _EventsWidgetState extends State<EventsWidget> {
       margin: EdgeInsets.symmetric(vertical: 16),
       borderRadius: BorderRadius.circular(6),
       percent: 42, // delimo sa 84
+    );
+  }
+
+  Widget eventProgressInfoRow(){
+    return IconRoundedProgressBar(
+      icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
+      theme: RoundedProgressBarTheme.green,
+      margin: EdgeInsets.symmetric(vertical: 16),
+      borderRadius: BorderRadius.circular(6),
+      percent: 26, // delimo sa 52
     );
   }
 
@@ -111,7 +138,7 @@ class _EventsWidgetState extends State<EventsWidget> {
       children: <Widget>[
         FlatButton(
           onPressed: (){
-            
+            moreInfoActionButton();
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -220,6 +247,130 @@ class _EventsWidgetState extends State<EventsWidget> {
               Navigator.of(context).pop();
             },
           )
+        ],
+      )
+    );
+  }
+
+  moreInfoActionButton(){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Informacije o dogadjaju."),
+        content: Container(
+          height: 500.0,
+          width: 400.0,
+          child: Column(
+            children: (event.eventType == 1) ? 
+            <Widget>[
+              Text("PMF KRAGUJEVAC"),
+              SizedBox(height: 10.0,),
+              Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text("Datum pocetka:"),
+                      Text("4/14/2020")
+                    ],
+                  ),
+                  Expanded(child: SizedBox()),
+                  Column(
+                    children: <Widget>[
+                      Text("Datum zavrsetka:"),
+                      Text("4/20/2020")
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(height: 10.0,),
+              showMap(),
+              SizedBox(height: 20.0,),
+              Text("Jovana Ristica 12, Kragujevac, Srbija"),
+              SizedBox(height: 10.0,),
+              Text("Ucestvuje: 10 korisnika"),
+              SizedBox(height: 20.0,),
+              Flexible(child: Text("Ovo je opis dogadjaja / donacije trebalo bi biti ovako i nzm sta ce biti ako ovo predje u novi red ali sad ce da vidimo kako to izgleda")),
+              SizedBox(height: 20.0,),
+            ]:
+            <Widget>[
+              Text("PMF KRAGUJEVAC"),
+              SizedBox(height: 10.0,),
+              Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text("Datum pocetka:"),
+                      Text("4/14/2020")
+                    ],
+                  ),
+                  Expanded(child: SizedBox()),
+                  Column(
+                    children: <Widget>[
+                      Text("Datum zavrsetka:"),
+                      Text("4/20/2020")
+                    ],
+                  )
+                ],
+              ),
+              eventProgressInfoRow(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  children: <Widget>[
+                    Text("Potrebno: 100 poena"),
+                    Text("Skupljeno: 50 poena"),
+                    Text("Ucestvuje: 10 korisnika"),
+                  ],
+                )
+              ),
+              SizedBox(height: 20.0,),
+              Flexible(child: Text("Ovo je opis dogadjaja / donacije trebalo bi biti ovako i nzm sta ce biti ako ovo predje u novi red ali sad ce da vidimo kako to izgleda")),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+          child: Text(
+            "Izadji",
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
+    );
+  }
+
+  Widget showMap(){
+    return Container(
+      height: 200,
+      width: double.infinity,
+      child: FlutterMap(
+        options: new MapOptions(
+          center: new LatLng(44.008852,20.923006), //event.latitude, event.longitude
+          zoom: 15,
+        ),
+        layers: [
+          new TileLayerOptions(
+              urlTemplate:
+                  "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+              additionalOptions: {
+                'accessToken':
+                    'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
+                'id': 'mapbox.mapbox-streets-v7'
+              }),
+          new MarkerLayerOptions(
+            markers:[
+              Marker(
+                point: new LatLng(44.008852,20.923006), //event.latitude, event.longitude
+                builder: (ctx) => new Container(
+                    child: Icon(Icons.location_on, color: Colors.red,)
+                ),
+              ),
+            ]
+          ),
         ],
       )
     );
