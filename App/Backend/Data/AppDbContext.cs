@@ -27,6 +27,7 @@ namespace Backend
         public DbSet<ReportType> reportType { get; set; }
         public DbSet<BlockedUsers> blockedUsers { get; set; }
         public DbSet<ReportComment> reportComment { get; set; }
+        public DbSet<Institution> institution { get; set; }
 
 
 
