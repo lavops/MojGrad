@@ -1,13 +1,13 @@
 class Filteri{
-  static const String kategorije = 'Kategorije';
-  static const String gradovi = 'Gradovi';
-  static const String brojlajkova = 'Broj lajkova';
-  static const String vreme = 'Vreme';
+  static const String reseni = 'Reseni slucajevi';
+  static const String nereseni = 'Nereseni slucajevi';
+  static const String svi = 'Svi slucajevi';
+  static const String prazno = 'Prazno';
 
   static const List<String> choices = <String>[
-    kategorije,
-    gradovi,
-    brojlajkova,
-    vreme
+    reseni,
+    nereseni,
+    svi,
+    prazno
   ];
 }

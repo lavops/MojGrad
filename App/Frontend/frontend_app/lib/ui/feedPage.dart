@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/filters.dart';
@@ -36,6 +37,34 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
+  _getUnsolvedPosts() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getUnsolvedPosts(jwt).then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listPosts = listP;
+        });
+      }
+    });
+  }
+
+  _getSolvedPosts() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    var res = await APIServices.getSolvedPosts(jwt);
+    print(res.body);
+    Iterable list = json.decode(res.body);
+    List<FullPost> listP = List<FullPost>();
+    listP = list.map((model) => FullPost.fromObject(model)).toList();
+    if (mounted) {
+      setState(() {
+        listPosts = listP;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,11 +74,11 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavDrawer(),
+        //drawer: NavDrawer(),
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.grey[50],
-          leading: Builder(builder: (BuildContext context) {
+          /*leading: Builder(builder: (BuildContext context) {
             return IconButton(
               icon: Icon(Icons.menu),
               color: Colors.black87,
@@ -57,7 +86,7 @@ class _FeedPageState extends State<FeedPage> {
                 Scaffold.of(context).openDrawer();
               },
             );
-          }),
+          }),*/
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
@@ -87,9 +116,7 @@ class _FeedPageState extends State<FeedPage> {
           ],
         ),
         body: RefreshIndicator(
-            onRefresh: () async {
-              _getPosts();
-            },
+            onRefresh: _handleRefresh,
             child: (listPosts != null)
                 ? ListView.builder(
                     padding: EdgeInsets.only(bottom: 30.0),
@@ -104,16 +131,34 @@ class _FeedPageState extends State<FeedPage> {
                     ),
                   )));
   }
-}
+  
+  Future<Null> _handleRefresh() async{
+    await new Future.delayed(new Duration(seconds: 3));
+    setState(() {
+      listPosts = [];
+    });
+    _getPosts();
+    return null;
+  }
 
-void choiceAction(String choice) {
-  if (choice == Filteri.kategorije) {
-    print('Kategorije');
-  } else if (choice == Filteri.gradovi) {
-    print('Gradovi');
-  } else if (choice == Filteri.brojlajkova) {
-    print('Broj lajkova');
-  } else if (choice == Filteri.vreme) {
-    print('Vreme');
+  Future<Null> choiceAction(String choice) async{
+    setState(() {
+      listPosts = null;
+    });
+    await new Future.delayed(new Duration(seconds: 1));
+    if (choice == Filteri.reseni) {
+      _getSolvedPosts();
+    } else if (choice == Filteri.nereseni) {
+      _getUnsolvedPosts();
+    } else if (choice == Filteri.svi) {
+      _getPosts();
+    } else if (choice == Filteri.prazno) {
+      print('Prazno');
+    }
+
+    return null;
   }
 }
+
+
+
