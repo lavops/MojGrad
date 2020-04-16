@@ -512,8 +512,8 @@ class MyDialogState extends State<MyDialog> {
                 jwt = res;
               });
               if (res != null) {
-                //print(userId.toString() + " " + widget.otherUserId.toString());
-                //print(messageController.text);
+                print(userId.toString() + " " + widget.otherUserId.toString());
+                print(messageController.text);
                 APIServices.addReport(jwt, userId, widget.otherUserId, _selectedId.id, messageController.text).then((res) {
                   Map<String, dynamic> list = json.decode(res);
                   LikeViewModel likeVM = LikeViewModel();
