@@ -37,13 +37,13 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   getReportTypes() async {
-     var jwt = await APIServices.jwtOrEmpty();
-     APIServices.getReportType(jwt).then((res) {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getReportType(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<ReportType> listRepTypes = List<ReportType>();
       listRepTypes = list.map((model) => ReportType.fromObject(model)).toList();
       setState(() {
-        reportTypes = listRepTypes;        
+        reportTypes = listRepTypes;
         _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
         _selectedId = _dropdownMenuItems[0].value;
       });
@@ -68,129 +68,129 @@ class _PostWidgetState extends State<PostWidget> {
     return newReports;
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
     return (post == null) ? Center() : newPost(); //buildPostList()
   }
 
   Widget newPost() {
-   return Card(
-    child: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+    return Card(
+        child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
           userInfoRow(post.userId, post.username, post.typeName, post.userPhoto, post.statusId),
           imageGallery(post.photoPath),
           SizedBox(height: 2.0),
           Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: <Widget>[
-                SizedBox(width: 10.0,),
-                Text(post.address)
-              ],
-            )
-          ),
-          actionsButtons(
-              post.statusId,
-              post.postId,
-              post.likeNum,
-              post.dislikeNum,
-              post.commNum, post.isLiked),
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(post.address)
+                ],
+              )),
+          actionsButtons(post.statusId, post.postId, post.likeNum,
+              post.dislikeNum, post.commNum, post.isLiked),
           description(post.userId, post.username, post.description),
           SizedBox(height: 10.0),
         ]));
   }
 
-  Widget userInfoRow(int otherUserId, String username, String category, String userPhoto, int statusId) => Row(
+  Widget userInfoRow(int otherUserId, String username, String category,
+          String userPhoto, int statusId) =>
+      Row(
         children: <Widget>[
           InkWell(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OthersProfilePage(otherUserId)),
-              );
-            },
-            child: CircleImage(
-              serverURLPhoto + userPhoto,
-              imageSize: 36.0,
-              whiteMargin: 2.0,
-              imageMargin: 6.0,
-            )
-          ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OthersProfilePage(otherUserId)),
+                );
+              },
+              child: CircleImage(
+                serverURLPhoto + userPhoto,
+                imageSize: 36.0,
+                whiteMargin: 2.0,
+                imageMargin: 6.0,
+              )),
           InkWell(
-            onTap: (){
-              if(userId != otherUserId)
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OthersProfilePage(otherUserId)),
-              );
-            },
-            child: Text(
-              username,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )
-          ),
+              onTap: () {
+                if (userId != otherUserId)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OthersProfilePage(otherUserId)),
+                  );
+              },
+              child: Text(
+                username,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
           Expanded(child: SizedBox()),
           Text(category),
-          (statusId == 2)?IconButton(
-            icon: Icon(Icons.location_on),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MapPage(postLatitude: post.latitude, postLongitude: post.longitude)),
-              );
-            },
-          ):Center(),
+          (statusId == 2)
+              ? IconButton(
+                  icon: Icon(Icons.location_on),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MapPage(
+                              postLatitude: post.latitude,
+                              postLongitude: post.longitude)),
+                    );
+                  },
+                )
+              : Center(),
           /*IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () {
 
             },
           ),*/
-          (otherUserId != userId)?
-          PopupMenuButton<String> (
-            onSelected: choiceAction,
-            itemBuilder: (BuildContext context) {
-              return Constants.choices.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );      
-              }).toList();
-            },
-          ):
-          PopupMenuButton<String> (
-            onSelected: choiceActionDeleteEdit,
-            itemBuilder: (BuildContext context) {
-              return ConstantsDeleteEdit.choices.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );      
-              }).toList();
-            },
-          ),
+          (otherUserId != userId)
+              ? PopupMenuButton<String>(
+                  onSelected: (String choice){
+                    choiceAction(choice, otherUserId);
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return Constants.choices.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                )
+              : PopupMenuButton<String>(
+                  onSelected: choiceActionDeleteEdit,
+                  itemBuilder: (BuildContext context) {
+                    return ConstantsDeleteEdit.choices.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                ),
         ],
       );
 
   //Choice for Report and other things
-  void choiceAction(String choice)
-  {
-    if(choice == Constants.PrijaviKorisnika)
-    {
-        showDialog(
-            context: context,
-            child: new MyDialog(
-              onValueChange: _onValueChange,
-              initialValue: _selectedId,
-              reportTypes: _dropdownMenuItems,
-            ));//potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
+  void choiceAction(String choice, int _otherUserId) {
+    if (choice == Constants.PrijaviKorisnika) {
+      showDialog(
+          context: context,
+          child: new MyDialog(
+            onValueChange: _onValueChange,
+            initialValue: _selectedId,
+            reportTypes: _dropdownMenuItems,
+            otherUserId: _otherUserId,
+          )); //potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
     }
   }
 
@@ -201,11 +201,9 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   //Choice for Delete and Edit
-  void choiceActionDeleteEdit(String choice)
-  {
-    if(choice == ConstantsDeleteEdit.IzbrisiObjavu)
-    {
-        showDialog(
+  void choiceActionDeleteEdit(String choice) {
+    if (choice == ConstantsDeleteEdit.IzbrisiObjavu) {
+      showDialog(
           context: context,
           child: AlertDialog(
             title: Text("Brisanje objave?"),
@@ -222,7 +220,7 @@ class _PostWidgetState extends State<PostWidget> {
                       jwt = res;
                     });
                     if (res != null) {
-                      APIServices.deletePost(jwt,post.postId);
+                      APIServices.deletePost(jwt, post.postId);
                       setState(() {
                         post = null;
                       });
@@ -230,26 +228,22 @@ class _PostWidgetState extends State<PostWidget> {
                   });
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
-                  
                 },
               ),
               FlatButton(
-              child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.green[800]),
-              ),
-              onPressed: () {
+                child: Text(
+                  "Otkazi",
+                  style: TextStyle(color: Colors.green[800]),
+                ),
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               )
             ],
-          )
-        );
-    }
-    else if(choice == ConstantsDeleteEdit.IzmeniObjavu)
-    {
+          ));
+    } else if (choice == ConstantsDeleteEdit.IzmeniObjavu) {
       opisController.text = post.description;
-        showDialog(
+      showDialog(
           context: context,
           child: AlertDialog(
             title: Text("Izmeni opis."),
@@ -276,7 +270,8 @@ class _PostWidgetState extends State<PostWidget> {
                       jwt = res;
                     });
                     if (res != null) {
-                      APIServices.editPost(jwt, post.postId, opisController.text);
+                      APIServices.editPost(
+                          jwt, post.postId, opisController.text);
                       setState(() {
                         post.description = opisController.text;
                       });
@@ -287,20 +282,18 @@ class _PostWidgetState extends State<PostWidget> {
                 },
               ),
               FlatButton(
-              child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
+                child: Text(
+                  "Otkazi",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               )
             ],
-          )
-        );
+          ));
     }
   }
-
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
@@ -320,8 +313,8 @@ class _PostWidgetState extends State<PostWidget> {
         child: Image(image: NetworkImage(serverURLPhoto + image)),
       );
 
-  Widget actionsButtons(
-          int statusId, int postId, int likeNum, int dislikeNum, int commNum,  int isLiked) =>
+  Widget actionsButtons(int statusId, int postId, int likeNum, int dislikeNum,
+          int commNum, int isLiked) =>
       Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -329,7 +322,9 @@ class _PostWidgetState extends State<PostWidget> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: isLiked == 1 ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]) : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
+                icon: isLiked == 1
+                    ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800])
+                    : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
@@ -337,7 +332,7 @@ class _PostWidgetState extends State<PostWidget> {
                       jwt = res;
                     });
                     if (res != null) {
-                      APIServices.addLike(jwt,postId, userId, 2).then((res){
+                      APIServices.addLike(jwt, postId, userId, 2).then((res) {
                         Map<String, dynamic> list = json.decode(res);
                         LikeViewModel likeVM = LikeViewModel();
                         likeVM = LikeViewModel.fromObject(list);
@@ -362,15 +357,17 @@ class _PostWidgetState extends State<PostWidget> {
                 child: Text(likeNum.toString()),
               ),
               IconButton(
-                icon: isLiked == 2 ? Icon(MdiIcons.thumbDownOutline, color: Colors.red) : Icon(MdiIcons.thumbDownOutline, color: Colors.grey),
+                icon: isLiked == 2
+                    ? Icon(MdiIcons.thumbDownOutline, color: Colors.red)
+                    : Icon(MdiIcons.thumbDownOutline, color: Colors.grey),
                 onPressed: () {
-                   APIServices.jwtOrEmpty().then((res) {
-                      String jwt;
-                      setState(() {
-                        jwt = res;
-                      });
-                      if (res != null) {
-                        APIServices.addLike(jwt,postId, userId, 1).then((res){
+                  APIServices.jwtOrEmpty().then((res) {
+                    String jwt;
+                    setState(() {
+                      jwt = res;
+                    });
+                    if (res != null) {
+                      APIServices.addLike(jwt, postId, userId, 1).then((res) {
                         Map<String, dynamic> list = json.decode(res);
                         LikeViewModel likeVM = LikeViewModel();
                         likeVM = LikeViewModel.fromObject(list);
@@ -381,9 +378,8 @@ class _PostWidgetState extends State<PostWidget> {
                           post.isLiked = likeVM.isLiked;
                         });
                       });
-                      }
-                    });
-                 
+                    }
+                  });
                 },
               ),
               GestureDetector(
@@ -421,9 +417,7 @@ class _PostWidgetState extends State<PostWidget> {
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                     ),
               SizedBox(width: 10.0), // For padding
             ],
@@ -431,37 +425,40 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
 
-  Widget description(int otherUserId, String username, String description,) => Container(
+  Widget description(
+    int otherUserId,
+    String username,
+    String description,
+  ) =>
+      Container(
           child: Row(
         children: <Widget>[
           SizedBox(
             width: 10,
           ),
           InkWell(
-            onTap:(){
-              if(userId != otherUserId)
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OthersProfilePage(otherUserId)),
-              );
-            },
-            child:Text(username, style: TextStyle(fontWeight: FontWeight.bold))
-          ),
+              onTap: () {
+                if (userId != otherUserId)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute( builder: (context) => OthersProfilePage(otherUserId)),
+                  );
+              },
+              child: Text(username, style: TextStyle(fontWeight: FontWeight.bold))),
           SizedBox(
             width: 10,
           ),
-          Flexible(
-            child: Text(description),
+          Flexible(child: Text(description),
           )
         ],
       ));
 }
 
 class MyDialog extends StatefulWidget {
-  const MyDialog({this.onValueChange, this.initialValue, this.reportTypes});
+  const MyDialog({this.onValueChange, this.initialValue, this.reportTypes, this.otherUserId});
 
   final ReportType initialValue;
+  final int otherUserId;
   final void Function(ReportType) onValueChange;
   final List<DropdownMenuItem<ReportType>> reportTypes;
 
@@ -471,7 +468,6 @@ class MyDialog extends StatefulWidget {
 
 class MyDialogState extends State<MyDialog> {
   ReportType _selectedId;
-  
 
   @override
   void initState() {
@@ -479,13 +475,13 @@ class MyDialogState extends State<MyDialog> {
     _selectedId = widget.initialValue;
   }
 
-
   Widget build(BuildContext context) {
     TextEditingController messageController = new TextEditingController();
     return new AlertDialog(
       title: Text("Prijavljivanje korisnika"),
-      content: 
-          Column(children: <Widget>[Container(
+      content: Column(children: <Widget>[
+        Container(
+            width: 200,
             padding: const EdgeInsets.all(10.0),
             child: new DropdownButton<ReportType>(
               value: _selectedId,
@@ -497,36 +493,48 @@ class MyDialogState extends State<MyDialog> {
               },
               items: widget.reportTypes,
             )),
-            TextFormField(
-                maxLines: 2,
-                controller: messageController,
-                decoration: InputDecoration(labelText: "Komentar"),
-            )
-            ]),
+        TextFormField(
+          maxLines: 2,
+          controller: messageController,
+          decoration: InputDecoration(labelText: "Komentar"),
+        )
+      ]),
       actions: <Widget>[
         FlatButton(
           child: Text(
             "Prijavi",
             style: TextStyle(color: Colors.green),
           ),
-          
           onPressed: () {
-            //var res = await APIServices.addReport(jwt, widget.userId, widget.otherUserId, _selectedId.id, messageController.text);
-            print('Uspesno ste prijavili korisnika.');
-            Navigator.of(context).pop();
+            APIServices.jwtOrEmpty().then((res) {
+              String jwt;
+              setState(() {
+                jwt = res;
+              });
+              if (res != null) {
+                //print(userId.toString() + " " + widget.otherUserId.toString());
+                //print(messageController.text);
+                APIServices.addReport(jwt, userId, widget.otherUserId, _selectedId.id, messageController.text).then((res) {
+                  Map<String, dynamic> list = json.decode(res);
+                  LikeViewModel likeVM = LikeViewModel();
+                  likeVM = LikeViewModel.fromObject(list);
+                  setState(() {});
+                });
+                Navigator.of(context).pop();
+              }
+            });
           },
         ),
         FlatButton(
-        child: Text(
-          "Otkazi",
-          style: TextStyle(color: Colors.green),
-        ),
-         onPressed: () {
+          child: Text(
+            "Otkazi",
+            style: TextStyle(color: Colors.green),
+          ),
+          onPressed: () {
             Navigator.of(context).pop();
           },
         )
-      ],      
+      ],
     );
   }
-  
 }
