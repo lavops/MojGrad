@@ -397,7 +397,7 @@ class _CameraPageState extends State<CameraPage> {
           }
           else{
             setState(() {
-              pogresanText = "Popuni obavezna polja tip posta i lokacija.";
+              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
             });
             throw Exception('Greskaaaa');
           }
