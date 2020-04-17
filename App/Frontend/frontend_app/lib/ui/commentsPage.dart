@@ -232,6 +232,12 @@ class StateComents extends State<CommentsPage> {
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('Komentari', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context, listComents.length);
+          },
+          child: Icon(Icons.arrow_back),
+        ),
       ),
       body: Container(
           padding: EdgeInsets.only(top: 0),

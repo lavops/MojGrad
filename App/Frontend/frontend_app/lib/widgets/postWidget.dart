@@ -394,11 +394,7 @@ class _PostWidgetState extends State<PostWidget> {
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Colors.green[800]),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CommentsPage(postId)),
-                  );
+                  _getCommentsFromPage(postId);
                 },
               ),
               Text(commNum.toString()),
@@ -424,6 +420,18 @@ class _PostWidgetState extends State<PostWidget> {
           ),
         ],
       );
+
+  _getCommentsFromPage(int postId) async{
+    int result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CommentsPage(postId)),
+    );
+
+    setState(() {
+      post.commNum = result;
+    });
+  }
 
   Widget description(
     int otherUserId,
