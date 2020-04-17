@@ -429,7 +429,8 @@ class _PostWidgetState extends State<PostWidget> {
     );
 
     setState(() {
-      post.commNum = result;
+      if(result != null)
+        post.commNum = result;
     });
   }
 
