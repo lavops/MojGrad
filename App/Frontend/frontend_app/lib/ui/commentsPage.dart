@@ -72,9 +72,10 @@ class StateComents extends State<CommentsPage> {
                       });
                     }
                   });
+                  _getComms();
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
-                  
+                  _getComms();
                 },
               ),
               FlatButton(
@@ -122,7 +123,6 @@ class StateComents extends State<CommentsPage> {
                   });
                   print('Uspesno ste prijavili komentar.');
                   Navigator.of(context).pop();
-                  
                 },
               ),
               FlatButton(
@@ -287,7 +287,8 @@ class StateComents extends State<CommentsPage> {
                           Comment newComm = Comment();
                           newComm = Comment.fromObject(list);
                           setState(() {
-                            //
+                            _getComms();
+                            myController.text = "";
                           });
                         });
                       }
