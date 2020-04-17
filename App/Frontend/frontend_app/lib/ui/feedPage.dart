@@ -5,7 +5,6 @@ import 'package:frontend/models/filters.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
-import 'package:frontend/ui/NavDrawer.dart';
 import 'package:frontend/widgets/postWidget.dart';
 
 class FeedPage extends StatefulWidget {
@@ -74,19 +73,9 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //drawer: NavDrawer(),
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.grey[50],
-          /*leading: Builder(builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.menu),
-              color: Colors.black87,
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          }),*/
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
