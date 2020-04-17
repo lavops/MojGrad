@@ -31,6 +31,7 @@ class _CameraPageState extends State<CameraPage> {
   double longitude2 = 0;
   var first;
   String addres = '';
+  String pogresanText = '';
   var id = 0;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
  
@@ -381,23 +382,24 @@ class _CameraPageState extends State<CameraPage> {
           });
           if (res != null && imageFile != null){
             APIServices.addPost(jwt,user.id, postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres);
+            APIServices.jwtOrEmpty().then((res) {
+              String jwt;
+              setState((){
+                jwt = res;
+              });
+              if(res != null) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute( builder: (context) => HomePage.fromBase64(jwt.toString())),
+                );
+              }
+            });
           }
           else{
-            print("Nisu dobri podaci");
-          }
-        });
-       
-
-        APIServices.jwtOrEmpty().then((res) {
-          String jwt;
-          setState(() {
-            jwt = res;
-          });
-          if (res != null) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute( builder: (context) => HomePage.fromBase64(jwt.toString())),
-            );
+            setState(() {
+              pogresanText = "Popuni obavezna polja tip posta i lokacija.";
+            });
+            throw Exception('Greskaaaa');
           }
         });
       },
@@ -406,6 +408,12 @@ class _CameraPageState extends State<CameraPage> {
         borderRadius: new BorderRadius.circular(50),
       ),
     );
+
+    final wrongData = Center(
+        child: Text(
+      '$pogresanText',
+      style: TextStyle(color: Colors.red),
+    ));
 
     return Center(
         child: Container(
@@ -444,6 +452,7 @@ class _CameraPageState extends State<CameraPage> {
             height: 20.0,
           ),
           submitObjavu,
+          wrongData
         ].where(notNull).toList(),
       ),
     ));
