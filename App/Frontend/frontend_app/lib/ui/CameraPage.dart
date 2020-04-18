@@ -365,23 +365,33 @@ class _CameraPageState extends State<CameraPage> {
         child: Text('Objavi'),
       ),
       onPressed: () {
+        
         imageUpload(imageFile);
-        if (_problemResava == 1)
-          statusId = 2;
-        else
-          statusId = 1;
-
-        if (_vrstaObjave == 2) //pohvala
-          postTypeId = 1;
-        else
-          postTypeId = postType.id;
+        
           APIServices.jwtOrEmpty().then((res) {
             String jwt;
           setState(() {
             jwt = res;
           });
-          if (res != null && imageFile != null){
-            APIServices.addPost(jwt,user.id, postTypeId,description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres);
+          if (_problemResava == 1)
+            statusId = 2;
+          else
+            statusId = 1;
+
+          if (_vrstaObjave == 2) //pohvala
+            postTypeId = 1;
+          else if(postType != null)
+            postTypeId = postType.id;
+          else pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+
+          if(imageFile == null || addres == null){
+            setState(() {
+              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+            });
+            throw Exception('Greskaaaa');
+          }
+          if (res != null && imageFile != null && addres != null){
+            APIServices.addPost(jwt,user.id, postTypeId, description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState((){
@@ -394,12 +404,6 @@ class _CameraPageState extends State<CameraPage> {
                 );
               }
             });
-          }
-          else{
-            setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
-            });
-            throw Exception('Greskaaaa');
           }
         });
       },
