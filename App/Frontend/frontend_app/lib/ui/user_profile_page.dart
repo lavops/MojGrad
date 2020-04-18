@@ -4,11 +4,10 @@ import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/login.dart';
-import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
 import 'edit_profile_page.dart';
-import 'homePage.dart';
+import 'globalValues.dart';
 
 class UserProfilePage extends StatefulWidget {
   final User user;
@@ -61,30 +60,32 @@ class HeaderSection extends State<UserProfilePage> {
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.grey[50],
+        iconTheme: IconThemeData(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack),
+        backgroundColor: Globals.theme,
       ),
       endDrawer: Drawer(
+        child : Container(
+         color : Globals.theme,
         child: ListView(
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.grey[50],
+                color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite
               ),
               child: Center(child: Text(
                 user.firstName + " " + user.lastName,
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
               ),)
             ),
             ListTile(
-              leading: Icon(Icons.edit, color: Colors.black),
-              trailing: Icon(Icons.arrow_right, color: Colors.black),
+              leading: Icon(Icons.edit, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+              trailing: Icon(Icons.arrow_right, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
               title: Text(
                 'Izmeni profil',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
               ),
               onTap: () {
                 Navigator.push(
@@ -95,11 +96,35 @@ class HeaderSection extends State<UserProfilePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.exit_to_app, color: Colors.black),
-              //trailing: Icon(Icons.arrow_right, color: Colors.black),
+              title: Text("Tamna tema", style: TextStyle(fontSize: 16, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),),
+              trailing: Switch(
+                value: Globals.switchStatus,
+                onChanged: (value) {
+                  setState(() {
+                  
+                    if(Globals.switchStatus == true) { 
+                      Globals.theme = Colors.white;
+                      Globals.colorBlack = Colors.black;
+                      Globals.switchStatus = false;
+                    }
+                    else {
+                      Globals.theme =  Colors.black87;
+                      Globals.colorWhite = Colors.white;
+                      Globals.themeBck =  Colors.black38;
+                      Globals.colorBlack = Colors.black;
+                      Globals.colorBlack12 = Colors.black12;
+                      Globals.green =  Color(0xFF1E8161);
+                      Globals.switchStatus = true;
+                    }
+                  });
+                },
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
               title: Text(
                 'Odjavi se',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
               ),
               onTap: () {
                 _removeToken();
@@ -112,6 +137,7 @@ class HeaderSection extends State<UserProfilePage> {
             ),
           ],
         ),
+        )
       ),
       body: (user != null)?NestedScrollView(
           controller: _scrollController,

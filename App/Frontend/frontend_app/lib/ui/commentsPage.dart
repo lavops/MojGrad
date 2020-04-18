@@ -72,9 +72,10 @@ class StateComents extends State<CommentsPage> {
                       });
                     }
                   });
+                  _getComms();
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
-                  
+                  _getComms();
                 },
               ),
               FlatButton(
@@ -122,7 +123,6 @@ class StateComents extends State<CommentsPage> {
                   });
                   print('Uspesno ste prijavili komentar.');
                   Navigator.of(context).pop();
-                  
                 },
               ),
               FlatButton(
@@ -232,6 +232,12 @@ class StateComents extends State<CommentsPage> {
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('Komentari', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context, listComents.length);
+          },
+          child: Icon(Icons.arrow_back),
+        ),
       ),
       body: Container(
           padding: EdgeInsets.only(top: 0),
@@ -281,7 +287,8 @@ class StateComents extends State<CommentsPage> {
                           Comment newComm = Comment();
                           newComm = Comment.fromObject(list);
                           setState(() {
-                            //
+                            _getComms();
+                            myController.text = "";
                           });
                         });
                       }
