@@ -95,6 +95,7 @@ namespace Backend.Controllers
             {
                 User user = u.user;
                 user.password = null;
+                user.points = u.donatedPoints;
                 listUsers.Add(user);
 
             }
