@@ -21,14 +21,12 @@ namespace Backend.Controllers
             _iCityUI = iCityUI;
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<City>> GetCity()
         {
             return  _iCityUI.getAllCities();
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public City GetCityById(long id)
         {

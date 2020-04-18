@@ -28,7 +28,10 @@ namespace Backend
         public DbSet<BlockedUsers> blockedUsers { get; set; }
         public DbSet<ReportComment> reportComment { get; set; }
         public DbSet<Institution> institution { get; set; }
-
+        public DbSet<Event> events { get; set; }
+        public DbSet<UserEvent> userEvent { get; set; }
+        public DbSet<Donation> donation { get; set; }
+        public DbSet<UserDonation> userDonation { get; set; }
 
 
 
