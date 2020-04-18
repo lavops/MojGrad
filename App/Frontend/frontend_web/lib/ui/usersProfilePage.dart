@@ -11,6 +11,7 @@ import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'dart:convert';
 
 import 'package:frontend_web/widgets/circleImageWidget.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 class UsersProfilePage extends StatefulWidget {
   @override
@@ -622,7 +623,9 @@ Widget dropdownFRU(List<City> listCities) {
                   }),
               bottom: tabs(),
             ),
-            body: TabBarView(children: <Widget>[
+            body: Stack(children: <Widget>[
+              
+              TabBarView(children: <Widget>[
               Container(
                 margin: EdgeInsets.only(left:80, right: 80),
                   padding: EdgeInsets.only(top: 0),
@@ -643,5 +646,8 @@ Widget dropdownFRU(List<City> listCities) {
                     searchRep(),],),
                     Flexible(child: filteredRepUsers==null ? buildReportedUserList(listRepUsers) : buildReportedUserList(filteredRepUsers)),
                   ])),
-            ])));
+            ]),
+            CollapsingNavigationDrawer(),
+            ],),),
+            );
   }}

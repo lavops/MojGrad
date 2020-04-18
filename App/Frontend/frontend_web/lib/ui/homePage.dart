@@ -4,6 +4,7 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/postWidget.dart';
 import 'dart:convert';
 import './navDrawer.dart';
@@ -70,24 +71,31 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.green,
         title: Text("Moj Grad"),
       ),
-      drawer: NavDrawer(),
-      body:  Center(
-        child: Container(
-          width: width1,
-          padding: EdgeInsets.all(10.0),
-        child: RefreshIndicator(
-            onRefresh: () async {
-              _getPosts();
-            },
-            child: (listPosts != null)
-                ? PostWidget(listPosts)
-                : Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                    ),
-                  ))
-      ),)
+      //drawer: NavDrawer(),
+      body: Row(
+        children: <Widget>[
+          CollapsingNavigationDrawer(),
+          Center(
+            child: Container(
+              width: width1,
+              padding: EdgeInsets.all(10.0),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  _getPosts();
+                },
+                child: (listPosts != null)
+                    ? PostWidget(listPosts)
+                    : Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                        ),
+                      )
+                )
+              ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 import '../models/city.dart';
 import '../models/user.dart';
@@ -273,7 +274,10 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
         title: Text("Registrovanje novog admina"),
       ),
       backgroundColor: Colors.white,
-      body: Center(
+      body: Row(children: <Widget>[
+        CollapsingNavigationDrawer(),
+        SizedBox(width: 400,),
+      Center(
         child: Container(
           width: 600,
           child: ListView(
@@ -301,7 +305,7 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
             ],
           ),
         ),
-      ),
+      ),],)
     );
   }
 }
