@@ -5,6 +5,7 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/managementPage.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/postWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -142,7 +143,8 @@ class _PostPageState extends State<PostPage> {
                   }),
               bottom: tabs(),
             ),
-            body: TabBarView(children: <Widget>[
+            body:  Stack(children: <Widget>[
+            TabBarView(children: <Widget>[
               Container(
                   margin: EdgeInsets.only(left: 200, right: 200),
                   padding: EdgeInsets.only(top: 0),
@@ -164,6 +166,8 @@ class _PostPageState extends State<PostPage> {
                   child: Column(children: [
                     Flexible(child: PostWidget(listUnsolvedPosts)),
                   ])),
-            ])));
+            ]),
+            CollapsingNavigationDrawer(),
+            ],)));
   }
 }
