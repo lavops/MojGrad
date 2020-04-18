@@ -133,6 +133,14 @@ namespace Backend
             services.AddTransient<IInstitutionBL, InstitutionBL>();
             services.AddTransient<IInstitutionDAL, InstitutionDAL>();
 
+            services.AddTransient<IEventUI, EventUI>();
+            services.AddTransient<IEventBL, EventBL>();
+            services.AddTransient<IEventDAL, EventDAL>();
+
+            services.AddTransient<IDonationUI, DonationUI>();
+            services.AddTransient<IDonationBL, DonationBL>();
+            services.AddTransient<IDonationDAL, DonationDAL>();
+
 
         }
 
