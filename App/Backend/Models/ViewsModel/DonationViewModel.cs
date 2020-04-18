@@ -12,17 +12,17 @@ namespace Backend.Models.ViewsModel
         public string title { get; set; }
         public string organizationName { get; set; }
         public string description { get; set; }
-        public double monetaryAmount { get; set; }
-        public double collectedMoney { get; set; }
+        public int pointsNeeded { get; set; }
+        public int pointsAccumulated{ get; set; }
         public int userNum { get; set; }
         private AppDbContext _context = new AppDbContext();
         public DonationViewModel(Donation don)
         {
             this.id = don.id;
             this.adminId = don.adminId;
-            this.collectedMoney = don.collectedMoney;
+            this.pointsNeeded = Convert.ToInt32(don.monetaryAmount/10);
             this.description = don.description;
-            this.monetaryAmount = don.monetaryAmount;
+            this.pointsAccumulated = Convert.ToInt32(don.collectedMoney / 10);
             this.organizationName = don.organizationName;
             this.title = don.title;
             this.userNum = _context.userDonation.Where(x => x.donationId == don.id).Count();
