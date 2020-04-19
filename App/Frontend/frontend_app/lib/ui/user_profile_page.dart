@@ -129,7 +129,7 @@ class HeaderSection extends State<UserProfilePage> {
               onTap: () {
                 _removeToken();
 
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );

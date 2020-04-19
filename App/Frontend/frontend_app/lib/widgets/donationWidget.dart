@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:frontend/models/donation.dart';
+import 'package:frontend/models/user.dart';
+import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/othersProfilePage.dart';
 
 class DonationsWidget extends StatefulWidget {
   final Donation donation;
@@ -76,16 +81,6 @@ class _DonationsWidgetState extends State<DonationsWidget> {
     );
   }
 
-  Widget eventProgressInfoRow(){
-    return IconRoundedProgressBar(
-      icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
-      theme: RoundedProgressBarTheme.green,
-      margin: EdgeInsets.symmetric(vertical: 16),
-      borderRadius: BorderRadius.circular(6),
-      percent: (donation.pointsAccumulated / donation.pointsNeeded) * 52, // 52
-    );
-  }
-
   Widget pointsRow(){
     return Row(
       children: <Widget>[
@@ -120,7 +115,10 @@ class _DonationsWidgetState extends State<DonationsWidget> {
         SizedBox(width: 10.0,),
         FlatButton(
           onPressed: (){
-            moreInfoActionButton();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DonationsPageWidget(donation)),
+            );
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -190,59 +188,138 @@ class _DonationsWidgetState extends State<DonationsWidget> {
     );
   }
 
-  moreInfoActionButton(){
-    showDialog(
-      context: context,
-      child: AlertDialog(
-        title: Text("Informacije o dogadjaju."),
-        content: Container(
-          height: double.infinity,
-          width: 400.0,
-          child: Column(
+}
+
+class DonationsPageWidget extends StatefulWidget {
+  final Donation donation;
+
+  DonationsPageWidget(this.donation);
+
+  @override
+  _DonationsPageWidgetState createState() => _DonationsPageWidgetState(donation);
+}
+
+class _DonationsPageWidgetState extends State<DonationsPageWidget> {
+  Donation donation;
+  List<User> users;
+  _DonationsPageWidgetState(Donation donation1) {
+    this.donation = donation1;
+  }
+
+  _getUsersFromDonation() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getUsersFromDonation(jwt, donation.id).then((res) {
+      Iterable list = json.decode(res);
+      List<User> users1 = List<User>();
+      users1 = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          users = users1;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsersFromDonation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        padding: EdgeInsets.only(left: 10.0, right: 10.0),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 10.0,),
+            Text(
+              donation.organizationName, 
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0)
+            ),
+            SizedBox(height: 10.0,),
+            eventProgressRow(),
+            Row(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text("Skupljeno:"),
+                    Text("${donation.pointsAccumulated} poena")
+                  ],
+                ),
+                Expanded(child: SizedBox()),
+                Column(
+                  children: <Widget>[
+                    Text("Potrebno:"),
+                    Text("${donation.pointsNeeded} poena")
+                  ],
+                )
+              ],
+            ),
+            SizedBox(height: 20.0,),
+            Flexible(child: Text(donation.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))),
+            Flexible(child: Text(donation.description)),
+            SizedBox(height: 10.0,),
+            Row(
             children: <Widget>[
-              Text(
-                donation.organizationName, 
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
-              ),
-              SizedBox(height: 10.0,),
-              eventProgressInfoRow(),
-              Row(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text("Skupljeno:"),
-                      Text("${donation.pointsAccumulated} poena")
-                    ],
-                  ),
-                  Expanded(child: SizedBox()),
-                  Column(
-                    children: <Widget>[
-                      Text("Potrebno:"),
-                      Text("${donation.pointsNeeded} poena")
-                    ],
-                  )
-                ],
-              ),
-              Text("Ucestvuje: ${donation.userNum} korisnika"),
-              SizedBox(height: 20.0,),
-              Flexible(child: Text(donation.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0))),
-              Flexible(child: Text(donation.description)),
-            ]
+              Text("Ucesnici:"),
+              Expanded(child: SizedBox()),
+              Text("${donation.userNum} korisnika"),
+            ],
           ),
+          (users != null)?listUsers():SizedBox(),
+          ]
         ),
-        actions: <Widget>[
-          FlatButton(
-          child: Text(
-            "Izadji",
-            style: TextStyle(color: Colors.red),
-          ),
-          onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )
-        ],
-      )
+      ),
     );
   }
 
+  Widget eventProgressRow(){
+    return IconRoundedProgressBar(
+      icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
+      theme: RoundedProgressBarTheme.green,
+      margin: EdgeInsets.symmetric(vertical: 16),
+      borderRadius: BorderRadius.circular(6),
+      percent:  (donation.pointsAccumulated / donation.pointsNeeded) * 80, // 80
+    );
+  }
+
+  Widget listUsers(){
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Wrap(
+        spacing: 10.0,
+        runSpacing: 10.0,
+        direction: Axis.horizontal,
+        children: users.map((User user) => InputChip(
+          avatar: CircleAvatar(child: Container(
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                  fit: BoxFit.fill,
+                  image: new NetworkImage(serverURLPhoto + user.photo)
+                )
+              )
+            ),
+          ),
+          label: Text(user.firstName + " " + user.lastName),
+          onPressed: (){
+            if(user.id != userId)
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OthersProfilePage(user.id)),
+              );
+          },
+        )).toList(),
+      )
+    );
+  }
 }

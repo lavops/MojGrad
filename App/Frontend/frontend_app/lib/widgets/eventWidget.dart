@@ -338,7 +338,6 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
           SizedBox(height: 10.0,),
           Flexible(child: Text(event.description)),
           SizedBox(height: 20.0,),
-          
           Row(
             children: <Widget>[
               Text("Ucesnici:"),
@@ -404,7 +403,7 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
               )
             ),
           ),
-          label: Text(user.username),
+          label: Text(user.firstName + " " + user.lastName),
           onPressed: (){
             if(user.id != userId)
             Navigator.push(
