@@ -4,6 +4,7 @@ import 'package:frontend/models/donation.dart';
 import 'package:frontend/models/event.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/widgets/donationWidget.dart';
 import 'package:frontend/widgets/eventWidget.dart';
 
 class SponsorshipPage extends StatefulWidget {
@@ -75,9 +76,9 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
             ),
             ListView.builder(
               padding: EdgeInsets.only(bottom: 30.0),
-              itemCount: events == null ? 0 : events.length,
+              itemCount: donations == null ? 0 : donations.length,
               itemBuilder: (BuildContext context, int index) {
-                return EventsWidget(events[index]);
+                return DonationsWidget(donations[index]);
               }
             )
           ],
@@ -101,20 +102,3 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
       ]);
   }
 }
-
-/*
-(events != null)
-      ? ListView.builder(
-        padding: EdgeInsets.only(bottom: 30.0, top: 30.0),
-        itemCount: events == null ? 0 : events.length,
-        itemBuilder: (BuildContext context, int index) {
-          return EventsWidget(events[index]);
-        }
-      )
-      : Center(
-          child: CircularProgressIndicator(
-            valueColor:
-                new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-          ),
-        )
-*/

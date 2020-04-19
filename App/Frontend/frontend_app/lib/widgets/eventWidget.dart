@@ -134,7 +134,7 @@ class _EventsWidgetState extends State<EventsWidget> {
               side: BorderSide(color: Colors.red
             )
           ),
-            child: Text("Otkazi", style: TextStyle(color: Colors.white)),
+            child: Text("Otkazi dolazak", style: TextStyle(color: Colors.white)),
           ),
         SizedBox(width: 10.0,),
       ],
@@ -207,7 +207,7 @@ class _EventsWidgetState extends State<EventsWidget> {
       child: AlertDialog(
         title: Text("Informacije o dogadjaju."),
         content: Container(
-          height: 500.0,
+          height: double.infinity,
           width: 400.0,
           child: Column(
             children: <Widget>[
