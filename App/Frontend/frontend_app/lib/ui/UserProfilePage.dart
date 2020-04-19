@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/bloc/themes.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/login.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
-import 'edit_profile_page.dart';
-import 'globalValues.dart';
+import '../main.dart';
+import 'EditProfilePage.dart';
+import 'package:provider/provider.dart';
 
 class UserProfilePage extends StatefulWidget {
   final User user;
@@ -28,8 +30,9 @@ class HeaderSection extends State<UserProfilePage> {
     print("korisnik ${user1.id}");
   }
 
-  final Color green = Color(0xFF1E8161);
+  final Color green = Colors.green[800];
   List<FullPost> posts;
+  bool darkThemeEnabled = MyApp.ind == 0 ? false : true;
 
   _getPosts() async {
      var jwt = await APIServices.jwtOrEmpty();
@@ -57,35 +60,36 @@ class HeaderSection extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+    
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack),
-        backgroundColor: Globals.theme,
+        backgroundColor: Colors.white
       ),
       endDrawer: Drawer(
         child : Container(
-         color : Globals.theme,
+         //color : Colors.white,
         child: ListView(
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
-                color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite
-              ),
+              /*decoration: BoxDecoration(
+                color: Colors.white
+              ),*/
               child: Center(child: Text(
                 user.firstName + " " + user.lastName,
                 style: TextStyle(
-                    color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
               ),)
             ),
             ListTile(
-              leading: Icon(Icons.edit, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
-              trailing: Icon(Icons.arrow_right, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+              leading: Icon(Icons.edit, color: Colors.black),
+              trailing: Icon(Icons.arrow_right, color: Colors.black),
               title: Text(
                 'Izmeni profil',
-                style: TextStyle(fontSize: 16, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                style: TextStyle(fontSize: 16, color: Colors.black),
               ),
               onTap: () {
                 Navigator.push(
@@ -96,35 +100,23 @@ class HeaderSection extends State<UserProfilePage> {
               },
             ),
             ListTile(
-              title: Text("Tamna tema", style: TextStyle(fontSize: 16, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),),
+              title: Text("Tamna tema", style: TextStyle(fontSize: 16, color: Colors.black)),
               trailing: Switch(
-                value: Globals.switchStatus,
-                onChanged: (value) {
+                value: darkThemeEnabled,
+                onChanged: (changedTheme) {
                   setState(() {
-                  
-                    if(Globals.switchStatus == true) { 
-                      Globals.theme = Colors.white;
-                      Globals.colorBlack = Colors.black;
-                      Globals.switchStatus = false;
-                    }
-                    else {
-                      Globals.theme =  Colors.black87;
-                      Globals.colorWhite = Colors.white;
-                      Globals.themeBck =  Colors.black38;
-                      Globals.colorBlack = Colors.black;
-                      Globals.colorBlack12 = Colors.black12;
-                      Globals.green =  Color(0xFF1E8161);
-                      Globals.switchStatus = true;
-                    }
+                    darkThemeEnabled = changedTheme;
+                    MyApp.ind = changedTheme ? 1 : 0;
                   });
+                  changedTheme ? _themeChanger.setTheme(ThemeData.dark()) : _themeChanger.setTheme(ThemeData.light());
                 },
               ),
             ),
             ListTile(
-              leading: Icon(Icons.exit_to_app, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+              leading: Icon(Icons.exit_to_app, color: Colors.black),
               title: Text(
                 'Odjavi se',
-                style: TextStyle(fontSize: 16, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                style: TextStyle(fontSize: 16, color: Colors.black),
               ),
               onTap: () {
                 _removeToken();

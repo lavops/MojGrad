@@ -4,8 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
-import 'package:frontend/ui/globalValues.dart';
-import 'package:frontend/ui/user_profile_page.dart';
+import 'package:frontend/ui/UserProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -47,7 +46,6 @@ class EditProfile extends State<EditProfilePage> {
      return null;
   }
 
-  final Color green = Color(0xFF1E8161);
   int _selectedOption = 0;
   int index = 6;
   String firstName = '',
@@ -71,7 +69,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget okButton = FlatButton(
       child: Text(
         "Izmeni",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Colors.green[800]),
       ),
       onPressed: () {
         if (imageFile != null) {
@@ -103,7 +101,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget closeButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: Globals.switchStatus == true ? Globals.colorBlack : Globals.colorWhite),
+        style: TextStyle(color: Colors.white),
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -120,12 +118,10 @@ class EditProfile extends State<EditProfilePage> {
         File imageFilee;
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-            backgroundColor:  Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             title: Text("Promena profilne slike"),
             content: Container(
-                color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite,
                 width: 300,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -145,7 +141,6 @@ class EditProfile extends State<EditProfilePage> {
                               });
                             },
                             icon: Icon(Icons.camera_alt),
-                            //color: Colors.greenAccent,
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(50),
                             ),
@@ -153,7 +148,7 @@ class EditProfile extends State<EditProfilePage> {
                           flex: 10,
                         ),
                         Expanded(
-                          child: Container( color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite,),
+                          child: Container( color: Colors.white,),
                           flex: 1,
                         ),
                         Expanded(
@@ -169,7 +164,6 @@ class EditProfile extends State<EditProfilePage> {
                               });
                             },
                             icon: Icon(Icons.photo_library),
-                            //color: Colors.greenAccent,
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(50),
                             ),
@@ -210,7 +204,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget okButton = FlatButton(
       child: Text(
         "OK",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Colors.green[800]),
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -245,10 +239,9 @@ class EditProfile extends State<EditProfilePage> {
 
     return showDialog(
         context: context,
-        barrierDismissible: false, // user must tap button!
+        //barrierDismissible: false, // user must tap button!
         builder: (context) {
           return AlertDialog(
-            backgroundColor:  Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
@@ -262,7 +255,7 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Ime i prezime", style: TextStyle(fontSize: 24, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack))
+                        Text("Ime i prezime", style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -281,7 +274,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -309,7 +302,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -333,7 +326,6 @@ class EditProfile extends State<EditProfilePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor:  Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
@@ -347,7 +339,7 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Korisničko ime", style: TextStyle(fontSize: 24, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack))
+                        Text("Korisničko ime", style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(
@@ -368,7 +360,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -391,7 +383,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -416,7 +408,6 @@ class EditProfile extends State<EditProfilePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-             backgroundColor:  Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
@@ -430,7 +421,7 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Šifra", style: TextStyle(fontSize: 24, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack))
+                        Text("Šifra", style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -441,7 +432,7 @@ class EditProfile extends State<EditProfilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Trenutna šifra",
-                        hintStyle: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                        hintStyle: TextStyle(color: Colors.black),
                         labelStyle: TextStyle(
                             color: Colors.black87, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
@@ -456,7 +447,6 @@ class EditProfile extends State<EditProfilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Nova šifra",
-                        hintStyle: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
                         labelStyle: TextStyle(
                             color: Colors.black87, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
@@ -471,7 +461,6 @@ class EditProfile extends State<EditProfilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Ponovi šifru",
-                        hintStyle: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
                         labelStyle: TextStyle(
                             color: Colors.black87, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
@@ -484,7 +473,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -517,7 +506,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -540,7 +529,6 @@ class EditProfile extends State<EditProfilePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor:  Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
@@ -554,7 +542,7 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Email adresa", style: TextStyle(fontSize: 24, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack))
+                        Text("Email adresa", style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -573,7 +561,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -596,7 +584,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -620,7 +608,6 @@ class EditProfile extends State<EditProfilePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor:  Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
@@ -634,7 +621,7 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Kontakt telefon", style: TextStyle(fontSize: 24, color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack))
+                        Text("Kontakt telefon", style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -654,7 +641,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -677,7 +664,7 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
+                            style: TextStyle(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -698,19 +685,18 @@ class EditProfile extends State<EditProfilePage> {
       appBar: AppBar(
         elevation: 8,
         brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack),
-        backgroundColor: Globals.theme,
-        title: Text('Podešavanja profila', style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack)),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white,
+        title: Text('Podešavanja profila', style: TextStyle(color: Colors.black)),
       ),
       body: Container(
-          color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite,
           child: ListView(
         children: <Widget>[
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.all(10),
             width: double.infinity,
-            color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite,
+            color: Colors.white,
             height: 5,
           ),
 
@@ -747,13 +733,12 @@ class EditProfile extends State<EditProfilePage> {
 
           //first name and last name
           Container(
-            color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite,
             child: Card(
               child: ListTile(
                 leading: Icon(Icons.account_circle, color: Colors.black),
                 title: Text('Ime i prezime',
                     style: TextStyle(
-                      color: Globals.switchStatus == true ? Globals.themeBck : Globals.colorWhite,
+                      color: Colors.black,
                       fontWeight: _selectedOption == index - 1
                           ? FontWeight.bold
                           : FontWeight.normal,
@@ -978,7 +963,7 @@ class EditProfile extends State<EditProfilePage> {
                 });
               }
             },
-            color: green,
+            color: Colors.green[800],
             child: Text(
               'Sacuvaj',
               style: TextStyle(

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
-import 'package:frontend/ui/globalValues.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -135,10 +134,10 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Vrsta objave: ", style: TextStyle(fontWeight: FontWeight.bold, color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack),
+              "Vrsta objave: ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             )),
         Text("Problem", 
-        style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,)),
+        style: TextStyle(color: Colors.black)),
         Flexible(
           child: Radio(
             value: 1,
@@ -148,11 +147,11 @@ class _CameraPageState extends State<CameraPage> {
                 _vrstaObjave = value;
               });
             },
-            focusColor: Globals.green,
-            activeColor: Globals.green,
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
           ),
         ),
-        Text("Pohvala", style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,)),
+        Text("Pohvala", style: TextStyle(color: Colors.black)),
         Flexible(
           child: Radio(
             value: 2,
@@ -162,8 +161,8 @@ class _CameraPageState extends State<CameraPage> {
                 _vrstaObjave = value;
               });
             },
-            focusColor: Globals.green,
-            activeColor: Globals.green,
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
           ),
         ),
       ],
@@ -175,8 +174,8 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Problem rešava: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,))),
-        Text("Rešiću sam", style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,)),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+        Text("Rešiću sam", style: TextStyle(color: Colors.black)),
         Flexible(
           child: Radio(
             value: 1,
@@ -186,11 +185,11 @@ class _CameraPageState extends State<CameraPage> {
                 _problemResava = value;
               });
             },
-            focusColor: Globals.green,
-            activeColor: Globals.green,
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
           ),
         ),
-        Text("Neko drugi", style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,)),
+        Text("Neko drugi", style: TextStyle(color:Colors.black)),
         Flexible(
           child: Radio(
             value: 2,
@@ -200,8 +199,8 @@ class _CameraPageState extends State<CameraPage> {
                 _problemResava = value;
               });
             },
-            focusColor: Globals.green,
-            activeColor: Globals.green,
+            focusColor: Colors.green[800],
+            activeColor: Colors.green[800],
           ),
         ),
       ],
@@ -213,10 +212,10 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Kategorija: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,))),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
         _postType != null
             ? DropdownButton<PostType>(
-                hint: Text("Izaberi", style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack,)),
+                hint: Text("Izaberi", style: TextStyle(color: Colors.black)),
                 value: postType,
                 onChanged: (PostType value) {
                   setState(() {
@@ -243,13 +242,13 @@ class _CameraPageState extends State<CameraPage> {
       onPressed: () {
         _openCamera();
       },
-      color: Globals.green,
+      color: Colors.green[800],
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.camera_alt, size: 30, color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack), // icon
-          Text("Kamera", style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack),), // text
+          Icon(Icons.camera_alt, size: 30, color: Colors.black), // icon
+          Text("Kamera", style: TextStyle(color: Colors.black),), // text
         ],
       ),
       padding: EdgeInsets.all(16),
@@ -261,13 +260,13 @@ class _CameraPageState extends State<CameraPage> {
       onPressed: () {
         _openGalery();
       },
-      color: Globals.green,
+      color: Colors.green[800],
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.add_photo_alternate, size: 30, color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack), // icon
-          Text("Galerija", style: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite : Globals.colorBlack),), // text
+          Icon(Icons.add_photo_alternate, size: 30, color:Colors.black), // icon
+          Text("Galerija", style: TextStyle(color: Colors.black),), // text
         ],
       ),
       padding: EdgeInsets.all(16),
@@ -347,10 +346,9 @@ class _CameraPageState extends State<CameraPage> {
       decoration: InputDecoration(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         hintText: (_vrstaObjave == 1) ? 'Opis problema' : 'Opis pohvale',
-        hintStyle: TextStyle(color: Globals.switchStatus == true ? Globals.colorWhite70 : Globals.colorBlack),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 2, color: Globals.green),
+          borderSide: BorderSide(width: 2, color: Colors.green[800]),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -421,7 +419,6 @@ class _CameraPageState extends State<CameraPage> {
 
     return Center(
         child: Container(
-          color: Globals.switchStatus == true ? Globals.theme : Globals.colorWhite,
       width: 400,
       child: ListView(
         shrinkWrap: true,

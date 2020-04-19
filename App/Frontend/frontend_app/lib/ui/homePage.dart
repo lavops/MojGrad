@@ -5,7 +5,7 @@ import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/ui/feedPage.dart';
 import 'package:frontend/ui/mapPage.dart';
-import 'package:frontend/ui/user_profile_page.dart';
+import 'package:frontend/ui/UserProfilePage.dart';
 import 'dart:convert';
 
 User publicUser;
