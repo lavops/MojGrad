@@ -7,16 +7,16 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
   //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  //String serverURLPhoto = 'http://192.168.1.2:45455//';
-  String serverURLPhoto = 'http://192.168.1.4:45455//';
+  String serverURLPhoto = 'http://192.168.1.2:45455//';
+  //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
   //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://192.168.1.4:45455/api/';
-
+  static String serverURL = 'http://192.168.1.2:45455/api/';
+  //static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
 
@@ -387,5 +387,25 @@ class APIServices
     }, body: jsonBody);
     print(res.statusCode);
     return res.body;
+  }
+
+  static Future getEvents(String jwt, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Event/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getDonations(String jwt) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Donation',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
   }
 }
