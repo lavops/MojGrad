@@ -65,16 +65,15 @@ class HeaderSection extends State<UserProfilePage> {
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white
+        backgroundColor: Colors.black,
       ),
       endDrawer: Drawer(
         child : Container(
-         //color : Colors.white,
         child: ListView(
           children: <Widget>[
             DrawerHeader(
               /*decoration: BoxDecoration(
-                color: Colors.white
+                color: Colors.blue,
               ),*/
               child: Center(child: Text(
                 user.firstName + " " + user.lastName,

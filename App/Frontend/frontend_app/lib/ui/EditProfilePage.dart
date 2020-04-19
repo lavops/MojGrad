@@ -43,7 +43,7 @@ class EditProfile extends State<EditProfilePage> {
       imageFile = picture;
       return picture;
     });
-     return null;
+    return null;
   }
 
   int _selectedOption = 0;
@@ -69,7 +69,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget okButton = FlatButton(
       child: Text(
         "Izmeni",
-        style: TextStyle(color: Colors.green[800]),
+        style: TextStyle(color: Colors.black),
       ),
       onPressed: () {
         if (imageFile != null) {
@@ -101,7 +101,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget closeButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -120,7 +120,10 @@ class EditProfile extends State<EditProfilePage> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
-            title: Text("Promena profilne slike"),
+            title: Text(
+              "Promena profilne slike",
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
             content: Container(
                 width: 300,
                 child: Column(
@@ -148,7 +151,9 @@ class EditProfile extends State<EditProfilePage> {
                           flex: 10,
                         ),
                         Expanded(
-                          child: Container( color: Colors.white,),
+                          child: Container(
+                            color: Colors.white,
+                          ),
                           flex: 1,
                         ),
                         Expanded(
@@ -255,7 +260,8 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Ime i prezime", style: TextStyle(fontSize: 24, color: Colors.black))
+                        Text("Ime i prezime",
+                            style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -339,7 +345,8 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Korisničko ime", style: TextStyle(fontSize: 24, color: Colors.black))
+                        Text("Korisničko ime",
+                            style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(
@@ -421,7 +428,8 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Šifra", style: TextStyle(fontSize: 24, color: Colors.black))
+                        Text("Šifra",
+                            style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -542,7 +550,8 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Email adresa", style: TextStyle(fontSize: 24, color: Colors.black))
+                        Text("Email adresa",
+                            style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -621,7 +630,8 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Kontakt telefon", style: TextStyle(fontSize: 24, color: Colors.black))
+                        Text("Kontakt telefon",
+                            style: TextStyle(fontSize: 24, color: Colors.black))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -682,298 +692,305 @@ class EditProfile extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 8,
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
-        title: Text('Podešavanja profila', style: TextStyle(color: Colors.black)),
-      ),
-      body: Container(
+        appBar: AppBar(
+          elevation: 8,
+          brightness: Brightness.light,
+          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Colors.white,
+          title: Text('Podešavanja profila',
+              style: TextStyle(color: Colors.black)),
+        ),
+        body: Container(
           child: ListView(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.all(10),
-            width: double.infinity,
-            color: Colors.white,
-            height: 5,
-          ),
-
-          //photo
-          Card(
-              child: Column(
             children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  editProfilePhotoo(context);
-                },
-                child: CircleImage(
-                  serverURLPhoto + user.photo,
-                  imageSize: 90.0,
-                  whiteMargin: 2.0,
-                  imageMargin: 20.0,
-                ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(10),
+                width: double.infinity,
+                height: 5,
               ),
-              GestureDetector(
-                onTap: () {
-                  editProfilePhotoo(context);
-                },
-                child: Text(
-                  "Promeni profilnu sliku",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.blue),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              )
-            ],
-          )),
 
-          //first name and last name
-          Container(
-            child: Card(
-              child: ListTile(
-                leading: Icon(Icons.account_circle, color: Colors.black),
-                title: Text('Ime i prezime',
+              //photo
+              Card(
+                  child: Column(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      editProfilePhotoo(context);
+                    },
+                    child: CircleImage(
+                      serverURLPhoto + user.photo,
+                      imageSize: 90.0,
+                      whiteMargin: 2.0,
+                      imageMargin: 20.0,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      editProfilePhotoo(context);
+                    },
+                    child: Text(
+                      "Promeni profilnu sliku",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.blue),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
+              )),
+
+              //first name and last name
+              Container(
+                  child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.account_circle, color: Colors.black),
+                  title: Text('Ime i prezime',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedOption == index - 1
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      )),
+                  subtitle: Text(
+                      firstName == ''
+                          ? user.firstName + ' ' + user.lastName
+                          : firstName + " " + lastName == ''
+                              ? user.lastName
+                              : lastName,
+                      style: TextStyle(
+                          color: _selectedOption == index - 1
+                              ? Colors.black
+                              : Colors.grey)),
+                  selected: _selectedOption == index - 1,
+                  onTap: () {
+                    setState(() {
+                      _selectedOption = index - 1;
+                    });
+
+                    firstLastName(context, user.firstName + " " + user.lastName)
+                        .then((onValue) {
+                      String newName = "$onValue";
+                      SnackBar snackName = SnackBar(content: Text(newName));
+                      Scaffold.of(context).showSnackBar(snackName);
+                    });
+                  },
+                ),
+              )),
+
+              //username
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.account_circle, color: Colors.black),
+                  title: Text('Korisničko ime',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedOption == index - 2
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      )),
+                  subtitle: Text(
+                    username1 == '' ? user.username : username1,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: _selectedOption == index - 1
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    )),
-                subtitle: Text(
-                    firstName == ''
-                        ? user.firstName
-                        : firstName + " " + lastName == ''
-                            ? user.lastName
-                            : lastName,
-                    style: TextStyle(
-                        color: _selectedOption == index - 1
+                        color: _selectedOption == index - 2
                             ? Colors.black
-                            : Colors.grey)),
-                selected: _selectedOption == index - 1,
-                onTap: () {
-                  setState(() {
-                    _selectedOption = index - 1;
-                  });
+                            : Colors.grey),
+                  ),
+                  selected: _selectedOption == index - 2,
+                  onTap: () {
+                    setState(() {
+                      _selectedOption = index - 2;
+                    });
 
-                  firstLastName(context, user.firstName + " " + user.lastName)
-                      .then((onValue) {
-                    String newName = "$onValue";
-                    SnackBar snackName = SnackBar(content: Text(newName));
-                    Scaffold.of(context).showSnackBar(snackName);
-                  });
+                    username(context, user.username).then((onValue) {
+                      String newUserame = "$onValue";
+                      SnackBar snackUsername =
+                          SnackBar(content: Text(newUserame));
+                      Scaffold.of(context).showSnackBar(snackUsername);
+                    });
+                  },
+                ),
+              ),
+
+              //password
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.lock_open, color: Colors.black),
+                  title: Text('Šifra',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedOption == index - 3
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      )),
+                  selected: _selectedOption == index - 3,
+                  onTap: () {
+                    setState(() {
+                      _selectedOption = index - 3;
+                    });
+                    password(context, user.password).then((onValue) {
+                      String newPassword = "$onValue";
+                      SnackBar snackPassword =
+                          SnackBar(content: Text(newPassword));
+                      Scaffold.of(context).showSnackBar(snackPassword);
+                    });
+                  },
+                ),
+              ),
+
+              //email
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.email, color: Colors.black),
+                  title: Text('Email',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedOption == index - 4
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      )),
+                  subtitle: Text(email1 == '' ? user.email : email1,
+                      style: TextStyle(
+                          color: _selectedOption == index - 4
+                              ? Colors.black
+                              : Colors.grey)),
+                  selected: _selectedOption == index - 4,
+                  onTap: () {
+                    setState(() {
+                      _selectedOption = index - 4;
+                    });
+
+                    email(context, user.email).then((onValue) {
+                      String newEmail = "$onValue";
+                      SnackBar snackEmail = SnackBar(content: Text(newEmail));
+                      Scaffold.of(context).showSnackBar(snackEmail);
+                    });
+                  },
+                ),
+              ),
+
+              //mobile number
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.phone_android, color: Colors.black),
+                  title: Text('Telefon',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedOption == index - 5
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      )),
+                  subtitle: Text(number1 == '' ? user.phone : number1,
+                      style: TextStyle(
+                          color: _selectedOption == index - 5
+                              ? Colors.black
+                              : Colors.grey)),
+                  selected: _selectedOption == index - 5,
+                  onTap: () {
+                    setState(() {
+                      _selectedOption = index - 5;
+                    });
+
+                    phone(context, user.phone).then((onValue) {
+                      String newPhoneNumber = "$onValue";
+                      SnackBar snackPhone =
+                          SnackBar(content: Text(newPhoneNumber));
+                      Scaffold.of(context).showSnackBar(snackPhone);
+                    });
+                  },
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              Center(
+                  child: MaterialButton(
+                minWidth: 200.0,
+                height: 50.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(50.0),
+                    side: BorderSide(color: Colors.transparent)),
+                onPressed: () async {
+                  if (firstName == '') {
+                    firstName = user.firstName;
+                  }
+
+                  if (lastName == '') {
+                    lastName = user.lastName;
+                  }
+
+                  if (username1 == '') {
+                    username1 = user.username;
+                  }
+
+                  if (password1 == '') {
+                    password1 = user.password;
+                  }
+
+                  if (email1 == '') {
+                    email1 = user.email;
+                  }
+
+                  if (number1 == '') {
+                    number1 = user.phone;
+                  }
+
+                  if (password1 != '' && oldPassword != '') {
+                    var pom = utf8.encode(password1);
+                    newPass = sha1.convert(pom);
+
+                    var pom2 = utf8.encode(oldPassword);
+                    oldPass = sha1.convert(pom2);
+                    APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        APIServices.editUserPassword(jwt, user.id,
+                                oldPass.toString(), newPass.toString())
+                            .then((response) {
+                          if (response.statusCode == 200) {
+                            showAlertDialog(context);
+                          }
+                        });
+                      }
+                    });
+                  }
+                  if (firstName != '' ||
+                      lastName != '' ||
+                      username1 != '' ||
+                      email1 != '' ||
+                      number1 != '') {
+                    APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        APIServices.editUser(jwt, user.id, firstName, lastName,
+                                username1, email1, number1)
+                            .then((response) {
+                          if (response.statusCode == 200 ||
+                              password1 == '' && oldPassword == '') {
+                            showAlertDialog(context);
+                          }
+                        });
+                      }
+                    });
+                  }
                 },
-              ),
-            )
+                color: Colors.green[800],
+                child: Text(
+                  'Sacuvaj',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ))
+            ],
           ),
-
-          //username
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.account_circle, color: Colors.black),
-              title: Text('Korisničko ime',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: _selectedOption == index - 2
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  )),
-              subtitle: Text(
-                username1 == '' ? user.username : username1,
-                style: TextStyle(
-                    color: _selectedOption == index - 2
-                        ? Colors.black
-                        : Colors.grey),
-              ),
-              selected: _selectedOption == index - 2,
-              onTap: () {
-                setState(() {
-                  _selectedOption = index - 2;
-                });
-
-                username(context, user.username).then((onValue) {
-                  String newUserame = "$onValue";
-                  SnackBar snackUsername = SnackBar(content: Text(newUserame));
-                  Scaffold.of(context).showSnackBar(snackUsername);
-                });
-              },
-            ),
-          ),
-
-          //password
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.lock_open, color: Colors.black),
-              title: Text('Šifra',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: _selectedOption == index - 3
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  )),
-              selected: _selectedOption == index - 3,
-              onTap: () {
-                setState(() {
-                  _selectedOption = index - 3;
-                });
-                password(context, user.password).then((onValue) {
-                  String newPassword = "$onValue";
-                  SnackBar snackPassword = SnackBar(content: Text(newPassword));
-                  Scaffold.of(context).showSnackBar(snackPassword);
-                });
-              },
-            ),
-          ),
-
-          //email
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.email, color: Colors.black),
-              title: Text('Email',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: _selectedOption == index - 4
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  )),
-              subtitle: Text(email1 == '' ? user.email : email1,
-                  style: TextStyle(
-                      color: _selectedOption == index - 4
-                          ? Colors.black
-                          : Colors.grey)),
-              selected: _selectedOption == index - 4,
-              onTap: () {
-                setState(() {
-                  _selectedOption = index - 4;
-                });
-
-                email(context, user.email).then((onValue) {
-                  String newEmail = "$onValue";
-                  SnackBar snackEmail = SnackBar(content: Text(newEmail));
-                  Scaffold.of(context).showSnackBar(snackEmail);
-                });
-              },
-            ),
-          ),
-
-          //mobile number
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.phone_android, color: Colors.black),
-              title: Text('Telefon',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: _selectedOption == index - 5
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  )),
-              subtitle: Text(number1 == '' ? user.phone : number1,
-                  style: TextStyle(
-                      color: _selectedOption == index - 5
-                          ? Colors.black
-                          : Colors.grey)),
-              selected: _selectedOption == index - 5,
-              onTap: () {
-                setState(() {
-                  _selectedOption = index - 5;
-                });
-
-                phone(context, user.phone).then((onValue) {
-                  String newPhoneNumber = "$onValue";
-                  SnackBar snackPhone = SnackBar(content: Text(newPhoneNumber));
-                  Scaffold.of(context).showSnackBar(snackPhone);
-                });
-              },
-            ),
-          ),
-
-          SizedBox(height: 20),
-
-          Center(
-              child: MaterialButton(
-            minWidth: 200.0,
-            height: 50.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(50.0),
-                side: BorderSide(color: Colors.transparent)),
-            onPressed: () async {
-              if (firstName == '') {
-                firstName = user.firstName;
-              }
-
-              if (lastName == '') {
-                lastName = user.lastName;
-              }
-
-              if (username1 == '') {
-                username1 = user.username;
-              }
-
-              if (password1 == '') {
-                password1 = user.password;
-              }
-
-              if (email1 == '') {
-                email1 = user.email;
-              }
-
-              if (number1 == '') {
-                number1 = user.phone;
-              }
-
-              if (password1 != '' && oldPassword != '') {
-                var pom = utf8.encode(password1);
-                newPass = sha1.convert(pom);
-
-                var pom2 = utf8.encode(oldPassword);
-                oldPass = sha1.convert(pom2);
-                APIServices.jwtOrEmpty().then((res) {
-                  String jwt;
-                  setState(() {
-                    jwt = res;
-                  });
-                  if (res != null) {
-                    APIServices.editUserPassword(jwt, user.id, oldPass.toString(), newPass.toString())
-                        .then((response) {
-                      if (response.statusCode == 200) {
-                        showAlertDialog(context);
-                      }
-                    });
-                  }
-                });
-              }
-              if (firstName != '' || lastName != '' ||  username1 != '' || email1 != '' ||   number1 != '') {
-                APIServices.jwtOrEmpty().then((res) {
-                  String jwt;
-                  setState(() {
-                    jwt = res;
-                  });
-                  if (res != null) {
-                    APIServices.editUser(jwt, user.id, firstName, lastName, username1, email1, number1)
-                        .then((response) {
-                      if (response.statusCode == 200 ||
-                          password1 == '' && oldPassword == '') {
-                        showAlertDialog(context);
-                      }
-                    });
-                  }
-                });
-              }
-            },
-            color: Colors.green[800],
-            child: Text(
-              'Sacuvaj',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ))
-        ],
-      ),
-      )      
-    );
+        ));
   }
 }
