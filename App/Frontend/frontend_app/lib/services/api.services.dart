@@ -408,4 +408,21 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     });
   }
+  
+  static Future getUsersFromEvent(String jwt, int eventId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event/UserForEvent';
+    var data = Map();
+    data["id"] = eventId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
 }
