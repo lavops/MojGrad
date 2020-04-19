@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:frontend/models/event.dart';
+import 'package:frontend/models/user.dart';
+import 'package:frontend/services/api.services.dart';
+import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:latlong/latlong.dart';
+
+import 'circleImageWidget.dart';
 
 class EventsWidget extends StatefulWidget {
   final Events event;
@@ -14,6 +22,7 @@ class EventsWidget extends StatefulWidget {
 
 class _EventsWidgetState extends State<EventsWidget> {
   Events event;
+  List<User> users;
   TextEditingController donateController = new TextEditingController();
 
   _EventsWidgetState(Events event1) {
@@ -101,7 +110,10 @@ class _EventsWidgetState extends State<EventsWidget> {
         SizedBox(width: 10.0,),
         FlatButton(
           onPressed: (){
-            moreInfoActionButton();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EventsPageWidget(event)),
+            );
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
@@ -201,57 +213,37 @@ class _EventsWidgetState extends State<EventsWidget> {
     );
   }
 
-  moreInfoActionButton(){
+  showUsers(){
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Informacije o dogadjaju."),
+        title: Text("Otkazi prisustvo dogadjaju!"),
         content: Container(
-          height: double.infinity,
-          width: 400.0,
-          child: Column(
-            children: <Widget>[
-              Text(
-                event.organizeName, 
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)
-              ),
-              SizedBox(height: 10.0,),
-              Row(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text("Datum pocetka:"),
-                      Text(event.startDate)
-                    ],
-                  ),
-                  Expanded(child: SizedBox()),
-                  Column(
-                    children: <Widget>[
-                      Text("Datum zavrsetka:"),
-                      Text(event.endDate)
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(height: 10.0,),
-              showMap(),
-              SizedBox(height: 20.0,),
-              Flexible(child:Text(event.address)),
-              SizedBox(height: 10.0,),
-              Text("Ucestvuje: ${event.userNum} korisnika"),
-              SizedBox(height: 20.0,),
-              Flexible(child: Text(event.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0))),
-              SizedBox(height: 10.0,),
-              Flexible(child: Text(event.description)),
-              SizedBox(height: 20.0,),
-            ]
+          child: ListView.builder(
+            padding: EdgeInsets.only(bottom: 30.0),
+            itemCount: users == null ? 0 : users.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: Text(users[index].username)
+              );
+            }
           ),
         ),
         actions: <Widget>[
           FlatButton(
+            child: Text(
+              "Potvrdi",
+              style: TextStyle(color: Colors.red),
+            ),
+            onPressed: () {
+              print('Uspesno ste otkazali prisustvo dogadjaju.');
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
           child: Text(
-            "Izadji",
-            style: TextStyle(color: Colors.red),
+            "Otkazi",
+            style: TextStyle(color: Colors.green[800]),
           ),
           onPressed: () {
               Navigator.of(context).pop();
@@ -259,6 +251,104 @@ class _EventsWidgetState extends State<EventsWidget> {
           )
         ],
       )
+    );
+  }
+}
+
+class EventsPageWidget extends StatefulWidget {
+  final Events event;
+
+  EventsPageWidget(this.event);
+
+  @override
+  _EventsPageWidgetState createState() => _EventsPageWidgetState(event);
+}
+
+class _EventsPageWidgetState extends State<EventsPageWidget> {
+  Events event;
+  List<User> users;
+  TextEditingController donateController = new TextEditingController();
+
+  _EventsPageWidgetState(Events event1) {
+    this.event = event1;
+  }
+
+  _getUsersFromEvent() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getUsersFromEvent(jwt, event.id).then((res) {
+      Iterable list = json.decode(res);
+      List<User> users1 = List<User>();
+      users1 = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          users = users1;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsersFromEvent();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      body: Container(
+      height: double.infinity,
+      width: double.infinity,
+      padding: EdgeInsets.only(left:10.0, right:10.0),
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 10.0,),
+          Text(
+            event.organizeName, 
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0)
+          ),
+          SizedBox(height: 10.0,),
+          Row(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Text("Datum pocetka:"),
+                  Text(event.startDate)
+                ],
+              ),
+              Expanded(child: SizedBox()),
+              Column(
+                children: <Widget>[
+                  Text("Datum zavrsetka:"),
+                  Text(event.endDate)
+                ],
+              )
+            ],
+          ),
+          SizedBox(height: 10.0,),
+          showMap(),
+          SizedBox(height: 20.0,),
+          Flexible(child:Text(event.address)),
+          SizedBox(height: 20.0,),
+          Flexible(child: Text(event.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))),
+          SizedBox(height: 10.0,),
+          Flexible(child: Text(event.description)),
+          SizedBox(height: 20.0,),
+          Row(
+            children: <Widget>[
+              Text("Ucesnici:"),
+              Expanded(child: SizedBox()),
+              Text("${event.userNum} korisnika"),
+            ],
+          ),
+          (users != null)?listUsers():SizedBox(),
+        ]
+      ),
+    )
     );
   }
 
@@ -294,4 +384,37 @@ class _EventsWidgetState extends State<EventsWidget> {
       )
     );
   }
+
+  Widget listUsers(){
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Wrap(
+        spacing: 10.0,
+        runSpacing: 10.0,
+        direction: Axis.horizontal,
+        children: users.map((User user) => InputChip(
+          avatar: CircleAvatar(child: Container(
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                  fit: BoxFit.fill,
+                  image: new NetworkImage(serverURLPhoto + user.photo)
+                )
+              )
+            ),
+          ),
+          label: Text(user.firstName + " " + user.lastName),
+          onPressed: (){
+            if(user.id != userId)
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OthersProfilePage(user.id)),
+              );
+          },
+        )).toList(),
+      )
+    );
+  }
+
 }
