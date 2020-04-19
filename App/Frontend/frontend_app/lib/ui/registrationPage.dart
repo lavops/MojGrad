@@ -145,8 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //function that adds cities to list
   _getCity() async {
-     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getCity(jwt).then((res) {
+    APIServices.getCity().then((res) {
       Iterable list = json.decode(res.body);
       List<City> cities = new List<City>();
       cities = list.map((model) => City.fromObject(model)).toList();

@@ -6,17 +6,17 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  //String serverURLPhoto = 'http://10.0.2.2:60676//';
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
   //String serverURLPhoto = 'http://192.168.1.2:45455//';
-  String serverURLPhoto = 'http://192.168.1.4:45455//';
+  //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
   //static String serverURL = 'http://192.168.1.2:45455/api/';
-  static String serverURL = 'http://192.168.1.4:45455/api/';
+  //static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
 
@@ -173,13 +173,11 @@ class APIServices
   }
 
   //fetch method for cities
-  static Future getCity(String jwt) async{
-    var datas = jsonDecode(jwt);
-    jwt = datas['token'].toString();
+  static Future getCity() async{
+
     return await http.get(serverURL + 'City', headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $jwt'
     });
   }
   
