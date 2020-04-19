@@ -55,7 +55,7 @@ class StateComents extends State<CommentsPage> {
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  "Izbrisi",
+                  "Izbriši",
                   style: TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
@@ -72,15 +72,14 @@ class StateComents extends State<CommentsPage> {
                       });
                     }
                   });
-                  _getComms();
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
-                  _getComms();
+                  
                 },
               ),
               FlatButton(
               child: Text(
-                "Otkazi",
+                "Otkaži",
                 style: TextStyle(color: Colors.green[800]),
               ),
               onPressed: () {
@@ -123,6 +122,7 @@ class StateComents extends State<CommentsPage> {
                   });
                   print('Uspesno ste prijavili komentar.');
                   Navigator.of(context).pop();
+                  
                 },
               ),
               FlatButton(
@@ -152,7 +152,6 @@ class StateComents extends State<CommentsPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                  color: Colors.white,
                   padding: EdgeInsets.all(10),
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
@@ -287,8 +286,7 @@ class StateComents extends State<CommentsPage> {
                           Comment newComm = Comment();
                           newComm = Comment.fromObject(list);
                           setState(() {
-                            _getComms();
-                            myController.text = "";
+                            //
                           });
                         });
                       }

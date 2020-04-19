@@ -5,12 +5,12 @@ import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
   //final  String imageUploadURL = 'http://10.0.2.2:60676/api/ImageUpload';
-  final  String imageUploadURL = 'http://192.168.1.2:45455/api/ImageUpload';
-  //final  String imageUploadURL = 'http://192.168.1.4:45455/api/ImageUpload';
+  //final  String imageUploadURL = 'http://192.168.1.2:45455/api/ImageUpload';
+  final  String imageUploadURL = 'http://192.168.1.4:45455/api/ImageUpload';
 
   //final  String imageUploadURLProfilePhoto = 'http://10.0.2.2:60676/api/ImageUpload/ProfilePhoto';
-  final  String imageUploadURLProfilePhoto = 'http://192.168.1.2:45455/api/ImageUpload/ProfilePhoto';
-  //final  String imageUploadURLProfilePhoto = 'http://192.168.1.4:45455/api/ImageUpload/ProfilePhoto';
+  //final  String imageUploadURLProfilePhoto = 'http://192.168.1.2:45455/api/ImageUpload/ProfilePhoto';
+  final  String imageUploadURLProfilePhoto = 'http://192.168.1.4:45455/api/ImageUpload/ProfilePhoto';
 
 imageUpload(File imageFile) async {
  

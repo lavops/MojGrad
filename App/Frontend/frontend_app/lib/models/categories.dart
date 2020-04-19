@@ -6,7 +6,7 @@ class Category{
 
   static List<Category> getCategories(){
     return <Category>[
-      Category(1,'Smece'),
+      Category(1,'Smeće'),
       Category(2,'Otpad'),
       Category(3,'Drugo'),
     ];

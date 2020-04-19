@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
-import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
-import 'edit_profile_page.dart';
+import 'EditProfilePage.dart';
 
 class OthersProfilePage extends StatefulWidget {
   final int otherUserId;

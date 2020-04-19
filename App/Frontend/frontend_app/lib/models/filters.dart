@@ -1,7 +1,7 @@
 class Filteri{
-  static const String reseni = 'Reseni slucajevi';
-  static const String nereseni = 'Nereseni slucajevi';
-  static const String svi = 'Svi slucajevi';
+  static const String svi = 'Svi slučajevi';
+  static const String reseni = 'Rešeni slučajevi';
+  static const String nereseni = 'Nerešeni slučajevi';
   static const String prazno = 'Prazno';
 
   static const List<String> choices = <String>[
