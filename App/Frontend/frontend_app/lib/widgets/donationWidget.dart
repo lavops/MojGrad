@@ -151,7 +151,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
       child: AlertDialog(
         title: Text("Doniraj poene."),
         content: Container(
-          height: 70.0,
+          height: 150.0,
           child: Column(
             children: <Widget>[
               Text("Imate ukupno " + publicUser.points.toString() + " poena!"),
@@ -169,9 +169,53 @@ class _DonationsWidgetState extends State<DonationsWidget> {
               style: TextStyle(color: Colors.green[800]),
             ),
             onPressed: () {
-              
-              print('Uspesno ste donirali.');
-              Navigator.of(context).pop();
+              int donationAmount = int.parse(donateController.text);
+              if(donationAmount != 0 && donationAmount <= publicUser.points)
+              {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.addDonation(jwt, donation.id, userId, donationAmount).then((res){
+                      if(res.statusCode == 200){
+                        Map<String, dynamic> list = json.decode(res.body);
+                        Donation donation1 = Donation();
+                        donation1 = Donation.fromObject(list);
+                        print('Uspesno ste donirali');
+                        setState(() {
+                          donation.pointsAccumulated = donation1.pointsAccumulated;
+                          donateController.text = "";
+                        });
+                        Navigator.of(context).pop();
+                      }
+                    });
+                  }
+                });
+              }
+              else{
+                if(donationAmount == 0){
+                  Navigator.of(context).pop();
+                  Scaffold.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne mozete donirati 0 poena.\n ")),));
+
+                  setState(() {
+                    donateController.text = "";
+                  });
+                }
+                else{
+                  Navigator.of(context).pop();
+                  Scaffold.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne mozete donirati vise poena nego sto imate.\n ")),));
+                  
+                  setState(() {
+                    donateController.text = "";
+                  });
+                }
+              }
             },
           ),
           FlatButton(
@@ -180,6 +224,9 @@ class _DonationsWidgetState extends State<DonationsWidget> {
             style: TextStyle(color: Colors.red),
           ),
           onPressed: () {
+              setState(() {
+                donateController.text = "";
+              });
               Navigator.of(context).pop();
             },
           )

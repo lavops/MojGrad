@@ -68,11 +68,19 @@ class _EventsWidgetState extends State<EventsWidget> {
     return Row(
       children: <Widget>[
         SizedBox(width: 10.0,),
-        Text("Pocetak: "),
-        Text(event.startDate.toString()),
+        Column(
+          children: <Widget>[
+            Text("Datum pocetka:"),
+            Text(event.startDate)
+          ],
+        ),
         Expanded(child: SizedBox()),
-        Text("Zavrsetak: "),
-        Text(event.endDate.toString()),
+        Column(
+          children: <Widget>[
+            Text("Datum zavrsetka:"),
+            Text(event.endDate)
+          ],
+        ),
         SizedBox(width: 10.0,),
       ],
     );
@@ -165,7 +173,22 @@ class _EventsWidgetState extends State<EventsWidget> {
               style: TextStyle(color: Colors.green[800]),
             ),
             onPressed: () {
-              print('Uspesno ste pridruzili dogadjaju.');
+              APIServices.jwtOrEmpty().then((res) {
+                String jwt;
+                setState(() {
+                  jwt = res;
+                });
+                if (res != null) {
+                  APIServices.joinEvent(jwt, event.id, userId).then((res){
+                    if(res.statusCode == 200){
+                      print('Uspesno ste sepridruzili dogadjaju.');
+                      setState(() {
+                        event.isGoing = 1;
+                      });
+                    }
+                  });
+                }
+              });
               Navigator.of(context).pop();
             },
           ),
@@ -195,7 +218,22 @@ class _EventsWidgetState extends State<EventsWidget> {
               style: TextStyle(color: Colors.red),
             ),
             onPressed: () {
-              print('Uspesno ste otkazali prisustvo dogadjaju.');
+              APIServices.jwtOrEmpty().then((res) {
+                String jwt;
+                setState(() {
+                  jwt = res;
+                });
+                if (res != null) {
+                  APIServices.joinEvent(jwt, event.id, userId).then((res){
+                    if(res.statusCode == 200){
+                      print('Uspesno ste napustili dogadjaj.');
+                      setState(() {
+                        event.isGoing = 0;
+                      });
+                    }
+                  });
+                }
+              });
               Navigator.of(context).pop();
             },
           ),
