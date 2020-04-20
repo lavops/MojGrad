@@ -127,5 +127,18 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Greska" });
         }
+
+        [Authorize]
+        [HttpPost("CancelArrival")]
+        public IActionResult CancelArrivalToEvent(UserEvent eve)
+        {
+            bool ind = _iEventUI.cancelArrival(eve);
+            if (ind == true)
+            {
+                return Ok(new { message = "Obrisan" });
+            }
+            else
+                return BadRequest(new { message = "Greska" });
+        }
     }
 }

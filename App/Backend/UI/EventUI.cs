@@ -24,6 +24,11 @@ namespace Backend.UI
             return _iEventBL.addGoingToEvent(ue);
         }
 
+        public bool cancelArrival(UserEvent ue)
+        {
+            return _iEventBL.cancelArrival(ue);
+        }
+
         public bool deleteEvent(long id)
         {
             return _iEventBL.deleteEvent(id);

@@ -37,6 +37,20 @@ namespace Backend.DAL
             }
         }
 
+        public bool cancelArrival(UserEvent ue)
+        {
+            var events = _context.userEvent.Where(x => x.userId == ue.userId && x.eventId == ue.eventId).FirstOrDefault();
+            if (events == null)
+            {
+                return false;
+            }
+
+            _context.userEvent.Remove(events);
+            _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public bool deleteEvent(long id)
         {
             var events = _context.events.Where(x => x.id == id).FirstOrDefault();

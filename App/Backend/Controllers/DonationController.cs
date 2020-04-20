@@ -106,10 +106,11 @@ namespace Backend.Controllers
         [HttpPost("addParcipate")]
         public IActionResult GetReportingUser(UserDonation donation)
         {
-            bool ind = _iDonationUI.addParticipate(donation);
-            if (ind == true)
+            Donation don = _iDonationUI.addParticipate(donation);
+            if (don != null)
             {
-                return Ok(new { message = "Uspesno dodato" });
+                DonationViewModel fullDonation = new DonationViewModel(don);
+                return Ok(fullDonation);
             }
             else
                 return BadRequest(new { message = "Greska" });

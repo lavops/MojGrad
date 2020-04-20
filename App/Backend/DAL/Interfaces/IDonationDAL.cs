@@ -10,7 +10,7 @@ namespace Backend.DAL.Interfaces
     public interface IDonationDAL
     {
         List<Donation> getAllDonations();
-        bool addParticipate(UserDonation ue);
+        Donation addParticipate(UserDonation ue);
         Donation getByID(long id);
         Donation insertDonation(Donation donation);
         bool deleteDonation(long id);

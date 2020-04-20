@@ -17,7 +17,7 @@ namespace Backend.DAL
             _context = context;
         }
 
-        public bool addParticipate(UserDonation ue)
+        public Donation addParticipate(UserDonation ue)
         {
             bool ret = false;
             var exist = _context.userDonation.Where(x => x.userId == ue.userId && x.donationId == ue.donationId).FirstOrDefault();
@@ -55,7 +55,10 @@ namespace Backend.DAL
                 if (existDon.monetaryAmount >= existDon.collectedMoney)
                     this.editDonation(existDon);
             }
-            return ret;
+            if (ret == true)
+                return _context.donation.Where(x => x.id == ue.donationId).FirstOrDefault();
+            else
+                return null;
         }
 
         public bool deleteDonation(long id)

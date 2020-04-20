@@ -142,6 +142,11 @@ namespace Backend
             services.AddTransient<IDonationDAL, DonationDAL>();
 
 
+            services.AddTransient<IChallengeSolvingUI, ChallengeSolvingUI>();
+            services.AddTransient<IChallengeSolvingBL, ChallengeSolvingBL>();
+            services.AddTransient<IChallengeSolvingDAL, ChallengeSolvingDAL>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

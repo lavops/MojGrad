@@ -17,7 +17,7 @@ namespace Backend.BL
             _iDonationDAL = iDonationDAL;
         }
 
-        public bool addParticipate(UserDonation ue)
+        public Donation addParticipate(UserDonation ue)
         {
             return _iDonationDAL.addParticipate(ue);
         }

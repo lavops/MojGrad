@@ -78,6 +78,7 @@ namespace Backend.DAL
                     exist.email = inst.email;
                     exist.phone = inst.phone;
                     exist.description = inst.description;
+                    exist.cityId = inst.cityId;
                     _context.Update(exist);
                     _context.SaveChanges();
                     return exist;
@@ -170,7 +171,9 @@ namespace Backend.DAL
                 u1.description = inst.description;
                 u1.cityId = inst.cityId;
                 u1.authentication = false;
-               
+                u1.photoPath = "Upload//ProfilePhoto//default.jpg";
+
+
                 _context.institution.Add(u1);
                 _context.SaveChanges();
 

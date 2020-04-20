@@ -87,6 +87,7 @@ namespace Backend.DAL
                     exist.username = user.username;
                     exist.email = user.email;
                     exist.phone = user.phone;
+                    exist.cityId = user.cityId;
                     _context.Update(exist);
                     _context.SaveChanges();
                     return exist;

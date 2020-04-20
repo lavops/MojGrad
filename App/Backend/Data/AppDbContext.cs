@@ -32,6 +32,7 @@ namespace Backend
         public DbSet<UserEvent> userEvent { get; set; }
         public DbSet<Donation> donation { get; set; }
         public DbSet<UserDonation> userDonation { get; set; }
+        public DbSet<ChallengeSolving> challengeSolving { get; set; }
 
 
 

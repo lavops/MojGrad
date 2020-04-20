@@ -9,7 +9,7 @@ namespace Backend.UI.Interfaces
     public interface IDonationUI
     {
         List<Donation> getAllDonations();
-        bool addParticipate(UserDonation ue);
+        Donation addParticipate(UserDonation ue);
         Donation getByID(long id);
         Donation insertDonation(Donation donation);
         bool deleteDonation(long id);
