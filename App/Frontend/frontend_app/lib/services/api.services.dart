@@ -6,16 +6,16 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  String serverURLPhoto = 'http://10.0.2.2:60676//';
-  //String serverURLPhoto = 'http://192.168.1.2:45455//';
+  //String serverURLPhoto = 'http://10.0.2.2:60676//';
+  String serverURLPhoto = 'http://192.168.1.2:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  static String serverURL = 'http://10.0.2.2:60676/api/';
-  //static String serverURL = 'http://192.168.1.2:45455/api/';
+  //static String serverURL = 'http://10.0.2.2:60676/api/';
+  static String serverURL = 'http://192.168.1.2:45455/api/';
   //static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
@@ -439,5 +439,60 @@ class APIServices
     }, body: jsonBody);
     print(res.statusCode);
     return res.body;
+  }
+
+  static Future joinEvent(String jwt, int eventId, int userId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event/addGoingToEvent';
+    var data = Map();
+    data["eventId"] = eventId;
+    data["userId"] = userId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res;
+  }
+
+  static Future leaveEvent(String jwt, int eventId, int userId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event/CancelArrival';
+    var data = Map();
+    data["eventId"] = eventId;
+    data["userId"] = userId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res;
+  }
+
+  static Future addDonation(String jwt, int donationId, int userId, int donatedPoints) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Donation/addParcipate';
+    var data = Map();
+    data["donationId"] = donationId;
+    data["userId"] = userId;
+    data["donatedPoints"] = donatedPoints;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res;
   }
 }
