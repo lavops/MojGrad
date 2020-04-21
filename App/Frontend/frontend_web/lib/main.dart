@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:frontend_web/ui/loginSponsorPage.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
@@ -33,17 +33,17 @@ class MyApp extends StatelessWidget {
             var jwt = str.split(".");
 
             if(jwt.length !=3) {
-              return LoginPage();
+              return LoginSponsorPage();
             } else {
               var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
                 return HomePage(str, payload);
               } else {
-                return LoginPage();
+                return LoginSponsorPage();
               }
             }
           } else {
-            return LoginPage();
+            return LoginSponsorPage();
           }
         }
       ),

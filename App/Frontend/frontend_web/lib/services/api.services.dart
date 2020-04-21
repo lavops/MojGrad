@@ -2,9 +2,11 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/user.dart';
+import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:http/http.dart' as http;
+
 
 String userPhotoURL = "http://127.0.0.1:60676//";
 
@@ -101,6 +103,13 @@ class APIServices {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
+    });
+  }
+
+   static Future getCity1() async {
+        return await http.get(serverURL + 'City',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json'
     });
   }
 
@@ -262,5 +271,33 @@ class APIServices {
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     });
+  }
+  
+  
+// institution registratiton
+static Future registerInstitution(Institution ins) async {
+  String url = serverURL + 'Institution/Register';
+  var data = Map();
+  data["name"] = ins.name;
+  data["description"] = ins.description;
+  data["email"] = ins.email;
+  data["password"] = ins.password;
+  data["cityId"]  = ins.cityId;
+  data["phone"] = ins.phone;
+  var jbody = convert.jsonEncode(data);
+  print(jbody);
+  return await http.post(url, headers: header, body: jbody);
+  
+  }
+
+
+// login institution
+ static Future loginInstitution(String mail, String password) async {
+    String url = serverURL + 'Institution/Login';
+    var jbody = jsonEncode({'email': mail, 'password': password});
+     var res = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: jbody);
+    if (res.statusCode == 200) return res.body;
+    return null;
   }
 }
