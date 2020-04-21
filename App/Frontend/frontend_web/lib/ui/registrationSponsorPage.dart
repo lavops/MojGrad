@@ -50,7 +50,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Uspešna registracija"),
-      content: Text("Podaci su poslati na Vašu e-mail adresu. Putem mail-a će Vam stići povratna informacija o odobrenju registracije."),
+      content: Text("Putem mail-a će Vam stići povratna informacija o odobrenju registracije."),
       actions: [
         okButton,
       ],
@@ -73,10 +73,17 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
     final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
     final mobRegex = RegExp(r'^06[0-9]{7,8}$');
 
-     
+    
+    if (cityId == 0) {
+      setState(() {
+        wrongRegText = "Izaberite grad.";
+      });
+      throw Exception("Izaberite grad.");
+    }
     if (description == ""){
         setState(() {
-              wrongRegText ="Unesite ponovo podatke o Vašoj instituciji."; });
+              wrongRegText ="Unesite ponovo podatke o Vašoj instituciji.";
+               });
               throw Exception("Unesite ponovo podatke o Vašoj instituciji.");
             }
       if (nameRegex.hasMatch(name)) {
@@ -157,6 +164,15 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
         width: 300,
       )),
     );
+
+     final wrongReg = Center(
+        child: Text(
+      '$wrongRegText',
+      style: TextStyle(
+          color: Colors.red,
+          fontSize: 20,
+      ),
+    ));
 
     final institutionNameWidget = Container(
       width: 600,
@@ -357,7 +373,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
                   password.text, city.id);
             else
               _register(name.text, description.text, email.text, mobile.text,
-                  password.text, 1,);
+                  password.text, 0);
           }),
     );
 
@@ -384,11 +400,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
       ],
     );
 
-    final wrongReg = Center(
-        child: Text(
-      '$wrongRegText',
-      style: TextStyle(color: Colors.red),
-    ));
+   
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -408,6 +420,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
                     SizedBox(
                       height: 30.0,
                     ),
+                    wrongReg,
                     institutionNameWidget,
                     aboutUsWidget,
                     mobileNumberWidget,
@@ -429,7 +442,6 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
                 ),
               ),
             ),
-            wrongReg,
           ],
         ),
       ),
