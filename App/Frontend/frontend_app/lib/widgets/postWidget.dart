@@ -5,6 +5,7 @@ import 'package:frontend/models/likeViewModel.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
+import 'package:frontend/ui/challengeSolvingPage.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
@@ -192,6 +193,12 @@ class _PostWidgetState extends State<PostWidget> {
             otherUserId: _otherUserId,
           )); //potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
     }
+    else if(choice == Constants.PogledajResenja){
+      Navigator.push(
+        context,
+        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId)),
+      );
+    }
   }
 
   void _onValueChange(ReportType value) {
@@ -292,6 +299,12 @@ class _PostWidgetState extends State<PostWidget> {
               )
             ],
           ));
+    }
+    else if(choice == ConstantsDeleteEdit.IzbrisiObjavu){
+      Navigator.push(
+        context,
+        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId)),
+      );
     }
   }
 
@@ -409,7 +422,12 @@ class _PostWidgetState extends State<PostWidget> {
                         "Reši",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId)),
+                        );
+                      },
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),

@@ -496,4 +496,14 @@ class APIServices
     print(res.statusCode);
     return res;
   }
+
+  static Future getChallengeSolving(String jwt, int postId, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'ChallengeSolving/postId=$postId/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
