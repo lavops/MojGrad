@@ -182,7 +182,7 @@ class APIServices
   }
   
   
-	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone) async  {
+	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone, String city) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'User/EditUserData';
@@ -193,6 +193,7 @@ class APIServices
 		data["username"] = username;
 		data["email"] = email;
 		data["phone"] = phone;
+    data["city"] = city;
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
 		return await http.post(url, headers: {
