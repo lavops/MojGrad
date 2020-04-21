@@ -9,6 +9,8 @@ namespace Backend.Models.ViewsModel
     {
         public long postId { get; set; }
         public long userId { get; set; }
+        public long cityId { get; set; }
+        public string cityName { get; set; }
         public string username { get; set; }
         public long postTypeId { get; set; }
         public string typeName { get; set; }
@@ -45,6 +47,8 @@ namespace Backend.Models.ViewsModel
             this.longitude = p.longitude;
             this.userPhoto = p.user.photo;
             this.address = p.address;
+            this.cityId = p.cityId;
+            this.cityName = p.city.name;
             Like like = p.likes.Where(x => x.userId == userId).FirstOrDefault();
             if (like == null)
                 this.isLiked = 0;

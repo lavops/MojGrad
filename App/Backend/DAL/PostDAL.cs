@@ -55,27 +55,42 @@ namespace Backend.DAL
 
         public List<Post> getAllPosts()
         {
-            return _context.post.Include(u => u.user).Include(c=> c.postType).Include(s=>s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x=>x.id).ToList();
+            return _context.post.Include(u => u.user).Include(c=> c.postType).Include(s=>s.status).Include(l => l.likes).Include(c => c.comments).Include(c=> c.city).OrderByDescending(x=>x.id).ToList();
+        }
+
+        public List<Post> getAllPostsByCityId(long cityId)
+        {
+            return _context.post.Where(c=> c.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(c => c.city).OrderByDescending(x => x.id).ToList();
         }
 
         public List<Post> getAllPostsForOneUser(long id)
         {
-            return _context.post.Where(x => x.userId == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
+            return _context.post.Where(x => x.userId == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).Include(c => c.city).OrderByDescending(x => x.id).ToList();
         }
 
         public List<Post> getAllSolvedPosts()
         {
-            return _context.post.Where(x=> x.statusId==1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
+            return _context.post.Where(x=> x.statusId==1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
+        }
+
+        public List<Post> getAllSolvedPostsByCityId(long cityId)
+        {
+            return _context.post.Where(x => x.statusId == 1 && x.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
         }
 
         public List<Post> getAllUnsolvedPosts()
         {
-            return _context.post.Where(x => x.statusId == 2).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
+            return _context.post.Where(x => x.statusId == 2).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
+        }
+
+        public List<Post> getAllUnsolvedPostsByCityId(long cityId)
+        {
+            return _context.post.Where(x => x.statusId == 2 && x.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
 
         public Post getByID(long id)
         {
-            return _context.post.Where(x => x.id == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).FirstOrDefault();
+            return _context.post.Where(x => x.id == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).Include(c => c.city).FirstOrDefault();
         }
 
         public Post insertPost(Post post)
@@ -91,6 +106,7 @@ namespace Backend.DAL
             post1.statusId = post.statusId;
             post1.latitude = post.latitude;
             post1.longitude = post.longitude;
+            post1.cityId = post.cityId;
 
             if (post != null)
             {

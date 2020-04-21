@@ -23,7 +23,7 @@ namespace Backend.Controllers
         }
 
         [Authorize]
-        [HttpGet("userId={userID}")]
+        [HttpGet("userId={userId}")]
         public ActionResult<IEnumerable<PostViewModel>> GetPosts(int userId)
         {
             var posts = _iPostUI.getAllPosts();
@@ -31,6 +31,20 @@ namespace Backend.Controllers
             foreach (var post in posts)
             {
                 listPosts.Add(new PostViewModel(post,userId));
+            }
+
+            return listPosts;
+        }
+
+        [Authorize]
+        [HttpGet("ByCityId/userId={userId}/cityId={cityId}")]
+        public ActionResult<IEnumerable<PostViewModel>> GetPostsByCityId(int userId, int cityId)
+        {
+            var posts = _iPostUI.getAllPostsByCityId(cityId);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, userId));
             }
 
             return listPosts;
@@ -58,7 +72,7 @@ namespace Backend.Controllers
         }
         
         [Authorize]
-        [HttpGet("SolvedPosts/userId={userID}")]
+        [HttpGet("SolvedPosts/userId={userId}")]
         public ActionResult<IEnumerable<PostViewModel>> SolvedPosts(int userId)
         {
             var posts = _iPostUI.getAllSolvedPosts();
@@ -66,6 +80,19 @@ namespace Backend.Controllers
             foreach (var post in posts)
             {
                 listPosts.Add(new PostViewModel(post,userId));
+            }
+
+            return listPosts;
+        }
+        [Authorize]
+        [HttpGet("SolvedPostsByCityId/userId={userId}/cityId={cityId}")]
+        public ActionResult<IEnumerable<PostViewModel>> SolvedPostsByCityId(int userId, int cityId)
+        {
+            var posts = _iPostUI.getAllSolvedPostsByCityId(cityId);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, userId));
             }
 
             return listPosts;
@@ -84,7 +111,20 @@ namespace Backend.Controllers
 
             return listPosts;
         }
-        
+        [Authorize]
+        [HttpGet("UnsolvedPostsByCityId/userId={userID}/cityId={cityId}")]
+        public ActionResult<IEnumerable<PostViewModel>> UnsolvedPostsByCityId(int userId, int cityId)
+        {
+            var posts = _iPostUI.getAllUnsolvedPostsByCityId(cityId);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, userId));
+            }
+
+            return listPosts;
+        }
+
         [Authorize]
         [HttpPost]
         public IActionResult InsertPost(Post post)

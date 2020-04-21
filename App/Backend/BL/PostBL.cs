@@ -32,6 +32,11 @@ namespace Backend.BL
             return _iPostDAL.getAllPosts();
         }
 
+        public List<Post> getAllPostsByCityId(long cityId)
+        {
+            return _iPostDAL.getAllPostsByCityId(cityId);
+        }
+
         public List<Post> getAllPostsForOneUser(long id)
         {
             return _iPostDAL.getAllPostsForOneUser(id);
@@ -42,9 +47,19 @@ namespace Backend.BL
             return _iPostDAL.getAllSolvedPosts();
         }
 
+        public List<Post> getAllSolvedPostsByCityId(long cityId)
+        {
+            return _iPostDAL.getAllSolvedPostsByCityId(cityId);
+        }
+
         public List<Post> getAllUnsolvedPosts()
         {
             return _iPostDAL.getAllUnsolvedPosts();
+        }
+
+        public List<Post> getAllUnsolvedPostsByCityId(long cityId)
+        {
+            return _iPostDAL.getAllUnsolvedPostsByCityId(cityId);
         }
 
         public Post getByID(long id)
