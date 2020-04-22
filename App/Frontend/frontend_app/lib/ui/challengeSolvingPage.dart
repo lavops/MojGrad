@@ -59,13 +59,22 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
           actions: <Widget>[
+            (solved == 2)?
             IconButton(
               icon: Text(
-                textForSolving,
+                "RESI",
                 style: TextStyle(color: Colors.green[800], fontWeight: FontWeight.bold)
               ),
               onPressed: (){
                 _goToCameraPage();
+              },
+            ):
+            IconButton(
+              icon: Text(
+                "RESENO",
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)
+              ),
+              onPressed: (){
               },
             ),
             SizedBox(width: 10.0,)
