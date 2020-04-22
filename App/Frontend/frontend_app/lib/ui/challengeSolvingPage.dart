@@ -3,25 +3,30 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/challengeSolving.dart';
 import 'package:frontend/services/api.services.dart';
+import 'package:frontend/ui/ChallengeSolvingCameraPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/solvingPostWidget.dart';
 
 class ChallengeSolvingPage extends StatefulWidget {
   int postId;
   int ownerId;
-  ChallengeSolvingPage(this.postId, this.ownerId);
+  int solved;
+  ChallengeSolvingPage(this.postId, this.ownerId, this.solved);
   @override
-  _ChallengeSolvingPageState createState() => _ChallengeSolvingPageState(postId, ownerId);
+  _ChallengeSolvingPageState createState() => _ChallengeSolvingPageState(postId, ownerId, solved);
 }
 
 class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
   int postId;
   int ownerId;
+  int solved;
+  String textForSolving = "RESI";
   List<ChallengeSolving> listChallengeSolving;
 
-  _ChallengeSolvingPageState(int postId1, int ownerId1) {
+  _ChallengeSolvingPageState(int postId1, int ownerId1, int solved1) {
     this.postId = postId1;
     this.ownerId = ownerId1;
+    this.solved = solved1;
   }
 
   _getChallengeSolving() async {
@@ -56,10 +61,12 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
           actions: <Widget>[
             IconButton(
               icon: Text(
-                "RESI",
-                style: TextStyle(color: Colors.green[800])
+                textForSolving,
+                style: TextStyle(color: Colors.green[800], fontWeight: FontWeight.bold)
               ),
-              onPressed: (){},
+              onPressed: (){
+                _goToCameraPage();
+              },
             ),
             SizedBox(width: 10.0,)
           ],
@@ -72,5 +79,15 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
           }
         )
     );
+  }
+
+  _goToCameraPage() async{
+    int result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ChallengeSolvingCameraPage(postId, ownerId)),
+    );
+
+    _getChallengeSolving();
   }
 }

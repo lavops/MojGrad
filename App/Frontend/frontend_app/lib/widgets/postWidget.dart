@@ -196,7 +196,7 @@ class _PostWidgetState extends State<PostWidget> {
     else if(choice == Constants.PogledajResenja){
       Navigator.push(
         context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId)),
+        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
       );
     }
   }
@@ -302,7 +302,7 @@ class _PostWidgetState extends State<PostWidget> {
     }else if(choice == ConstantsDeleteEdit.PogledajResenja){
       Navigator.push(
         context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId)),
+        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
       );
     }
   }
@@ -424,7 +424,7 @@ class _PostWidgetState extends State<PostWidget> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId)),
+                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
                         );
                       },
                     )
