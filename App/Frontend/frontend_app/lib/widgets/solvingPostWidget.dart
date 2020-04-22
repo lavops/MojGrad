@@ -2,36 +2,30 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/challengeSolving.dart';
 import 'package:frontend/models/constantsDeleteEdit.dart';
-import 'package:frontend/models/likeViewModel.dart';
-import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
-import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/challengeSolvingPage.dart';
-import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
-import 'package:frontend/ui/likesPage.dart';
-import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/models/constants.dart';
-import 'dart:convert';
 import '../services/api.services.dart';
 
 class SolvingPostWidget extends StatefulWidget {
   final ChallengeSolving solvingPost;
+  final int ownerId;
 
-  SolvingPostWidget(this.solvingPost);
+  SolvingPostWidget(this.solvingPost, this.ownerId);
 
   @override
-  _SolvingPostWidgetState createState() => _SolvingPostWidgetState(solvingPost);
+  _SolvingPostWidgetState createState() => _SolvingPostWidgetState(solvingPost, ownerId);
 }
 
 class _SolvingPostWidgetState extends State<SolvingPostWidget> {
   ChallengeSolving solvingPost;
-
-  _SolvingPostWidgetState(ChallengeSolving solvingPost1) {
+  int ownerId;
+  _SolvingPostWidgetState(ChallengeSolving solvingPost1, int ownerId1) {
     this.solvingPost = solvingPost1;
+    this.ownerId = ownerId1;
   }
 
   @override
@@ -52,7 +46,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             children: <Widget>[
           userInfoRow(),
           imageGallery(),
-          SizedBox(height: 2.0),
+          SizedBox(height: 10.0),
           description(),
           SizedBox(height: 10.0),
         ]));
@@ -90,8 +84,127 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               )),
           Expanded(child: SizedBox()),
+          (ownerId == userId)
+          ? PopupMenuButton<String>(
+            onSelected: choiceActionSolvingDelete,
+            itemBuilder: (BuildContext context) {
+              return ConstantsChallengeSolvingDelete.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ): SizedBox(),
+          (ownerId != userId && solvingPost.userId == userId)
+          ?
+          PopupMenuButton<String>(
+            onSelected: choiceActionSolvingDelete,
+            itemBuilder: (BuildContext context) {
+              return ConstantsChallengeDelete.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ): SizedBox(),
         ],
       );
+
+  void choiceActionSolvingDelete(String choice) {
+    if (choice == ConstantsChallengeSolvingDelete.IzbrisiResenje) {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text("Brisanje resenja?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                "Izbrisi",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
+                      if(res.statusCode == 200){
+                        print('Uspesno ste izbrisali resenje.');
+                        setState(() {
+                          solvingPost = null;
+                        });
+                      }
+                    });
+                    
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+    }else if(choice == ConstantsChallengeSolvingDelete.IzaberiResenje){
+      print('OK RADI OVO ConstantsChallengeSolvingDelete');
+    }else if(choice == ConstantsChallengeDelete.IzbrisiSvojeResenje){
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text("Brisanje resenja?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                "Izbrisi",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
+                      if(res.statusCode == 200){
+                        print('Uspesno ste izbrisali resenje.');
+                        setState(() {
+                          solvingPost = null;
+                        });
+                      }
+                    });
+                    
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+    }
+  }
+
+  
 
   Widget imageGallery() => Container(
         constraints: BoxConstraints(

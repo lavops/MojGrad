@@ -3,24 +3,25 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/challengeSolving.dart';
 import 'package:frontend/services/api.services.dart';
-import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/ui/homePage.dart';
-import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/solvingPostWidget.dart';
 
 class ChallengeSolvingPage extends StatefulWidget {
   int postId;
-  ChallengeSolvingPage(this.postId);
+  int ownerId;
+  ChallengeSolvingPage(this.postId, this.ownerId);
   @override
-  _ChallengeSolvingPageState createState() => _ChallengeSolvingPageState(postId);
+  _ChallengeSolvingPageState createState() => _ChallengeSolvingPageState(postId, ownerId);
 }
 
 class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
   int postId;
+  int ownerId;
   List<ChallengeSolving> listChallengeSolving;
 
-  _ChallengeSolvingPageState(int postId1) {
+  _ChallengeSolvingPageState(int postId1, int ownerId1) {
     this.postId = postId1;
+    this.ownerId = ownerId1;
   }
 
   _getChallengeSolving() async {
@@ -67,7 +68,7 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listChallengeSolving == null ? 0 : listChallengeSolving.length,
           itemBuilder: (BuildContext context, int index) {
-            return SolvingPostWidget(listChallengeSolving[index]);
+            return SolvingPostWidget(listChallengeSolving[index], ownerId);
           }
         )
     );
