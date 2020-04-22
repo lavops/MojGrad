@@ -506,4 +506,21 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     });
   }
+
+  static Future challengeSolvingDelete(String jwt, int solvingPostId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'ChallengeSolving/Delete';
+    var data = Map();
+    data["id"] = solvingPostId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res;
+  }
 }

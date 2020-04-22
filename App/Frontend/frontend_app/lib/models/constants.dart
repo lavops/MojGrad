@@ -23,3 +23,21 @@ class ConstantsCommentDelete {
     ObrisiKomentar
   ];
 }
+
+class ConstantsChallengeSolvingDelete{
+  static const String IzaberiResenje = 'Izaberi rešenje';
+  static const String IzbrisiResenje = 'Izbriši rešenje';
+
+  static const List<String> choices = <String> [
+    IzaberiResenje,
+    IzbrisiResenje
+  ];
+}
+
+class ConstantsChallengeDelete{
+  static const String IzbrisiSvojeResenje = 'Izbriši svoje rešenje';
+
+  static const List<String> choices = <String> [
+    IzbrisiSvojeResenje
+  ];
+}
