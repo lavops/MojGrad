@@ -77,7 +77,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       onPressed: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
+          MaterialPageRoute(builder: (context) => InstitutionPage.fromBase64(TokenSession.getToken)),
         );
       },
     );
@@ -86,12 +86,27 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       controller: newName,
     );
 
+
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkazi",
+        style: TextStyle(color: Colors.green),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
+        );
+      },
+    );
+
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Promena imena institucije"),
       content: newNameField,
       actions: [
         okButton,
+        notButton
       ],
     );
 
@@ -112,17 +127,26 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
         style: TextStyle(color: Colors.green),
       ),
       onPressed: () {
-      },
-    );
-    Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
-      onPressed: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId:insId)),
+          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
         );
       },
     );
+
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkazi",
+        style: TextStyle(color: Colors.green),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
+        );
+      },
+    );
+
 
     Widget newDescriptionField = TextField(
       controller: newDescription,
@@ -134,6 +158,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       content: newDescriptionField,
       actions: [
         okButton,
+        notButton
       ],
     );
 
@@ -157,6 +182,19 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       onPressed: () {
       },
     );
+    
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkazi",
+        style: TextStyle(color: Colors.green),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
+        );
+      },
+    );
 
     Widget newEmailField = TextField(
       controller: newEmail,
@@ -168,6 +206,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       content: newEmailField,
       actions: [
         okButton,
+        notButton
       ],
     );
 
@@ -191,6 +230,19 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
      },
    );
 
+   Widget notButton = FlatButton(
+     child: Text(
+       "Otkazi",
+       style: TextStyle(color: Colors.green),
+     ),
+     onPressed: () {
+       Navigator.pushReplacement(
+         context,
+         MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
+       );
+     },
+   );
+   
    Widget newMobileField = TextField(
      controller: newMobile,
    );
@@ -201,6 +253,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
      content: newMobileField,
      actions: [
        okButton,
+       notButton
      ],
    );
 
@@ -224,6 +277,19 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       },
     );
 
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkazi",
+        style: TextStyle(color: Colors.green),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId,)),
+        );
+      },
+    );
+
     Widget newPassword1Field = TextField(
       controller: newPassword1,
     );
@@ -239,6 +305,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
         newPassword1Field,
         newPassword2Field,
         okButton,
+        notButton
       ],
     );
 
@@ -367,7 +434,10 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
     email.text = institution.email;
     mobile.text = institution.phone;
     description.text = institution.description;
-    ime = name.text;
+    newMobile.text = institution.phone;
+    newEmail.text = institution.email;
+    newDescription.text = institution.description;
+    newName.text = institution.name;
 
       return MaterialApp(
         theme: ThemeData(
