@@ -301,6 +301,17 @@ static Future registerInstitution(Institution ins) async {
     return null;
   }
   
+   // get inst
+
+  static Future getInstitutionById(String jwt, int id) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Institution/' + id.toString(), headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
   
   // editData ins
 
