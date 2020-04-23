@@ -124,7 +124,7 @@ namespace Backend.DAL
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
+           
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),

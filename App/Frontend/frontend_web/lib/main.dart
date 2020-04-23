@@ -5,6 +5,7 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/loginPage.dart';
+import 'package:frontend_web/ui/sponsorPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,7 +38,11 @@ class MyApp extends StatelessWidget {
             } else {
               var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
-                return HomePage(str, payload);
+                int type = int.parse(payload["nameid"]);
+                if(type == 1)
+                  return HomePage(str, payload);
+                else
+                  return InstitutionPage(str,payload);
               } else {
                 return LoginSponsorPage();
               }

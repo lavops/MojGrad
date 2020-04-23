@@ -6,6 +6,8 @@ import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'dart:convert';
 
+import 'package:frontend_web/ui/loginSponsorPage.dart';
+
 class LoginPage extends StatefulWidget{
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -31,7 +33,7 @@ class _LoginPageState extends State<LoginPage>{
       setState(() {
         pogresanLoginText = "Podaci nisu ispravni";
       });
-      throw Exception('Los email/sifra');
+      throw Exception('Loš email/sifra');
     }
     else{
       var pom = utf8.encode(_password);
@@ -141,6 +143,29 @@ class _LoginPageState extends State<LoginPage>{
       )
     );
 
+          final loginInstitutionLabelWidget = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text('Želite da se prijavite kao institucija? '),
+        SizedBox(
+          width: 5.0,
+        ),
+        InkWell(
+          child: Text(
+            'Prijavi se.',
+            style: TextStyle(
+                color: Colors.green[800], fontWeight: FontWeight.bold),
+          ),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginSponsorPage()),
+            );
+          },
+        ),
+      ],
+    );
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -159,6 +184,7 @@ class _LoginPageState extends State<LoginPage>{
                     passwordText,
                     SizedBox(height: 24.0,),
                     loginButton,
+                    loginInstitutionLabelWidget
                   ], 
                 ),
                 SizedBox(height: 8.0,),
