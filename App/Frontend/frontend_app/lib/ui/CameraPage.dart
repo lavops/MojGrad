@@ -83,9 +83,11 @@ class _CameraPageState extends State<CameraPage> {
 
   // Function for opening a camera
   _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    print("Kompresovana" + picture.lengthSync().toString());
+    
     this.setState(() {
-      imageFile = picture;
+        imageFile = picture;
     });
   }
 
@@ -104,7 +106,8 @@ class _CameraPageState extends State<CameraPage> {
 
   // Function for opening a gallery
   _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    print("Kompresovana" + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });

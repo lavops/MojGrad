@@ -40,7 +40,7 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
 
   // Function for opening a camera
   _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     this.setState(() {
       imageFile = picture;
     });
@@ -48,7 +48,7 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
 
   // Function for opening a gallery
   _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
     this.setState(() {
       imageFile = picture;
     });
