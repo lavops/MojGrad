@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/city.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
@@ -32,6 +33,8 @@ class _CameraPageState extends State<CameraPage> {
   String addres = '';
   String pogresanText = '';
   var id = 0;
+  List<City> _city;
+  City city;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
  
   _getUser() async {
@@ -58,18 +61,33 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  //function that adds cities to list
+  _getCity() async {
+    APIServices.getCity().then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> cities = new List<City>();
+      cities = list.map((model) => City.fromObject(model)).toList();
+      setState(() {
+        _city = cities;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getUser();
     _getPostType();
+    _getCity();
   }
 
   // Function for opening a camera
   _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    print("Kompresovana" + picture.lengthSync().toString());
+    
     this.setState(() {
-      imageFile = picture;
+        imageFile = picture;
     });
   }
 
@@ -88,7 +106,8 @@ class _CameraPageState extends State<CameraPage> {
 
   // Function for opening a gallery
   _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    print("Kompresovana" + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });
@@ -237,12 +256,41 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
+    final _dropDownCity = Row(
+      children: <Widget>[
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text("Grad: ",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+        _city != null
+            ? DropdownButton<City>(
+                hint: Text("Izaberi", style: TextStyle(color: Colors.black)),
+                value: city,
+                onChanged: (City value) {
+                  setState(() {
+                    city = value;
+                  });
+                },
+                items: _city.map((City option) {
+                  return DropdownMenuItem<City>(
+                    value: option,
+                    child: Text(option.name),
+                  );
+                }).toList(),
+              )
+            : DropdownButton<String>(
+                hint: Text("Izaberi"),
+                onChanged: null,
+                items: null,
+              ),
+      ],
+    );
+
     // Pick image from your camera live
     final cameraPhone = MaterialButton(
       onPressed: () {
         _openCamera();
       },
-      color: Colors.green[800],
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -252,7 +300,6 @@ class _CameraPageState extends State<CameraPage> {
         ],
       ),
       padding: EdgeInsets.all(16),
-      shape: CircleBorder(),
     );
 
     // Pick image from your gallery
@@ -260,7 +307,6 @@ class _CameraPageState extends State<CameraPage> {
       onPressed: () {
         _openGalery();
       },
-      color: Colors.green[800],
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +316,6 @@ class _CameraPageState extends State<CameraPage> {
         ],
       ),
       padding: EdgeInsets.all(16),
-      shape: CircleBorder(),
     );
 
     // Row with camera buttons
@@ -389,7 +434,7 @@ class _CameraPageState extends State<CameraPage> {
             throw Exception('Greskaaaa');
           }
           if (res != null && imageFile != null && addres != null){
-            APIServices.addPost(jwt,user.id, postTypeId, description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres);
+            APIServices.addPost(jwt,user.id, postTypeId, description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres,city.id);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState((){
@@ -438,6 +483,7 @@ class _CameraPageState extends State<CameraPage> {
           _vrstaObjave == 1
               ? Column(children: <Widget>[problemResava, _dropDown])
               : null,
+          _dropDownCity,
           SizedBox(
             height: 20.0,
           ),

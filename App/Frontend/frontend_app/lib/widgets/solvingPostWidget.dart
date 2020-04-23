@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/challengeSolving.dart';
-import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/challengeSolvingPage.dart';
 import 'package:frontend/ui/homePage.dart';
@@ -84,6 +83,13 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               )),
           Expanded(child: SizedBox()),
+          (solvingPost.selected == 1)
+          ?
+          Text(
+            "RESENJE",
+            style: TextStyle(color:Colors.green[800], fontWeight: FontWeight.bold),
+          ):
+          SizedBox(),
           (ownerId == userId)
           ? PopupMenuButton<String>(
             onSelected: choiceActionSolvingDelete,
@@ -157,7 +163,49 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
           ],
         ));
     }else if(choice == ConstantsChallengeSolvingDelete.IzaberiResenje){
-      print('OK RADI OVO ConstantsChallengeSolvingDelete');
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text("Prihvati resenje?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                "Izaberi",
+                style: TextStyle(color: Colors.green[800]),
+              ),
+              onPressed: () {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.challengeSolving(jwt, solvingPost.id, solvingPost.postId).then((res){
+                      if(res.statusCode == 200){
+                        print('Uspesno ste izabrali resenje.');
+                        setState(() {
+                          solvingPost.selected = 1;
+                          solvingPost.postStatusId = 1;
+                        });
+                      }
+                    });
+                    
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Otkazi",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
     }else if(choice == ConstantsChallengeDelete.IzbrisiSvojeResenje){
       showDialog(
         context: context,

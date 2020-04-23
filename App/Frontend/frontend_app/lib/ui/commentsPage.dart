@@ -72,9 +72,10 @@ class StateComents extends State<CommentsPage> {
                       });
                     }
                   });
+                  _getComms();
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
-                  
+                  _getComms();
                 },
               ),
               FlatButton(
@@ -282,11 +283,10 @@ class StateComents extends State<CommentsPage> {
                       if (res != null) {
                         print(myController.text);
                         APIServices.addComment(jwt, myController.text, 1, postId).then((res){
-                          Map<String, dynamic> list = json.decode(res);
-                          Comment newComm = Comment();
-                          newComm = Comment.fromObject(list);
+                          
                           setState(() {
-                            //
+                            _getComms();
+                            myController.text = "";
                           });
                         });
                       }

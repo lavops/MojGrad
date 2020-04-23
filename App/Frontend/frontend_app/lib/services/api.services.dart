@@ -63,7 +63,7 @@ class APIServices
   }
 
   //send a new post to the database
-  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address) async {
+  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address, int cityId) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Post';
@@ -76,6 +76,7 @@ class APIServices
     data["latitude"] = latitude;
     data["longitude"] = longitude;
     data["address"] = address;
+    data["cityId"] = cityId;
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -521,6 +522,43 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
     print(res.statusCode);
+    return res;
+  }
+
+  static Future challengeSolving(String jwt, int solvingPostId, int postId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'ChallengeSolving/solvingChallenge';
+    var data = Map();
+    data["id"] = solvingPostId;
+    data["postId"] = postId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res;
+  }
+
+  static Future insertSolution (String jwt, int userId, int postId, String description, String photoPath, int selected) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'ChallengeSolving';
+    var data = Map();
+    data["userId"] = userId;
+    data["postId"] = postId;
+    data["description"] = description;
+    data["solvingPhoto"] = photoPath;
+    data["selected"] = selected;
+    var jsonBody = convert.jsonEncode(data);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
     return res;
   }
 }
