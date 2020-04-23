@@ -92,7 +92,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
             if (mobRegex.hasMatch(mobile)) {
                 var tempPass = utf8.encode(password);
                 var shaPass = sha1.convert(tempPass);
-                Institution ins = new  Institution.without(name, description, email, mobile, shaPass.toString(), cityId);
+                Institution ins = new  Institution.without(name, description, shaPass.toString(), email, mobile, cityId);
                 print(ins);
                 APIServices.registerInstitution(ins).then((response) {
                   if (response.statusCode == 200) {
@@ -170,7 +170,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
       '$wrongRegText',
       style: TextStyle(
           color: Colors.red,
-          fontSize: 20,
+          fontSize: 25,
       ),
     ));
 

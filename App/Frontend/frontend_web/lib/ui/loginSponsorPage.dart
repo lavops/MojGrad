@@ -48,7 +48,7 @@ class _LoginSponsorPageState extends State<LoginSponsorPage>{
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => SecondPage()));
+                  builder: (context) => InstitutionPage.fromBase64(response)));
         }
          else {
           _passwordController.text = "";

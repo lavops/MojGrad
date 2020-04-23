@@ -300,4 +300,46 @@ static Future registerInstitution(Institution ins) async {
     if (res.statusCode == 200) return res.body;
     return null;
   }
+  
+  
+  // editData ins
+
+  static Future editInstitutionData(String jwt, int id, String name, String email, String phone, String description, int cityId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Institution/EditData';
+
+    var data = Map();
+    data["id"] = id;
+    data["name"] = name;
+    data["email"] = email;
+    data["phone"] = phone;
+    data["description"] = description;
+    data["cityId"] = cityId;
+
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
+  static Future editInstitutionPassword(String jwt, int id, String password, String password1) async {
+
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Institution/EditPassword';
+
+    var data = Map();
+    data["id"] = id;
+    data["password"] = password;
+    data["password1"] = password1;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
 }

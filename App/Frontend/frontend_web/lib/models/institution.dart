@@ -54,7 +54,7 @@ class Institution {
   Institution.fromObject(dynamic data){
     this._id = data["id"];
     this._name = data["name"];
-    this._description = data["decription"];
+    this._description = data["description"];
     this._password = data["password"];
     this._email = data["email"];
     this._phone = data["phone"];
