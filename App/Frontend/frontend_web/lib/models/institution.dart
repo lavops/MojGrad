@@ -11,6 +11,7 @@ class Institution {
   String _cityName;
   String _createdAt;
   String _city;
+  String _photoPath;
   
 
   Institution();
@@ -26,6 +27,7 @@ class Institution {
   String get cityName => _cityName;
   String get createdAt => _createdAt;
   String get city => _city;
+  String get photoPath => _photoPath;
   bool get authentication => _authentication;
 
   //Convert a Ins into a Map object
@@ -42,6 +44,7 @@ class Institution {
     data["createdAt"] = _createdAt;
     data["authentication"] = _authentication;
     data["city"] = _city;
+    data["photoPath"] = _photoPath;
  
     if(_id != null){
       data["id"] = _id;
@@ -63,6 +66,7 @@ class Institution {
     this._authentication = data["authentication"];
     this._createdAt = data["createdAt"];
     this._cityName = data["cityName"];
+    this._photoPath = data["photoPath"];
    
   }
 

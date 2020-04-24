@@ -124,6 +124,18 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Greska" });
         }
+        [Authorize]
+        [HttpPost("AcceptInstitution")]
+        public IActionResult AcceptInstitution(Institution inst)
+        {
+            Institution ind = _iInstitutionUI.acceptInstitution(inst.id);
+            if (ind != null)
+            {
+                return Ok(new { message = "Prihvacena" });
+            }
+            else
+                return BadRequest(new { message = "Greska" });
+        }
 
         [Authorize]
         [HttpPost("AuthorizedByCityId")]

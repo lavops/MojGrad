@@ -90,6 +90,14 @@ namespace Backend.DAL
                     exist.selected = 1;
                     _context.Update(exist);
                     _context.SaveChanges();
+
+                    var exist1 = _context.post.Where(x => x.id == postId).FirstOrDefault();
+                    if(exist1 != null)
+                    {
+                        exist1.statusId = 1;
+                        _context.Update(exist1);
+                        _context.SaveChanges();
+                    }
                     return _context.challengeSolving.Where(x => x.postId == postId).OrderByDescending(x => x.selected).Include(u => u.user).Include(s => s.institution).Include(po => po.post).ToList();
                 }
                 catch (DbUpdateException ex)
