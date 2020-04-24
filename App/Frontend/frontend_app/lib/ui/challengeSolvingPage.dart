@@ -7,6 +7,8 @@ import 'package:frontend/ui/ChallengeSolvingCameraPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/solvingPostWidget.dart';
 
+import '../main.dart';
+
 class ChallengeSolvingPage extends StatefulWidget {
   int postId;
   int ownerId;
@@ -56,8 +58,8 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
+          iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
           actions: <Widget>[
             (solved == 2)?
             IconButton(

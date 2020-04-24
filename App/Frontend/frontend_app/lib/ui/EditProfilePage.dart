@@ -9,6 +9,7 @@ import 'package:frontend/ui/UserProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import '../main.dart';
 import '../services/api.services.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -895,7 +896,7 @@ class EditProfile extends State<EditProfilePage> {
             color: Theme.of(context).textTheme.bodyText1.color, //change your color here
           ),
           elevation: 8,
-          backgroundColor: Theme.of(context).copyWith().backgroundColor,
+          backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           title: Text('Podešavanja profila',
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color)),

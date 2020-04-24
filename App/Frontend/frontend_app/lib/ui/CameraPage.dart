@@ -265,10 +265,10 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
         _city != null
             ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Colors.black)),
+                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
                 value: city,
                 onChanged: (City value) {
                   setState(() {

@@ -6,6 +6,7 @@ import 'package:frontend/services/api.services.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
 
+import '../main.dart';
 import 'homePage.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -146,7 +147,7 @@ class StateComents extends State<CommentsPage> {
   TextEditingController myController = new TextEditingController();
   Widget buildCommentList() {
     return Container(
-        color: Theme.of(context).copyWith().backgroundColor,
+        color: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         child: ListView.builder(
           itemCount: listComents == null ? 0 : listComents.length,
           itemBuilder: (BuildContext context, int index) {
@@ -237,7 +238,7 @@ class StateComents extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(
             color: Theme.of(context).copyWith().iconTheme.color,
             size: Theme.of(context).copyWith().iconTheme.size),
