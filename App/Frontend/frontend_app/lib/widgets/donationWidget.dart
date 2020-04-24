@@ -9,6 +9,8 @@ import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 
+import '../main.dart';
+
 class DonationsWidget extends StatefulWidget {
   final Donation donation;
 
@@ -277,7 +279,7 @@ class _DonationsPageWidgetState extends State<DonationsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
       ),
       body: Container(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/login.dart';
+import '../main.dart';
 import '../models/city.dart';
 import '../models/user.dart';
 import '../services/api.services.dart';
@@ -419,7 +420,7 @@ class _RegisterPageState extends State<RegisterPage> {
     ));
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
       body: Center(
         child: ListView(
           shrinkWrap: true,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
 
+import '../main.dart';
+
 class SplashPage extends StatefulWidget {
   final String jwt;
   SplashPage(this.jwt);
@@ -48,7 +50,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Image.asset('assets/fromAnts1.png', width: 150));
 
     return Scaffold(
-        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         body: Center(
             child: Container(
           width: 400,
