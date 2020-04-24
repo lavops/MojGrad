@@ -4,6 +4,7 @@ import 'package:frontend/bloc/themes.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
@@ -120,6 +121,63 @@ class HeaderSection extends State<UserProfilePage> {
                       : _themeChanger.setTheme(MyApp.themeLight());
                 },
               ),
+            ),
+            ListTile(
+              leading: Icon(Icons.cancel,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
+              title: Text(
+                'Deaktiviraj nalog',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    title: Text("Daktivacija profila?"),
+                    content: Container(
+                      height: 100,
+                      child: Flexible(
+                        child: Text("Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vasa rešenja."),
+                      ),
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text(
+                          "Deaktiviraj",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        onPressed: () {
+                          APIServices.jwtOrEmpty().then((res) {
+                            String jwt;
+                            setState(() {
+                              jwt = res;
+                            });
+                            if (res != null) {
+                              APIServices.deleteUser(jwt, userId);
+                            }
+                          });
+                          _removeToken();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPage()),
+                          );
+                        },
+                      ),
+                      FlatButton(
+                        child: Text(
+                          "Otkaži",
+                          style: TextStyle(color: Colors.green[800]),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    ],
+                  ));
+              },
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app,
