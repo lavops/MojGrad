@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/ui/institutionProfilesPage.dart';
 import 'package:frontend_web/ui/postPage.dart';
 import 'package:frontend_web/ui/registerAdminPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
@@ -96,15 +97,17 @@ class _ManagementPageState extends State<ManagementPage> {
                             borderRadius: BorderRadius.circular(30.0)),
                         child: Column(
                           children: <Widget>[
-                            Icon(Icons.monetization_on ,size:150),
-                            Text("Upravljanje sponzorstvima", style: TextStyle(color: Colors.white, fontSize: 17.0)),
+                            Icon(Icons.business ,size:150),
+                            Text("Upravljanje institucijama", style: TextStyle(color: Colors.white, fontSize: 17.0)),
                           ],
                         ),
                         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                         textColor: Colors.white,
                         color: Color(0xff33691e),
                         onPressed: () {
-
+                           Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => InstitutionProfilesPage())
+                          );
                         }
                         ),
                   ),
