@@ -33,7 +33,7 @@ class Debouncer {
   }
 }
 
-class _UsersProfilePageState extends State<UsersProfilePage> {
+class _UsersProfilePageState extends State<UsersProfilePage> with SingleTickerProviderStateMixin{
   List<User> listUsers;
   List<User> listRepUsers;
   List<City> listCities;
@@ -42,6 +42,8 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
   final _debouncer = Debouncer(milliseconds: 500);
   List<User> filteredUsers;
   List<User> filteredRepUsers;
+  //Animation<double> animation;
+  //AnimationController animationController;
 
   _getUsers() {
     APIServices.getUsers(TokenSession.getToken).then((res) {
@@ -115,11 +117,17 @@ class _UsersProfilePageState extends State<UsersProfilePage> {
     _getUsers(); 
     _getReportedUsers();
     _getCities();
+    /*animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    animation = Tween<double>(begin: 220, end: 80).animate(animationController);
+    setState(() {
+      CollapsingNavigationDrawerState.isCollapsed ? animationController.forward() : animationController.reverse();
+    });*/
   }
 
   @override
   void dispose() {
     searchController.dispose();
+    //animationController.dispose();
     super.dispose();
   }
 
@@ -623,11 +631,11 @@ Widget dropdownFRU(List<City> listCities) {
                   }),
               bottom: tabs(),
             ),
-            body: Stack(children: <Widget>[
-              
+            body: Stack(
+            children: <Widget>[
               TabBarView(children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left:80, right: 80),
+                margin: EdgeInsets.only(left: 220, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
@@ -637,7 +645,7 @@ Widget dropdownFRU(List<City> listCities) {
                     Flexible(child: filteredUsers==null ?  buildUserList(listUsers) : buildUserList(filteredUsers)),
                   ])),
               Container(
-                  margin: EdgeInsets.only(left:80, right: 80),
+                  margin: EdgeInsets.only(left:220, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
