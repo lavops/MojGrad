@@ -5,6 +5,7 @@ import 'package:frontend/models/likeViewModel.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
+import 'package:frontend/ui/challengeSolvingPage.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
@@ -193,6 +194,13 @@ class _PostWidgetState extends State<PostWidget> {
             otherUserId: _otherUserId,
           ));
     }
+    else if(choice == Constants.PogledajResenja){
+      Navigator.push(
+        context,
+        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+      );
+    }
+
   }
 
   void _onValueChange(ReportType value) {
@@ -293,6 +301,11 @@ class _PostWidgetState extends State<PostWidget> {
               )
             ],
           ));
+    }else if(choice == ConstantsDeleteEdit.PogledajResenja){
+      Navigator.push(
+        context,
+        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+      );
     }
   }
 
@@ -410,7 +423,12 @@ class _PostWidgetState extends State<PostWidget> {
                         "Reši",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+                        );
+                      },
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),
