@@ -638,7 +638,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
     final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
     final mobRegex = RegExp(r'^06[0-9]{7,8}$');
 
-    if (nname == institution.name && ndescription == institution.description && nemail == institution.email && nmobile == institution.phone && cityId == 0 && pass1 == "" && pass2 == "") {
+    if (nname == institution.name && ndescription == institution.description && nemail == institution.email && nmobile == institution.phone && ncityId == 0 && pass1 == "" && pass2 == "") {
       setState(() {
         wrongRegText = "Nista niste izmenili.";
       });
