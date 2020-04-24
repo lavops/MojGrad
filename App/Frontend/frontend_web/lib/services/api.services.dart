@@ -384,7 +384,7 @@ static Future registerInstitution(Institution ins) async {
         }));
   }
 
-   static Future acceptInstitution(String jwt, int id) async {
+   static Future acceptInstitution(String jwt, int id, String email) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
     String url = serverURL + 'Institution/AcceptInstitution';
@@ -394,6 +394,7 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
       }, body: convert.jsonEncode({
           'id': id,
+          'email': email
         }));
   }
 }

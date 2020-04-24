@@ -8,8 +8,7 @@ import 'package:frontend_web/ui/managementPage.dart';
 import 'dart:convert';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+
 
 class InstitutionProfilesPage extends StatefulWidget {
   @override
@@ -40,30 +39,6 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
   final _debouncer = Debouncer(milliseconds: 500);
   List<Institution> filteredInstitution;
   List<Institution> filteredUnauthInstitution;
-
-  
-  _email() async {
-  String username = "mojgrad.info@gmail.com";
-  String password = "MojGrad22";
-
-  final smtpServer = gmail(username, password); 
-  // Creating the Gmail server
-
-  // Create our email message.
-  final message = Message()
-    ..from = Address(username)
-    ..recipients.add('anan87412@gmail.com') //recipent email 
-    ..subject = 'Test ' //subject of the email
-    ..text = 'This is the plain text.\nThis is line 2 of the text part.'; //body of the email
-
-  try {
-    final sendReport = await send(message, smtpServer);
-    print('Message sent: ' + sendReport.toString()); //print if the email is sent
-  } on MailerException catch (e) {
-    print('Message not sent. \n'+ e.toString()); //print if the email is not sent
-    // e.toString() will show why the email is not sending
-  }
-  } 
 
   _getInstitutions() {
     APIServices.getAllAuthInstitutions(TokenSession.getToken).then((res) {
@@ -307,9 +282,13 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                _email();
-                               // APIServices.acceptInstitution(TokenSession.getToken, listInst[index].id);
-                               // _getUnauthInstitutions();
+                                APIServices.acceptInstitution(TokenSession.getToken, listInst[index].id, listInst[index].email);
+                               setState(() {
+                                 _getUnauthInstitutions();
+                                 _getUnauthInstitutions();
+                                 _getUnauthInstitutions();
+                               });
+                                _getUnauthInstitutions();
                               },
                             )
                             ],),

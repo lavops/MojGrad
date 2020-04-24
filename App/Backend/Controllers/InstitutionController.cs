@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.ViewsModel;
 using Backend.UI.Interfaces;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 using static Backend.Controllers.UserController;
 
 namespace Backend.Controllers
@@ -131,6 +133,24 @@ namespace Backend.Controllers
             Institution ind = _iInstitutionUI.acceptInstitution(inst.id);
             if (ind != null)
             {
+                
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Moj grad", "mojgrad.info@gmail.com"));
+                message.To.Add(new MailboxAddress("Moj grad", inst.email));
+                message.Subject = "Moj grad";
+                message.Body = new TextPart("plain")
+                {
+                    Text = "Zahtev je prihvaćen. Hvala na angažovanju"
+                };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("mojgrad.info@gmail.com", "MojGrad22");
+                    client.Send(message);
+
+                    client.Disconnect(true);
+                }
+                
                 return Ok(new { message = "Prihvacena" });
             }
             else
