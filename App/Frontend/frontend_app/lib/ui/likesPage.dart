@@ -149,8 +149,8 @@ class StateLikes extends State<LikesPage> {
 
   Widget tabs() {
     return TabBar(
-        labelColor: Colors.green,
-        indicatorColor: Colors.green,
+        labelColor: Colors.green[800],
+        indicatorColor: Colors.green[800],
         unselectedLabelColor: Colors.black,
         tabs: <Widget>[
           Tab(
@@ -168,9 +168,9 @@ class StateLikes extends State<LikesPage> {
         length: 2,
         child: Scaffold(
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.black),
-              title: Text('Reakcije', style: TextStyle(color: Colors.black)),
-              backgroundColor: Colors.white,
+              iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
+              title: Text('Reakcije', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+              backgroundColor: Theme.of(context).copyWith().backgroundColor,
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {

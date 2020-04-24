@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Widget okButton = FlatButton(
       child: Text(
         "OK",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Colors.green[800]),
       ),
       onPressed: () {
         Navigator.pushReplacement(

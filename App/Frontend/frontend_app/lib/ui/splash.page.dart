@@ -48,7 +48,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Image.asset('assets/fromAnts1.png', width: 150));
 
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).copyWith().backgroundColor,
         body: Center(
             child: Container(
           width: 400,

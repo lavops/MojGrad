@@ -5,7 +5,6 @@ import 'package:frontend/models/likeViewModel.dart';
 import 'package:frontend/models/reportType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
-import 'package:frontend/ui/challengeSolvingPage.dart';
 import 'package:frontend/ui/commentsPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
@@ -80,7 +79,8 @@ class _PostWidgetState extends State<PostWidget> {
             //crossAxisAlignment: CrossAxisAlignment.start,
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-          userInfoRow(post.userId, post.username, post.typeName, post.userPhoto, post.statusId),
+          userInfoRow(post.userId, post.username, post.typeName, post.userPhoto,
+              post.statusId),
           imageGallery(post.photoPath),
           SizedBox(height: 2.0),
           Align(
@@ -155,7 +155,7 @@ class _PostWidgetState extends State<PostWidget> {
           ),*/
           (otherUserId != userId)
               ? PopupMenuButton<String>(
-                  onSelected: (String choice){
+                  onSelected: (String choice) {
                     choiceAction(choice, otherUserId);
                   },
                   itemBuilder: (BuildContext context) {
@@ -191,13 +191,7 @@ class _PostWidgetState extends State<PostWidget> {
             initialValue: _selectedId,
             reportTypes: _dropdownMenuItems,
             otherUserId: _otherUserId,
-          )); //potrebno je poslati odredjeni context, da bi se cuvalo koji je report selektovan u alert dialogu..
-    }
-    else if(choice == Constants.PogledajResenja){
-      Navigator.push(
-        context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-      );
+          ));
     }
   }
 
@@ -239,7 +233,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               FlatButton(
                 child: Text(
-                  "Otkazi",
+                  "Otkaži",
                   style: TextStyle(color: Colors.green[800]),
                 ),
                 onPressed: () {
@@ -253,7 +247,7 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Izmeni opis."),
+            title: Text("Izmeni opis.", textAlign: TextAlign.center,),
             content: Container(
               height: 50.0,
               child: Column(
@@ -267,7 +261,7 @@ class _PostWidgetState extends State<PostWidget> {
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  "Sacuvaj",
+                  "Sačuvaj",
                   style: TextStyle(color: Colors.green[800]),
                 ),
                 onPressed: () {
@@ -290,7 +284,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               FlatButton(
                 child: Text(
-                  "Otkazi",
+                  "Otkaži",
                   style: TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
@@ -299,11 +293,6 @@ class _PostWidgetState extends State<PostWidget> {
               )
             ],
           ));
-    }else if(choice == ConstantsDeleteEdit.PogledajResenja){
-      Navigator.push(
-        context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-      );
     }
   }
 
@@ -421,12 +410,7 @@ class _PostWidgetState extends State<PostWidget> {
                         "Reši",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-                        );
-                      },
+                      onPressed: () {},
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),
@@ -438,16 +422,14 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
 
-  _getCommentsFromPage(int postId) async{
+  _getCommentsFromPage(int postId) async {
     int result = await Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => CommentsPage(postId)),
+      MaterialPageRoute(builder: (context) => CommentsPage(postId)),
     );
 
     setState(() {
-      if(result != null)
-        post.commNum = result;
+      if (result != null) post.commNum = result;
     });
   }
 
@@ -467,21 +449,28 @@ class _PostWidgetState extends State<PostWidget> {
                 if (userId != otherUserId)
                   Navigator.push(
                     context,
-                    MaterialPageRoute( builder: (context) => OthersProfilePage(otherUserId)),
+                    MaterialPageRoute(
+                        builder: (context) => OthersProfilePage(otherUserId)),
                   );
               },
-              child: Text(username, style: TextStyle(fontWeight: FontWeight.bold))),
+              child: Text(username,
+                  style: TextStyle(fontWeight: FontWeight.bold))),
           SizedBox(
             width: 10,
           ),
-          Flexible(child: Text(description),
+          Flexible(
+            child: Text(description),
           )
         ],
       ));
 }
 
 class MyDialog extends StatefulWidget {
-  const MyDialog({this.onValueChange, this.initialValue, this.reportTypes, this.otherUserId});
+  const MyDialog(
+      {this.onValueChange,
+      this.initialValue,
+      this.reportTypes,
+      this.otherUserId});
 
   final ReportType initialValue;
   final int otherUserId;
@@ -504,7 +493,10 @@ class MyDialogState extends State<MyDialog> {
   Widget build(BuildContext context) {
     TextEditingController messageController = new TextEditingController();
     return new AlertDialog(
-      title: Text("Prijavljivanje korisnika"),
+      title: Text(
+        "Prijavljivanje korisnika",
+        textAlign: TextAlign.center,
+      ),
       content: Column(children: <Widget>[
         Container(
             width: 200,
@@ -522,14 +514,17 @@ class MyDialogState extends State<MyDialog> {
         TextFormField(
           maxLines: 2,
           controller: messageController,
-          decoration: InputDecoration(labelText: "Komentar"),
+          decoration: InputDecoration(
+              labelText: "Komentar",
+              hoverColor: Theme.of(context).textTheme.bodyText1.color),
         )
       ]),
       actions: <Widget>[
         FlatButton(
           child: Text(
             "Prijavi",
-            style: TextStyle(color: Colors.green),
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
           ),
           onPressed: () {
             APIServices.jwtOrEmpty().then((res) {
@@ -540,7 +535,9 @@ class MyDialogState extends State<MyDialog> {
               if (res != null) {
                 print(userId.toString() + " " + widget.otherUserId.toString());
                 print(messageController.text);
-                APIServices.addReport(jwt, userId, widget.otherUserId, _selectedId.id, messageController.text).then((res) {
+                APIServices.addReport(jwt, userId, widget.otherUserId,
+                        _selectedId.id, messageController.text)
+                    .then((res) {
                   Map<String, dynamic> list = json.decode(res);
                   LikeViewModel likeVM = LikeViewModel();
                   likeVM = LikeViewModel.fromObject(list);
@@ -553,8 +550,9 @@ class MyDialogState extends State<MyDialog> {
         ),
         FlatButton(
           child: Text(
-            "Otkazi",
-            style: TextStyle(color: Colors.green),
+            "Otkaži",
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
           ),
           onPressed: () {
             Navigator.of(context).pop();

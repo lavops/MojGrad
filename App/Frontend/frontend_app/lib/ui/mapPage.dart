@@ -101,8 +101,8 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: (postLatitude != 0 && postLongitude != 0)?
       AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white) : null,
+        iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
+        backgroundColor: Theme.of(context).copyWith().backgroundColor) : null,
       body: (_city != null)?FlutterMap(
         options: new MapOptions(
           center: (postLatitude == 0 && postLongitude == 0)? new LatLng(_city.latitude, _city.longitude) : new LatLng(postLatitude, postLongitude),

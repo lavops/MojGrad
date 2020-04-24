@@ -5,7 +5,6 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
-import 'EditProfilePage.dart';
 
 class OthersProfilePage extends StatefulWidget {
   final int otherUserId;
@@ -27,7 +26,7 @@ class HeaderSection extends State<OthersProfilePage> {
     print("korisnik $otherUserId1");
   }
 
-  final Color green = Color(0xFF1E8161);
+  final Color green = Colors.green[800];
   List<FullPost> posts;
 
   _getUser() async {
@@ -67,8 +66,8 @@ class HeaderSection extends State<OthersProfilePage> {
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.grey[50],
+        iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
+        backgroundColor: Theme.of(context).copyWith().backgroundColor,
       ),
       body: (otherUser != null)?NestedScrollView(
           controller: _scrollController,
@@ -87,11 +86,11 @@ class HeaderSection extends State<OthersProfilePage> {
               }
             ):
             Center(child: CircularProgressIndicator(
-              valueColor:new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+              valueColor:new AlwaysStoppedAnimation<Color>(green),
               ),
             )
         ):Center(child: CircularProgressIndicator(
-          valueColor:new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+          valueColor:new AlwaysStoppedAnimation<Color>(green),
           ),
         ),
     );

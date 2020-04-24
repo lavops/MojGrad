@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
       BottomNavigationBarItem(
           icon: Icon(Icons.nature_people), title: Text("Kamera")),
       BottomNavigationBarItem(
-          icon: Icon(Icons.event), title: Text("Dogadjaji")),
+          icon: Icon(Icons.event), title: Text("Događaji")),
       BottomNavigationBarItem(
           icon: Icon(Icons.account_circle), title: Text("Profil"))
     ];

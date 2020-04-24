@@ -125,7 +125,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
             side: BorderSide(color: Colors.green[800]
           )
         ),
-          child: Text("Vise informacija"),
+          child: Text("Više informacija"),
         ),
         Expanded(child: SizedBox()),
         RaisedButton(
@@ -220,7 +220,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
           ),
           FlatButton(
           child: Text(
-            "Otkazi",
+            "Otkaži",
             style: TextStyle(color: Colors.red),
           ),
           onPressed: () {
@@ -277,8 +277,8 @@ class _DonationsPageWidgetState extends State<DonationsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
       ),
       body: Container(
         height: double.infinity,
@@ -316,9 +316,12 @@ class _DonationsPageWidgetState extends State<DonationsPageWidget> {
             SizedBox(height: 10.0,),
             Row(
             children: <Widget>[
-              Text("Ucesnici:"),
+              Text("Učesnici:"),
               Expanded(child: SizedBox()),
-              Text("${donation.userNum} korisnika"),
+              //Text("${donation.userNum} korisnika"),
+              Text("${donation.userNum}" == '1'
+                    ? "${donation.userNum} korisnik"
+                    : "${donation.userNum} korisnika"),
             ],
           ),
           (users != null)?listUsers():SizedBox(),

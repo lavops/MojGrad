@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/ui/homePage.dart';
-import 'package:frontend/ui/othersProfilePage.dart';
 
 class CircleImage extends StatelessWidget {
   final String image;
@@ -29,7 +27,7 @@ class CircleImage extends StatelessWidget {
         margin: EdgeInsets.all(whiteMargin),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
+          color: Theme.of(context).textTheme.bodyText1.color,
           image: DecorationImage(
             fit: BoxFit.cover,
             image: NetworkImage(image),

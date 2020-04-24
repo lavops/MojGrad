@@ -7,16 +7,16 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
   //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  String serverURLPhoto = 'http://192.168.1.2:45455//';
-  //String serverURLPhoto = 'http://192.168.1.4:45455//';
+  //String serverURLPhoto = 'http://192.168.1.2:45455//';
+  String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
   //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://192.168.1.2:45455/api/';
-  //static String serverURL = 'http://192.168.1.4:45455/api/';
+  //static String serverURL = 'http://192.168.1.2:45455/api/';
+  static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
 
@@ -63,7 +63,7 @@ class APIServices
   }
 
   //send a new post to the database
-  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address, int cityId) async {
+  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Post';
@@ -76,7 +76,6 @@ class APIServices
     data["latitude"] = latitude;
     data["longitude"] = longitude;
     data["address"] = address;
-    data["cityId"] = cityId;
     var jsonBody = convert.jsonEncode(data);
     var res = await http.post(url, headers: {
       'Content-type': 'application/json',
@@ -495,70 +494,6 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
     print(res.statusCode);
-    return res;
-  }
-
-  static Future getChallengeSolving(String jwt, int postId, int userId) async{
-    var datas = jsonDecode(jwt);
-    jwt = datas['token'].toString();
-    return await http.get(serverURL + 'ChallengeSolving/postId=$postId/userId=$userId',headers: {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $jwt'
-    });
-  }
-
-  static Future challengeSolvingDelete(String jwt, int solvingPostId) async {
-     var datas = jsonDecode(jwt);
-    jwt = datas['token'].toString();
-    String url = serverURL + 'ChallengeSolving/Delete';
-    var data = Map();
-    data["id"] = solvingPostId;
-    var jsonBody = convert.jsonEncode(data);
-    print(jsonBody);
-    var res = await http.post(url, headers: {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $jwt'
-    }, body: jsonBody);
-    print(res.statusCode);
-    return res;
-  }
-
-  static Future challengeSolving(String jwt, int solvingPostId, int postId) async {
-     var datas = jsonDecode(jwt);
-    jwt = datas['token'].toString();
-    String url = serverURL + 'ChallengeSolving/solvingChallenge';
-    var data = Map();
-    data["id"] = solvingPostId;
-    data["postId"] = postId;
-    var jsonBody = convert.jsonEncode(data);
-    print(jsonBody);
-    var res = await http.post(url, headers: {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $jwt'
-    }, body: jsonBody);
-    print(res.statusCode);
-    return res;
-  }
-
-  static Future insertSolution (String jwt, int userId, int postId, String description, String photoPath, int selected) async {
-    var datas = jsonDecode(jwt);
-    jwt = datas['token'].toString();
-    String url = serverURL + 'ChallengeSolving';
-    var data = Map();
-    data["userId"] = userId;
-    data["postId"] = postId;
-    data["description"] = description;
-    data["solvingPhoto"] = photoPath;
-    data["selected"] = selected;
-    var jsonBody = convert.jsonEncode(data);
-    var res = await http.post(url, headers: {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $jwt'
-    }, body: jsonBody);
     return res;
   }
 }

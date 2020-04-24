@@ -44,11 +44,10 @@ class StateComents extends State<CommentsPage> {
     super.initState();
     _getComms();
   }
-    void choiceActionDelete(String choice)
-  {
-    if(choice == ConstantsCommentDelete.ObrisiKomentar)
-    {
-        showDialog(
+
+  void choiceActionDelete(String choice) {
+    if (choice == ConstantsCommentDelete.ObrisiKomentar) {
+      showDialog(
           context: context,
           child: AlertDialog(
             title: Text("Brisanje komentara?"),
@@ -56,7 +55,8 @@ class StateComents extends State<CommentsPage> {
               FlatButton(
                 child: Text(
                   "Izbriši",
-                  style: TextStyle(color: Colors.red),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -65,39 +65,35 @@ class StateComents extends State<CommentsPage> {
                       jwt = res;
                     });
                     if (res != null) {
-                      print("Delete comment"+ comment.id.toString());
+                      print("Delete comment" + comment.id.toString());
                       APIServices.deleteComment(jwt, comment.id);
                       setState(() {
                         _getComms();
                       });
                     }
                   });
-                  _getComms();
                   print('Uspesno ste izbrisali objavu.');
                   Navigator.of(context).pop();
-                  _getComms();
                 },
               ),
               FlatButton(
-              child: Text(
-                "Otkaži",
-                style: TextStyle(color: Colors.green[800]),
-              ),
-              onPressed: () {
+                child: Text(
+                  "Otkaži",
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText2.color),
+                ),
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               )
             ],
-          )
-        );
+          ));
     }
-    
   }
-   void choiceAction(String choice)
-  {
-    if(choice == ConstantsComment.PrijaviKomentar)
-    {
-        showDialog(
+
+  void choiceAction(String choice) {
+    if (choice == ConstantsComment.PrijaviKomentar) {
+      showDialog(
           context: context,
           child: AlertDialog(
             title: Text("Želiš da prijaviš komentar?"),
@@ -114,7 +110,7 @@ class StateComents extends State<CommentsPage> {
                       jwt = res;
                     });
                     if (res != null) {
-                      print("Report comment"+ comment.id.toString());
+                      print("Report comment" + comment.id.toString());
                       APIServices.addReportComment(jwt, comment.id, userId);
                       setState(() {
                         _getComms();
@@ -123,120 +119,130 @@ class StateComents extends State<CommentsPage> {
                   });
                   print('Uspesno ste prijavili komentar.');
                   Navigator.of(context).pop();
-                  
                 },
               ),
               FlatButton(
-              child: Text(
-                "Otkaži",
-                style: TextStyle(color: Colors.green[800]),
-              ),
-              onPressed: () {
+                child: Text(
+                  "Otkaži",
+                  style: TextStyle(color: Colors.green[800]),
+                ),
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               )
             ],
-          )
-        );
+          ));
     }
-    
   }
 
   TextEditingController myController = new TextEditingController();
   Widget buildCommentList() {
-    return ListView.builder(
-      itemCount: listComents == null ? 0 : listComents.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-            child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(top: 5),
-                  child: Row(children: [
-                    CircleImage(
-                      serverURLPhoto + listComents[index].photoPath,
-                      imageSize: 56.0,
-                      whiteMargin: 2.0,
-                      imageMargin: 6.0,
-                    ),
-                    Container(
-                      width: 260,
+    return Container(
+        color: Theme.of(context).copyWith().backgroundColor,
+        child: ListView.builder(
+          itemCount: listComents == null ? 0 : listComents.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+                child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
                       padding: EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            Text(listComents[index].username,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            Expanded(child: SizedBox()),
-                          ]),
-                          Text(listComents[index].description,
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic, fontSize: 15))
-                        ],
-                      ),
-                    ),
-                    Expanded(child: SizedBox()),
-                    Flexible(
-                     child: /*IconButton(
+                      margin: EdgeInsets.only(top: 5),
+                      child: Row(children: [
+                        CircleImage(
+                          serverURLPhoto + listComents[index].photoPath,
+                          imageSize: 56.0,
+                          whiteMargin: 2.0,
+                          imageMargin: 6.0,
+                        ),
+                        Container(
+                          width: 260,
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(children: [
+                                Text(listComents[index].username,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Expanded(child: SizedBox()),
+                              ]),
+                              Text(listComents[index].description,
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 15))
+                            ],
+                          ),
+                        ),
+                        Expanded(child: SizedBox()),
+                        Flexible(
+                          child:
+                              /*IconButton(
                         icon: Icon(Icons.more_vert),
                         onPressed: () {
 
                         },
                       ),*/
-                        (listComents[index].userId != userId)?
-                      PopupMenuButton<String> (
-                        onSelected: choiceAction,
-                        itemBuilder: (BuildContext context) {
-                          setState(() {
-                            comment = listComents[index];
-                          });
-                          return ConstantsComment.choices.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );      
-                          }).toList();
-                        },
-                      ):
-                      PopupMenuButton<String> (
-                        onSelected: choiceActionDelete,
-                        itemBuilder: (BuildContext context) {
-                          setState(() {
-                            comment = listComents[index];
-                          });
-                          return ConstantsCommentDelete.choices.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );      
-                          }).toList();
-                        },
-          ),
-                    )
-                  ])),
-            ],
-          ),
+                              (listComents[index].userId != userId)
+                                  ? PopupMenuButton<String>(
+                                      onSelected: choiceAction,
+                                      itemBuilder: (BuildContext context) {
+                                        setState(() {
+                                          comment = listComents[index];
+                                        });
+                                        return ConstantsComment.choices
+                                            .map((String choice) {
+                                          return PopupMenuItem<String>(
+                                            value: choice,
+                                            child: Text(choice),
+                                          );
+                                        }).toList();
+                                      },
+                                    )
+                                  : PopupMenuButton<String>(
+                                      onSelected: choiceActionDelete,
+                                      itemBuilder: (BuildContext context) {
+                                        setState(() {
+                                          comment = listComents[index];
+                                        });
+                                        return ConstantsCommentDelete.choices
+                                            .map((String choice) {
+                                          return PopupMenuItem<String>(
+                                            value: choice,
+                                            child: Text(choice),
+                                          );
+                                        }).toList();
+                                      },
+                                    ),
+                        )
+                      ])),
+                ],
+              ),
+            ));
+          },
         ));
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text('Komentari', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
+        iconTheme: IconThemeData(
+            color: Theme.of(context).copyWith().iconTheme.color,
+            size: Theme.of(context).copyWith().iconTheme.size),
+        title: Text('Komentari',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context, listComents.length);
           },
-          child: Icon(Icons.arrow_back),
+          child: Icon(Icons.arrow_back,
+              color: Theme.of(context).copyWith().iconTheme.color,
+              size: Theme.of(context).copyWith().iconTheme.size),
         ),
       ),
       body: Container(
@@ -249,6 +255,7 @@ class StateComents extends State<CommentsPage> {
                 SizedBox(width: 10),
                 Icon(
                   Icons.account_circle,
+                  color: Theme.of(context).copyWith().iconTheme.color,
                   size: 36,
                 ),
                 Flexible(
@@ -258,8 +265,9 @@ class StateComents extends State<CommentsPage> {
                       hoverColor: Colors.grey,
                       labelText: 'Dodaj komentar...',
                       labelStyle: TextStyle(
-                          color: Colors.black87, fontStyle: FontStyle.italic),
-                      fillColor: Colors.black,
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontStyle: FontStyle.italic),
+                      fillColor: Theme.of(context).textTheme.bodyText1.color,
                       contentPadding: const EdgeInsets.all(10.0),
                     ),
                   ),
@@ -268,10 +276,11 @@ class StateComents extends State<CommentsPage> {
                   //splashColor: Colors.black,
                   elevation: 7,
                   padding: const EdgeInsets.all(10.0),
-                  color: Colors.green,
+                  color: Colors.green[800],
                   child: Text(
                     'Komentariši',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),
                   ),
                   //post comment
                   onPressed: () {
@@ -282,11 +291,14 @@ class StateComents extends State<CommentsPage> {
                       });
                       if (res != null) {
                         print(myController.text);
-                        APIServices.addComment(jwt, myController.text, 1, postId).then((res){
-                          
+                        APIServices.addComment(
+                                jwt, myController.text, 1, postId)
+                            .then((res) {
+                          Map<String, dynamic> list = json.decode(res);
+                          Comment newComm = Comment();
+                          newComm = Comment.fromObject(list);
                           setState(() {
-                            _getComms();
-                            myController.text = "";
+                            //
                           });
                         });
                       }

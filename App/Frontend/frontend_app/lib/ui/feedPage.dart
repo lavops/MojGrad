@@ -75,7 +75,9 @@ class _FeedPageState extends State<FeedPage> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.grey[50],
+          backgroundColor: Theme.of(context).copyWith().backgroundColor,
+          iconTheme: IconThemeData(
+              color: Theme.of(context).copyWith().iconTheme.color),
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
@@ -89,7 +91,7 @@ class _FeedPageState extends State<FeedPage> {
             SizedBox(width: 16.0),
             PopupMenuButton<String>(
                 onSelected: choiceAction,
-                icon: Icon(Icons.filter_list, color: Colors.black),
+                icon: Icon(Icons.filter_list, color: Theme.of(context).copyWith().iconTheme.color),
                 itemBuilder: (BuildContext context) {
                   return Filteri.choices.map((String choice) {
                     return PopupMenuItem<String>(
@@ -100,7 +102,7 @@ class _FeedPageState extends State<FeedPage> {
                 }),
             Icon(
               Icons.notifications,
-              color: Colors.black,
+              color:Theme.of(context).copyWith().iconTheme.color,
             ),
           ],
         ),
@@ -120,8 +122,8 @@ class _FeedPageState extends State<FeedPage> {
                     ),
                   )));
   }
-  
-  Future<Null> _handleRefresh() async{
+
+  Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 3));
     setState(() {
       listPosts = [];
@@ -130,7 +132,7 @@ class _FeedPageState extends State<FeedPage> {
     return null;
   }
 
-  Future<Null> choiceAction(String choice) async{
+  Future<Null> choiceAction(String choice) async {
     setState(() {
       listPosts = null;
     });
@@ -141,6 +143,8 @@ class _FeedPageState extends State<FeedPage> {
       _getUnsolvedPosts();
     } else if (choice == Filteri.svi) {
       _getPosts();
+    } else if (choice == Filteri.prazno) {
+      print('Prazno');
     }
 
     return null;

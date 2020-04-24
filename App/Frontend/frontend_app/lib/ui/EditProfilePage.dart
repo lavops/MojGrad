@@ -111,7 +111,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget okButton = FlatButton(
       child: Text(
         "Izmeni",
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onPressed: () {
         if (imageFile != null) {
@@ -128,11 +128,13 @@ class EditProfile extends State<EditProfilePage> {
                 Map<String, dynamic> jsonUser = jsonDecode(response);
                 User user1 = User.fromObject(jsonUser);
                 if (user1 != null) {
-                  Navigator.pushReplacement(
+                  /* Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => UserProfilePage(user1)),
-                  );
+                        
+                  );*/
+                  Navigator.of(context).pop();
                 }
               });
             }
@@ -144,7 +146,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget closeButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onPressed: () {
         /*Navigator.pushReplacement(
@@ -166,7 +168,11 @@ class EditProfile extends State<EditProfilePage> {
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             title: Text(
               "Promena profilne slike",
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1.color,
+                fontSize: 16,
+              ),
             ),
             content: Container(
                 width: 300,
@@ -177,6 +183,7 @@ class EditProfile extends State<EditProfilePage> {
                       children: <Widget>[
                         Expanded(
                           child: RaisedButton.icon(
+                            color: Colors.green[800],
                             label: Flexible(
                               child: Text('Kamera'),
                             ),
@@ -187,7 +194,11 @@ class EditProfile extends State<EditProfilePage> {
                                 });
                               });
                             },
-                            icon: Icon(Icons.camera_alt),
+                            icon: Icon(Icons.camera_alt,
+                                color: Theme.of(context)
+                                    .copyWith()
+                                    .iconTheme
+                                    .color),
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(50),
                             ),
@@ -202,8 +213,16 @@ class EditProfile extends State<EditProfilePage> {
                         ),
                         Expanded(
                           child: RaisedButton.icon(
+                            color: Colors.green[800],
                             label: Flexible(
-                              child: Text('Galerija'),
+                              child: Text(
+                                'Galerija',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color),
+                              ),
                             ),
                             onPressed: () {
                               _openGalery().then((res) {
@@ -212,7 +231,11 @@ class EditProfile extends State<EditProfilePage> {
                                 });
                               });
                             },
-                            icon: Icon(Icons.photo_library),
+                            icon: Icon(Icons.photo_library,
+                                color: Theme.of(context)
+                                    .copyWith()
+                                    .iconTheme
+                                    .color),
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(50),
                             ),
@@ -265,8 +288,14 @@ class EditProfile extends State<EditProfilePage> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Izmena podataka"),
-      content: Text("Uspešno ste izmenili podatke."),
+      title: Text(
+        "Izmena podataka",
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+      ),
+      content: Text("Uspešno ste izmenili podatke.",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1.color,
+          )),
       actions: [
         okButton,
       ],
@@ -309,7 +338,12 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text("Ime i prezime",
-                            style: TextStyle(fontSize: 24, color: Colors.black))
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -317,7 +351,8 @@ class EditProfile extends State<EditProfilePage> {
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
-                        labelStyle: TextStyle(color: Colors.black87),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
@@ -328,7 +363,11 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -357,7 +396,11 @@ class EditProfile extends State<EditProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                           ),
                           onPressed: () {
                             setState(() {
@@ -402,7 +445,12 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text("Korisničko ime",
-                            style: TextStyle(fontSize: 24, color: Colors.black))
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color))
                       ],
                     ),
                     SizedBox(
@@ -412,7 +460,9 @@ class EditProfile extends State<EditProfilePage> {
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
-                        labelStyle: TextStyle(color: Colors.black87),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
@@ -423,7 +473,11 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -446,7 +500,11 @@ class EditProfile extends State<EditProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                           ),
                           onPressed: () {
                             setState(() {
@@ -487,7 +545,12 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text("Šifra",
-                            style: TextStyle(fontSize: 24, color: Colors.black))
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -498,10 +561,12 @@ class EditProfile extends State<EditProfilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Trenutna šifra",
-                        hintStyle: TextStyle(color: Colors.black),
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color),
                         labelStyle: TextStyle(
-                            color: Colors.black87, fontStyle: FontStyle.italic),
-                        fillColor: Colors.black,
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontStyle: FontStyle.italic),
+                        fillColor: Theme.of(context).textTheme.bodyText1.color,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
@@ -514,7 +579,8 @@ class EditProfile extends State<EditProfilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Nova šifra",
                         labelStyle: TextStyle(
-                            color: Colors.black87, fontStyle: FontStyle.italic),
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
@@ -528,7 +594,8 @@ class EditProfile extends State<EditProfilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Ponovi šifru",
                         labelStyle: TextStyle(
-                            color: Colors.black87, fontStyle: FontStyle.italic),
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
@@ -539,7 +606,11 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -572,7 +643,11 @@ class EditProfile extends State<EditProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                           ),
                           onPressed: () {
                             setState(() {
@@ -617,7 +692,12 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text("Email adresa",
-                            style: TextStyle(fontSize: 24, color: Colors.black))
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -625,7 +705,9 @@ class EditProfile extends State<EditProfilePage> {
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
-                        labelStyle: TextStyle(color: Colors.black87),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
@@ -636,7 +718,11 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -659,7 +745,11 @@ class EditProfile extends State<EditProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                           ),
                           onPressed: () {
                             setState(() {
@@ -723,7 +813,12 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text("Kontakt telefon",
-                            style: TextStyle(fontSize: 24, color: Colors.black))
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -732,7 +827,8 @@ class EditProfile extends State<EditProfilePage> {
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
-                        labelStyle: TextStyle(color: Colors.black87),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
@@ -743,7 +839,11 @@ class EditProfile extends State<EditProfilePage> {
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -766,7 +866,11 @@ class EditProfile extends State<EditProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                           ),
                           onPressed: () {
                             setState(() {
@@ -787,12 +891,14 @@ class EditProfile extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Theme.of(context).textTheme.bodyText1.color, //change your color here
+          ),
           elevation: 8,
-          brightness: Brightness.light,
-          iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).copyWith().backgroundColor,
           title: Text('Podešavanja profila',
-              style: TextStyle(color: Colors.black)),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color)),
         ),
         body: Container(
           child: ListView(
@@ -826,7 +932,8 @@ class EditProfile extends State<EditProfilePage> {
                     child: Text(
                       "Promeni profilnu sliku",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blue),
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.bodyText1.color),
                     ),
                   ),
                   SizedBox(
@@ -839,10 +946,11 @@ class EditProfile extends State<EditProfilePage> {
               Container(
                   child: Card(
                 child: ListTile(
-                  leading: Icon(Icons.account_circle, color: Colors.black),
+                  leading: Icon(Icons.account_circle,
+                      color: Theme.of(context).copyWith().iconTheme.color),
                   title: Text('Ime i prezime',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: (_selectedOption == index - 1)
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -855,7 +963,7 @@ class EditProfile extends State<EditProfilePage> {
                               : firstName + ' ' + lastName,
                       style: TextStyle(
                           color: _selectedOption == index - 1
-                              ? Colors.black
+                              ? Theme.of(context).textTheme.bodyText1.color
                               : Colors.grey)),
                   selected: _selectedOption == index - 1,
                   onTap: () {
@@ -877,10 +985,11 @@ class EditProfile extends State<EditProfilePage> {
               //username
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.account_circle, color: Colors.black),
+                  leading: Icon(Icons.account_circle,
+                      color: Theme.of(context).copyWith().iconTheme.color),
                   title: Text('Korisničko ime',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: _selectedOption == index - 2
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -889,7 +998,7 @@ class EditProfile extends State<EditProfilePage> {
                     username1 == '' ? user.username : username1,
                     style: TextStyle(
                         color: _selectedOption == index - 2
-                            ? Colors.black
+                            ? Theme.of(context).textTheme.bodyText1.color
                             : Colors.grey),
                   ),
                   selected: _selectedOption == index - 2,
@@ -913,10 +1022,11 @@ class EditProfile extends State<EditProfilePage> {
               //password
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.lock_open, color: Colors.black),
+                  leading: Icon(Icons.lock_open,
+                      color: Theme.of(context).copyWith().iconTheme.color),
                   title: Text('Šifra',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: _selectedOption == index - 3
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -941,10 +1051,11 @@ class EditProfile extends State<EditProfilePage> {
               //email
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.email, color: Colors.black),
+                  leading: Icon(Icons.email,
+                      color: Theme.of(context).copyWith().iconTheme.color),
                   title: Text('Email',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: _selectedOption == index - 4
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -952,7 +1063,7 @@ class EditProfile extends State<EditProfilePage> {
                   subtitle: Text(email1 == '' ? user.email : email1,
                       style: TextStyle(
                           color: _selectedOption == index - 4
-                              ? Colors.black
+                              ? Theme.of(context).textTheme.bodyText1.color
                               : Colors.grey)),
                   selected: _selectedOption == index - 4,
                   onTap: () {
@@ -974,10 +1085,11 @@ class EditProfile extends State<EditProfilePage> {
               //mobile number
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.phone_android, color: Colors.black),
+                  leading: Icon(Icons.phone_android,
+                      color: Theme.of(context).copyWith().iconTheme.color),
                   title: Text('Telefon',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: _selectedOption == index - 5
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -985,7 +1097,7 @@ class EditProfile extends State<EditProfilePage> {
                   subtitle: Text(number1 == '' ? user.phone : number1,
                       style: TextStyle(
                           color: _selectedOption == index - 5
-                              ? Colors.black
+                              ? Theme.of(context).textTheme.bodyText1.color
                               : Colors.grey)),
                   selected: _selectedOption == index - 5,
                   onTap: () {
@@ -1010,10 +1122,11 @@ class EditProfile extends State<EditProfilePage> {
               //city
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.location_city, color: Colors.black),
+                  leading: Icon(Icons.location_city,
+                      color: Theme.of(context).copyWith().iconTheme.color),
                   title: Text('Grad',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: _selectedOption == index - 6
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -1021,7 +1134,7 @@ class EditProfile extends State<EditProfilePage> {
                   subtitle: Text(city1 == '' ? user.cityName : city1,
                       style: TextStyle(
                           color: _selectedOption == index - 6
-                              ? Colors.black
+                              ? Theme.of(context).textTheme.bodyText1.color
                               : Colors.grey)),
                   selected: _selectedOption == index - 6,
                   onTap: () {
@@ -1126,7 +1239,7 @@ class EditProfile extends State<EditProfilePage> {
                 },
                 color: Colors.green[800],
                 child: Text(
-                  'Sacuvaj',
+                  'Sačuvaj',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1182,7 +1295,9 @@ class MyDialogState extends State<MyDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text("Grad",
-                      style: TextStyle(fontSize: 24, color: Colors.black))
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Theme.of(context).textTheme.bodyText1.color))
                 ],
               ),
               SizedBox(height: 5),
@@ -1204,7 +1319,8 @@ class MyDialogState extends State<MyDialog> {
                   MaterialButton(
                     child: Text(
                       "Izmeni",
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
@@ -1218,7 +1334,8 @@ class MyDialogState extends State<MyDialog> {
                   FlatButton(
                     child: Text(
                       "Otkaži",
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
                     ),
                     onPressed: () {
                       Navigator.pop(context);

@@ -13,13 +13,12 @@ class SponsorshipPage extends StatefulWidget {
 }
 
 class _SponsorshipPageState extends State<SponsorshipPage> {
-
   List<Events> events;
   List<Donation> donations;
 
   _getEvents() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getEvents(jwt,publicUser.id).then((res) {
+    APIServices.getEvents(jwt, publicUser.id).then((res) {
       Iterable list = json.decode(res.body);
       List<Events> events1 = List<Events>();
       events1 = list.map((model) => Events.fromObject(model)).toList();
@@ -54,7 +53,7 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  DefaultTabController(
+    return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
@@ -68,19 +67,17 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
         body: TabBarView(
           children: <Widget>[
             ListView.builder(
-              padding: EdgeInsets.only(bottom: 30.0),
-              itemCount: events == null ? 0 : events.length,
-              itemBuilder: (BuildContext context, int index) {
-                return EventsWidget(events[index]);
-              }
-            ),
+                padding: EdgeInsets.only(bottom: 30.0),
+                itemCount: events == null ? 0 : events.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return EventsWidget(events[index]);
+                }),
             ListView.builder(
-              padding: EdgeInsets.only(bottom: 30.0),
-              itemCount: donations == null ? 0 : donations.length,
-              itemBuilder: (BuildContext context, int index) {
-                return DonationsWidget(donations[index]);
-              }
-            )
+                padding: EdgeInsets.only(bottom: 30.0),
+                itemCount: donations == null ? 0 : donations.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return DonationsWidget(donations[index]);
+                })
           ],
         ),
       ),
@@ -89,16 +86,18 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
 
   Widget tabs() {
     return TabBar(
-      labelColor: Colors.green,
-      indicatorColor: Colors.green,
-      unselectedLabelColor: Colors.black,
-      tabs: <Widget>[
-        Tab(
-          child: Text("Događaji"),
-        ),
-        Tab(
-          child: Text("Donacije"),
-        ),
-      ]);
+        labelColor: Colors.green[800],
+        indicatorColor: Colors.green[800],
+        unselectedLabelColor: Colors.black,
+        tabs: <Widget>[
+          Tab(
+            child: Text("Događaji"),
+          ),
+          Tab(
+            child: Text(
+              "Donacije",
+            ),
+          ),
+        ]);
   }
 }

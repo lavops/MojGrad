@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/city.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
@@ -33,10 +32,8 @@ class _CameraPageState extends State<CameraPage> {
   String addres = '';
   String pogresanText = '';
   var id = 0;
-  List<City> _city;
-  City city;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
- 
+
   _getUser() async {
     var jwt = await APIServices.jwtOrEmpty();
     var res = await APIServices.getUser(jwt, userId);
@@ -48,7 +45,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   _getPostType() async {
-     var jwt = await APIServices.jwtOrEmpty();
+    var jwt = await APIServices.jwtOrEmpty();
     APIServices.getPostType(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<PostType> postTypes = new List<PostType>();
@@ -61,33 +58,18 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
-  //function that adds cities to list
-  _getCity() async {
-    APIServices.getCity().then((res) {
-      Iterable list = json.decode(res.body);
-      List<City> cities = new List<City>();
-      cities = list.map((model) => City.fromObject(model)).toList();
-      setState(() {
-        _city = cities;
-      });
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     _getUser();
     _getPostType();
-    _getCity();
   }
 
   // Function for opening a camera
   _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-    print("Kompresovana" + picture.lengthSync().toString());
-    
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
-        imageFile = picture;
+      imageFile = picture;
     });
   }
 
@@ -97,7 +79,8 @@ class _CameraPageState extends State<CameraPage> {
           await geolocator.placemarkFromCoordinates(latitude1, longitude2);
       Placemark place = p[0];
       setState(() {
-        addres ="${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
+        addres =
+            "${place.locality},${place.thoroughfare}${place.subThoroughfare},${place.country}";
       });
     } catch (e) {
       print(e);
@@ -106,8 +89,7 @@ class _CameraPageState extends State<CameraPage> {
 
   // Function for opening a gallery
   _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
-    print("Kompresovana" + picture.lengthSync().toString());
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile = picture;
     });
@@ -153,10 +135,11 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Vrsta objave: ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              "Vrsta objave: ",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color),
             )),
-        Text("Problem", 
-        style: TextStyle(color: Colors.black)),
+        Text("Problem", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
         Flexible(
           child: Radio(
             value: 1,
@@ -170,7 +153,7 @@ class _CameraPageState extends State<CameraPage> {
             activeColor: Colors.green[800],
           ),
         ),
-        Text("Pohvala", style: TextStyle(color: Colors.black)),
+        Text("Pohvala", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
         Flexible(
           child: Radio(
             value: 2,
@@ -193,8 +176,9 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Problem rešava: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
-        Text("Rešiću sam", style: TextStyle(color: Colors.black)),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
+        Text("Rešiću sam", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
         Flexible(
           child: Radio(
             value: 1,
@@ -208,7 +192,7 @@ class _CameraPageState extends State<CameraPage> {
             activeColor: Colors.green[800],
           ),
         ),
-        Text("Neko drugi", style: TextStyle(color:Colors.black)),
+        Text("Neko drugi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
         Flexible(
           child: Radio(
             value: 2,
@@ -231,10 +215,11 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Kategorija: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
         _postType != null
             ? DropdownButton<PostType>(
-                hint: Text("Izaberi", style: TextStyle(color: Colors.black)),
+                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
                 value: postType,
                 onChanged: (PostType value) {
                   setState(() {
@@ -256,50 +241,27 @@ class _CameraPageState extends State<CameraPage> {
       ],
     );
 
-    final _dropDownCity = Row(
-      children: <Widget>[
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
-        _city != null
-            ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Colors.black)),
-                value: city,
-                onChanged: (City value) {
-                  setState(() {
-                    city = value;
-                  });
-                },
-                items: _city.map((City option) {
-                  return DropdownMenuItem<City>(
-                    value: option,
-                    child: Text(option.name),
-                  );
-                }).toList(),
-              )
-            : DropdownButton<String>(
-                hint: Text("Izaberi"),
-                onChanged: null,
-                items: null,
-              ),
-      ],
-    );
-
     // Pick image from your camera live
     final cameraPhone = MaterialButton(
       onPressed: () {
         _openCamera();
       },
+      color: Colors.green[800],
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.camera_alt, size: 30, color: Colors.black), // icon
-          Text("Kamera", style: TextStyle(color: Colors.black),), // text
+          Icon(Icons.camera_alt,
+              size: 30,
+              color: Theme.of(context).copyWith().iconTheme.color), // icon
+          Text(
+            "Kamera",
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ), // text
         ],
       ),
       padding: EdgeInsets.all(16),
+      shape: CircleBorder(),
     );
 
     // Pick image from your gallery
@@ -307,15 +269,22 @@ class _CameraPageState extends State<CameraPage> {
       onPressed: () {
         _openGalery();
       },
+      color: Colors.green[800],
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.add_photo_alternate, size: 30, color:Colors.black), // icon
-          Text("Galerija", style: TextStyle(color: Colors.black),), // text
+          Icon(Icons.add_photo_alternate,
+              size: 30,
+              color: Theme.of(context).copyWith().iconTheme.color), // icon
+          Text(
+            "Galerija",
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ), // text
         ],
       ),
       padding: EdgeInsets.all(16),
+      shape: CircleBorder(),
     );
 
     // Row with camera buttons
@@ -339,14 +308,14 @@ class _CameraPageState extends State<CameraPage> {
     // button for current location
     final currentLocation = RaisedButton.icon(
       label: Flexible(
-        child: Text('Trenutna lokacija'),
+        child: Text('Trenutna lokacija', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
         currentLocationFunction();
         _getUserLocation();
       },
       icon: Icon(Icons.my_location, size: 20),
-      //color: Colors.green[800],
+      color: Colors.green[800],
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -355,13 +324,13 @@ class _CameraPageState extends State<CameraPage> {
     // button for choosing location
     final chooseLocation = RaisedButton.icon(
       label: Flexible(
-        child: Text('Izaberi lokaciju'),
+        child: Text('Izaberi lokaciju', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
         currentLocationFunction();
       },
-      icon: Icon(Icons.location_on),
-      //color: Colors.green[800],
+      icon: Icon(Icons.location_on,),
+      color: Colors.green[800],
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -405,14 +374,13 @@ class _CameraPageState extends State<CameraPage> {
     // Submit it
     final submitObjavu = RaisedButton.icon(
       label: Flexible(
-        child: Text('Objavi'),
+        child: Text('Objavi', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
-        
         imageUpload(imageFile);
-        
-          APIServices.jwtOrEmpty().then((res) {
-            String jwt;
+
+        APIServices.jwtOrEmpty().then((res) {
+          String jwt;
           setState(() {
             jwt = res;
           });
@@ -423,27 +391,39 @@ class _CameraPageState extends State<CameraPage> {
 
           if (_vrstaObjave == 2) //pohvala
             postTypeId = 1;
-          else if(postType != null)
+          else if (postType != null)
             postTypeId = postType.id;
-          else pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+          else
+            pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
 
-          if(imageFile == null || addres == null){
+          if (imageFile == null || addres == null) {
             setState(() {
               pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
             });
             throw Exception('Greskaaaa');
           }
-          if (res != null && imageFile != null && addres != null){
-            APIServices.addPost(jwt,user.id, postTypeId, description.text,"Upload//" + basename(imageFile.path),statusId,latitude1,longitude2,addres,city.id);
+          if (res != null && imageFile != null && addres != null) {
+            APIServices.addPost(
+                jwt,
+                user.id,
+                postTypeId,
+                description.text,
+                "Upload//" + basename(imageFile.path),
+                statusId,
+                latitude1,
+                longitude2,
+                addres);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
-              setState((){
+              setState(() {
                 jwt = res;
               });
-              if(res != null) {
+              if (res != null) {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute( builder: (context) => HomePage.fromBase64(jwt.toString())),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePage.fromBase64(jwt.toString())),
                 );
               }
             });
@@ -451,6 +431,7 @@ class _CameraPageState extends State<CameraPage> {
         });
       },
       icon: Icon(Icons.nature_people),
+      color: Colors.green[800],
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -483,7 +464,6 @@ class _CameraPageState extends State<CameraPage> {
           _vrstaObjave == 1
               ? Column(children: <Widget>[problemResava, _dropDown])
               : null,
-          _dropDownCity,
           SizedBox(
             height: 20.0,
           ),
