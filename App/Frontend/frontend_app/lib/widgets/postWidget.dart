@@ -497,28 +497,28 @@ class MyDialogState extends State<MyDialog> {
         "Prijavljivanje korisnika",
         textAlign: TextAlign.center,
       ),
-      content: Column(children: <Widget>[
-        Container(
-            width: 200,
-            padding: const EdgeInsets.all(10.0),
-            child: new DropdownButton<ReportType>(
-              value: _selectedId,
-              onChanged: (ReportType value) {
-                setState(() {
-                  _selectedId = value;
-                });
-                widget.onValueChange(value);
-              },
-              items: widget.reportTypes,
-            )),
-        TextFormField(
-          maxLines: 2,
-          controller: messageController,
-          decoration: InputDecoration(
-              labelText: "Komentar",
-              hoverColor: Theme.of(context).textTheme.bodyText1.color),
-        )
-      ]),
+      content: Container(
+        height: 150,
+        child: Column(children: <Widget>[
+          new DropdownButton<ReportType>(
+            isExpanded: true,
+            value: _selectedId,
+            onChanged: (ReportType value) {
+              setState(() {
+                _selectedId = value;
+              });
+              widget.onValueChange(value);
+            },
+            items: widget.reportTypes,
+          ),
+          TextFormField(
+            maxLines: 2,
+            controller: messageController,
+            decoration: InputDecoration(
+                labelText: "Komentar",
+                hoverColor: Theme.of(context).textTheme.bodyText1.color),
+          )
+        ])),
       actions: <Widget>[
         FlatButton(
           child: Text(
