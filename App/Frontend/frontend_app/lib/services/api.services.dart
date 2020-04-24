@@ -562,4 +562,20 @@ class APIServices
     return res;
   }
 
+  static Future deleteUser(String jwt, int userId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'User/Delete';
+    var data = Map();
+    data["id"] = userId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res;
+  }
 }
