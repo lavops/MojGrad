@@ -16,9 +16,12 @@ namespace Backend.Models
         public long statusId { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
+        public string address { get; set; }
         public virtual Status status { get; set; }
         public virtual PostType postType { get; set; }
-        public virtual user user { get; set; }
+        public long cityId { get; set; }
+        public virtual City city { get; set; }
+        public virtual User user { get; set; }
         
         public IList<Like> likes { get; set; }
         public IList<Comment> comments { get; set; }

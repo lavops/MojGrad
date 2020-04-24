@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using Backend.Helpers;
 using Backend.Models;
+using Backend.Models.ViewsModel;
+using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Controllers
 {
@@ -18,117 +15,141 @@ namespace Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private AppDbContext _context = new AppDbContext();
-        private readonly AppSettings _appSettings;
+        private readonly IUserUI _iUserUI;
 
-       
-        public UserController(IOptions<AppSettings> appSettings)
+        public UserController(IUserUI iUserUI)
         {
-            _appSettings = appSettings.Value;
+            _iUserUI = iUserUI;
         }
 
+        [Authorize]
         [HttpGet]
-        public IEnumerable<user> GetUsers()
+        public IEnumerable<UserViewModel> GetUsers()
         {
-            return _context.user.ToList();
-        }
-
-         [HttpGet("{id}")]
-        public async Task<ActionResult<FullUser>> Getuser(long id)
-        {
-            var user = await _context.user.FindAsync(id);
-            var c = await _context.city.FindAsync(user.cityId);
-            var type = await _context.typeOfUser.FindAsync(user.userTypeId);
-            var userWhitCity = new FullUser(user, c.name, type.typeName);
-
-            if (user == null)
+            var users = _iUserUI.getAllUsers();
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
             {
-                return NotFound();
+                user.Add(new UserViewModel(u));
             }
 
-            return userWhitCity;
+            return user;
+
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public UserViewModel GetUser(long id)
+        {
+            var user = _iUserUI.getByID(id);
+            UserViewModel userr = new UserViewModel(user);
+            return userr;
+
         }
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] user userParam)
+        public IActionResult Login([FromBody] User userParam)
         {
-            var user = _context.user.SingleOrDefault(x => x.email == userParam.email);
-
-            if (user == null)
+            string tokenStr = _iUserUI.login(userParam);
+            if (tokenStr != null)
             {
-                return BadRequest(new { poruka = "Nevalidni podaci" });
+                return Ok(new { token = tokenStr });
             }
-
-            bool validPassword = false;
-
-            if (user != null)
-            {
-                if (userParam.password == user.password)
-                    validPassword = true;
-            }
-
-            if (validPassword == false)
-            {
-                return BadRequest(new { poruka = "Nevalidni podaci" });
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.id.ToString()),
-                    new Claim("idUser", user.id.ToString()),
-
-                }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            user.token = tokenHandler.WriteToken(token);
-            user.password = null;
-
-            return Ok(user);
+            else
+                return Unauthorized();
         }
 
         [HttpPost("Register")]
-        public IActionResult Register(user u)
+        public IActionResult Register(User u)
         {
-            var exist = _context.user.Where(x=> x.email==u.email);
-            if (!exist.Any())
+            User user = _iUserUI.insertUser(u);
+            if (user != null)
             {
-                var existUsername = _context.user.Where(x => x.username == u.username);
-                if (!existUsername.Any())
-                {
-                    user u1 = new user();
-                    u1.email = u.email;
-                    u1.createdAt = DateTime.Now;
-                    u1.cityId = u.cityId;
-                    u1.firstName = u.firstName;
-                    u1.lastName = u.lastName;
-                    u1.password = u.password;
-                    u1.phone = u.phone;
-                    u1.username = u.username;
-                    u1.photo = "default.png";
-                    u1.token = null;
-
-                    _context.user.Add(u1);
-                    _context.SaveChanges();
-
-                    return Ok(u1);
-                }
-                else
-                {
-                    return BadRequest(new { poruka = "Username vec postoji" });
-                }
-
+                user.password = null;
+                return Ok(user);
             }
             else
-            {
-                return BadRequest(new { poruka = "Email vec postoji" });
-            }
+                return BadRequest(new { message = "Nevalidni podaci" });
         }
+
+        [Authorize]
+        [HttpPost("EditUserData")]
+        public IActionResult EditUserData(User u)
+        {
+            User user = _iUserUI.editUserData(u);
+            if (user != null)
+            {
+                user.password = null;
+                return Ok(user);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+        public class changePassword
+        {
+            public long id { get; set; }
+            public string password { get; set; }
+            public string password1 { get; set; }
+        }
+
+        [Authorize]
+        [HttpPost("EditUserPassword")]
+        public IActionResult EditUserPassword(changePassword pass)
+        {
+            User user = _iUserUI.editUserPassword(pass.id, pass.password ,pass.password1);
+            if (user != null)
+            {
+                user.password = null;
+                return Ok(user);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+        public class deleteUser
+        {
+            public long id { get; set; }
+        }
+        [Authorize]
+        [HttpPost("Delete")]
+        public IActionResult DeleteUser(deleteUser user)
+        {
+            bool ind = _iUserUI.deleteUser(user.id);
+            if (ind ==true)
+            {
+                return Ok(new { message = "Obrisan" });
+            }
+            else
+                return BadRequest(new { message = "Greska" });
+        }
+
+        [Authorize]
+        [HttpPost("EditUserPhoto")]
+        public IActionResult EditUserPhoto(User u)
+        {
+            User user = _iUserUI.editUserPhoto(u.id, u.photo);
+            if (user != null)
+            {
+                UserViewModel newUser = new UserViewModel(user);
+                return Ok(newUser);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+
+        [Authorize]
+        [HttpPost("UsersByCityId")]
+        public IEnumerable<UserViewModel> GetUsersByCityId(User user1)
+        {
+            var users = _iUserUI.getUsersByCityId(user1.cityId);
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
+            {
+                user.Add(new UserViewModel(u));
+            }
+
+            return user;
+
+        }
+
     }
 }

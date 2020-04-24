@@ -11,7 +11,7 @@ class Post{
 
 
   Post(this._id, this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
-  Post.WithoutId(this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
+  Post.withoutId(this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
 
   int get id => _id;
   String get userId => _userId;

@@ -15,6 +15,12 @@ using Backend.Helpers;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Backend.UI;
+using Backend.UI.Interfaces;
+using Backend.BL;
+using Backend.BL.Interfaces;
+using Backend.DAL;
+using Backend.DAL.Interfaces;
 
 namespace Backend
 {
@@ -31,7 +37,7 @@ namespace Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -45,7 +51,13 @@ namespace Backend
             }
 
             );
+            
 
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                 
+            );
+            
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -72,6 +84,69 @@ namespace Backend
 
             services.AddDbContext<AppDbContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            services.AddTransient<IUserUI, UserUI>();
+            services.AddTransient<IUserBL, UserBL>();
+            services.AddTransient<IUserDAL, UserDAL>();
+
+            services.AddTransient<ICityUI, CityUI>();
+            services.AddTransient<ICityBL, CityBL>();
+            services.AddTransient<ICityDAL, CityDAL>();
+
+            services.AddTransient<ICommentUI, CommentUI>();
+            services.AddTransient<ICommentBL, CommentBL>();
+            services.AddTransient<ICommentDAL, CommentDAL>();
+
+            services.AddTransient<IPostUI, PostUI>();
+            services.AddTransient<IPostBL, PostBL>();
+            services.AddTransient<IPostDAL, PostDAL>();
+
+            services.AddTransient<ILikeUI, LikeUI>();
+            services.AddTransient<ILikeBL, LikeBL>();
+            services.AddTransient<ILikeDAL, LikeDAL>();
+
+            services.AddTransient<IPostTypeUI, PostTypeUI>();
+            services.AddTransient<IPostTypeBL, PostTypeBL>();
+            services.AddTransient<IPostTypeDAL, PostTypeDAL>();
+
+            services.AddTransient<IReportUI, ReportUI>();
+            services.AddTransient<IReportBL, ReportBL>();
+            services.AddTransient<IReportDAL, ReportDAL>();
+
+            services.AddTransient<IReportCommentUI, ReportCommentUI>();
+            services.AddTransient<IReportCommentBL, ReportCommentBL>();
+            services.AddTransient<IReportCommentDAL, ReportCommentDAL>();
+
+            services.AddTransient<IBlockedUsersUI, BlockedUsersUI>();
+            services.AddTransient<IBlockedUsersBL, BlockedUsersBL>();
+            services.AddTransient<IBlockedUsersDAL, BlockedUsersDAL>();
+
+            services.AddTransient<IAdminUI, AdminUI>();
+            services.AddTransient<IAdminBL, AdminBL>();
+            services.AddTransient<IAdminDAL, AdminDAL>();
+
+            services.AddTransient<IReportTypeUI, ReportTypeUI>();
+            services.AddTransient<IReportTypeBL, ReportTypeBL>();
+            services.AddTransient<IReportTypeDAL, ReportTypeDAL>();
+
+            services.AddTransient<IInstitutionUI, InstitutionUI>();
+            services.AddTransient<IInstitutionBL, InstitutionBL>();
+            services.AddTransient<IInstitutionDAL, InstitutionDAL>();
+
+            services.AddTransient<IEventUI, EventUI>();
+            services.AddTransient<IEventBL, EventBL>();
+            services.AddTransient<IEventDAL, EventDAL>();
+
+            services.AddTransient<IDonationUI, DonationUI>();
+            services.AddTransient<IDonationBL, DonationBL>();
+            services.AddTransient<IDonationDAL, DonationDAL>();
+
+
+            services.AddTransient<IChallengeSolvingUI, ChallengeSolvingUI>();
+            services.AddTransient<IChallengeSolvingBL, ChallengeSolvingBL>();
+            services.AddTransient<IChallengeSolvingDAL, ChallengeSolvingDAL>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +162,8 @@ namespace Backend
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

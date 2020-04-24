@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
+using Backend.UI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -13,16 +14,20 @@ namespace Backend.Controllers
     [ApiController]
     public class PostTypeController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public PostTypeController(AppDbContext context)
+        private readonly IPostTypeUI _iPostTypeUI;
+
+        public PostTypeController(IPostTypeUI iPostTypeUI)
         {
-            _context = context;
+            _iPostTypeUI = iPostTypeUI;
         }
 
+        [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostType>>> GetPostType()
+        public ActionResult<IEnumerable<PostType>> GetPostType()
         {
-            return await _context.postType.Where(x=> x.id!=1).ToListAsync();
+            return _iPostTypeUI.getAllPostTypes();
         }
+
+
     }
 }

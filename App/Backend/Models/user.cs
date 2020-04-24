@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Models
 {
-    public class user
+    public class User
     {
         public long id { get; set; }
         public string firstName { get; set; }
@@ -17,14 +17,16 @@ namespace Backend.Models
         public DateTime createdAt { get; set; }
         public long cityId { get; set; }
         public string photo { get; set; }
-        public string token { get; set; }
-
-        public long userTypeId { get; set; }
-        public virtual UserType userTypes { get; set; }
+        public int points { get; set; }
+        public int level { get; set; }
         public virtual City city { get; set; }
         public IList<Like> likes { get; set; }
         public IList<Post> posts { get; set; }
         public IList<Comment> comments { get; set; }
+       // public IList<BlockedUsers> blockedUsers { get; set; }
+        public IList<Report> reportingUsers { get; set; }
+        //public IList<ReportUser> reportingUsers { get; set; }
+       
 
     }
 }
