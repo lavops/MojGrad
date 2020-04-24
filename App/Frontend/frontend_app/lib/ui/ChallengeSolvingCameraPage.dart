@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:frontend/services/api.services.dart';
 import 'package:path/path.dart';
 
+import '../main.dart';
+
 class ChallengeSolvingCameraPage extends StatefulWidget {
   int postId;
   int ownerId;
@@ -131,7 +133,7 @@ class _ChallengeSolvingCameraPageState
       controller: description,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        hintText: 'Opis resenja',
+        hintText: 'Opis rešenja',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
           borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -192,7 +194,7 @@ class _ChallengeSolvingCameraPageState
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(
             color: Theme.of(context).copyWith().iconTheme.color,
             size: Theme.of(context).copyWith().iconTheme.size),

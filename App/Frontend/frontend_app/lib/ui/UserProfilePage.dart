@@ -107,6 +107,9 @@ class HeaderSection extends State<UserProfilePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.brightness_medium,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
               title: Text("Tamna tema",
                   style: TextStyle(
                       fontSize: 16,
