@@ -143,8 +143,6 @@ class _FeedPageState extends State<FeedPage> {
       _getUnsolvedPosts();
     } else if (choice == Filteri.svi) {
       _getPosts();
-    } else if (choice == Filteri.prazno) {
-      print('Prazno');
     }
 
     return null;
