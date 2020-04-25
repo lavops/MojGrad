@@ -186,6 +186,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                         setState(() {
                           solvingPost.selected = 1;
                           solvingPost.postStatusId = 1;
+                          isSolved = 1;
                         });
                       }
                     });

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:frontend/models/city.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
@@ -9,7 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
 import 'package:frontend/services/api.services.dart';
+import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
+import 'package:nominatim_location_picker/nominatim_location_picker.dart';
 import 'package:path/path.dart';
 
 class CameraPage extends StatefulWidget {
@@ -35,6 +38,7 @@ class _CameraPageState extends State<CameraPage> {
   var id = 0;
   List<City> _city;
   City city;
+  LatLng location;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
 
   _getUser() async {
@@ -149,6 +153,36 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     // Chosing what post type should be
+
+      Future getLocationWithNominatim() async {
+      Map result = await showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return NominatimLocationPicker(
+              searchHint: 'Pretrazi',
+              awaitingForLocation: "Ceka se lokacija.",
+              customMapLayer: new TileLayerOptions(
+                urlTemplate:
+                    "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+                additionalOptions: {
+                  'accessToken':
+                      'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
+                  'id': 'mapbox.mapbox-streets-v7'
+                }),
+            );
+          });
+      if (result != null) {
+        setState(() => location = result['latlng']);
+        setState(() {
+          latitude1 = location.latitude;
+          longitude2 = location.longitude;
+          _getUserLocation();
+        });
+      } else {
+        return;
+      }
+    }
+
     final vrstaObjave = Row(
       children: <Widget>[
         Align(
@@ -375,8 +409,8 @@ class _CameraPageState extends State<CameraPage> {
       label: Flexible(
         child: Text('Izaberi lokaciju', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
-      onPressed: () {
-        currentLocationFunction();
+      onPressed: () async{
+        await getLocationWithNominatim();
       },
       icon: Icon(Icons.location_on,),
       color: Colors.green[800],
