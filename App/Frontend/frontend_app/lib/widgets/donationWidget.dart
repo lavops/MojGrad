@@ -151,7 +151,8 @@ class _DonationsWidgetState extends State<DonationsWidget> {
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Doniraj poene."),
+        title: Text("Doniraj poene.", style: TextStyle(
+         color: Theme.of(context).textTheme.bodyText1.color),),
         content: Container(
           height: 150.0,
           child: Column(

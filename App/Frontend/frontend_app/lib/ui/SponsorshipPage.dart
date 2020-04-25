@@ -91,7 +91,7 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
         unselectedLabelColor: Colors.black,
         tabs: <Widget>[
           Tab(
-            child: Text("Događaji"),
+            child: Text("Događaji",),
           ),
           Tab(
             child: Text(

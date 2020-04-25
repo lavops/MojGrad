@@ -215,7 +215,8 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje objave?"),
+            title: Text("Brisanje objave?", style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -255,7 +256,8 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Izmeni opis.", textAlign: TextAlign.center,),
+            title: Text("Izmeni opis.", textAlign: TextAlign.center,style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color),),
             content: Container(
               height: 50.0,
               child: Column(
@@ -514,6 +516,8 @@ class MyDialogState extends State<MyDialog> {
       title: Text(
         "Prijavljivanje korisnika",
         textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color),
       ),
       content: Container(
         height: 150,

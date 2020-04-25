@@ -51,7 +51,9 @@ class StateComents extends State<CommentsPage> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje komentara?"),
+            title: Text("Brisanje komentara?",style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),
+                  ),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -105,7 +107,8 @@ class StateComents extends State<CommentsPage> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Želiš da prijaviš komentar?"),
+            title: Text("Želiš da prijaviš komentar?",style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -293,6 +296,7 @@ class StateComents extends State<CommentsPage> {
                   ),
                   //post comment
                   onPressed: () {
+                    if(myController.text != ""){
                     APIServices.jwtOrEmpty().then((res) {
                       String jwt;
                       setState(() {
@@ -301,7 +305,7 @@ class StateComents extends State<CommentsPage> {
                       if (res != null) {
                         print(myController.text);
                         APIServices.addComment(
-                                jwt, myController.text, 1, postId)
+                                jwt, myController.text, userId, postId)
                             .then((res) {
                           
                           setState(() {
@@ -311,6 +315,7 @@ class StateComents extends State<CommentsPage> {
                         });
                       }
                     });
+                    }
                     _getComms();
                   },
                 ),
