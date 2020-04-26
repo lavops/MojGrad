@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="wwwroot\Upload\InstitutionProfilePhoto\" />
     <Folder Include="wwwroot\Upload\Post\" />
   </ItemGroup>
 

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Backend.Controllers
 {
@@ -86,6 +88,26 @@ namespace Backend.Controllers
             {
                 return ex.Message.ToString();
             }
+
+        }
+
+        [Route("test")]
+        [HttpPost]
+        public async Task<string> test(WebImage webImage)
+        {
+           
+            if (webImage.img != null || webImage.img != "")
+            {
+                byte[] bytes = Convert.FromBase64String(webImage.img);
+                //var ext = "img";
+                //var fullpath = Constant.ImagesRoot + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "." + ext; 
+                var path = "Upload//InstitutionProfilePhoto//" + Guid.NewGuid() + ".jpg";
+                var filePath = Path.Combine($"{_environment.ContentRootPath}/wwwroot/" + path);
+                System.IO.File.WriteAllBytes(filePath, bytes);
+                return path;
+            }
+
+            return "";
 
         }
     }

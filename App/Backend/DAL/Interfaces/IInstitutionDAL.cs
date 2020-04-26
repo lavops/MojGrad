@@ -21,5 +21,6 @@ namespace Backend.DAL.Interfaces
         Institution acceptInstitution(long id);
         List<Institution> getAuthInstitutionByCityId(long cityId);
         List<Institution> getUnauthInstitutionByCityId(long cityId);
+        Institution editInstitutionProfilePhoto(long id, string photoPath);
     }
 }
