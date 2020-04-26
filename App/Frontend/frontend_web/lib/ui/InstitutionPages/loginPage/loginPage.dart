@@ -1,23 +1,103 @@
+import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/api.services.dart';
-import 'package:frontend_web/ui/managementPage.dart';
-import 'package:frontend_web/ui/loginPage.dart';
-import 'package:frontend_web/ui/registrationSponsorPage.dart';
-import 'dart:convert';
+import 'package:frontend_web/ui/InstitutionPages/registerPage/registerPage.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
+import 'package:frontend_web/widgets/centeredView/centeredView.dart';
+import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
-import 'package:frontend_web/ui/usersProfilePage.dart';
-
-class LoginSponsorPage extends StatefulWidget{
+class InstitutionLoginPage extends StatefulWidget{
   @override
-  _LoginSponsorPageState createState() => new _LoginSponsorPageState();
+  _InstitutionLoginPageState createState() => new _InstitutionLoginPageState();
 }
 
-class _LoginSponsorPageState extends State<LoginSponsorPage>{
+class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        /*drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? NavigationDrawer()
+            : null,*/
+        backgroundColor: Colors.white,
+        body: CenteredView(
+          child: Column(
+            children: <Widget>[
+              HomeNavigationBar(1),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile: InstitutionAdminLoginMobilePage(),
+                  desktop: InstitutionLoginDesktopPage(),
+                  tablet: InstitutionAdminLoginMobilePage(),
+                ),
+              )
+            ],
+          ),
+        )
+      )
+    );
+  }
+}
+
+class InstitutionAdminLoginMobilePage extends StatefulWidget{
+  @override
+  _InstitutionLoginMobilePageState createState() => new _InstitutionLoginMobilePageState();
+}
+
+class _InstitutionLoginMobilePageState extends State<InstitutionAdminLoginMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 100,),
+            Image.asset('assets/undraw2.png'),
+            InstitutionLoginPageWidget(),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class InstitutionLoginDesktopPage extends StatefulWidget{
+  @override
+  _InstitutionLoginDesktopPageState createState() => new _InstitutionLoginDesktopPageState();
+}
+
+class _InstitutionLoginDesktopPageState extends State<InstitutionLoginDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[ 
+        Row(children: <Widget>[
+          Expanded(
+            child: Center(
+              child: Image.asset('assets/undraw2.png'),
+            ),
+          ),
+          InstitutionLoginPageWidget(),
+        ],)
+      ]
+    );
+  }
+}
+
+
+class InstitutionLoginPageWidget extends StatefulWidget{
+  @override
+  _InstitutionLoginPageWidgetState createState() => new _InstitutionLoginPageWidgetState();
+}
+
+class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>{
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   String pogresanLoginText = '';
@@ -63,14 +143,6 @@ class _LoginSponsorPageState extends State<LoginSponsorPage>{
 
   @override
   Widget build(BuildContext context){
-
-    //logo
-    final logo = Hero(
-      tag: 'hero',
-      child: Center(
-        child: Image.asset('assets/mojGrad4.png', width: 300,)
-      ),
-    );
 
     //text box for email
     final emailText = TextField(
@@ -150,41 +222,21 @@ class _LoginSponsorPageState extends State<LoginSponsorPage>{
       final registrationLabelWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('Da li želite da se registrujete? '),
+        Flexible(child:Text('Da li želite da se registrujete? ')),
         SizedBox(
           width: 5.0,
         ),
         InkWell(
-          child: Text(
+          child: Flexible(
+            child: Text(
             'Registruj me.',
             style: TextStyle(
                 color: Colors.green[800], fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => RegistrationSponsorPage()),
-            );
-          },
-        ),
-      ],
-    );
-
-      final loginAdminWidget = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[  
-        InkWell(
-          child: new Container(
-            margin: EdgeInsets.only(right: 40),
-            child: new Text(
-            'Prijava administratora',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
           ),),
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
+              MaterialPageRoute(builder: (context) => InstitutionRegisterPage()),
             );
           },
         ),
@@ -192,22 +244,12 @@ class _LoginSponsorPageState extends State<LoginSponsorPage>{
     );
 
 
-
-    return Scaffold(
-          appBar: AppBar(
-          automaticallyImplyLeading: false,  
-          actions: <Widget>[
-            loginAdminWidget,  
-          ]),
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Container(
+    return Container(
             width: 400,
             child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
               children: <Widget>[
-                logo,
                 Column(
                   children: <Widget>[
                     SizedBox(height: 48.0,),
@@ -223,8 +265,6 @@ class _LoginSponsorPageState extends State<LoginSponsorPage>{
                 pogresanLogin,
               ],
             ),
-          )
-        )
-    );
+          );
   }
 }

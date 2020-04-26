@@ -1,19 +1,102 @@
+import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/services/api.services.dart';
-import 'dart:convert';
+import 'package:frontend_web/widgets/centeredView/centeredView.dart';
+import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
-import 'package:frontend_web/ui/loginSponsorPage.dart';
-
-class LoginPage extends StatefulWidget{
+class AdminLoginPage extends StatefulWidget{
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _AdminLoginPageState createState() => new _AdminLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
+class _AdminLoginPageState extends State<AdminLoginPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        /*drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? NavigationDrawer()
+            : null,*/
+        backgroundColor: Colors.white,
+        body: CenteredView(
+          child: Column(
+            children: <Widget>[
+              HomeNavigationBar(2),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile: AdminLoginMobilePage(),
+                  desktop: AdminLoginDesktopPage(),
+                  tablet: AdminLoginMobilePage(),
+                ),
+              )
+            ],
+          ),
+        )
+      )
+    );
+  }
+}
+
+class AdminLoginMobilePage extends StatefulWidget{
+  @override
+  _AdminLoginMobilePageState createState() => new _AdminLoginMobilePageState();
+}
+
+class _AdminLoginMobilePageState extends State<AdminLoginMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 100,),
+            Image.asset('assets/undraw2.png'),
+            LoginPageWidget(),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class AdminLoginDesktopPage extends StatefulWidget{
+  @override
+  _AdminLoginDesktopPageState createState() => new _AdminLoginDesktopPageState();
+}
+
+class _AdminLoginDesktopPageState extends State<AdminLoginDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[ 
+        Row(children: <Widget>[
+          Expanded(
+            child: Center(
+              child: Image.asset('assets/undraw2.png'),
+            ),
+          ),
+          LoginPageWidget(),
+        ],)
+      ]
+    );
+  }
+}
+
+class LoginPageWidget extends StatefulWidget{
+  @override
+  _LoginPageWidgetState createState() => new _LoginPageWidgetState();
+}
+
+class _LoginPageWidgetState extends State<LoginPageWidget>{
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   String pogresanLoginText = '';
@@ -59,14 +142,6 @@ class _LoginPageState extends State<LoginPage>{
 
   @override
   Widget build(BuildContext context){
-
-    //logo
-    final logo = Hero(
-      tag: 'hero',
-      child: Center(
-        child: Image.asset('assets/mojGrad4.png', width: 300,)
-      ),
-    );
 
     //text box for email
     final emailText = TextField(
@@ -142,40 +217,12 @@ class _LoginPageState extends State<LoginPage>{
         style: TextStyle(color: Colors.red),
       )
     );
-
-          final loginInstitutionLabelWidget = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text('Želite da se prijavite kao institucija? '),
-        SizedBox(
-          width: 5.0,
-        ),
-        InkWell(
-          child: Text(
-            'Prijavi se.',
-            style: TextStyle(
-                color: Colors.green[800], fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginSponsorPage()),
-            );
-          },
-        ),
-      ],
-    );
-
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Container(
+    return Container(
             width: 400,
             child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
               children: <Widget>[
-                logo,
                 Column(
                   children: <Widget>[
                     SizedBox(height: 48.0,),
@@ -184,15 +231,13 @@ class _LoginPageState extends State<LoginPage>{
                     passwordText,
                     SizedBox(height: 24.0,),
                     loginButton,
-                    loginInstitutionLabelWidget
                   ], 
                 ),
                 SizedBox(height: 8.0,),
                 pogresanLogin,
               ],
             ),
-          )
-        )
-    );
+          );
   }
+  
 }

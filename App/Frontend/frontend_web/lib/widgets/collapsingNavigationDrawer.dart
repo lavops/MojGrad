@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/ui/loginPage.dart';
 import 'package:frontend_web/ui/managementPage.dart';
 import 'package:frontend_web/ui/statisticsPage.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
@@ -122,7 +122,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                       _removeToken(),
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => HomeView()),
                       )
                     },
                   ),
