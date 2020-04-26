@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/editInstitutionPage.dart';
 import 'package:frontend_web/ui/loginSponsorPage.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
-import 'package:frontend_web/ui/editInstitutionPage.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -83,7 +83,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId)),
+                        MaterialPageRoute(builder: (context) => EditInstitutionPage(insId)),
                       );
                     },
                     isSelected: currentSelectedIndex == 2,
