@@ -38,17 +38,17 @@ class HomeNavigationBarMobile extends StatelessWidget{
             ),
             onTap: (){
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeView()
-                )
-              );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeView()
+                    )
+                  );
             },
           ),
           IconButton(
             icon: Icon(Icons.toc),
             onPressed: (){
-              
+              print('Nece da pull endDrawer');
             },
           )
         ],
@@ -125,6 +125,56 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomeNavigationDrawer extends StatelessWidget{
+  final int selected;
+  HomeNavigationDrawer(this.selected);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+          child: Container(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Center(child: Text("MOJ GRAD"),),
+            ),
+            ListTile(
+              leading: Icon(Icons.business),
+              title: Text(
+                'Institucija',
+                style: TextStyle(fontSize: 16, color: (selected == 1)? greenPastel : Colors.black),
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InstitutionLoginPage()
+                    )
+                  );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.perm_identity),
+              title: Text(
+                'Administrator',
+                style: TextStyle(fontSize: 16, color: (selected == 2)? greenPastel : Colors.black),
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminLoginPage()
+                    )
+                  );
+              },
+            ),
+          ],
+        ),
+      )
     );
   }
 }

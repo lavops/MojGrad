@@ -19,9 +19,9 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
-        /*drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-            ? NavigationDrawer()
-            : null,*/
+        endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? HomeNavigationDrawer(1)
+            : null,
         backgroundColor: Colors.white,
         body: CenteredView(
           child: Column(
