@@ -203,5 +203,26 @@ namespace Backend.DAL
         {
             return _context.institution.Where(x => x.authentication == false).Include(x => x.city).ToList();
         }
+
+        public Institution editInstitutionProfilePhoto(long id, string photoPath)
+        {
+            var exist = _context.institution.Where(x => x.id == id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.photoPath = photoPath;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return _context.institution.Where((u) => u.id == id).Include(x => x.city).FirstOrDefault();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
+        }
     }
 }

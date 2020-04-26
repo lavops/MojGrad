@@ -1,12 +1,18 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
+import 'package:frontend_web/widgets/circleImageWidget.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import '../models/city.dart';
 import '../services/api.services.dart';
 import '../services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
+import 'package:universal_html/prefer_universal/html.dart' as html;
 
 class EditInstitutionPage extends StatefulWidget {
   final int insId;
@@ -20,10 +26,12 @@ class EditInstitutionPage extends StatefulWidget {
 class _EditInstitutionPageState extends State<EditInstitutionPage> {
   String wrongRegText = "";
   Institution institution;
+  Image imageFile;
 
   String name = '',password = '', oldPassword = '', email = '',description = '',phone = '',cityName = '';
   int cityId = 0;
   String spoljasnjeIme = '';
+  String baseString;
 
   @override
   void initState() {
@@ -39,6 +47,183 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
     setState(() {
       institution = ins;
     });
+  }
+/*
+  Future<File> _openGalery() async {
+   Uint8List bytesFromPicker = await ImagePickerWeb.getImage(outputType: ImageType.bytes);
+   String base64Image = base64Encode(bytesFromPicker);
+
+    if (fromPicker != null) {
+      setState(() {
+        imageFile = fromPicker;
+        print("kamera slika"+imageFile.path);
+        return fromPicker;
+      });
+    }
+    return null;
+  }
+  */
+
+  String namePhoto = '';
+  String error;
+  Uint8List data;
+ 
+  pickImage() {
+    final html.InputElement input = html.document.createElement('input');
+    input
+      ..type = 'file'
+      ..accept = 'image/*';
+ 
+    input.onChange.listen((e) {
+      if (input.files.isEmpty) return;
+      final reader = html.FileReader();
+      reader.readAsDataUrl(input.files[0]);
+      reader.onError.listen((err) => setState(() {
+            error = err.toString();
+          }));
+      reader.onLoad.first.then((res) {
+        final encoded = reader.result as String;
+        // remove data:image/*;base64 preambule
+        final stripped =
+            encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+ 
+        setState(() {
+          namePhoto = input.files[0].name;
+          data = base64.decode(stripped);
+          error = null;
+        });
+      });
+    });
+ 
+    input.click();
+  }
+
+    editProfilePhotoo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        File imageFilee;
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            title: Text(
+              "Promena profilne slike",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1.color,
+                fontSize: 16,
+              ),
+            ),
+            content: Container(
+                width: 300,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                          flex: 1,
+                        ),
+                        Expanded(
+                          child: RaisedButton.icon(
+                            color: Colors.green[800],
+                            label: Flexible(
+                              child: Text(
+                                'Galerija',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color),
+                              ),
+                            ),
+                            onPressed: () {
+                             pickImage();
+                            },
+                            icon: Icon(Icons.photo_library,
+                                color: Theme.of(context)
+                                    .copyWith()
+                                    .iconTheme
+                                    .color),
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50),
+                            ),
+                          ),
+                          flex: 10,
+                        ),
+                      ],
+                    ),
+                    ClipOval(
+                      child:error != null
+                          ? Text(error)
+                          : data != null
+                              ? Container(
+                                  margin: EdgeInsets.only(left: 10.0),
+                                  width: 50,
+                                  height: 50,
+                                  child: Image.memory(data))
+                              :  Image.network(
+                              userPhotoURL + institution.photoPath,
+                              height: 150.0,
+                              width: 150.0,
+                              fit: BoxFit.cover,
+                            ), 
+                    ),
+                     SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        SizedBox(width: 50),
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {
+                           if (namePhoto != "") {
+                            String base64Image = base64Encode(data);
+                            APIServices.addImageWeb(base64Image);
+                              APIServices.editInstitutionProfilePhoto(TokenSession.getToken, institution.id,"Upload//ProfilePhoto//" + namePhoto)
+                                  .then((response) {
+                                Map<String, dynamic> jsonUser = jsonDecode(response);
+                                Institution inst1 = Institution.fromObject(jsonUser);
+                                if (inst1 != null) {
+                                  /* Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UserProfilePage(user1)),
+                                        
+                                  );*/
+                                  Navigator.of(context).pop();
+                                }
+                              });
+                          }
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                )),
+          );
+        });
+      },
+    );
   }
 
   Future<String> institutionName(BuildContext context, String instName) {
@@ -592,11 +777,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
               ),
       ],
     );
-    return MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-        ),
-        home: Scaffold(
+    return  Scaffold(
             appBar: AppBar(
               iconTheme: IconThemeData(color: Colors.white),
               title: Text('Izmena podataka institucije'),
@@ -626,6 +807,46 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
                         width: 500,
                         child: ListView(
                           children: <Widget>[
+                            Container(
+                              margin:EdgeInsets.all(10) ,
+                              child: Column(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  pickImage();
+                                },
+                                child: error != null
+                              ? Text(error)
+                              : data != null
+                              ? ClipOval(
+                                  child: Image.memory(data, height: 100.0,
+                                  width: 100.0,
+                                  fit: BoxFit.cover,)
+                                  )
+                                  : CircleImage(
+                                  userPhotoURL + institution.photoPath,
+                                  imageSize: 100.0,
+                                  whiteMargin: 0.0,
+                                  imageMargin: 0.0,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  pickImage();
+                                },
+                                child: Text(
+                                  "Promeni profilnu sliku",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).textTheme.bodyText1.color),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          )),
+
                             ListTile(
                               leading: Icon(Icons.business,
                                   color: Colors.green[800]),
@@ -754,7 +975,7 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
                             Colors.green[800]),
                       ),
                     ),
-            )));
+            ));
   }
 
   Future<Null> _handleRefresh() async {
@@ -813,6 +1034,24 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
 
   edit(String nname, String ndescription, String nemail, String nmobile,
       int ncityId, Institution institution, String pass1, String pass2) {
+
+        if (namePhoto != "") {
+            String base64Image = base64Encode(data);
+            APIServices.addImageWeb(base64Image).then((res){
+              var res1 = jsonDecode(res);
+              print("usloo");
+                APIServices.editInstitutionProfilePhoto(TokenSession.getToken, institution.id,res1)
+                  .then((response) {
+                Map<String, dynamic> jsonUser = jsonDecode(response);
+                Institution inst1 = Institution.fromObject(jsonUser);
+                if (inst1 != null) {
+                institution = inst1;
+                }
+              });
+
+            } );
+            
+         }
     if (nname == institution.name &&
         ndescription == institution.description &&
         nemail == institution.email &&
