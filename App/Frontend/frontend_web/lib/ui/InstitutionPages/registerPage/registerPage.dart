@@ -1,20 +1,54 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/institution.dart';
-import 'package:frontend_web/ui/loginSponsorPage.dart';
-import '../models/city.dart';
-import '../models/user.dart';
-import '../services/api.services.dart';
-import '../services/token.session.dart';	
+import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/ui/InstitutionPages/loginPage/loginPage.dart';
+import 'package:frontend_web/widgets/centeredView/centeredView.dart';
+import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
-class RegistrationSponsorPage extends StatefulWidget {
+class InstitutionRegisterPage extends StatefulWidget{
   @override
-  _RegistrationSponsorPageState createState() => _RegistrationSponsorPageState();
+  _InstitutionRegisterPageState createState() => new _InstitutionRegisterPageState();
 }
 
-class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
+class _InstitutionRegisterPageState extends State<InstitutionRegisterPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        /*drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? NavigationDrawer()
+            : null,*/
+        backgroundColor: Colors.white,
+        body: CenteredView(
+          child: Column(
+            children: <Widget>[
+              HomeNavigationBar(1),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile: InstitutionRegisterPageWidget(),
+                  desktop: InstitutionRegisterPageWidget(),
+                  tablet: InstitutionRegisterPageWidget(),
+                ),
+              )
+            ],
+          ),
+        )
+      )
+    );
+  }
+  
+}
+
+class InstitutionRegisterPageWidget extends StatefulWidget{
+  @override
+  _InstitutionRegisterPageWidgetState createState() => new _InstitutionRegisterPageWidgetState();
+}
+
+class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageWidget>{
   String wrongRegText = "";
 
   TextEditingController name = new TextEditingController();
@@ -42,7 +76,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
       onPressed: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginSponsorPage()),
+          MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
         );
       },
     );
@@ -156,14 +190,6 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final logoWidget = Hero(
-      tag: 'hero',
-      child: Center(
-          child: Image.asset(
-        'assets/mojGrad4.png',
-        width: 300,
-      )),
-    );
 
      final wrongReg = Center(
         child: Text(
@@ -393,7 +419,7 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => LoginSponsorPage()),
+              MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
             );
           },
         ),
@@ -416,7 +442,6 @@ class _RegistrationSponsorPageState extends State<RegistrationSponsorPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    logoWidget,
                     SizedBox(
                       height: 30.0,
                     ),
