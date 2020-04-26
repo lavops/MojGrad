@@ -5,14 +5,13 @@ import 'package:frontend_web/widgets/projectDetails/projectDetails.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomeView extends StatelessWidget{
- 
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
-        /*drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-            ? NavigationDrawer()
-            : null,*/
+        endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? HomeNavigationDrawer(0)
+            : null,
         backgroundColor: Colors.white,
         body: CenteredView(
           child: Column(

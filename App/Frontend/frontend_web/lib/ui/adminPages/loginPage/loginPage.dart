@@ -19,9 +19,9 @@ class _AdminLoginPageState extends State<AdminLoginPage>{
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
-        /*drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-            ? NavigationDrawer()
-            : null,*/
+        endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? HomeNavigationDrawer(2)
+            : null,
         backgroundColor: Colors.white,
         body: CenteredView(
           child: Column(
