@@ -29,9 +29,9 @@ class _AdminLoginPageState extends State<AdminLoginPage>{
               HomeNavigationBar(2),
               Expanded(
                 child: ScreenTypeLayout(
-                  mobile: LoginPageWidget(),
-                  desktop: LoginPageWidget(),
-                  tablet: LoginPageWidget(),
+                  mobile: AdminLoginMobilePage(),
+                  desktop: AdminLoginDesktopPage(),
+                  tablet: AdminLoginMobilePage(),
                 ),
               )
             ],
@@ -40,7 +40,55 @@ class _AdminLoginPageState extends State<AdminLoginPage>{
       )
     );
   }
-  
+}
+
+class AdminLoginMobilePage extends StatefulWidget{
+  @override
+  _AdminLoginMobilePageState createState() => new _AdminLoginMobilePageState();
+}
+
+class _AdminLoginMobilePageState extends State<AdminLoginMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 100,),
+            Image.asset('assets/undraw2.png'),
+            LoginPageWidget(),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class AdminLoginDesktopPage extends StatefulWidget{
+  @override
+  _AdminLoginDesktopPageState createState() => new _AdminLoginDesktopPageState();
+}
+
+class _AdminLoginDesktopPageState extends State<AdminLoginDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[ 
+        Row(children: <Widget>[
+          Expanded(
+            child: Center(
+              child: Image.asset('assets/undraw2.png'),
+            ),
+          ),
+          LoginPageWidget(),
+        ],)
+      ]
+    );
+  }
 }
 
 class LoginPageWidget extends StatefulWidget{
@@ -169,10 +217,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
         style: TextStyle(color: Colors.red),
       )
     );
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Container(
+    return Container(
             width: 400,
             child: ListView(
               shrinkWrap: true,
@@ -192,9 +237,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                 pogresanLogin,
               ],
             ),
-          )
-        )
-    );
+          );
   }
   
 }

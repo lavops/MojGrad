@@ -29,9 +29,9 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
               HomeNavigationBar(1),
               Expanded(
                 child: ScreenTypeLayout(
-                  mobile: InstitutionLoginPageWidget(),
-                  desktop: InstitutionLoginPageWidget(),
-                  tablet: InstitutionLoginPageWidget(),
+                  mobile: InstitutionAdminLoginMobilePage(),
+                  desktop: InstitutionLoginDesktopPage(),
+                  tablet: InstitutionAdminLoginMobilePage(),
                 ),
               )
             ],
@@ -40,8 +40,57 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
       )
     );
   }
-  
 }
+
+class InstitutionAdminLoginMobilePage extends StatefulWidget{
+  @override
+  _InstitutionLoginMobilePageState createState() => new _InstitutionLoginMobilePageState();
+}
+
+class _InstitutionLoginMobilePageState extends State<InstitutionAdminLoginMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 100,),
+            Image.asset('assets/undraw2.png'),
+            InstitutionLoginPageWidget(),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class InstitutionLoginDesktopPage extends StatefulWidget{
+  @override
+  _InstitutionLoginDesktopPageState createState() => new _InstitutionLoginDesktopPageState();
+}
+
+class _InstitutionLoginDesktopPageState extends State<InstitutionLoginDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[ 
+        Row(children: <Widget>[
+          Expanded(
+            child: Center(
+              child: Image.asset('assets/undraw2.png'),
+            ),
+          ),
+          InstitutionLoginPageWidget(),
+        ],)
+      ]
+    );
+  }
+}
+
 
 class InstitutionLoginPageWidget extends StatefulWidget{
   @override
@@ -195,10 +244,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
     );
 
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Container(
+    return Container(
             width: 400,
             child: ListView(
               shrinkWrap: true,
@@ -219,8 +265,6 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
                 pogresanLogin,
               ],
             ),
-          )
-        )
-    );
+          );
   }
 }

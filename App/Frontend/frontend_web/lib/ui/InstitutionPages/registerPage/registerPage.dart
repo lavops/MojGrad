@@ -29,9 +29,9 @@ class _InstitutionRegisterPageState extends State<InstitutionRegisterPage>{
               HomeNavigationBar(1),
               Expanded(
                 child: ScreenTypeLayout(
-                  mobile: InstitutionRegisterPageWidget(),
-                  desktop: InstitutionRegisterPageWidget(),
-                  tablet: InstitutionRegisterPageWidget(),
+                  mobile: InstitutionRegisterMobilePage(),
+                  desktop: InstitutionRegisterDesktopPage(),
+                  tablet: InstitutionRegisterMobilePage(),
                 ),
               )
             ],
@@ -41,6 +41,55 @@ class _InstitutionRegisterPageState extends State<InstitutionRegisterPage>{
     );
   }
   
+}
+
+class InstitutionRegisterMobilePage extends StatefulWidget{
+  @override
+  _InstitutionRegisterMobilePageState createState() => new _InstitutionRegisterMobilePageState();
+}
+
+class _InstitutionRegisterMobilePageState extends State<InstitutionRegisterMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 100,),
+            Image.asset('assets/undraw5.png'),
+            InstitutionRegisterPageWidget(),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class InstitutionRegisterDesktopPage extends StatefulWidget{
+  @override
+  _InstitutionRegisterDesktopPageState createState() => new _InstitutionRegisterDesktopPageState();
+}
+
+class _InstitutionRegisterDesktopPageState extends State<InstitutionRegisterDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[ 
+        Row(children: <Widget>[
+          Expanded(
+            child: Center(
+              child: Image.asset('assets/undraw5.png'),
+            ),
+          ),
+          InstitutionRegisterPageWidget(),
+        ],)
+      ]
+    );
+  }
 }
 
 class InstitutionRegisterPageWidget extends StatefulWidget{
@@ -428,15 +477,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
 
    
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.all(15.0),
-          children: <Widget>[
-            Center(
-              child: Container(
+    return Container(
                 padding: const EdgeInsets.all(8.0),
                 color: Colors.white,
                 child: Column(
@@ -465,11 +506,6 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+              );
   }
 }
