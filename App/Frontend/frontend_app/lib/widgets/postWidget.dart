@@ -415,7 +415,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               Text(commNum.toString()),
               Expanded(child: SizedBox()),
-              statusId == 2
+              statusId == 2 && post.postTypeId != 1
                   ? FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
@@ -434,7 +434,12 @@ class _PostWidgetState extends State<PostWidget> {
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+                        );
+                      },
                     ),
               SizedBox(width: 10.0), // For padding
             ],
