@@ -45,12 +45,16 @@ class HomeNavigationBarMobile extends StatelessWidget{
                   );
             },
           ),
-          IconButton(
-            icon: Icon(Icons.toc),
-            onPressed: (){
-              print('Nece da pull endDrawer');
-            },
-          )
+          new Builder(builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.toc),
+              onPressed: (){
+                Scaffold.of(context).openDrawer(); 
+                print('Nece da pull endDrawer');
+              },
+            );
+          })
+          
         ],
       ),
     );
@@ -71,7 +75,7 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
           InkWell(
             child: SizedBox(
               width: 200,
-              child: Image.asset('assets/mojGrad4.png'),
+              child: Image.asset('assets/mojGrad2.png'),
             ),
             onTap: (){
               Navigator.push(
