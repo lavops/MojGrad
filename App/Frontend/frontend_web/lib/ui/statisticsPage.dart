@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/postPage.dart';
-import 'package:frontend_web/ui/registerAdminPage.dart';
 import './navDrawer.dart';
 import 'package:frontend_web/ui/usersProfilePage.dart';
 

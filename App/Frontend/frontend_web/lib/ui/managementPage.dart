@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/institutionProfilesPage.dart';
 import 'package:frontend_web/ui/postPage.dart';
-import 'package:frontend_web/ui/registerAdminPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import './navDrawer.dart';
 import 'package:frontend_web/ui/usersProfilePage.dart';

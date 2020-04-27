@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/admin.dart';
+import 'package:frontend_web/models/user.dart';
+import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/loginPage/loginPage.dart';
 import 'package:frontend_web/ui/homePage.dart';
+import 'package:frontend_web/widgets/centeredView/centeredView.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
-import '../models/city.dart';
-import '../models/user.dart';
-import '../services/api.services.dart';
 
 class RegisterAdminPage extends StatefulWidget {
   @override
@@ -16,13 +19,105 @@ class RegisterAdminPage extends StatefulWidget {
 }
 
 class _RegisterAdminPageState extends State<RegisterAdminPage> {
-  String wrongRegText = "";
+  
+  @override
+  Widget build(BuildContext context) {
+     return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+         appBar: AppBar(
+              title: Text('Izmena podataka institucije', style: TextStyle(color: Colors.black45),),
+              backgroundColor: Colors.white60,
+        ),
+        backgroundColor: Colors.white,
+        body: Row(
+            children: <Widget>[
+              sizingInformation.deviceScreenType != DeviceScreenType.Mobile 
+            ? CollapsingNavigationDrawer(): SizedBox(),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile:AdminRegisterMobilePage(),
+                  desktop: AdminRegisterDesktopPage(),
+                  tablet: AdminRegisterDesktopPage(),
+                ),
+              )
+            ],
+          ),
+        )
+    );
+
+  }
+}
+
+
+class AdminRegisterMobilePage extends StatefulWidget{
+  @override
+  _AdminRegisterMobilePageState createState() => new _AdminRegisterMobilePageState();
+}
+
+class _AdminRegisterMobilePageState extends State<AdminRegisterMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 40,),
+            Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Container(width: 350, child: 
+            AdminRegisterPageWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class AdminRegisterDesktopPage extends StatefulWidget{
+  @override
+  _AdminRegisterDesktopPageState createState() => new _AdminRegisterDesktopPageState();
+}
+
+class _AdminRegisterDesktopPageState extends State<AdminRegisterDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 50,),
+            Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Container(width: 500, child: 
+            AdminRegisterPageWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+
+class AdminRegisterPageWidget extends StatefulWidget{
+  @override
+  _AdminRegisterPageWidgetState createState() => new _AdminRegisterPageWidgetState();
+}
+
+class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
+ String wrongRegText = "";
 
   TextEditingController firstName = new TextEditingController();
   TextEditingController lastName = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
   bool _secureText = true;
+
 
   showHide() {
     setState(() {
@@ -38,19 +133,17 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
         style: TextStyle(color: Colors.green),
       ),
       onPressed: () {
-        String jwt = TokenSession.getToken;
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage.fromBase64(jwt)),
+          MaterialPageRoute(builder: (context) => RegisterAdminPage()),
         );
-        ;
       },
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Uspešna registracija"),
-      content: Text("Prijavi se da bi nastavio."),
+      content: Text("Uspešno ste registrovali novog administratora"),
       actions: [
         okButton,
       ],
@@ -131,9 +224,13 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final firstNameWidget = Card(
+
+    final firstNameWidget = Container(
+      width: 600,
+      child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
@@ -144,49 +241,52 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "Ime",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.person, color: Colors.green[800]),
+            child: Icon(Icons.person, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
-    );
+    ),);
 
-    final lastNameWidget = Card(
+        final lastNameWidget = Container(
+      width: 600,
+      child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
-        controller: lastName,
+        controller: firstName,
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "Prezime",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.person, color: Colors.green[800]),
+            child: Icon(Icons.person, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Prezime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
-    );
+    ),);
 
-    
-    final emailWidget = Card(
+     final emailWidget = Container(
+      width: 600,
+      child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
@@ -197,24 +297,26 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "E-mail",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.email, color: Colors.green[800]),
+            child: Icon(Icons.email, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "E-mail",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
-    );
+    ),);
 
     
 
-    final passwordWidget = Card(
+   final passwordWidget = Container(
+      width: 600,
+      child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
@@ -226,25 +328,25 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "Šifra",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           suffixIcon: IconButton(
             onPressed: showHide,
             icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility,
-                color: Colors.green[800]),
+                color: greenPastel),
           ),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phonelink_lock, color: Colors.green[800]),
+            child: Icon(Icons.phonelink_lock, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Šifra",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
-    );
+    ),);
 
     final registerButtonWidget = SizedBox(
       height: 48.0,
@@ -252,12 +354,12 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           child: Text(
-            "Registruj novog admina",
+            "Registruj administratora",
             style: TextStyle(fontSize: 16.0),
           ),
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           textColor: Colors.white,
-          color: Colors.green[800],
+          color: greenPastel,
           onPressed: () {
                _register(firstName.text, lastName.text, email.text, password.text);
           }),
@@ -268,44 +370,26 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
       '$wrongRegText',
       style: TextStyle(color: Colors.red),
     ));
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Registrovanje novog admina"),
-      ),
-      backgroundColor: Colors.white,
-      body: Row(children: <Widget>[
-        CollapsingNavigationDrawer(),
-        SizedBox(width: 400,),
-      Center(
-        child: Container(
-          width: 600,
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(15.0),
-            children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              firstNameWidget,
-              lastNameWidget,
-              emailWidget,
-              passwordWidget,
-              SizedBox(
-                height: 12.0,
-              ),
-              registerButtonWidget,
-              SizedBox(
-                height: 12.0,
-              ),
-              SizedBox(
-                height: 12.0,
-              ),
-              wrongReg,
-            ],
-          ),
-        ),
-      ),],)
-    );
+    return Container(
+                padding: const EdgeInsets.all(8.0),
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    wrongReg,
+                    lastNameWidget,
+                    firstNameWidget,
+                    emailWidget,
+                    passwordWidget,
+                    SizedBox(
+                      height: 12.0,
+                    ),
+                    registerButtonWidget,
+                  ],
+                ),
+              );
   }
 }
