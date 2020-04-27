@@ -30,3 +30,20 @@ class CenteredViewPostTabletDesktop extends StatelessWidget{
     );
   }
 }
+
+class CenteredViewPostMobile extends StatelessWidget{
+  final Widget child;
+  const CenteredViewPostMobile({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5, right: 5, top: 30),
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 500),
+        child: child,
+      ),
+    );
+  }
+}
