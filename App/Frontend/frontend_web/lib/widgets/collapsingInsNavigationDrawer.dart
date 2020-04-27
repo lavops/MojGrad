@@ -17,7 +17,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
     with SingleTickerProviderStateMixin {
   double maxWidth = 210;
   double minWidth = 70;
-  bool isCollapsed = true;
+  static bool isCollapsed = true;
   AnimationController _animationController;
   Animation<double> widthAnimation;
   static int currentSelectedIndex = 1;
@@ -32,7 +32,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 300));
     widthAnimation = Tween<double>(begin: maxWidth, end: minWidth).animate(_animationController);
-    _animationController.forward();
+    isCollapsed ? _animationController.forward() : _animationController.reverse();
   }
 
   @override
@@ -126,7 +126,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                 icon: AnimatedIcons.arrow_menu,
                 progress: _animationController,
                 color: Colors.black54,
-                size: 50.0,
+                size: 40.0,
               ),
             ),
           ],
