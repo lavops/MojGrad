@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/comment.dart';
 import 'package:frontend/models/constants.dart';
-import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
@@ -51,9 +50,11 @@ class StateComents extends State<CommentsPage> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje komentara?",style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color),
-                  ),
+            title: Text(
+              "Brisanje komentara?",
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -69,14 +70,13 @@ class StateComents extends State<CommentsPage> {
                     });
                     if (res != null) {
                       print("Delete comment" + comment.id.toString());
-                      APIServices.deleteComment(jwt, comment.id).then((res){
-                        if(res.statusCode == 200){
+                      APIServices.deleteComment(jwt, comment.id).then((res) {
+                        if (res.statusCode == 200) {
                           setState(() {
                             _getComms();
                           });
                         }
                       });
-                      
                     }
                   });
                   _getComms();
@@ -107,8 +107,11 @@ class StateComents extends State<CommentsPage> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Želiš da prijaviš komentar?",style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color),),
+            title: Text(
+              "Želiš da prijaviš komentar?",
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -150,7 +153,7 @@ class StateComents extends State<CommentsPage> {
   TextEditingController myController = new TextEditingController();
   Widget buildCommentList() {
     return Container(
-        color: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
+        color: MyApp.ind == 0 ? Colors.white : Colors.grey[800],
         child: ListView.builder(
           itemCount: listComents == null ? 0 : listComents.length,
           itemBuilder: (BuildContext context, int index) {
@@ -170,6 +173,9 @@ class StateComents extends State<CommentsPage> {
                           imageMargin: 6.0,
                         ),
                         Container(
+                          //OBRISATI AKO NE VALJA
+                          color:
+                              MyApp.ind == 0 ? Colors.white : Colors.grey[600],
                           width: 260,
                           padding: EdgeInsets.all(10),
                           child: Column(
@@ -241,7 +247,9 @@ class StateComents extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0
+            ? Colors.white
+            : Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(
             color: Theme.of(context).copyWith().iconTheme.color,
             size: Theme.of(context).copyWith().iconTheme.size),
@@ -258,8 +266,8 @@ class StateComents extends State<CommentsPage> {
         ),
       ),
       body: Container(
+          color: MyApp.ind == 0 ? Colors.white : Colors.grey[600],
           padding: EdgeInsets.only(top: 0),
-          color: Colors.grey[100],
           child: Column(children: [
             Flexible(child: buildCommentList()),
             Row(
@@ -296,25 +304,24 @@ class StateComents extends State<CommentsPage> {
                   ),
                   //post comment
                   onPressed: () {
-                    if(myController.text != ""){
-                    APIServices.jwtOrEmpty().then((res) {
-                      String jwt;
-                      setState(() {
-                        jwt = res;
-                      });
-                      if (res != null) {
-                        print(myController.text);
-                        APIServices.addComment(
-                                jwt, myController.text, userId, postId)
-                            .then((res) {
-                          
-                          setState(() {
-                            _getComms();
-                            myController.text = "";
-                          });
+                    if (myController.text != "") {
+                      APIServices.jwtOrEmpty().then((res) {
+                        String jwt;
+                        setState(() {
+                          jwt = res;
                         });
-                      }
-                    });
+                        if (res != null) {
+                          print(myController.text);
+                          APIServices.addComment(
+                                  jwt, myController.text, userId, postId)
+                              .then((res) {
+                            setState(() {
+                              _getComms();
+                              myController.text = "";
+                            });
+                          });
+                        }
+                      });
                     }
                     _getComms();
                   },
