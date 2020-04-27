@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/institutionProfilesPage.dart';
@@ -86,7 +87,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         });
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PostPage(globalUser)),
+                        MaterialPageRoute(builder: (context) => ManagePostPage())//PostPage(globalUser)),
                       );
                     },
                     isSelected: currentSelectedIndex == 2,
@@ -107,7 +108,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     isSelected: currentSelectedIndex == 3,
                   ),
                   CollapsingListTile(
-                    title: 'Upravljanje događajima',
+                    title: 'Upravljanje institucijama',
                     icon: Icons.business,
                     animationController: _animationController,
                     onTap: () => {

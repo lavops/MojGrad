@@ -479,7 +479,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     final loginLabelWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('Vec imate nalog? '),
+        Text('Vec imate profil? '),
         SizedBox(
           width: 5.0,
         ),

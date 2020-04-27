@@ -246,17 +246,16 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
       final registrationLabelWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Flexible(child:Text('Da li želite da se registrujete? ')),
+        Text('Nemate profil? '),
         SizedBox(
           width: 5.0,
         ),
         InkWell(
-          child: Flexible(
             child: Text(
             'Registruj se.',
             style: TextStyle(
                 color: greenPastel, fontWeight: FontWeight.bold),
-          ),),
+          ),
           onTap: () {
             Navigator.pushReplacement(
               context,
