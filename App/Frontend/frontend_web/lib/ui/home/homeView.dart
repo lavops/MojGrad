@@ -12,11 +12,32 @@ class HomeView extends StatelessWidget{
         endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
             ? HomeNavigationDrawer(0)
             : null,
+        appBar: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? AppBar(
+              leading: new Container(),
+              backgroundColor: Colors.white,
+              iconTheme: IconThemeData(color: Colors.black),
+              title: InkWell(
+                child: SizedBox(
+                  width: 150,
+                  child: Image.asset('assets/mojGrad2.png'),
+                ),
+                onTap: (){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeView()
+                    )
+                  );
+                },
+              ),
+            )
+            : null,
         backgroundColor: Colors.white,
         body: CenteredView(
           child: Column(
             children: <Widget>[
-              HomeNavigationBar(0),
+              (sizingInformation.deviceScreenType != DeviceScreenType.Mobile) ? HomeNavigationBar(0) : SizedBox(),
               Expanded(
                 child: ScreenTypeLayout(
                   mobile: HomeViewMobile(),
