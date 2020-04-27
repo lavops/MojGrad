@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/ui/InstitutionPages/registerPage/registerPage.dart';
+import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
@@ -22,11 +23,32 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
         endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
             ? HomeNavigationDrawer(1)
             : null,
+        appBar: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? AppBar(
+              leading: new Container(),
+              backgroundColor: Colors.white,
+              iconTheme: IconThemeData(color: Colors.black),
+              title: InkWell(
+                child: SizedBox(
+                  width: 150,
+                  child: Image.asset('assets/mojGrad2.png'),
+                ),
+                onTap: (){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeView()
+                    )
+                  );
+                },
+              ),
+            )
+            : null,
         backgroundColor: Colors.white,
         body: CenteredView(
           child: Column(
             children: <Widget>[
-              HomeNavigationBar(1),
+              (sizingInformation.deviceScreenType != DeviceScreenType.Mobile) ? HomeNavigationBar(1) : SizedBox(),
               Expanded(
                 child: ScreenTypeLayout(
                   mobile: InstitutionAdminLoginMobilePage(),
