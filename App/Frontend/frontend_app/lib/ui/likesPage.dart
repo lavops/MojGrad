@@ -5,6 +5,8 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
 
+import '../main.dart';
+
 class LikesPage extends StatefulWidget {
   final int postId;
   LikesPage(this.postId);
@@ -24,7 +26,7 @@ class StateLikes extends State<LikesPage> {
   List<Like> listDislikes;
 
   _getLikeInPost() async {
-     var jwt = await APIServices.jwtOrEmpty();
+    var jwt = await APIServices.jwtOrEmpty();
     APIServices.likeInPost(jwt, postId).then((res) {
       //umesto 1 stavlja se idPosta
       Iterable list = json.decode(res.body);
@@ -37,7 +39,7 @@ class StateLikes extends State<LikesPage> {
   }
 
   _getDislikeInPost() async {
-     var jwt = await APIServices.jwtOrEmpty();
+    var jwt = await APIServices.jwtOrEmpty();
     APIServices.dislikeInPost(jwt, postId).then((res) {
       //umesto 1 stavlja se idPosta
       Iterable list = json.decode(res.body);
@@ -65,7 +67,7 @@ class StateLikes extends State<LikesPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                  color: Colors.white,
+                  color: MyApp.ind == 0 ? Colors.white : Colors.grey[600],
                   padding: EdgeInsets.all(10),
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
@@ -111,7 +113,7 @@ class StateLikes extends State<LikesPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                  color: Colors.white,
+                  color: MyApp.ind == 0 ? Colors.white : Colors.grey[600],
                   padding: EdgeInsets.all(10),
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
@@ -151,7 +153,7 @@ class StateLikes extends State<LikesPage> {
     return TabBar(
         labelColor: Colors.green[800],
         indicatorColor: Colors.green[800],
-        unselectedLabelColor: Colors.black,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
         tabs: <Widget>[
           Tab(
             child: Text("Sviđanja"),
@@ -168,9 +170,14 @@ class StateLikes extends State<LikesPage> {
         length: 2,
         child: Scaffold(
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
-              title: Text('Reakcije', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
-              backgroundColor: Theme.of(context).copyWith().backgroundColor,
+              iconTheme: IconThemeData(
+                  color: Theme.of(context).copyWith().iconTheme.color),
+              title: Text('Reakcije',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color)),
+              backgroundColor: MyApp.ind == 0
+                  ? Colors.white
+                  : Theme.of(context).copyWith().backgroundColor,
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -194,13 +201,13 @@ class StateLikes extends State<LikesPage> {
             body: TabBarView(children: <Widget>[
               Container(
                   padding: EdgeInsets.only(top: 0),
-                  color: Colors.grey[100],
+                  color: MyApp.ind == 0 ? Colors.white : Colors.grey[800],
                   child: Column(children: [
                     Flexible(child: buildLikeList()),
                   ])),
               Container(
                   padding: EdgeInsets.only(top: 0),
-                  color: Colors.grey[100],
+                  color: MyApp.ind == 0 ? Colors.white : Colors.grey[800],
                   child: Column(children: [
                     Flexible(child: buildDislikeList()),
                   ])),

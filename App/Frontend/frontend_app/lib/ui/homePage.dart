@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             _currentTabIndex = 2;
           });
         },
-        child: Icon(Icons.nature_people),
+        child: Icon(Icons.nature_people, color: Theme.of(context).copyWith().iconTheme.color),
         backgroundColor: Colors.green[800],
       ),
       bottomNavigationBar: BottomAppBar(
