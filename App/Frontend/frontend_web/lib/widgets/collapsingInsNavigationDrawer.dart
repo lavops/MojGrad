@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/editInstitutionPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
