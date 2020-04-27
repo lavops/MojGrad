@@ -10,6 +10,8 @@ import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+Color greenPastel = Color(0xFF00BFA6);
+
 class AdminLoginPage extends StatefulWidget{
   @override
   _AdminLoginPageState createState() => new _AdminLoginPageState();
@@ -170,7 +172,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email,color: Colors.green[800]),
+        prefixIcon: Icon(Icons.email,color: greenPastel),
         hintText: 'E-mail',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
@@ -178,7 +180,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          borderSide: BorderSide(width: 2,color: greenPastel),
         ),
       ),
       controller: _emailController,
@@ -189,7 +191,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock,color: Colors.green[800],),
+        prefixIcon: Icon(Icons.lock,color: greenPastel,),
         hintText: 'Šifra',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
@@ -197,7 +199,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          borderSide: BorderSide(width: 2,color: greenPastel),
         ),
       ),
       controller: _passwordController,
@@ -208,7 +210,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
         borderRadius: BorderRadius.circular(50.0),
-        shadowColor: Colors.lightGreenAccent.shade100,
+        shadowColor: Colors.black,
         elevation: 5.0,
         child: MaterialButton(
           minWidth: 200.0,
@@ -222,7 +224,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
             _login(_emailController.text, _passwordController.text);
             
           },
-          color: Colors.green[800],
+          color: greenPastel,
           child: Text(
             'Uloguj se',
             style: TextStyle(

@@ -10,6 +10,8 @@ import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+Color greenPastel = Color(0xFF00BFA6);
+
 class InstitutionRegisterPage extends StatefulWidget{
   @override
   _InstitutionRegisterPageState createState() => new _InstitutionRegisterPageState();
@@ -284,16 +286,16 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "Naziv institucije",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.person, color: Colors.green[800]),
+            child: Icon(Icons.person, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Naziv institucije",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
@@ -320,7 +322,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          borderSide: BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: greenPastel),
         ),
       ),
     ),
@@ -340,16 +342,16 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "E-mail",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.email, color: Colors.green[800]),
+            child: Icon(Icons.email, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "E-mail",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
@@ -368,16 +370,16 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "Mobilni telefon",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phone, color: Colors.green[800]),
+            child: Icon(Icons.phone, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Mobilni telefon",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
         keyboardType: TextInputType.number,
@@ -398,21 +400,21 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          hintText: "Šifra",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           suffixIcon: IconButton(
             onPressed: showHide,
             icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility,
-                color: Colors.green[800]),
+                color: greenPastel),
           ),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phonelink_lock, color: Colors.green[800]),
+            child: Icon(Icons.phonelink_lock, color: greenPastel),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Šifra",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
       ),
@@ -463,7 +465,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           ),
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           textColor: Colors.white,
-          color: Colors.green[800],
+          color: greenPastel,
           onPressed: () {
             if (city != null)
               _register(name.text, description.text, email.text, mobile.text,
@@ -485,7 +487,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           child: Text(
             'Prijavite se.',
             style: TextStyle(
-                color: Colors.green[800], fontWeight: FontWeight.bold),
+                color: greenPastel, fontWeight: FontWeight.bold),
           ),
           onTap: () {
             Navigator.pushReplacement(

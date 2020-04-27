@@ -10,6 +10,8 @@ import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+Color greenPastel = Color(0xFF00BFA6);
+
 class InstitutionLoginPage extends StatefulWidget{
   @override
   _InstitutionLoginPageState createState() => new _InstitutionLoginPageState();
@@ -171,7 +173,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email,color: Colors.green[800]),
+        prefixIcon: Icon(Icons.email,color: greenPastel),
         hintText: 'E-mail',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
@@ -179,7 +181,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          borderSide: BorderSide(width: 2,color: greenPastel),
         ),
       ),
       controller: _emailController,
@@ -190,7 +192,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock,color: Colors.green[800],),
+        prefixIcon: Icon(Icons.lock,color: greenPastel,),
         hintText: 'Šifra',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
@@ -198,7 +200,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2,color: Colors.green[800]),
+          borderSide: BorderSide(width: 2,color: greenPastel),
         ),
       ),
       controller: _passwordController,
@@ -209,7 +211,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
         borderRadius: BorderRadius.circular(50.0),
-        shadowColor: Colors.lightGreenAccent.shade100,
+        shadowColor: Colors.black,
         elevation: 5.0,
         child: MaterialButton(
           minWidth: 200.0,
@@ -223,7 +225,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
             _login(_emailController.text, _passwordController.text);
             
           },
-          color: Colors.green[800],
+          color: greenPastel,
           child: Text(
             'Uloguj se',
             style: TextStyle(
@@ -251,9 +253,9 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
         InkWell(
           child: Flexible(
             child: Text(
-            'Registruj me.',
+            'Registruj se.',
             style: TextStyle(
-                color: Colors.green[800], fontWeight: FontWeight.bold),
+                color: greenPastel, fontWeight: FontWeight.bold),
           ),),
           onTap: () {
             Navigator.pushReplacement(
