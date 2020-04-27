@@ -404,7 +404,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
           children: <Widget>[
             TabBarView(children: <Widget>[
               Container(
-                  margin: EdgeInsets.only(left: 80, right: 80),
+                  margin: EdgeInsets.only(left: 220, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
@@ -420,7 +420,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
                             : buildInstList(filteredInstitution)),
                   ])),
               Container(
-                  margin: EdgeInsets.only(left: 80, right: 80),
+                  margin: EdgeInsets.only(left: 220, right: 80),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
