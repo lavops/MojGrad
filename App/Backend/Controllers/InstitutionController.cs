@@ -182,5 +182,19 @@ namespace Backend.Controllers
             }
             return user;
         }
+
+        [Authorize]
+        [HttpPost("EditProfilePhoto")]
+        public IActionResult EditProfilePhoto(Institution u)
+        {
+            Institution institution = _iInstitutionUI.editInstitutionProfilePhoto(u.id, u.photoPath);
+            if (institution != null)
+            {
+                InstitutionViewModel newInst = new InstitutionViewModel(institution);
+                return Ok(newInst);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
     }
 }

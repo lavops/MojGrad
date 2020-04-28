@@ -7,6 +7,8 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/widgets/postWidget.dart';
 
+import '../main.dart';
+
 class FeedPage extends StatefulWidget {
   final User user;
   FeedPage(this.user);
@@ -75,7 +77,7 @@ class _FeedPageState extends State<FeedPage> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Theme.of(context).copyWith().backgroundColor,
+          backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           iconTheme: IconThemeData(
               color: Theme.of(context).copyWith().iconTheme.color),
           title: Text(

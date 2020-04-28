@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 
+import '../main.dart';
+
 class UserInfoWidget extends StatefulWidget {
   final User user; //profilePage User or others User's profile
   UserInfoWidget(this.user);
@@ -42,7 +44,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).copyWith().backgroundColor,
+        color: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         border: Border(
           bottom: BorderSide(
             color: Colors.black26,

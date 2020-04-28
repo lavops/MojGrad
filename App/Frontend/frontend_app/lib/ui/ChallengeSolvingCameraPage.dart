@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:frontend/services/api.services.dart';
 import 'package:path/path.dart';
 
+import '../main.dart';
+
 class ChallengeSolvingCameraPage extends StatefulWidget {
   int postId;
   int ownerId;
@@ -14,14 +16,16 @@ class ChallengeSolvingCameraPage extends StatefulWidget {
   ChallengeSolvingCameraPage(this.postId, this.ownerId);
 
   @override
-  _ChallengeSolvingCameraPageState createState() => _ChallengeSolvingCameraPageState(postId, ownerId);
+  _ChallengeSolvingCameraPageState createState() =>
+      _ChallengeSolvingCameraPageState(postId, ownerId);
 }
 
-class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage> {
+class _ChallengeSolvingCameraPageState
+    extends State<ChallengeSolvingCameraPage> {
   int postId;
   int ownerId;
 
-  _ChallengeSolvingCameraPageState(int postId1, int ownerId1){
+  _ChallengeSolvingCameraPageState(int postId1, int ownerId1) {
     this.postId = postId1;
     this.ownerId = ownerId1;
   }
@@ -32,7 +36,6 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
   var first;
   var id = 0;
 
-
   @override
   void initState() {
     super.initState();
@@ -40,7 +43,8 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
 
   // Function for opening a camera
   _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
     print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
@@ -49,7 +53,8 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
 
   // Function for opening a gallery
   _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 50);
     print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
@@ -59,7 +64,6 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
   bool notNull(Object o) => o != null;
   @override
   Widget build(BuildContext context) {
-
     // Pick image from your camera live
     final cameraPhone = MaterialButton(
       onPressed: () {
@@ -70,8 +74,14 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.camera_alt, size: 30, color: Colors.black), // icon
-          Text("Kamera", style: TextStyle(color: Colors.black),), // text
+          Icon(Icons.camera_alt,
+              size: 30,
+              color: Theme.of(context).textTheme.bodyText1.color), // icon
+          Text(
+            "Kamera",
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ),
         ],
       ),
       padding: EdgeInsets.all(16),
@@ -88,8 +98,12 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.add_photo_alternate, size: 30, color:Colors.black), // icon
-          Text("Galerija", style: TextStyle(color: Colors.black),), // text
+          Icon(Icons.add_photo_alternate,
+              size: 30, color: Theme.of(context).textTheme.bodyText1.color), // icon
+          Text(
+            "Galerija",
+            style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ), // text
         ],
       ),
       padding: EdgeInsets.all(16),
@@ -119,7 +133,7 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
       controller: description,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        hintText: 'Opis resenja',
+        hintText: 'Opis rešenja',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
           borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -133,34 +147,36 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
 
     // Submit it
     final submitObjavu = RaisedButton.icon(
+      color: Colors.green[800],
       label: Flexible(
         child: Text('Objavi'),
       ),
       onPressed: () {
-        
         imageUpload(imageFile);
-        
-          APIServices.jwtOrEmpty().then((res) {
-            String jwt;
-            setState(() {
-              jwt = res;
-            });
 
-            if(imageFile == null){
-              setState(() {
-                pogresanText = "Izaberi fotografiju.";
-              });
-              throw Exception('Greskaaaa');
-            }
-            if (res != null && imageFile != null){
-              APIServices.insertSolution(jwt,userId, postId, description.text,"Upload//" + basename(imageFile.path), 0).then((res){
-                if(res.statusCode == 200){
-                  print("Uspesno ste objavili resenje");
-                  print(res.body);
-                  Navigator.pop(context);
-                }
-              });
-            }
+        APIServices.jwtOrEmpty().then((res) {
+          String jwt;
+          setState(() {
+            jwt = res;
+          });
+
+          if (imageFile == null) {
+            setState(() {
+              pogresanText = "Izaberi fotografiju.";
+            });
+            throw Exception('Greskaaaa');
+          }
+          if (res != null && imageFile != null) {
+            APIServices.insertSolution(jwt, userId, postId, description.text,
+                    "Upload//" + basename(imageFile.path), 0)
+                .then((res) {
+              if (res.statusCode == 200) {
+                print("Uspesno ste objavili resenje");
+                print(res.body);
+                Navigator.pop(context);
+              }
+            });
+          }
         });
       },
       icon: Icon(Icons.nature_people),
@@ -177,39 +193,41 @@ class _ChallengeSolvingCameraPageState extends State<ChallengeSolvingCameraPage>
 
     return Scaffold(
       appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
+        elevation: 0.0,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
+        iconTheme: IconThemeData(
+            color: Theme.of(context).copyWith().iconTheme.color,
+            size: Theme.of(context).copyWith().iconTheme.size),
+      ),
       body: Center(
-        child: Container(
-          width: 400,
-          child: ListView(
-            shrinkWrap: true,
-            padding:
-                EdgeInsets.only(left: 15.0, right: 15.0, top: 0.0, bottom: 24.0),
-            children: <Widget>[
-              izaberiKameru,
-              SizedBox(height: 30),
-              imageFile != null
-              ? Image.file(
-                  imageFile,
-                  width: 300,
-                  height: 300,
-                )
-              : null,
-              SizedBox(
-                height: 20.0,
-              ),
-              opis,
-              SizedBox(
-                height: 20.0,
-              ),
-              submitObjavu,
-              wrongData
-            ].where(notNull).toList(),
-          ),
-        )),
+          child: Container(
+        width: 400,
+        child: ListView(
+          shrinkWrap: true,
+          padding:
+              EdgeInsets.only(left: 15.0, right: 15.0, top: 0.0, bottom: 24.0),
+          children: <Widget>[
+            izaberiKameru,
+            SizedBox(height: 30),
+            imageFile != null
+                ? Image.file(
+                    imageFile,
+                    width: 300,
+                    height: 300,
+                  )
+                : null,
+            SizedBox(
+              height: 20.0,
+            ),
+            opis,
+            SizedBox(
+              height: 20.0,
+            ),
+            submitObjavu,
+            wrongData
+          ].where(notNull).toList(),
+        ),
+      )),
     );
   }
 }

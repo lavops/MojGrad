@@ -35,11 +35,9 @@ class MyApp extends StatelessWidget {
     return base.copyWith(
         textTheme: _themeLight(base.textTheme),
         primaryColor: Colors.white,
+        /*brightness: Brightness.light,
+        accentColor: Colors.white,*/
         iconTheme: IconThemeData(color: Colors.black, size: 25),
-        buttonTheme: ButtonThemeData(),
-        /*floatingActionButtonTheme:
-            FloatingActionButtonThemeData(backgroundColor: Colors.brown),*/
-        buttonColor: Colors.red,
         backgroundColor: Colors.white);
   }
 
@@ -59,10 +57,6 @@ class MyApp extends StatelessWidget {
         textTheme: _themeDark(base.textTheme),
         primaryColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white, size: 25),
-        buttonTheme: ButtonThemeData(),
-        /*floatingActionButtonTheme:
-            FloatingActionButtonThemeData(backgroundColor: Colors.brown),*/
-        buttonColor: Colors.red,
         backgroundColor: Colors.black45);
   }
 }

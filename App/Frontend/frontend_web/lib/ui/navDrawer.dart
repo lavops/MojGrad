@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/loginPage.dart';
+import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/managementPage.dart';
 import 'package:frontend_web/ui/statisticsPage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -72,7 +71,7 @@ class NavDrawer extends StatelessWidget {
               _removeToken(),
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
+                MaterialPageRoute(builder: (context) => HomeView()),
               )
             },
           ),

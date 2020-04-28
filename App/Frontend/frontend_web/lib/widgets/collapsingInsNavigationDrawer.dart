@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/loginSponsorPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
+import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
-import 'package:frontend_web/ui/editInstitutionPage.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 
 class CollapsingInsNavigationDrawer extends StatefulWidget {
@@ -18,7 +17,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
     with SingleTickerProviderStateMixin {
   double maxWidth = 210;
   double minWidth = 70;
-  bool isCollapsed = true;
+  static bool isCollapsed = true;
   AnimationController _animationController;
   Animation<double> widthAnimation;
   static int currentSelectedIndex = 1;
@@ -33,7 +32,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 300));
     widthAnimation = Tween<double>(begin: maxWidth, end: minWidth).animate(_animationController);
-    _animationController.forward();
+    isCollapsed ? _animationController.forward() : _animationController.reverse();
   }
 
   @override
@@ -83,7 +82,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EditInstitutionPage(insId: insId)),
+                        MaterialPageRoute(builder: (context) => EditInstitutionPage(insId)),
                       );
                     },
                     isSelected: currentSelectedIndex == 2,
@@ -107,7 +106,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                       _removeToken(),
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginSponsorPage()),
+                        MaterialPageRoute(builder: (context) => HomeView()),
                       )
                     },
                   ),
@@ -127,7 +126,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                 icon: AnimatedIcons.arrow_menu,
                 progress: _animationController,
                 color: Colors.black54,
-                size: 50.0,
+                size: 40.0,
               ),
             ),
           ],

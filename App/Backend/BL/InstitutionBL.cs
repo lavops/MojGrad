@@ -32,6 +32,11 @@ namespace Backend.BL
             return _iInstitutionDAL.editData(inst);
         }
 
+        public Institution editInstitutionProfilePhoto(long id, string photoPath)
+        {
+            return _iInstitutionDAL.editInstitutionProfilePhoto(id, photoPath);
+        }
+
         public Institution editPassword(long id, string password, string newPassword)
         {
             return _iInstitutionDAL.editPassword(id, password, newPassword);

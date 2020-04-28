@@ -8,6 +8,8 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:latlong/latlong.dart';
 
+import '../main.dart';
+
 class MapPage extends StatefulWidget {
   final double postLatitude;
   final double postLongitude;
@@ -102,7 +104,7 @@ class _MapPageState extends State<MapPage> {
       appBar: (postLatitude != 0 && postLongitude != 0)?
       AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
-        backgroundColor: Theme.of(context).copyWith().backgroundColor) : null,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor) : null,
       body: (_city != null)?FlutterMap(
         options: new MapOptions(
           center: (postLatitude == 0 && postLongitude == 0)? new LatLng(_city.latitude, _city.longitude) : new LatLng(postLatitude, postLongitude),

@@ -88,10 +88,12 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
     return TabBar(
         labelColor: Colors.green[800],
         indicatorColor: Colors.green[800],
-        unselectedLabelColor: Colors.black,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
         tabs: <Widget>[
           Tab(
-            child: Text("Događaji"),
+            child: Text(
+              "Događaji",
+            ),
           ),
           Tab(
             child: Text(

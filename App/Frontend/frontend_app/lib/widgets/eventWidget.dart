@@ -9,6 +9,8 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:latlong/latlong.dart';
 
+import '../main.dart';
+
 class EventsWidget extends StatefulWidget {
   final Events event;
 
@@ -334,7 +336,7 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).copyWith().backgroundColor,
+          backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           iconTheme: IconThemeData(
               color: Theme.of(context).copyWith().iconTheme.color),
         ),

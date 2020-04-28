@@ -66,7 +66,9 @@ class HeaderSection extends State<UserProfilePage> {
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0
+            ? Colors.white
+            : Theme.of(context).copyWith().backgroundColor,
         iconTheme:
             IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
       ),
@@ -105,6 +107,9 @@ class HeaderSection extends State<UserProfilePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.brightness_medium,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
               title: Text("Tamna tema",
                   style: TextStyle(
                       fontSize: 16,
@@ -134,49 +139,51 @@ class HeaderSection extends State<UserProfilePage> {
               ),
               onTap: () {
                 showDialog(
-                  context: context,
-                  child: AlertDialog(
-                    title: Text("Daktivacija profila?"),
-                    content: Container(
-                      height: 100,
-                      child: Flexible(
-                        child: Text("Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vasa rešenja."),
-                      ),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          "Deaktiviraj",
-                          style: TextStyle(color: Colors.red),
+                    context: context,
+                    child: AlertDialog(
+                      title: Text("Daktivacija profila?"),
+                      content: Container(
+                        height: 100,
+                        child: Flexible(
+                          child: Text(
+                              "Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vasa rešenja."),
                         ),
-                        onPressed: () {
-                          APIServices.jwtOrEmpty().then((res) {
-                            String jwt;
-                            setState(() {
-                              jwt = res;
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            "Deaktiviraj",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onPressed: () {
+                            APIServices.jwtOrEmpty().then((res) {
+                              String jwt;
+                              setState(() {
+                                jwt = res;
+                              });
+                              if (res != null) {
+                                APIServices.deleteUser(jwt, userId);
+                              }
                             });
-                            if (res != null) {
-                              APIServices.deleteUser(jwt, userId);
-                            }
-                          });
-                          _removeToken();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
-                          );
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          "Otkaži",
-                          style: TextStyle(color: Colors.green[800]),
+                            _removeToken();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    ],
-                  ));
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: Colors.green[800]),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
               },
             ),
             ListTile(

@@ -6,6 +6,8 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
 
+import '../main.dart';
+
 class OthersProfilePage extends StatefulWidget {
   final int otherUserId;
 
@@ -41,7 +43,7 @@ class HeaderSection extends State<OthersProfilePage> {
   }
 
   _getPosts() async {
-     var jwt = await APIServices.jwtOrEmpty();
+    var jwt = await APIServices.jwtOrEmpty();
     APIServices.getPostsForUser(jwt, otherUserId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
@@ -66,33 +68,38 @@ class HeaderSection extends State<OthersProfilePage> {
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
-        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        iconTheme:
+            IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
+        backgroundColor: MyApp.ind == 0
+            ? Colors.white
+            : Theme.of(context).copyWith().backgroundColor,
       ),
-      body: (otherUser != null)?NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-            return <Widget>[
-              // User information section
-              SliverToBoxAdapter(child: UserInfoWidget(otherUser)),
-            ];
-          },
-          body: (posts != null)?
-            ListView.builder(
-              padding: EdgeInsets.only(bottom: 30.0),
-              itemCount: posts == null ? 0 : posts.length,
-              itemBuilder: (BuildContext context, int index) {
-                return PostWidget(posts[index]);
-              }
-            ):
-            Center(child: CircularProgressIndicator(
-              valueColor:new AlwaysStoppedAnimation<Color>(green),
+      body: (otherUser != null)
+          ? NestedScrollView(
+              controller: _scrollController,
+              headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+                return <Widget>[
+                  // User information section
+                  SliverToBoxAdapter(child: UserInfoWidget(otherUser)),
+                ];
+              },
+              body: (posts != null)
+                  ? ListView.builder(
+                      padding: EdgeInsets.only(bottom: 30.0),
+                      itemCount: posts == null ? 0 : posts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PostWidget(posts[index]);
+                      })
+                  : Center(
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(green),
+                      ),
+                    ))
+          : Center(
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(green),
               ),
-            )
-        ):Center(child: CircularProgressIndicator(
-          valueColor:new AlwaysStoppedAnimation<Color>(green),
-          ),
-        ),
+            ),
     );
   }
 }

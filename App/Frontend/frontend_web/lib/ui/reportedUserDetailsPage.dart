@@ -131,10 +131,7 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UsersProfilePage()));
+              Navigator.pop(context);
             }),
       ),
       body: Center(

@@ -33,6 +33,11 @@ namespace Backend.UI
             return _iInstitutionBL.editData(inst);
         }
 
+        public Institution editInstitutionProfilePhoto(long id, string photoPath)
+        {
+            return _iInstitutionBL.editInstitutionProfilePhoto(id, photoPath);
+        }
+
         public Institution editPassword(long id, string password, string newPassword)
         {
             return _iInstitutionBL.editPassword(id, password, newPassword);

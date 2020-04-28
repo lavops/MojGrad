@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
+import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
+import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/ui/loginPage.dart';
-import 'package:frontend_web/ui/managementPage.dart';
-import 'package:frontend_web/ui/statisticsPage.dart';
+import 'package:frontend_web/ui/institutionProfilesPage.dart';
+import 'package:frontend_web/ui/postPage.dart';
+import 'package:frontend_web/ui/usersProfilePage.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 
 class CollapsingNavigationDrawer extends StatefulWidget {
@@ -19,8 +22,8 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
     with SingleTickerProviderStateMixin {
   double maxWidth = 210;
   double minWidth = 70;
-  bool isCollapsed = true;
-  AnimationController _animationController;
+  static bool isCollapsed = true;
+  static AnimationController _animationController;
   Animation<double> widthAnimation;
   static int currentSelectedIndex = 1;
 
@@ -34,7 +37,9 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
     _animationController = AnimationController(
       vsync: this, duration: Duration(milliseconds: 300));
     widthAnimation = Tween<double>(begin: maxWidth, end: minWidth).animate(_animationController);
-    _animationController.forward();
+    setState(() {
+      isCollapsed ? _animationController.forward() : _animationController.reverse();
+    });
   }
 
   @override
@@ -49,7 +54,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
     return Material(
       child: Container(
         width: widthAnimation.value,
-        color: Colors.green[800],
+        color: Colors.grey[100],
         child: Column(
           children: <Widget>[
             Expanded(
@@ -74,8 +79,8 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                       isSelected: currentSelectedIndex == 1,
                       ),
                   CollapsingListTile(
-                    title: 'Statistika',
-                    icon: MdiIcons.chartAreaspline,
+                    title: 'Upravljanje objavama',
+                    icon: Icons.rate_review,
                     animationController: _animationController,
                     onTap: () {
                       setState(() {
@@ -83,25 +88,29 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         });
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => StatisticsPage()),
+                        MaterialPageRoute(builder: (context) => ManagePostPage())//PostPage(globalUser)),
                       );
                     },
                     isSelected: currentSelectedIndex == 2,
                     ),
                   CollapsingListTile(
-                    title: 'Zadavanje misija',
-                    icon: Icons.timer,
+                    title: 'Upravljanje korisnicima',
+                    icon: Icons.supervised_user_circle,
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
                           currentSelectedIndex = 3;
                         }),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ManageUserPage()),
+                      ),
                     },
                     isSelected: currentSelectedIndex == 3,
                   ),
                   CollapsingListTile(
-                    title: 'Upravljanje',
-                    icon: Icons.settings,
+                    title: 'Upravljanje institucijama',
+                    icon: Icons.business,
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
@@ -109,10 +118,55 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         }),
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ManagementPage()),
+                        MaterialPageRoute(builder: (context) => InstitutionProfilesPage()),
                       ),
                     },
                     isSelected: currentSelectedIndex == 4,
+                  ),
+                  CollapsingListTile(
+                    title: 'Upravljanje događajima',
+                    icon: Icons.event,
+                    animationController: _animationController,
+                    onTap: () => {
+                      setState(() {
+                          currentSelectedIndex = 5;
+                        }),
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => null),
+                      ),*/
+                    },
+                    isSelected: currentSelectedIndex == 5,
+                  ),
+                  CollapsingListTile(
+                    title: 'Upravljanje donacijama',
+                    icon: Icons.monetization_on,
+                    animationController: _animationController,
+                    onTap: () => {
+                      setState(() {
+                          currentSelectedIndex = 6;
+                        }),
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => null),
+                      ),*/
+                    },
+                    isSelected: currentSelectedIndex == 6,
+                  ),
+                  CollapsingListTile(
+                    title: 'Dodavanje administratora',
+                    icon: Icons.person_add,
+                    animationController: _animationController,
+                    onTap: () => {
+                      setState(() {
+                          currentSelectedIndex = 7;
+                        }),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterAdminPage()),
+                      ),
+                    },
+                    isSelected: currentSelectedIndex == 7,
                   ),
                   CollapsingListTile(
                     title: 'Odjavite se',
@@ -122,7 +176,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                       _removeToken(),
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => HomeView()),
                       )
                     },
                   ),
@@ -141,8 +195,8 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               child: AnimatedIcon(
                 icon: AnimatedIcons.arrow_menu,
                 progress: _animationController,
-                color: Colors.white,
-                size: 50.0,
+                color: Colors.black54,
+                size: 40.0,
               ),
             ),
           ],

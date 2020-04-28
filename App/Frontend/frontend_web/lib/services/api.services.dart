@@ -397,4 +397,42 @@ static Future registerInstitution(Institution ins) async {
           'email': email
         }));
   }
+     static Future editInstitutionProfilePhoto(String jwt, int userId, String photo) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Institution/EditProfilePhoto';
+    var data = Map();
+    data["id"] = userId;
+    data["photoPath"] = photo;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
+
+  static Future<String> addImageWeb(String img) async {
+    print("pocetak ovoga");
+    var url = serverURL + 'ImageUpload/test';
+    var map = Map();
+    map['img'] = img;
+    var putBody = json.encode(map);
+    var res = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: putBody);
+    print(res.statusCode);
+    print(res.body);
+    print("kraj ovoga");
+    // print("*************************************************************");
+    // print(res.statusCode);
+    print(res.body);
+    return res.body;
+  }
 }

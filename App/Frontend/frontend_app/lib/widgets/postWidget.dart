@@ -215,7 +215,8 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje objave?"),
+            title: Text("Brisanje objave?", style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -255,7 +256,8 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Izmeni opis.", textAlign: TextAlign.center,),
+            title: Text("Izmeni opis.", textAlign: TextAlign.center,style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color),),
             content: Container(
               height: 50.0,
               child: Column(
@@ -413,7 +415,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               Text(commNum.toString()),
               Expanded(child: SizedBox()),
-              statusId == 2
+              statusId == 2 && post.postTypeId != 1
                   ? FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
@@ -432,7 +434,12 @@ class _PostWidgetState extends State<PostWidget> {
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+                        );
+                      },
                     ),
               SizedBox(width: 10.0), // For padding
             ],
@@ -514,6 +521,8 @@ class MyDialogState extends State<MyDialog> {
       title: Text(
         "Prijavljivanje korisnika",
         textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color),
       ),
       content: Container(
         height: 150,
