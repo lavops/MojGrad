@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
-import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/loginPage/loginPage.dart';
-import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/widgets/centeredView/centeredView.dart';
-import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+Color greenPastel = Color(0xFF00BFA6);
 
 class RegisterAdminPage extends StatefulWidget {
   @override
@@ -24,10 +21,15 @@ class _RegisterAdminPageState extends State<RegisterAdminPage> {
   Widget build(BuildContext context) {
      return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
-         appBar: AppBar(
-              title: Text('Izmena podataka institucije', style: TextStyle(color: Colors.black45),),
-              backgroundColor: Colors.white60,
-        ),
+        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+          ? DrawerAdmin(8)
+          : null,
+        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+          ? null
+          : AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+          ),
         backgroundColor: Colors.white,
         body: Row(
             children: <Widget>[
@@ -65,7 +67,7 @@ class _AdminRegisterMobilePageState extends State<AdminRegisterMobilePage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 40,),
-            Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25), textAlign: TextAlign.center,),
             Container(width: 350, child: 
             AdminRegisterPageWidget(),
             ),

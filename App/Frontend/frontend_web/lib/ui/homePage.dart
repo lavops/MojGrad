@@ -4,6 +4,7 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/postWidget.dart';
 import 'dart:convert';
@@ -66,36 +67,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double width1 = MediaQuery.of(context).size.width -300; //> 400 ? MediaQuery.of(context).size.width - 300 : MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text("Moj Grad"),
-      ),
-      //drawer: NavDrawer(),
-      body: Row(
-        children: <Widget>[
-          CollapsingNavigationDrawer(),
-          Center(
-            child: Container(
-              width: width1,
-              padding: EdgeInsets.all(10.0),
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  _getPosts();
-                },
-                child: (listPosts != null)
-                    ? PostWidget(listPosts)
-                    : Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                        ),
-                      )
-                )
-              ),
-          ),
-        ],
-      ),
-    );
+    return StatisticsPage();
   }
 }

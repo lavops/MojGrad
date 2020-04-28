@@ -4,7 +4,6 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
 
 class ManagePostMobile extends StatefulWidget {
