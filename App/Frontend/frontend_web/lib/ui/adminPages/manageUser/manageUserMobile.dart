@@ -10,7 +10,6 @@ import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 class ManageUserMobile extends StatefulWidget {
   @override

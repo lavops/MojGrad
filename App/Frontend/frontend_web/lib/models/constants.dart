@@ -19,3 +19,27 @@ class ConstantsReportedUsers {
     ObrisiKorisnika
   ];
 }
+
+class ConstantsAllInstitutions {
+  static const String OpisInstitucije = "Opis institucije";
+  static const String ObrisiInstitutciju = 'Obriši instituciju';
+
+
+  static const List<String> choices = <String> [
+    OpisInstitucije,
+    ObrisiInstitutciju
+  ];
+}
+
+class ConstantsRequestsInstitutions {
+  static const String OpisInstitucije = "Opis institucije";
+  static const String PrihvatiInstitutciju = 'Prihvati zahtev';
+  static const String ObrisiInstitutciju = 'Obriši instituciju';
+
+
+  static const List<String> choices = <String> [
+    OpisInstitucije,
+    PrihvatiInstitutciju,
+    ObrisiInstitutciju
+  ];
+}
