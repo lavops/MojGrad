@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
@@ -102,7 +103,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         }),
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UsersProfilePage()),
+                        MaterialPageRoute(builder: (context) => ManageUserPage()),
                       ),
                     },
                     isSelected: currentSelectedIndex == 3,
