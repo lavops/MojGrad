@@ -6,16 +6,16 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  String serverURLPhoto = 'http://192.168.1.2:45455//';
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //String serverURLPhoto = 'http://192.168.1.2:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://192.168.1.2:45455/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://192.168.1.2:45455/api/';
   //static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
@@ -183,7 +183,7 @@ class APIServices
   }
   
   
-	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone, String city) async  {
+	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone, int city) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'User/EditUserData';
@@ -194,7 +194,7 @@ class APIServices
 		data["username"] = username;
 		data["email"] = email;
 		data["phone"] = phone;
-    data["city"] = city;
+    data["cityId"] = city;
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
 		return await http.post(url, headers: {

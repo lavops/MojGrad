@@ -190,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.person, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Ime",
+          hintText: "Ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -216,7 +216,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.person, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Prezime",
+          hintText: "Prezime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -242,7 +242,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.adb, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Korisnicko ime",
+          hintText: "Korisnicko ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -268,7 +268,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.email, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "E-mail",
+          hintText: "E-mail",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -294,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.phone, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Mobilni telefon",
+          hintText: "Mobilni telefon",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -327,7 +327,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.phonelink_lock, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          labelText: "Šifra",
+          hintText: "Šifra",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -435,8 +435,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: <Widget>[
                     logoWidget,
                     SizedBox(
-                      height: 30.0,
+                      height: 15.0,
                     ),
+                    wrongReg,
                     firstNameWidget,
                     lastNameWidget,
                     usernameWidget,
@@ -459,7 +460,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             ),
-            wrongReg,
           ],
         ),
       ),

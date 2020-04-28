@@ -54,7 +54,7 @@ namespace Backend.DAL
                     u1.password = user.password;
                     u1.phone = user.phone;
                     u1.username = user.username;
-                    u1.photo = "default.png";
+                    u1.photo = "Upload//ProfilePhoto//default.jpg";
                     u1.points = 0;
                     u1.level = 1;
 

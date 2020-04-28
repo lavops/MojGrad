@@ -180,7 +180,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   passwordText,
                   SizedBox(
-                    height: 24.0,
+                    height: 10.0,
+                  ),
+                  pogresanLogin,
+                  SizedBox(
+                    height: 5.0,
                   ),
                   loginButton,
                 ],
@@ -189,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 8.0,
               ),
-              pogresanLogin,
+              
             ],
           ),
         )));

@@ -12,6 +12,8 @@ import 'package:path/path.dart';
 import '../main.dart';
 import '../services/api.services.dart';
 
+String cityName;
+
 class EditProfilePage extends StatefulWidget {
   final User user;
 
@@ -29,7 +31,7 @@ class EditProfile extends State<EditProfilePage> {
   EditProfile(User user1) {
     user = user1;
   }
-
+  
   Future<File> _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
@@ -55,8 +57,6 @@ class EditProfile extends State<EditProfilePage> {
       listCities = list.map((model) => City.fromObject(model)).toList();
       setState(() {
         _city = listCities;
-        _dropdownMenuItems = buildDropDownMenuItems(_city);
-        _selectedId = _dropdownMenuItems[user.cityId - 1].value;
       });
     });
   }
@@ -95,6 +95,7 @@ class EditProfile extends State<EditProfilePage> {
       number1 = '',
       oldPassword = '',
       city1 = '';
+  int  city1Id=0;
   var newPass, oldPass;
   int ind = 0;
   List<City> _city;
@@ -280,10 +281,7 @@ class EditProfile extends State<EditProfilePage> {
         style: TextStyle(color: Colors.green[800]),
       ),
       onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => UserProfilePage(user)),
-        );
+       Navigator.of(context).popUntil((route) => route.isFirst);
       },
     );
 
@@ -767,24 +765,111 @@ class EditProfile extends State<EditProfilePage> {
         });
   }
 
-  //dialog city
-  Future<String> city(BuildContext context, String cityName) {
-    TextEditingController customController;
-    if (city1 == '') {
-      customController = new TextEditingController(text: "$cityName");
-    } else {
-      String _cityName = city1;
-      customController = new TextEditingController(text: "$_cityName");
-    }
 
-    return showDialog(
-        context: context,
-        child: new MyDialog(
-            onValueChange: _onValueChange,
-            initialValue: _selectedId,
-            cities: _dropdownMenuItems,
-            edit: this,
-            user: widget.user));
+ Future<String> editCity(BuildContext context, String email) async {
+    // show the dialog
+   return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        City pomCity;
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16))),
+      content: Container(
+          width: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text("Grad",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Theme.of(context).textTheme.bodyText1.color))
+                ],
+              ),
+              SizedBox(height: 5),
+              Center(
+                child:Row(
+      children: <Widget>[
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text("Grad: ",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
+        _city != null
+            ? DropdownButton<City>(
+                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+                value: pomCity,
+                onChanged: (City value) {
+                  setState(() {
+                    pomCity = value;
+                    _selectedId = value;
+                    city1 = value.name;
+                    city1Id = value.id;
+                  });
+                },
+                items: _city.map((City option) {
+                  return DropdownMenuItem<City>(
+                    value: option,
+                    child: Text(option.name),
+                  );
+                }).toList(),
+              )
+            : DropdownButton<String>(
+                hint: Text("Izaberi"),
+                onChanged: null,
+                items: null,
+              ),
+      ],
+    )
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: <Widget>[
+                  MaterialButton(
+                    child: Text(
+                      "Izmeni",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                      textAlign: TextAlign.center,
+                    ),
+                    onPressed: () {
+                      if(pomCity != null){
+                        Navigator.pop(context,pomCity.name);
+                      }
+                      
+                    },
+                  ),
+                  SizedBox(width: 50),
+                  FlatButton(
+                    child: Text(
+                      "Otkaži",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                       _selectedOption = 0;
+                       city1 = '';
+                      city1Id = 0;
+                      });
+                     
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              )
+            ],
+          )),
+    );
+        });
+      },
+    );
   }
 
   Future<String> phone(BuildContext context, String phone) {
@@ -1138,18 +1223,12 @@ class EditProfile extends State<EditProfilePage> {
                               ? Theme.of(context).textTheme.bodyText1.color
                               : Colors.grey)),
                   selected: _selectedOption == index - 6,
-                  onTap: () {
+                  onTap: () async{
+                    var res = await editCity(context, user.cityName);
                     setState(() {
-                      _selectedOption = index - 6;
-                    });
-
-                    city(context,
-                            user.cityName) /*.then((onValue) {
-                      String newName = "$onValue";
-                      SnackBar snackName = SnackBar(content: Text(newName));
-                      Scaffold.of(context).showSnackBar(snackName);
-                    })*/
-                        ;
+                      city1 = res;
+                       _selectedOption = index - 6;
+                    });       
                   },
                 ),
               ),
@@ -1164,6 +1243,7 @@ class EditProfile extends State<EditProfilePage> {
                     borderRadius: new BorderRadius.circular(50.0),
                     side: BorderSide(color: Colors.transparent)),
                 onPressed: () async {
+                  print(city1);
                   if (firstName == '') {
                     firstName = user.firstName;
                   }
@@ -1226,8 +1306,11 @@ class EditProfile extends State<EditProfilePage> {
                         jwt = res;
                       });
                       if (res != null) {
+                        print("city1Id"+city1Id.toString());
+                        print("_selectedid"+_selectedId.id.toString());
+                        if(city1Id == 0) city1Id=user.cityId;
                         APIServices.editUser(jwt, user.id, firstName, lastName,
-                                username1, email1, number1, city1)
+                                username1, email1, number1, city1Id)
                             .then((response) {
                           if (response.statusCode == 200 ||
                               password1 == '' && oldPassword == '') {
@@ -1249,103 +1332,5 @@ class EditProfile extends State<EditProfilePage> {
             ],
           ),
         ));
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  const MyDialog(
-      {this.onValueChange,
-      this.initialValue,
-      this.cities,
-      this.edit,
-      this.user});
-
-  final EditProfile edit;
-  final User user;
-  final City initialValue;
-  final void Function(City) onValueChange;
-  final List<DropdownMenuItem<City>> cities;
-
-  @override
-  State createState() => new MyDialogState();
-}
-
-class MyDialogState extends State<MyDialog> {
-  City _selectedId;
-  TextEditingController customController = new TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedId = widget.initialValue;
-  }
-
-  Widget build(BuildContext context) {
-    return new AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16))),
-      content: Container(
-          width: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("Grad",
-                      style: TextStyle(
-                          fontSize: 24,
-                          color: Theme.of(context).textTheme.bodyText1.color))
-                ],
-              ),
-              SizedBox(height: 5),
-              Center(
-                child: new DropdownButton<City>(
-                    value: _selectedId,
-                    onChanged: (City value) {
-                      setState(() {
-                        _selectedId = value;
-                        print(_selectedId.name);
-                      });
-                      widget.onValueChange(value);
-                    },
-                    items: widget.cities),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: <Widget>[
-                  MaterialButton(
-                    child: Text(
-                      "Izmeni",
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
-                      textAlign: TextAlign.center,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        widget.edit.city1 = _selectedId.name;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  SizedBox(width: 50),
-                  FlatButton(
-                    child: Text(
-                      "Otkaži",
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              )
-            ],
-          )),
-    );
   }
 }

@@ -543,7 +543,8 @@ class MyDialogState extends State<MyDialog> {
             controller: messageController,
             decoration: InputDecoration(
                 labelText: "Komentar",
-                hoverColor: Theme.of(context).textTheme.bodyText1.color),
+                hoverColor: Colors.grey,
+                labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)   ),
           )
         ])),
       actions: <Widget>[
@@ -565,10 +566,7 @@ class MyDialogState extends State<MyDialog> {
                 APIServices.addReport(jwt, userId, widget.otherUserId,
                         _selectedId.id, messageController.text)
                     .then((res) {
-                  Map<String, dynamic> list = json.decode(res);
-                  LikeViewModel likeVM = LikeViewModel();
-                  likeVM = LikeViewModel.fromObject(list);
-                  setState(() {});
+                  
                 });
                 Navigator.of(context).pop();
               }
