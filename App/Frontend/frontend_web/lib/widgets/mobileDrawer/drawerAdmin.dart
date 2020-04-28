@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
@@ -83,7 +84,7 @@ class DrawerAdmin extends StatelessWidget{
             ),
             onTap: (){
               Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => InstitutionProfilesPage()),
+                MaterialPageRoute(builder: (context) => ManageInstitutionPage()),
               );
             },
           ),
