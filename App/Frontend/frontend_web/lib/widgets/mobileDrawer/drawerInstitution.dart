@@ -6,6 +6,8 @@ import 'package:frontend_web/ui/adminPages/loginPage/loginPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
 
+import '../../ui/InstitutionPages/homePage/homePage.dart';
+
 class DrawerInstitution extends StatelessWidget{
   final int selected;
   DrawerInstitution(this.selected);
@@ -43,7 +45,7 @@ class DrawerInstitution extends StatelessWidget{
             onTap: (){
               String jwt = TokenSession.getToken;
               Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => InstitutionPage.fromBase64(jwt)),
+                MaterialPageRoute(builder: (context) => HomePage2.fromBase64(jwt)),
               );
             },
           ),

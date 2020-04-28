@@ -5,6 +5,8 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
 
+import 'ui/InstitutionPages/homePage/homePage.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
                 if(type == 1)
                   return HomePage(str, payload);
                 else
-                  return InstitutionPage(str,payload);
+                  return HomePage2(str,payload);
               } else {
                 return HomeView();//LoginSponsorPage();
               }
