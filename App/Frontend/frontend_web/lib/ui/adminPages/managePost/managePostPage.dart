@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostDesktop.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostMobile.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -19,19 +20,21 @@ class _ManagePostPageState extends State<ManagePostPage> {
       builder: (context, sizingInformation) => DefaultTabController(
         length: 3,
         child: Scaffold(
+          drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? DrawerAdmin(3)
+            : null,
           appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
             ? PreferredSize(
                 preferredSize: Size.fromHeight(kToolbarHeight),
                 child: Container(
                   height: 100.0,
-                  child: tabs(),
+                  child: tabsDesktop(),
                 ),
               )
             : AppBar(
-              leading: new Container(),
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Colors.black),
-              bottom: tabs(),
+              bottom: tabsMobile(),
             ),
           backgroundColor: Colors.white,
           body: ScreenTypeLayout(
@@ -43,7 +46,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
     );
   }
 
-  Widget tabs() {
+  Widget tabsDesktop() {
     return TabBar(
       labelColor: greenPastel,
       indicatorColor: greenPastel,
@@ -53,10 +56,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(MdiIcons.homeSearchOutline, color: Colors.black, size: 20),
-              Text(
-                'Sve objave',
-                style: TextStyle(color: Colors.black),
-              ),
+              Text('Sve objave', style: TextStyle(color: Colors.black),),
             ],
           ),
         ),
@@ -65,10 +65,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.done_all, color: Colors.black, size: 20),
-              Text(
-                'Rešene objave',
-                style: TextStyle(color: Colors.black),
-              ),
+              Text('Rešene objave', style: TextStyle(color: Colors.black),),
             ],
           ),
         ),
@@ -77,10 +74,40 @@ class _ManagePostPageState extends State<ManagePostPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.close, color: Colors.black, size: 20),
-              Text(
-                'Nerešene objave',
-                style: TextStyle(color: Colors.black),
-              ),
+              Text('Nerešene objave', style: TextStyle(color: Colors.black),),
+            ],
+          ),
+        ),
+      ]
+    );
+  }
+
+  Widget tabsMobile() {
+    return TabBar(
+      labelColor: greenPastel,
+      indicatorColor: greenPastel,
+      tabs: <Widget>[
+        Tab(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Sve', style: TextStyle(color: Colors.black),),
+            ],
+          ),
+        ),
+        Tab(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Rešeno', style: TextStyle(color: Colors.black),),
+            ],
+          ),
+        ),
+        Tab(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Nerešeno', style: TextStyle(color: Colors.black),),
             ],
           ),
         ),

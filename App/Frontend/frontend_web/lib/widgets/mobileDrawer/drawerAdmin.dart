@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/loginPage/loginPage.dart';
+import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/institutionProfilesPage.dart';
-import 'package:frontend_web/ui/postPage.dart';
-import 'package:frontend_web/ui/usersProfilePage.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
 
 class DrawerAdmin extends StatelessWidget{
   final int selected;
@@ -58,7 +59,7 @@ class DrawerAdmin extends StatelessWidget{
             ),
             onTap: (){
               Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => PostPage(globalUser)),
+                MaterialPageRoute(builder: (context) => ManagePostPage()),
               );
             },
           ),
@@ -70,7 +71,7 @@ class DrawerAdmin extends StatelessWidget{
             ),
             onTap: (){
               Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => UsersProfilePage()),
+                MaterialPageRoute(builder: (context) => ManageUserPage()),
               );
             },
           ),
