@@ -10,6 +10,8 @@ import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../homePage/homePage.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class InstitutionLoginPage extends StatefulWidget{
@@ -152,7 +154,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => InstitutionPage.fromBase64(response)));
+                  builder: (context) => HomePage2.fromBase64(response)));
         }
          else {
           _passwordController.text = "";

@@ -435,4 +435,14 @@ static Future registerInstitution(Institution ins) async {
     print(res.body);
     return res.body;
   }
+  
+  static Future getInstitutionUnsolvedFromCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Post/UnsolvedPostsByCityId/userId='+(0).toString() + '/cityId=' + cityId.toString(), headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }

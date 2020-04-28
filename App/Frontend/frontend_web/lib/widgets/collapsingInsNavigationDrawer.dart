@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+
 
 
 class CollapsingInsNavigationDrawer extends StatefulWidget {
@@ -66,7 +67,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                       String jwt = TokenSession.getToken;
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => InstitutionPage.fromBase64(jwt)),
+                        MaterialPageRoute(builder: (context) => HomePage2.fromBase64(jwt)),
                       );
                     },
                     isSelected: currentSelectedIndex == 1,
