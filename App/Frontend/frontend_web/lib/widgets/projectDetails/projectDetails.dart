@@ -32,7 +32,7 @@ class ProjectDetails extends StatelessWidget{
               ),
               SizedBox(height: 50,),
               Text(
-                ":LKASJKDLJASKJDKLASJKDLJSAKJDKLSAJKDJASKJD :LKASJKDLJASKJDKLASJKDLJSAKJDKLSAJKDJASKJD",
+                "Web aplikacija za predmet za kontrolisanje objava, korisnika i institucija.",
                 style: TextStyle(fontSize: descSize, height: 1.7),
                 textAlign: textAligment,
               ),

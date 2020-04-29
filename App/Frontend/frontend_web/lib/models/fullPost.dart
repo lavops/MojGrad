@@ -17,6 +17,7 @@ class FullPost
   double _latitude;
   double _longitude;
   String _userPhoto;
+  String _address;
   
   FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum, this._latitude, this._longitude, this._userPhoto);
  
@@ -37,7 +38,7 @@ class FullPost
   double get latitude => _latitude;
   double get longitude => _longitude;  
   String get userPhoto => _userPhoto;  
-
+  String get address => _address;
  //saljemo kao json fajl
   Map<String, dynamic> toMap()
   {
@@ -59,7 +60,7 @@ class FullPost
     map["latitude"] = _latitude;
     map["longitude"] =_longitude;
     map["userPhoto"] =_userPhoto;
-   
+    map["address"] = _address;
     return map;
   }
 
@@ -82,5 +83,6 @@ class FullPost
     this._latitude = data["latitude"];
     this._longitude = data["longitude"];
     this._userPhoto = data["userPhoto"];
+    this._address = data["address"];
   }
 }
