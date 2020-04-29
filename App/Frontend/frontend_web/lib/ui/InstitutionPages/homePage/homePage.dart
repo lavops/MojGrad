@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
-import 'package:frontend_web/widgets/postWidget.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePageDesktop.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePageMobile.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 int insId;
 int icityId;
 
-class HomePage2 extends StatefulWidget {
-  HomePage2(this.jwt, this.payload);
-  factory HomePage2.fromBase64(String jwt) => HomePage2(
+class HomePageInstitution extends StatefulWidget {
+  HomePageInstitution(this.jwt, this.payload);
+  factory HomePageInstitution.fromBase64(String jwt) => HomePageInstitution(
       jwt,
       json.decode(
           ascii.decode(base64.decode(base64.normalize(jwt.split(".")[1])))));
@@ -21,18 +22,16 @@ class HomePage2 extends StatefulWidget {
   final Map<String, dynamic> payload;
 
   @override
-  _HomePage2State createState() => new _HomePage2State(jwt, payload);
+  _HomePageInstitutionState createState() => new _HomePageInstitutionState(jwt, payload);
 }
 
-class _HomePage2State extends State<HomePage2> {
+class _HomePageInstitutionState extends State<HomePageInstitution> {
 
   Institution institution;
-  List<FullPost> listUnsolvedPosts;
-
   final String jwt;
   final Map<String, dynamic> payload;
 
-  _HomePage2State(this.jwt, this.payload);
+  _HomePageInstitutionState(this.jwt, this.payload);
 
 
   _getInstitutionId() {
@@ -50,68 +49,40 @@ class _HomePage2State extends State<HomePage2> {
         institution = inst;
         icityId = institution.cityId;
       });
-    }
-
-  _getUnsolved(int cityId)  async {
-    APIServices.getInstitutionUnsolvedFromCityId(TokenSession.getToken, cityId).then((res) {
-      Iterable list = json.decode(res.body);
-      List<FullPost> listP = List<FullPost>();
-      listP = list.map((model) => FullPost.fromObject(model)).toList();
-      if (mounted) {
-        setState(() {
-          listUnsolvedPosts = listP;
-        });
-      }
-    });
   }
-
-
 
   @override
   void initState() {
     super.initState();
     _getInstitutionId();
     _getInstitutionWithId(insId);
-    _getUnsolved(icityId);
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    double width1 = MediaQuery.of(context).size.width -300; //> 400 ? MediaQuery.of(context).size.width - 300 : MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text("Institucija " + institution.name),
-      ),
-      //drawer: NavDrawer(),
-      body: Row(
-        children: <Widget>[
-          CollapsingInsNavigationDrawer(),
-          Center(
-            child: Container(
-                width: width1,
-                padding: EdgeInsets.all(10.0),
-                child: RefreshIndicator(
-                    child: (listUnsolvedPosts != null)
-                        ? PostWidget(listUnsolvedPosts)
-                        : Center(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                        new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                      ),
-                    )
-                )
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+            ? DrawerInstitution(2)
+            : null,
+          appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+            ? null
+            : AppBar(
+              backgroundColor: Colors.white,
+              iconTheme: IconThemeData(color: Colors.black),
             ),
+          backgroundColor: Colors.white,
+          body: ScreenTypeLayout(
+            mobile: HomeInstitutionMobile(),
+            tablet: HomeInstitutionDesktop(),
           ),
-        ],
-      ),
+        ),
+      )
     );
   }
-
-
-
-
-
 }
+

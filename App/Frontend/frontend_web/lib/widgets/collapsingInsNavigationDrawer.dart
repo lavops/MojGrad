@@ -67,7 +67,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                       String jwt = TokenSession.getToken;
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage2.fromBase64(jwt)),
+                        MaterialPageRoute(builder: (context) => HomePageInstitution.fromBase64(jwt)),
                       );
                     },
                     isSelected: currentSelectedIndex == 1,

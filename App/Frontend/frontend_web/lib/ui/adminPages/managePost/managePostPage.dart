@@ -56,7 +56,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(MdiIcons.homeSearchOutline, color: Colors.black, size: 20),
-              Text('Sve objave', style: TextStyle(color: Colors.black),),
+              Text(' SVE OBJAVE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),
@@ -65,7 +65,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.done_all, color: Colors.black, size: 20),
-              Text('Rešene objave', style: TextStyle(color: Colors.black),),
+              Text(' REŠENE OBJAVE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),
@@ -74,7 +74,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.close, color: Colors.black, size: 20),
-              Text('Nerešene objave', style: TextStyle(color: Colors.black),),
+              Text(' NEREŠENE OBJAVE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),
@@ -91,7 +91,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Sve', style: TextStyle(color: Colors.black),),
+              Text('SVE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),
@@ -99,7 +99,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Rešeno', style: TextStyle(color: Colors.black),),
+              Text('REŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),
@@ -107,7 +107,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Nerešeno', style: TextStyle(color: Colors.black),),
+              Text('NEREŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),

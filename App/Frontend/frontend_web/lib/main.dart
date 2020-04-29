@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
                 if(type == 1)
                   return HomePage(str, payload);
                 else
-                  return HomePage2(str,payload);
+                  return HomePageInstitution(str,payload);
               } else {
                 return HomeView();//LoginSponsorPage();
               }

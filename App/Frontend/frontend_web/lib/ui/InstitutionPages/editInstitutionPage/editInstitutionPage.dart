@@ -11,6 +11,7 @@ import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitu
 import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionTabletPage.dart';
 import 'package:frontend_web/ui/sponsorPage.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 
@@ -73,10 +74,15 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
   Widget build(BuildContext context) {
      return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
-          appBar: AppBar(
-              title: Text('Izmena podataka institucije', style: TextStyle(color: Colors.black45),),
-              backgroundColor: Colors.white60,
-        ),
+        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+          ? DrawerInstitution(3)
+          : null,
+        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+          ? null
+          : AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+          ),
         backgroundColor: Colors.white,
         body: RefreshIndicator(
               onRefresh: _handleRefresh,

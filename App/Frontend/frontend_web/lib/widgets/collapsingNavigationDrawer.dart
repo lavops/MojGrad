@@ -4,13 +4,12 @@ import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPa
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
+import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/ui/institutionProfilesPage.dart';
-import 'package:frontend_web/ui/postPage.dart';
-import 'package:frontend_web/ui/usersProfilePage.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
 
+Color greenPastel = Color(0xFF00BFA6);
 
 class CollapsingNavigationDrawer extends StatefulWidget {
   @override
@@ -74,7 +73,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         String jwt = TokenSession.getToken;
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage.fromBase64(jwt)),
+                          MaterialPageRoute(builder: (context) => StatisticsPage()),
                         );
                       },
                       isSelected: currentSelectedIndex == 1,

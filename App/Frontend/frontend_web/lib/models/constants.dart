@@ -43,3 +43,15 @@ class ConstantsRequestsInstitutions {
     ObrisiInstitutciju
   ];
 }
+
+class ConstantsPostAdmin {
+  static const String PogledajObjavu = "Pogledaj objavu";
+  static const String PogledajResenja = 'Pogledaj rešenja';
+  static const String ObrisiObjavu = 'Obriši objavu';
+
+  static const List<String> choices = <String> [
+    PogledajObjavu,
+    PogledajResenja,
+    ObrisiObjavu
+  ];
+}

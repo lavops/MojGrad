@@ -4,7 +4,7 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/post/rowPostMobileWidget.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
 
 class ManagePostMobile extends StatefulWidget {
@@ -73,21 +73,21 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listPosts == null ? 0 : listPosts.length,
           itemBuilder: (BuildContext context, int index) {
-            return SinglePostWidget(listPosts[index]);
+            return RowPostMobileWidget(listPosts[index]);
           }
         ),
         ListView.builder(
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listSolvedPosts == null ? 0 : listSolvedPosts.length,
           itemBuilder: (BuildContext context, int index) {
-            return SinglePostWidget(listSolvedPosts[index]);
+            return RowPostMobileWidget(listSolvedPosts[index]);
           }
         ),
         ListView.builder(
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
           itemBuilder: (BuildContext context, int index) {
-            return SinglePostWidget(listUnsolvedPosts[index]);
+            return RowPostMobileWidget(listUnsolvedPosts[index]);
           }
         ),
       ]

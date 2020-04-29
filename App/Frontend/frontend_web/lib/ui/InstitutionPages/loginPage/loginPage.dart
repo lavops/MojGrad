@@ -154,7 +154,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => HomePage2.fromBase64(response)));
+                  builder: (context) => HomePageInstitution.fromBase64(response)));
         }
          else {
           _passwordController.text = "";
