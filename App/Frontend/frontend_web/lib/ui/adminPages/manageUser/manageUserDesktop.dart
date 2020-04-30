@@ -5,11 +5,12 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
 
 class ManageUserDesktop extends StatefulWidget {
   @override
@@ -156,16 +157,34 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
     ],);
   }
 
-  showAlertDialog(BuildContext context, int id) {
-      // set up the button
+  deleteFromList(int userId){
+    for(int i = 0; i < listUsers.length; i++){
+      if(listUsers[i].id == userId){
+        setState(() {
+          listUsers.removeAt(i);
+        });
+        break;
+      }
+    }
+
+    for(int i = 0; i < listRepUsers.length; i++){
+      if(listRepUsers[i].id == userId){
+        setState(() {
+          listRepUsers.removeAt(i);
+        });
+        break;
+      }
+    }
+  }
+
+  showAlertDialog(BuildContext context, int id, int index, int page) {
+    // set up the button
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.green),),
       onPressed: () {
         APIServices.deleteUser(TokenSession.getToken,id);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageUserPage()),
-        );
+        deleteFromList(id);
+        Navigator.pop(context);
         },
     );
      Widget notButton = FlatButton(
@@ -205,8 +224,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(left: 10,right: 10),
+                  //margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
                       userPhotoURL + listUsers[index].photo,
@@ -216,7 +235,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                     ),
                     Container(
                       width: 180,
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.only(left: 10,right: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -274,8 +293,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                     FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.green[800])),
-                      color: Colors.green[800],
+                          side: BorderSide(color: greenPastel)),
+                      color: greenPastel,
                       child: Text(
                         "Poseti profil",
                         style: TextStyle(color: Colors.white),
@@ -295,7 +314,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        showAlertDialog(context, listUsers[index].id);
+                        showAlertDialog(context, listUsers[index].id, index, 1);
                       },
                     )
                   ])),
@@ -318,7 +337,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                 children: <Widget>[
                   Container(
                       color: Colors.white,
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.only(left: 10,right: 10),
                       margin: EdgeInsets.only(top: 5),
                       child: Row(children: [
                         CircleImage(
@@ -329,7 +348,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                         ),
                         Container(
                           width: 180,
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.only(left: 10,right: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -345,49 +364,11 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                             ],
                           ),
                         ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              listRepUsers[index].postsNum.toString(),
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Broj objava',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              listRepUsers[index].points.toString(),
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Broj poena',
-                              style: TextStyle(color: Colors.grey),
-                            )
-                          ],
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              listRepUsers[index].level.toString(),
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Nivo',
-                              style: TextStyle(color: Colors.grey),
-                            )
-                          ],
-                          ),  SizedBox(width: 10),
                         Container(
                           margin:const
                           EdgeInsets.all(10.0),
                           padding: const
-                          EdgeInsets.all(10.0),
+                          EdgeInsets.only(left: 10,right: 10),
                           decoration: BoxDecoration(
                             border: Border.all(
                               width: 2,
@@ -431,8 +412,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                         FlatButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(11.0),
-                              side: BorderSide(color: Colors.green[800])),
-                          color: Colors.green[800],
+                              side: BorderSide(color: greenPastel)),
+                          color: greenPastel,
                           child: Text(
                             "Poseti profil",
                             style: TextStyle(color: Colors.white),
@@ -452,7 +433,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            showAlertDialog(context, listRepUsers[index].id);
+                            showAlertDialog(context, listRepUsers[index].id, index, 2);
                           },
                         )
                       ])),
@@ -479,7 +460,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
         },
         autofocus: false,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search,color: Colors.green[800]),
+          prefixIcon: Icon(Icons.search,color: greenPastel),
           hintText: 'Pretraži...',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
@@ -487,7 +468,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2,color: greenPastel),
           ),
         ),
         controller: searchController,
@@ -600,7 +581,7 @@ Widget dropdownFRU(List<City> listCities) {
         },
         autofocus: false,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search,color: Colors.green[800]),
+          prefixIcon: Icon(Icons.search,color: greenPastel),
           hintText: 'Pretraži...',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
@@ -608,7 +589,7 @@ Widget dropdownFRU(List<City> listCities) {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2,color: greenPastel),
           ),
         ),
         controller: searchRepController,

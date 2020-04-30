@@ -6,10 +6,11 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
 
 class ManageUserMobile extends StatefulWidget {
   @override
@@ -151,16 +152,34 @@ List<User> listUsers;
       );
   }
 
+  deleteFromList(int userId){
+    for(int i = 0; i < listUsers.length; i++){
+      if(listUsers[i].id == userId){
+        setState(() {
+          listUsers.removeAt(i);
+        });
+        break;
+      }
+    }
+    
+    for(int i = 0; i < listRepUsers.length; i++){
+      if(listRepUsers[i].id == userId){
+        setState(() {
+          listRepUsers.removeAt(i);
+        });
+        break;
+      }
+    }
+  }
+
   showAlertDialog(BuildContext context, int id) {
-      // set up the button
+    // set up the button
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.green),),
       onPressed: () {
         APIServices.deleteUser(TokenSession.getToken,id);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageUserPage()),
-        );
+        deleteFromList(id);
+        Navigator.pop(context);
         },
     );
      Widget notButton = FlatButton(
@@ -200,7 +219,7 @@ List<User> listUsers;
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left:10,right: 10),
                   margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
@@ -211,7 +230,7 @@ List<User> listUsers;
                     ),
                     Container(
                       width: 180,
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.only(left:10,right: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -312,7 +331,7 @@ List<User> listUsers;
                         Expanded(child: SizedBox()),
                         PopupMenuButton<String>(
                           onSelected: (String choice) {
-                            choiceActionReportedUsers(choice, listUsers[index].id, listRepUsers[index].firstName, listRepUsers[index].lastName);
+                            choiceActionReportedUsers(choice, listRepUsers[index].id, listRepUsers[index].firstName, listRepUsers[index].lastName);
                           },
                           itemBuilder: (BuildContext context) {
                             return ConstantsReportedUsers.choices.map((String choice) {
@@ -362,7 +381,7 @@ List<User> listUsers;
         },
         autofocus: false,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search,color: Colors.green[800]),
+          prefixIcon: Icon(Icons.search,color: greenPastel),
           hintText: 'Pretraži...',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
@@ -370,7 +389,7 @@ List<User> listUsers;
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2,color: greenPastel),
           ),
         ),
         controller: searchController,
@@ -483,7 +502,7 @@ Widget dropdownFRU(List<City> listCities) {
         },
         autofocus: false,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search,color: Colors.green[800]),
+          prefixIcon: Icon(Icons.search,color: greenPastel),
           hintText: 'Pretraži...',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
@@ -491,7 +510,7 @@ Widget dropdownFRU(List<City> listCities) {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2,color: Colors.green[800]),
+            borderSide: BorderSide(width: 2,color: greenPastel),
           ),
         ),
         controller: searchRepController,
