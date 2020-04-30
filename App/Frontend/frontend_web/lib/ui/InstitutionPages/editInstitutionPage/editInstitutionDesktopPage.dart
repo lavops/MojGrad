@@ -14,9 +14,8 @@ import 'package:universal_html/prefer_universal/html.dart' as html;
 
 class EditInstitutionDesktopPage extends StatefulWidget {
   final Institution institution;
-  final List<City> _city;
 
-  EditInstitutionDesktopPage(this.institution, this._city);
+  EditInstitutionDesktopPage(this.institution);
 
   @override
   _EditInstitutionDesktopPageState createState() => _EditInstitutionDesktopPageState();
@@ -31,12 +30,28 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
   int cityId = 0;
   String spoljasnjeIme = '';
   String baseString;
+  String city1='';
+  int city1Id = 0;
+
+  _getCity() {
+    APIServices.getCity1().then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> listC = List<City>();
+      listC = list.map((model) => City.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          _city = listC;
+        });
+      }
+    });
+  }
+
 
   @override
   void initState() {
     super.initState();
     institution = widget.institution;
-    _city = widget._city;
+    _getCity();
   }
   String namePhoto = '';
   String error;
@@ -559,6 +574,110 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
   List<City> _city;
   City city;
 
+  
+ Future<String> editCity(BuildContext context, String cityName) async {
+    // show the dialog
+   return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        City pomCity;
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16))),
+      content: Container(
+          width: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text("Grad",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Theme.of(context).textTheme.bodyText1.color))
+                ],
+              ),
+              SizedBox(height: 5),
+              Center(
+                child:Row(
+      children: <Widget>[
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text("Grad: ",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
+        _city != null
+            ? DropdownButton<City>(
+                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+                value: pomCity,
+                onChanged: (City value) {
+                  setState(() {
+                    pomCity = value;
+                    city1 = value.name;
+                    city1Id = value.id;
+                  });
+                },
+                items: _city.map((City option) {
+                  return DropdownMenuItem<City>(
+                    value: option,
+                    child: Text(option.name),
+                  );
+                }).toList(),
+              )
+            : DropdownButton<String>(
+                hint: Text("Izaberi"),
+                onChanged: null,
+                items: null,
+              ),
+              ],)
+              ),
+              SizedBox(height: 20),
+              Row(
+                 mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text(
+                      "Otkaži",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                       city1 = '';
+                      city1Id = 0;
+                      });
+                     
+                      Navigator.pop(context,'');
+                    },
+                  ),
+                   MaterialButton(
+                    child: Text(
+                      "Izmeni",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                      textAlign: TextAlign.center,
+                    ),
+                    onPressed: () {
+                      if(pomCity != null){
+                        Navigator.pop(context,pomCity.name);
+                      }
+                      
+                    },
+                  ),
+                ],
+              )
+            ],
+          )),
+    );
+        });
+      },
+    );
+  }
+
   final deactLabelWidget = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
@@ -579,40 +698,7 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
 
   @override
   Widget build(BuildContext context) {
-    final _dropDownCity = Row(
-      children: <Widget>[
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text("Grad: ",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.bodyText1.color))),
-           _city != null
-            ? DropdownButton<City>(
-                hint: Text("Izaberi",
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color)),
-                value: city,
-                onChanged: (City value) {
-                  setState(() {
-                    city = value;
-                  });
-                },
-                items: _city.map((City option) {
-                  return DropdownMenuItem<City>(
-                    value: option,
-                    child: Text(option.name),
-                  );
-                }).toList(),
-              )
-            : DropdownButton<String>(
-                hint: Text("Izaberi"),
-                onChanged: null,
-                items: null,
-              ),
-      ],
-    );
-return
+  return
       Center(
           child: Container(
         padding: EdgeInsets.all(10),
@@ -746,7 +832,26 @@ return
                 },
               ),
             ),
-            _dropDownCity,
+            ListTile(
+              leading: Icon(Icons.phonelink_lock,
+                  color:Color.fromRGBO(15, 32, 67,100)),
+              title: Text('Grad'),
+              subtitle: Text(city1 == '' ? institution.cityName : city1),
+              trailing: FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        new BorderRadius.circular(11.0),
+                    side: BorderSide(color: Colors.grey)),
+                color: Colors.grey,
+                child: Icon(Icons.edit, color: Colors.white),
+                onPressed: () async{
+                    var res = await editCity(context, institution.cityName);
+                    setState(() {
+                      city1 = res;
+                    });       
+                  },
+              ),
+            ),
             Center(
                 child: Container(
                     width: 600,
@@ -762,8 +867,8 @@ return
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        if (city != null) {
-                          edit(name,description,email,phone,city.id,institution,oldPassword,password);
+                        if (city1Id != 0) {
+                          edit(name,description,email,phone,city1Id,institution,oldPassword,password);
                         } else {
                           edit(name,description,email,phone,0,institution,oldPassword,password);
                         }
@@ -832,30 +937,10 @@ return
 
   edit(String nname, String ndescription, String nemail, String nmobile,
       int ncityId, Institution institution, String pass1, String pass2) {
-        int ind=0;
 
-        if (namePhoto != "") {
-            String base64Image = base64Encode(data);
-            APIServices.addImageWeb(base64Image).then((res){
-              var res1 = jsonDecode(res);
-              print("usloo");
-                APIServices.editInstitutionProfilePhoto(TokenSession.getToken, institution.id,res1)
-                  .then((response) {
-                Map<String, dynamic> jsonUser = jsonDecode(response);
-                Institution inst1 = Institution.fromObject(jsonUser);
-                if (inst1 != null) {
-                institution = inst1;
-                showDial(context);
-                }
-              });
-
-            } );
-            
-         }
     if (ncityId == 0) {
       ncityId = institution.cityId;
     }
-
     if (nname == "") {
       nname = institution.name;
     }
@@ -874,24 +959,29 @@ return
         nmobile == institution.phone &&
         ncityId == institution.cityId &&
         pass1 == "" &&
-        pass2 == "") {
+        pass2 == "" && namePhoto == "") {
       setState(() {
         wrongRegText = "Nista niste izmenili.";
-        ind=1;
       });
       throw Exception("Nista niste izmenili");
     }
-    if (pass1 == "" && pass2 == "" && ind != 1) {
+    else {
+      
+        if (namePhoto != "") {
+            String base64Image = base64Encode(data);
+            APIServices.addImageWeb(base64Image).then((res){
+              var res1 = jsonDecode(res);
+              print("usloo");
+                APIServices.editInstitutionProfilePhoto(TokenSession.getToken, institution.id,res1);
+            } );
+            
+         }
+      if (pass1 == "" && pass2 == "") {
       String jwt = TokenSession.getToken;
       APIServices.editInstitutionData(
-          jwt, institution.id, nname, nemail, nmobile, ndescription, ncityId).then((value) => showDial(context));
+          jwt, institution.id, nname, nemail, nmobile, ndescription, ncityId).then((value) {
+          });
     } else {
-      if (pass1 == pass2) {
-        setState(() {
-          wrongRegText = "Unesite ponovo lozinku.";
-        });
-        throw Exception("Ne poklapaju se lozinke");
-      }
       String jwt = TokenSession.getToken;
 
       var tempPass1 = utf8.encode(pass1);
@@ -907,15 +997,12 @@ return
           setState(() {
             password='';
             oldPassword = '';
-            showDial(context);
           });
-        } else {
-          setState(() {
-            wrongRegText = "Unesite ponovo podatke.";
-          });
-          throw Exception("Unesite ponovo podatke.");
-        }
+        } 
       });
     }
+    showDial(context);
+    }
+   
   }
 }

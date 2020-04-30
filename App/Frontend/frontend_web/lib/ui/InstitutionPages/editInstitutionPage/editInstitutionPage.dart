@@ -38,7 +38,6 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
   @override
   void initState() {
     super.initState();
-    _getCity();
     _getInsData(TokenSession.getToken, widget.insId);
   }
 
@@ -50,22 +49,6 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
       institution = ins;
     });
   }
- List<City> _city;
-  City city;
-  _getCity() {
-    APIServices.getCity1().then((res) {
-      Iterable list = json.decode(res.body);
-      List<City> listC = List<City>();
-      listC = list.map((model) => City.fromObject(model)).toList();
-      if (mounted) {
-        setState(() {
-          _city = listC;
-        });
-      }
-    });
-  }
-
-
   String namePhoto = '';
   String error;
   Uint8List data;
@@ -94,9 +77,9 @@ class _EditInstitutionPageState extends State<EditInstitutionPage> {
             : SizedBox(),
               Expanded(
                 child: ScreenTypeLayout(
-                  mobile: EditInstitutionMobilePage(institution, _city),
-                  desktop: EditInstitutionDesktopPage(institution, _city),
-                  tablet: EditInstitutionTabletPage(institution, _city),
+                  mobile: EditInstitutionMobilePage(institution),
+                  desktop: EditInstitutionDesktopPage(institution),
+                  tablet: EditInstitutionTabletPage(institution),
                 ),
               )
             ],
