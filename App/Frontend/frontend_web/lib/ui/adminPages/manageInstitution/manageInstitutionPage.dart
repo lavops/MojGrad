@@ -53,10 +53,10 @@ class _ManageInstitutionPageState extends State<ManageInstitutionPage> {
       indicatorColor: greenPastel,
       tabs: <Widget>[
         Tab(
-          child: Text('Sve institucije', style: TextStyle(color: Colors.black),),
+          child: Text('SVE INSTITUCIJE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
         ),
         Tab(
-          child: Text('Zahtevi za registraciju', style: TextStyle(color: Colors.black),),
+          child: Text('ZAHTEVI ZA REGISTRACIJU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
         ),
       ]
     );
