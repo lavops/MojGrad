@@ -3,7 +3,6 @@ import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
 
 import 'ui/InstitutionPages/homePage/homePage.dart';
 

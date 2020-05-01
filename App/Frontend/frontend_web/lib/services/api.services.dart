@@ -445,4 +445,48 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
+
+  static Future getDonations(String jwt) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Donation',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getUsersFromDonation(String jwt, int donationId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Donation/UserForDonation';
+    var data = Map();
+    data["id"] = donationId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
+
+  static Future deleteDonation(String jwt, int donationId) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Donation/Delete';
+    var data = Map();
+    data["id"] = donationId;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    
+    return res;
+  }
 }
