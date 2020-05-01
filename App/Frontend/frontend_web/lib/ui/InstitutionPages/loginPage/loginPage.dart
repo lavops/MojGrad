@@ -5,7 +5,6 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/ui/InstitutionPages/registerPage/registerPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';

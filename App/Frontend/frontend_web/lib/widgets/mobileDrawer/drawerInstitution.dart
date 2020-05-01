@@ -4,7 +4,6 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/loginPage/loginPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
 
 import '../../ui/InstitutionPages/homePage/homePage.dart';
 
