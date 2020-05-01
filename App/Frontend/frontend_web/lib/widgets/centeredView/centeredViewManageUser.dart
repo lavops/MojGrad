@@ -56,7 +56,7 @@ class CenteredViewManageUserMobile extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 20),
+      padding: const EdgeInsets.only(left: 2.5, right: 2.5, top: 10),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 500),

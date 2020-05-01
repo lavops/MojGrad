@@ -53,10 +53,10 @@ class _ManageUserPageState extends State<ManageUserPage> {
       indicatorColor: greenPastel,
       tabs: <Widget>[
         Tab(
-          child: Text('SVI KORISNICI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+          child: Text('SVI KORISNICI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
         ),
         Tab(
-          child: Text('PRIJAVLJENI KORISNICI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+          child: Text('PRIJAVLJENI KORISNICI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
         ),
       ]
     );
