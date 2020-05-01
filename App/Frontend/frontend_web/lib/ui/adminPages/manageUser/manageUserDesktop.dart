@@ -369,13 +369,6 @@ class _ManageUserDesktopState extends State<ManageUserDesktop> with SingleTicker
                           EdgeInsets.all(10.0),
                           padding: const
                           EdgeInsets.only(left: 10,right: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 2,
-                              color: Colors.red,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
                           child: Column(
                             children: <Widget>[
                               Text(

@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionDesktop extends StatefulWidget {
   @override
@@ -78,25 +78,30 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
     super.dispose();
   }
   
-  showAlertDialog(BuildContext context, int id) {
+  showAlertDialog(BuildContext context, int id, int index, int page) {
     // set up the button
     Widget okButton = FlatButton(
       child: Text(
         "Obriši",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Colors.red),
       ),
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageInstitutionPage()),
-        );
+        setState(() {
+          if(page == 1){
+            listInstitutions.removeAt(index);
+          }
+          else if(page == 2){
+            listUnauthInstitutions.removeAt(index);
+          }
+        });
+        Navigator.pop(context);
       },
     );
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         Navigator.pop(context);
@@ -107,6 +112,54 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
     AlertDialog alert = AlertDialog(
       title: Text("Brisanje institucije"),
       content: Text("Da li ste sigurni da želite da obrišete instituciju?"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlertDialogAccept(BuildContext context, int id, String email, int index, int page) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text(
+        "Prihvati",
+        style: TextStyle(color: greenPastel),
+      ),
+      onPressed: () {
+        APIServices.acceptInstitution(TokenSession.getToken, id, email).then((res){
+          if(res.statusCode == 200){
+            setState(() {
+              listInstitutions.insert(0, listUnauthInstitutions[index]);
+              listUnauthInstitutions.removeAt(index);
+            });
+          }
+        });
+        Navigator.pop(context);
+      },
+    );
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: Colors.red),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Prihvati zahtev"),
+      content: Text("Da li ste sigurni da želite da prihvatite zahtev?"),
       actions: [
         okButton,
         notButton,
@@ -153,7 +206,10 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
       );
 
   Widget descriptionWidget(String description) => Container(
-        width: 400,
+        constraints: BoxConstraints(
+          maxWidth: 400,
+          minWidth: 200,
+        ),
         padding: EdgeInsets.all(10),
         child: Column(
           //crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +232,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left: 10, right: 10),
                   margin: EdgeInsets.only(top: 5, left: 20, right: 20),
                   child: Center(
                       child: Column(
@@ -195,8 +251,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                               whiteMargin: 2.0,
                               imageMargin: 6.0,
                             ),
-                            contactWidget(
-                                listInst[index].phone, listInst[index].email),
+                            contactWidget(listInst[index].phone, listInst[index].email),
                             descriptionWidget(listInst[index].description),
                             FlatButton(
                               shape: RoundedRectangleBorder(
@@ -208,7 +263,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                showAlertDialog(context, listInst[index].id);
+                                showAlertDialog(context, listInst[index].id, index, 1);
                               },
                             )
                           ])
@@ -232,7 +287,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left: 10, right: 10),
                   margin: EdgeInsets.only(top: 5, left: 20, right: 20),
                   child: Center(
                       child: Column(
@@ -251,10 +306,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                               whiteMargin: 2.0,
                               imageMargin: 6.0,
                             ),
-                            contactWidget(
-                                listInst[index].phone, listInst[index].email),
+                            contactWidget(listInst[index].phone, listInst[index].email),
                             descriptionWidget(listInst[index].description),
-                            Row(children: <Widget>[
+                            Column(children: <Widget>[
                             FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(11.0),
@@ -265,27 +319,21 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                showAlertDialog(context, listInst[index].id);
+                                showAlertDialog(context, listInst[index].id, index, 2);
                               },
                             ),
                             SizedBox(width: 10,),
                             FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(11.0),
-                                  side: BorderSide(color: Colors.green[800])),
-                              color: Colors.green[800],
+                                  side: BorderSide(color: greenPastel)),
+                              color: greenPastel,
                               child: Text(
                                 "Prihvati zahtev",
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                APIServices.acceptInstitution(TokenSession.getToken, listInst[index].id, listInst[index].email);
-                               setState(() {
-                                 _getUnauthInstitutions();
-                                 _getUnauthInstitutions();
-                                 _getUnauthInstitutions();
-                               });
-                                _getUnauthInstitutions();
+                                showAlertDialogAccept(context, listInst[index].id, listInst[index].email, index, 2);
                               },
                             )
                             ],),
@@ -316,7 +364,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
           },
           autofocus: false,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.green[800]),
+            prefixIcon: Icon(Icons.search, color: greenPastel),
             hintText: 'Pretraži...',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
@@ -324,7 +372,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(width: 2, color: Colors.green[800]),
+              borderSide: BorderSide(width: 2, color: greenPastel),
             ),
           ),
           controller: searchController,
@@ -348,7 +396,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
           },
           autofocus: false,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.green[800]),
+            prefixIcon: Icon(Icons.search, color: greenPastel),
             hintText: 'Pretraži...',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
@@ -356,7 +404,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(width: 2, color: Colors.green[800]),
+              borderSide: BorderSide(width: 2, color: greenPastel),
             ),
           ),
           controller: searchRepController,
