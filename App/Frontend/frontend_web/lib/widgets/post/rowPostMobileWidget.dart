@@ -3,6 +3,7 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -146,6 +147,10 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
   void choicePostAdmin(String choice) {
     if (choice == ConstantsPostAdmin.PogledajObjavu) {
       print("Pogledaj objavu.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewPostPage(post)),
+      );
     } else if (choice == ConstantsPostAdmin.PogledajResenja) {
       print("Pogledaj resenja.");
     } else if (choice == ConstantsPostAdmin.ObrisiObjavu){

@@ -3,6 +3,7 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostDesktop.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostMobile.dart';
 import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostDesktop.dart';
+import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostMobile.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -50,7 +51,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
             ),
           backgroundColor: Colors.white,
           body: ScreenTypeLayout(
-            mobile: ViewPostDesktop(post),
+            mobile: ViewPostMobile(post),
             tablet: ViewPostDesktop(post),
           ),
         ),
@@ -103,7 +104,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('SVE O OBJAVI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+              Text('O OBJAVI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
             ],
           ),
         ),
