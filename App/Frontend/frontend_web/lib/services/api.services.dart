@@ -290,19 +290,7 @@ static Future registerInstitution(Institution ins) async {
   
   }
 
-
-// login institution
- static Future loginInstitution(String mail, String password) async {
-    String url = serverURL + 'Institution/Login';
-    var jbody = jsonEncode({'email': mail, 'password': password});
-     var res = await http.post(url,
-        headers: {"Content-Type": "application/json"}, body: jbody);
-    if (res.statusCode == 200) return res.body;
-    return null;
-  }
-  
    // get inst
-
   static Future getInstitutionById(String jwt, int id) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
