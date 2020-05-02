@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -42,11 +43,10 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
         setState(() {
           post = null;
         });
-        Navigator.pop(context);
-        /*Navigator.pushReplacement(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => ManagePostPage()),
-        );*/
+        );
         },
     );
      Widget notButton = FlatButton(
@@ -192,7 +192,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
                           side: BorderSide(color: greenPastel)),
                       color: greenPastel,
                       child: Text(
-                        "Reši",
+                        "Nije rešeno",
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {},

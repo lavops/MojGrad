@@ -7,7 +7,8 @@ class Comment{
   String _photoPath;
   String _date;
 
-  Comment(this._id, this._username, this._postId, this._userId, this._description, this._photoPath, this._date);
+  Comment();
+  Comment.full(this._id, this._username, this._postId, this._userId, this._description, this._photoPath, this._date);
 
   int get id => _id;
   String get username => _username;
