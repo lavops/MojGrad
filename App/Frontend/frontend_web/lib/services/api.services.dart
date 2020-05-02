@@ -445,4 +445,15 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
+  
+  //get events
+  static Future getEvents(String jwt) async {
+    var data = convert.jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Event', headers: {
+      'Content-type': 'application/json',
+      'Accept' : 'application/josn',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
