@@ -5,7 +5,7 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
-import 'package:frontend_web/widgets/post/singlePostWidget.dart';
+import 'package:frontend_web/widgets/post/singlePostIWidget.dart';
 
 class HomeInstitutionDesktop extends StatefulWidget {
   @override
@@ -43,7 +43,7 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
         padding: EdgeInsets.only(bottom: 30.0),
         itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
         itemBuilder: (BuildContext context, int index) {
-          return SinglePostWidget(listUnsolvedPosts[index]);
+          return SinglePostIWidget(listUnsolvedPosts[index]);
         }
       ),
     ),
