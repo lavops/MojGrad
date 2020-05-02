@@ -5,7 +5,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/ui/InstitutionPages/registerPage/registerPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
+import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -147,14 +147,45 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
     else{
       var pom = utf8.encode(_password);
       var pass = sha1.convert(pom);
-      APIServices.loginInstitution(_email, pass.toString()).then((response){
+      APIServices.login(_email, pass.toString()).then((response){
          if (response != null) {
           TokenSession.setToken = response;
           print(response);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePageInstitution.fromBase64(response)));
+           var str = response;
+            var jwt = str.split(".");
+
+            if(jwt.length !=3) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeView()
+                    )
+                  );
+            } else {
+              var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+              if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
+                int type = int.parse(payload["nameid"]);
+                if(type == 1)
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(str, payload)
+                    )
+                  );
+                else
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePageInstitution(str,payload)
+                    )
+                  );
+              } else {
+                 _passwordController.text = "";
+                setState(() {
+                  pogresanLoginText = "PODACI NISU ISPRAVNI";
+                });
+              }
+            }
         }
          else {
           _passwordController.text = "";

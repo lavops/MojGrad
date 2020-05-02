@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
@@ -101,16 +102,16 @@ class DrawerAdmin extends StatelessWidget{
             },*/
           ),
           ListTile(
-            leading: Icon(Icons.calendar_today),
+            leading: Icon(Icons.monetization_on),
             title: Text(
               "Upravljanje donacijama",
               style: TextStyle(fontSize: 16, color: (selected == 7) ? greenPastel : Colors.black),
             ),
-            /*onTap: (){
+            onTap: (){
               Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => null),
+                MaterialPageRoute(builder: (context) => ManageDonationPage()),
               );
-            },*/
+            },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),

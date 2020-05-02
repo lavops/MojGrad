@@ -5,10 +5,11 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionTablet extends StatefulWidget {
   @override
@@ -77,7 +78,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     super.dispose();
   }
   
-  showAlertDialog(BuildContext context, int id) {
+  showAlertDialog(BuildContext context, int id, int index, int page) {
     // set up the button
     Widget okButton = FlatButton(
       child: Text(
@@ -86,16 +87,21 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
       ),
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageInstitutionPage()),
-        );
+        setState(() {
+          if(page == 1){
+            listInstitutions.removeAt(index);
+          }
+          else if(page == 2){
+            listUnauthInstitutions.removeAt(index);
+          }
+        });
+        Navigator.pop(context);
       },
     );
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         Navigator.pop(context);
@@ -106,6 +112,54 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     AlertDialog alert = AlertDialog(
       title: Text("Brisanje institucije"),
       content: Text("Da li ste sigurni da želite da obrišete instituciju?"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlertDialogAccept(BuildContext context, int id, String email, int index, int page) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text(
+        "Prihvati",
+        style: TextStyle(color: greenPastel),
+      ),
+      onPressed: () {
+        APIServices.acceptInstitution(TokenSession.getToken, id, email).then((res){
+          if(res.statusCode == 200){
+            setState(() {
+              listInstitutions.insert(0, listUnauthInstitutions[index]);
+              listUnauthInstitutions.removeAt(index);
+            });
+          }
+        });
+        Navigator.pop(context);
+      },
+    );
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: Colors.red),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Prihvati zahtev"),
+      content: Text("Da li ste sigurni da želite da prihvatite zahtev?"),
       actions: [
         okButton,
         notButton,
@@ -199,7 +253,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
                             Expanded(child: SizedBox()),
                             PopupMenuButton<String>(
                               onSelected: (String choice) {
-                                choiceActionAllInstitutions(choice,listInst[index].id, listInst[index].description );
+                                choiceActionAllInstitutions(choice,listInst[index].id, listInst[index].description, index);
                               },
                               itemBuilder: (BuildContext context) {
                                 return ConstantsAllInstitutions.choices.map((String choice) {
@@ -220,7 +274,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     );
   }
 
-  void choiceActionAllInstitutions(String choice, int institutionId, String description) {
+  void choiceActionAllInstitutions(String choice, int institutionId, String description, int index) {
     if (choice == ConstantsAllInstitutions.OpisInstitucije) {
       print("Opis institucije.");
       showDialog(
@@ -235,7 +289,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
               FlatButton(
                 child: Text(
                   "Izadji",
-                  style: TextStyle(color: Colors.green[800]),
+                  style: TextStyle(color: greenPastel),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -245,7 +299,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
           ));
     } else if (choice == ConstantsAllInstitutions.ObrisiInstitutciju) {
       print("Brisanje institucije.");
-      showAlertDialog(context, institutionId);
+      showAlertDialog(context, institutionId, index, 1);
     }
   }
 
@@ -260,7 +314,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left: 10, right: 10),
                   margin: EdgeInsets.only(top: 5, left: 20, right: 20),
                   child: Center(
                       child: Column(
@@ -284,7 +338,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
                             Expanded(child: SizedBox()),
                             PopupMenuButton<String>(
                               onSelected: (String choice) {
-                                choiceActionRequestsInstitutions(choice,listInst[index].id, listInst[index].description, listInst[index].email);
+                                choiceActionRequestsInstitutions(choice,listInst[index].id, listInst[index].description, listInst[index].email, index);
                               },
                               itemBuilder: (BuildContext context) {
                                 return ConstantsRequestsInstitutions.choices.map((String choice) {
@@ -305,7 +359,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     );
   }
 
-  void choiceActionRequestsInstitutions(String choice, int institutionId, String description, String email) {
+  void choiceActionRequestsInstitutions(String choice, int institutionId, String description, String email, int index) {
     if (choice == ConstantsRequestsInstitutions.OpisInstitucije) {
       print("Opis institucije.");
       showDialog(
@@ -320,7 +374,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
               FlatButton(
                 child: Text(
                   "Izadji",
-                  style: TextStyle(color: Colors.green[800]),
+                  style: TextStyle(color: greenPastel),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -330,16 +384,10 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
           ));
     } else if (choice == ConstantsRequestsInstitutions.ObrisiInstitutciju) {
       print("Brisanje institucije.");
-      showAlertDialog(context, institutionId);
+      showAlertDialog(context, institutionId, index, 2);
     } else if (choice == ConstantsRequestsInstitutions.PrihvatiInstitutciju) {
       print("Prihvati instituciju.");
-      APIServices.acceptInstitution(TokenSession.getToken, institutionId, email);
-      setState(() {
-        _getUnauthInstitutions();
-        _getUnauthInstitutions();
-        _getUnauthInstitutions();
-      });
-      _getUnauthInstitutions();
+      showAlertDialogAccept(context, institutionId,email, index, 2);
     }
   }
 
@@ -360,7 +408,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
           },
           autofocus: false,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.green[800]),
+            prefixIcon: Icon(Icons.search, color: greenPastel),
             hintText: 'Pretraži...',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
@@ -368,7 +416,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(width: 2, color: Colors.green[800]),
+              borderSide: BorderSide(width: 2, color: greenPastel),
             ),
           ),
           controller: searchController,
@@ -379,7 +427,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     return Container(
         margin: EdgeInsets.only( top: 5, bottom: 5),
         width: 450,
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child:TextField(
           onChanged: (string) {
             _debouncer.run(() {
@@ -392,7 +440,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
           },
           autofocus: false,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.green[800]),
+            prefixIcon: Icon(Icons.search, color: greenPastel),
             hintText: 'Pretraži...',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
@@ -400,7 +448,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(width: 2, color: Colors.green[800]),
+              borderSide: BorderSide(width: 2, color: greenPastel),
             ),
           ),
           controller: searchRepController,

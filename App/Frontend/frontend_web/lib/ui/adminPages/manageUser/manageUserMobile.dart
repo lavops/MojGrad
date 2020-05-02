@@ -229,20 +229,20 @@ List<User> listUsers;
                       imageMargin: 6.0,
                     ),
                     Container(
-                      width: 180,
+                      width: 150,
                       padding: EdgeInsets.only(left:10,right: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(listUsers[index].username,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                           Text(
                               listUsers[index].firstName +
                                   " " +
                                   listUsers[index].lastName,
                               style: TextStyle(
-                                  fontStyle: FontStyle.italic, fontSize: 15))
+                                  fontStyle: FontStyle.italic, fontSize: 12))
                         ],
                       ),
                     ),
@@ -299,20 +299,20 @@ List<User> listUsers;
                           imageMargin: 6.0,
                         ),
                         Container(
-                          width: 180,
+                          width: 120,
                           padding: EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(listRepUsers[index].username,
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                               Text(
                                   listRepUsers[index].firstName +
                                       " " +
                                       listRepUsers[index].lastName,
                                   style: TextStyle(
-                                      fontStyle: FontStyle.italic, fontSize: 15))
+                                      fontStyle: FontStyle.italic, fontSize: 12))
                             ],
                           ),
                         ),
@@ -405,14 +405,9 @@ Widget dropdownFU(List<City> listCities) {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Container(
-          margin: EdgeInsets.only(left: 10, right: 10, top:10, bottom: 10),
-          ),  
           new Text("Izaberite grad korisnika: ",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          new Container(
-            padding: new EdgeInsets.all(20.0),
-          ),  
+          SizedBox(width: 10,), 
           listCities != null
               ? new DropdownButton<City>(
                   hint: Text("Izaberi"),
@@ -448,14 +443,9 @@ Widget dropdownFRU(List<City> listCities) {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Container(
-          margin: EdgeInsets.only(left: 10, right: 10, top:10, bottom: 10),
-          ),  
           new Text("Izaberite grad korisnika: ",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          new Container(
-            padding: new EdgeInsets.all(20.0),
-          ),  
+          SizedBox(width: 10,),   
           listCities != null
               ? new DropdownButton<City>(
                   hint: Text("Izaberi"),

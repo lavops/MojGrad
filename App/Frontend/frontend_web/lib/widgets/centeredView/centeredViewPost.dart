@@ -21,7 +21,7 @@ class CenteredViewPostTabletDesktop extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 100, right: 100, top: 60),
+      padding: const EdgeInsets.only(left: 100, right: 100, top: 20),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 600),
@@ -38,7 +38,7 @@ class CenteredViewPostMobile extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 30),
+      padding: const EdgeInsets.only(left: 5, right: 5, top: 20),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 500),

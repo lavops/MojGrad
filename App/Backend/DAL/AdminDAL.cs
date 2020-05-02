@@ -148,6 +148,36 @@ namespace Backend.DAL
             }
         }
 
+        public Institution AuthenticateInstitution(Admin admin)
+        {
+            var existingInst = _context.institution.Where(k => k.email.Equals(admin.email)
+                  && k.password.Equals(admin.password)).FirstOrDefault();
+            return existingInst;
+        }
+
+        public string GenerateJSONWebTokenInst(Institution inst)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var x = 2;
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, inst.id.ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId, x.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _appSettings.Secret,
+                audience: _appSettings.Secret,
+                claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials);
+
+            var encodeToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return encodeToken;
+        }
+
         public string login(Admin admin)
         {
             var adminn = AuthenticateAdmin(admin);
@@ -155,6 +185,12 @@ namespace Backend.DAL
             if (adminn != null)
             {
                 var tokenStr = GenerateJSONWebToken(adminn);
+                return tokenStr;
+            }
+            var inst = AuthenticateInstitution(admin);
+            if (inst != null)
+            {
+                var tokenStr = GenerateJSONWebTokenInst(inst);
                 return tokenStr;
             }
             return null;

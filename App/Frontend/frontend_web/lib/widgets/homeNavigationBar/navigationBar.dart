@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/InstitutionPages/loginPage/loginPage.dart';
-import 'package:frontend_web/ui/adminPages/loginPage/loginPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -90,7 +89,7 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               InkWell(
-                child: Text( "Institucija", 
+                child: Text( "Prijavi se", 
                   style: TextStyle(
                     fontSize: 20, 
                     fontWeight: FontWeight.bold,
@@ -106,25 +105,7 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
                   );
                 },
               ),
-              SizedBox(width: 60,),
-              InkWell(
-                child: Text( "Administrator", 
-                  style: TextStyle(
-                    fontSize: 20, 
-                    fontWeight: FontWeight.bold,
-                    color: (selected == 2)? greenPastel : Colors.black,
-                  ),
-                ),
-                onTap: (){
-                  print("Administrator login");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AdminLoginPage()
-                    )
-                  );
-                },
-              )
+              SizedBox(width: 10,),
             ],
           ),
         ],
@@ -157,21 +138,6 @@ class HomeNavigationDrawer extends StatelessWidget{
                     context,
                     MaterialPageRoute(
                       builder: (context) => InstitutionLoginPage()
-                    )
-                  );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.perm_identity),
-              title: Text(
-                'Administrator',
-                style: TextStyle(fontSize: 16, color: (selected == 2)? greenPastel : Colors.black),
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AdminLoginPage()
                     )
                   );
               },

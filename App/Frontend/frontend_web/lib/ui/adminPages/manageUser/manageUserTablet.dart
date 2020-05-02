@@ -365,13 +365,6 @@ List<User> listUsers;
                           EdgeInsets.all(10.0),
                           padding: const
                           EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 2,
-                              color: Colors.red,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
                           child: Column(
                             children: <Widget>[
                               Text(

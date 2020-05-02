@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
@@ -8,10 +7,7 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
-import 'package:image_picker_web/image_picker_web.dart';
-import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
 
 class EditInstitutionMobilePage extends StatefulWidget {
