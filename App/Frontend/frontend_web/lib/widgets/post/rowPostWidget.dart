@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -145,6 +147,21 @@ class _RowPostWidgetState extends State<RowPostWidget> {
     ],
   );
 
+  void choicePostAdmin(String choice) {
+    if (choice == ConstantsPostAdmin.PogledajObjavu) {
+      print("Pogledaj objavu.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewPostPage(post)),
+      );
+    } else if (choice == ConstantsPostAdmin.PogledajResenja) {
+      print("Pogledaj resenja.");
+    } else if (choice == ConstantsPostAdmin.ObrisiObjavu){
+      print("Obrisi resenja.");
+      showAlertDialog(context,post.postId);
+    }
+  }
+
   Widget imageGallery() => Container(
     constraints: BoxConstraints(
       maxHeight: 180.0, // changed to 400
@@ -187,22 +204,22 @@ class _RowPostWidgetState extends State<RowPostWidget> {
               ),
               Text(post.commNum.toString()),
               Expanded(child: SizedBox()),
-              post.statusId == 2
-                  ? FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: greenPastel)),
-                      color: greenPastel,
-                      child: Text(
-                        "Reši",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {},
-                    )
-                  : IconButton(
-                      icon: Icon(Icons.done_all, color: greenPastel),
-                      onPressed: () {},
-                    ),
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(11.0),
+                    side: BorderSide(color: greenPastel)),
+                color: greenPastel,
+                child: Text(
+                  "Više informacija",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewPostPage(post)),
+                  );
+                },
+              ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
