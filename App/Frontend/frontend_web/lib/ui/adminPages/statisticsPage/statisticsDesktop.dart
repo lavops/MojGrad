@@ -49,31 +49,31 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
           shrinkWrap: true,
           children: <Widget>[
             Row(children: <Widget>[
-              Expanded(child: SizedBox()),
+            //  Expanded(child: SizedBox()),
               stats("OBJAVE", Icons.photo_library, 5),
-              Expanded(child: SizedBox()),
+              SizedBox(width: 40),
               stats("DOGAĐAJI", Icons.calendar_today, 1),
-              Expanded(child: SizedBox()),
+              SizedBox(width: 15),
               stats("KORISNICI", Icons.account_circle, 5),
-              Expanded(child: SizedBox()),
+              SizedBox(width: 50),
               stats("INSTITUCIJE", Icons.account_balance, 2),
-              Expanded(child: SizedBox()),
+            //  Expanded(child: SizedBox()),
             ],),
-            SizedBox(height: 100,),
+            SizedBox(height: 15,),
             Row(children: <Widget>[
-              Expanded(child: SizedBox()),
+           ///   Expanded(child: SizedBox()),
               myCircularItems(),
-              Expanded(child: SizedBox()),
+              SizedBox(width:15),
               eventPost(),
-              Expanded(child: SizedBox()),
+             // Expanded(child: SizedBox()),
             ],),
-            SizedBox(height: 100,),
+            SizedBox(height: 15,),
             Row(children: <Widget>[
-              Expanded(child: SizedBox(),),
+            //  Expanded(child: SizedBox(),),
               buildUserList(listUsers),
-              Expanded(child: SizedBox()),
+              SizedBox(width:15),
               newDonation(),
-              Expanded(child: SizedBox()),
+            //  Expanded(child: SizedBox()),
             ],)
 
             
@@ -89,7 +89,7 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
     return Card(
         child:Container(
         width: 400,
-        height: 250,
+        height: 265,
         child:ListView.builder(
           itemCount: listUsers == null ? 0 : listUsers.length,
           itemBuilder: (BuildContext context, int index) {
@@ -149,9 +149,6 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
   Material myCircularItems(){
     return Material(
       color: Colors.white,
-      elevation: 14.0,
-      //  borderRadius: BorderRadius.circular(24.0),
-      shadowColor: Color.fromRGBO(210, 245, 203, 1),
       child: Card(
         child:Padding(
           padding: EdgeInsets.all(4.0),
