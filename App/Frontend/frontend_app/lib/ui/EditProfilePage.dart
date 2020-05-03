@@ -859,7 +859,7 @@ class EditProfile extends State<EditProfilePage> {
                       city1Id = 0;
                       });
                      
-                      Navigator.pop(context,'');
+                      Navigator.pop(context);
                     },
                   )
                 ],

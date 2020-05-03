@@ -188,7 +188,7 @@ class _EventsWidgetState extends State<EventsWidget> {
                   if (res != null) {
                     APIServices.joinEvent(jwt, event.id, userId).then((res) {
                       if (res.statusCode == 200) {
-                        print('Uspesno ste sepridruzili dogadjaju.');
+                        print('Uspesno ste se pridruzili dogadjaju.');
                         setState(() {
                           event.isGoing = 1;
                         });
@@ -221,7 +221,7 @@ class _EventsWidgetState extends State<EventsWidget> {
             FlatButton(
               child: Text(
                 "Potvrdi",
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -230,7 +230,7 @@ class _EventsWidgetState extends State<EventsWidget> {
                     jwt = res;
                   });
                   if (res != null) {
-                    APIServices.joinEvent(jwt, event.id, userId).then((res) {
+                    APIServices.leaveEvent(jwt, event.id, userId).then((res) {
                       if (res.statusCode == 200) {
                         print('Uspesno ste napustili dogadjaj.');
                         setState(() {
@@ -246,7 +246,7 @@ class _EventsWidgetState extends State<EventsWidget> {
             FlatButton(
               child: Text(
                 "Otkaži",
-                style: TextStyle(color: Colors.green[800]),
+                style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -272,20 +272,36 @@ class _EventsWidgetState extends State<EventsWidget> {
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "Potvrdi",
+                "Otkaži",
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
-                print('Uspesno ste otkazali prisustvo dogadjaju.');
-                Navigator.of(context).pop();
+                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
               child: Text(
-                "Otkaži",
+                "Potvrdi",
                 style: TextStyle(color: Colors.green[800]),
               ),
               onPressed: () {
+                 APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.leaveEvent(jwt, event.id, userId).then((res) {
+                      if (res.statusCode == 200) {
+                        print('Uspesno ste napustili dogadjaj.');
+                        setState(() {
+                          event.isGoing = 1;
+                        });
+                      }
+                    });
+                  }
+                });
+                print('Uspesno ste otkazali prisustvo dogadjaju.');
                 Navigator.of(context).pop();
               },
             )
