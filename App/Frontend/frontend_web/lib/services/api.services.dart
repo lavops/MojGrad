@@ -433,19 +433,6 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
-<<<<<<< HEAD
-  
-  //get events
-  static Future getEvents(String jwt) async {
-    var data = convert.jsonDecode(jwt);
-    jwt = data['token'].toString();
-    return await http.get(serverURL + 'Event', headers: {
-      'Content-type': 'application/json',
-      'Accept' : 'application/josn',
-      'Authorization': 'Bearer $jwt'
-    });
-  }
-=======
 
   static Future getDonations(String jwt) async{
     var datas = jsonDecode(jwt);
@@ -517,5 +504,15 @@ static Future registerInstitution(Institution ins) async {
     print(res.statusCode);
     return res;
   }
->>>>>>> 125e387d5f54e39e1f668234338d314fa12c2cca
+
+  //get events
+  static Future getEvents(String jwt, int userId) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Event/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }

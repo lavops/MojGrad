@@ -21,6 +21,54 @@ class Events{
   Events();
   Events.withId(this._id);
 
+  int get id => _id;
+  set id(int id){_id = id;}
+
+  int get institutionId => _institutionId;
+  set institutionId(int institutionId){_institutionId = institutionId;}
+
+  int get adminId => _adminId;
+  set adminId(int adminId){_adminId = adminId;}
+
+  String get organizeName => _organizeName;
+  set organizeName(String organizeName){_organizeName = organizeName;}
+
+  int get cityId => _cityId;
+  set cityId(int cityId){_cityId = cityId;}
+
+  String get cityName => _cityName;
+  set cityName(String cityName){_cityName = cityName;}
+
+  String get startDate => _startDate;
+  set startDate(String startDate){_startDate = startDate;}
+
+  String get endDate => _endDate;
+  set endDate(String endDate){_endDate = endDate;}
+
+  String get shortDescription => _shortDescription;
+  set shortDescription(String shortDescription){_shortDescription = shortDescription;}
+
+  double get latitude => _latitude;
+  set latitude(double latitude){_latitude = latitude;}
+  
+  double get longitude => _longitude;
+  set longitude(double longitude){_longitude = longitude;}
+
+  String get address => _address;
+  set address(String address){_address = address;}
+
+  String get title => _title;
+  set title(String title){_title = title;}
+
+  String get description => _description;
+  set description(String description){_description = description;}
+
+  int get userNum => _userNum;
+  set userNum(int userNum){_userNum = userNum;}
+
+  int get isGoing => _isGoing;
+  set isGoing(int isGoing){_isGoing = isGoing;}
+
   Map<String, dynamic> toMap()
   {
     var map = Map<String, dynamic>();
