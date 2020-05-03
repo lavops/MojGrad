@@ -5,6 +5,7 @@ import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
@@ -164,7 +165,10 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
         SizedBox(width: 10.0,),
         RaisedButton(
           onPressed: (){
-            
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ViewDonationPage(don)),
+            );
           },
           color: greenPastel,
           shape: RoundedRectangleBorder(
