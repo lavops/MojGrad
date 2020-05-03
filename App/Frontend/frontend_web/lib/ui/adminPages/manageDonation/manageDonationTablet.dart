@@ -10,12 +10,12 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class ManageDonationDesktop extends StatefulWidget {
+class ManageDonationTablet extends StatefulWidget {
   @override
-  _ManageDonationDesktopState createState() => _ManageDonationDesktopState();
+  _ManageDonationTabletState createState() => _ManageDonationTabletState();
 }
 
-class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
+class _ManageDonationTabletState extends State<ManageDonationTablet>{
   
   List<Donation> donations;
 
@@ -72,37 +72,27 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
   }
 
   Widget buildDonationList(List<Donation> listDonations){
-    return GridView.builder(
+    return ListView.builder(
       padding: EdgeInsets.only(bottom: 30.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 2,
-        mainAxisSpacing: 2,
-        childAspectRatio: 1.7,
-      ),
       itemCount: donations == null ? 0 : donations.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-          child: Container(
-            child: Row(
-              children: <Widget>[
-                Expanded(child:Column(children: <Widget>[
-                  eventInfoRow(donations[index].organizationName),
-                  SizedBox(height: 10.0,),
-                  Expanded(child: SizedBox(),),
-                  titleRow(donations[index].title),
-                  descriptionRow(donations[index].description),
-                  Expanded(child: SizedBox(),),
-                  eventProgressRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
-                  pointsRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
-                  actionButtonRow(donations[index], donations[index].id, index)
-                ]),),
-                Container(
-                  color: (donations[index].pointsAccumulated >= donations[index].pointsNeeded) ? greenPastel: Colors.white,
-                  child: SizedBox(width: 20,),
-                )
-              ],
-            ),
+          child: Row(
+            children: <Widget>[
+              Expanded(child:Column(children: <Widget>[
+                eventInfoRow(donations[index].organizationName),
+                SizedBox(height: 10.0,),
+                titleRow(donations[index].title),
+                descriptionRow(donations[index].description),
+                eventProgressRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
+                pointsRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
+                actionButtonRow(donations[index], donations[index].id, index)
+              ]),),
+              Container(
+                color: (donations[index].pointsAccumulated >= donations[index].pointsNeeded) ? greenPastel: Colors.white,
+                child: SizedBox(width: 20,),
+              )
+            ],
           )
         );
       }
@@ -141,7 +131,7 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
       theme: RoundedProgressBarTheme.green,
       margin: EdgeInsets.symmetric(vertical: 16),
       borderRadius: BorderRadius.circular(6),
-      percent: (pointsAccumulated / pointsNeeded) * 22, // 22
+      percent: (pointsAccumulated / pointsNeeded) * 84, // 84
     );
   }
 
