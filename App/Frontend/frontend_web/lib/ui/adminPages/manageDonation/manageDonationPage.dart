@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationDesktop.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationMobile.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationTablet.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -29,7 +30,7 @@ class _ManageDonationPageState extends State<ManageDonationPage> {
           backgroundColor: Colors.white,
           body: ScreenTypeLayout(
             mobile: ManageDonationMobile(),
-            tablet: ManageDonationDesktop(),
+            tablet: ManageDonationTablet(),
             desktop: ManageDonationDesktop(),
           ),
         ),
