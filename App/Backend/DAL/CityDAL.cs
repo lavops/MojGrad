@@ -16,6 +16,25 @@ namespace Backend.DAL
             _context = context;
         }
 
+        public City insertCity(City city)
+        {
+            City city1 = new City();
+            city1.name = city.name;
+            city1.latitude = city.latitude;
+            city1.longitude = city.longitude;
+
+            if (city1 != null )
+            {
+                _context.city.Add(city1);
+                _context.SaveChangesAsync();
+                return city1;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public List<City> getAllCities()
         {
             return _context.city.ToList();

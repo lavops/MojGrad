@@ -151,5 +151,20 @@ namespace Backend.Controllers
 
         }
 
+        [Authorize]
+        [HttpPost("Top10")]
+        public IEnumerable<UserViewModel> GetTop10UsersByCityId(User user1)
+        {
+            var users = _iUserUI.getTop10UserFromCity(user1.cityId);
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
+            {
+                user.Add(new UserViewModel(u));
+            }
+
+            return user;
+
+        }
+
     }
 }

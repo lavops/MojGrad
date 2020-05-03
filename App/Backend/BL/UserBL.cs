@@ -47,6 +47,11 @@ namespace Backend.BL
             return _iUserDAL.getByID(id);
         }
 
+        public IEnumerable<User> getNUserFromCity(long cityId, int n)
+        {
+            return _iUserDAL.getNUserFromCity(cityId, n);
+        }
+
         public List<User> getUsersByCityId(long cityId)
         {
             return _iUserDAL.getUsersByCityId(cityId);

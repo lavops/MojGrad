@@ -10,5 +10,6 @@ namespace Backend.UI.Interfaces
     {
         List<City> getAllCities();
         City getByID(long id);
+        City insertCity(City city);
     }
 }

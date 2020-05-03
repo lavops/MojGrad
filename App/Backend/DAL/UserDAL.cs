@@ -56,6 +56,7 @@ namespace Backend.DAL
                     u1.username = user.username;
                     u1.photo = "Upload//ProfilePhoto//default.jpg";
                     u1.points = 0;
+                    u1.donatedPoints = 0;
                     u1.level = 1;
 
                     _context.user.Add(u1);
@@ -201,6 +202,12 @@ namespace Backend.DAL
         public List<User> getUsersByCityId(long cityId)
         {
             return _context.user.Where(u=> u.cityId == cityId).Include(x => x.city).Include(p => p.posts).ToList();
+        }
+
+        public IEnumerable<User> getNUserFromCity(long cityId, int n)
+        {
+            var users =_context.user.Where(u => u.cityId == cityId).Include(x => x.city).Include(p => p.posts).OrderByDescending(x=> x.donatedPoints + x.points).ToList();
+            return users.Take(n);
         }
     }
 }

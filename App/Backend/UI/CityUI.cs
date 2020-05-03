@@ -26,5 +26,10 @@ namespace Backend.UI
         {
             return _iCityBL.getByID(id);
         }
+
+        public City insertCity(City city)
+        {
+            return _iCityBL.insertCity(city);
+        }
     }
 }

@@ -90,6 +90,27 @@ namespace Backend.DAL
             return null;
         }
 
+        public Admin editAdimnProfilePhoto(long id, string photoPath)
+        {
+            var exist = _context.admin.Where(x => x.id == id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    exist.photoPath = photoPath;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return _context.admin.Where((u) => u.id == id).FirstOrDefault();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
+        }
+
         public string GenerateJSONWebToken(Admin admin)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
@@ -136,7 +157,9 @@ namespace Backend.DAL
                 a1.createdAt = DateTime.Now;
                 a1.lastName = admin.lastName;
                 a1.password = admin.password;
-              
+                a1.photoPath = "Upload//ProfilePhoto//default.jpg";
+
+
                 _context.admin.Add(a1);
                 _context.SaveChanges();
 

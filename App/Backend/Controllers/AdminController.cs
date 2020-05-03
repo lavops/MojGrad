@@ -102,5 +102,18 @@ namespace Backend.Controllers
                 return BadRequest(new { message = "Greska" });
         }
 
+        [Authorize]
+        [HttpPost("EditPhoto")]
+        public IActionResult EditAdminPhoto(Admin u)
+        {
+            Admin admin = _iAdminUI.editAdimnProfilePhoto(u.id, u.photoPath);
+            if (admin != null)
+            {
+                return Ok(admin);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+
     }
 }

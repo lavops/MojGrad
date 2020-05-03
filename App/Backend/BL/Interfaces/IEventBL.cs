@@ -11,6 +11,7 @@ namespace Backend.BL.Interfaces
     public interface IEventBL
     {
         List<Event> getAllEvents();
+        List<Event> getFinishedEvents();
         List<Event> getAllEventsByCityId(long id);
         bool addGoingToEvent(UserEvent ue);
         Event getByID(long id);
