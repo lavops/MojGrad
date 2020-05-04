@@ -6,6 +6,7 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
 import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
@@ -249,7 +250,7 @@ List<User> listUsers;
                     Expanded(child: SizedBox()),
                     PopupMenuButton<String>(
                       onSelected: (String choice) {
-                        choiceActionAllUsers(choice, listUsers[index].id);
+                        choiceActionAllUsers(choice, listUsers[index].id, listUsers[index]);
                       },
                       itemBuilder: (BuildContext context) {
                         return ConstantsAllUsers.choices.map((String choice) {
@@ -268,9 +269,13 @@ List<User> listUsers;
     );
   }
 
-  void choiceActionAllUsers(String choice, int userId) {
+  void choiceActionAllUsers(String choice, int userId, User user) {
     if (choice == ConstantsAllUsers.PosetiProfil) {
       print("Poseti profil korisnika.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewUserProfilePage(user)),
+      );
     } else if (choice == ConstantsAllUsers.ObrisiKorisnika) {
       print("Obrisi profil korisnika.");
       showAlertDialog(context, userId);
@@ -331,7 +336,7 @@ List<User> listUsers;
                         Expanded(child: SizedBox()),
                         PopupMenuButton<String>(
                           onSelected: (String choice) {
-                            choiceActionReportedUsers(choice, listRepUsers[index].id, listRepUsers[index].firstName, listRepUsers[index].lastName);
+                            choiceActionReportedUsers(choice, listRepUsers[index].id, listRepUsers[index].firstName, listRepUsers[index].lastName, listRepUsers[index]);
                           },
                           itemBuilder: (BuildContext context) {
                             return ConstantsReportedUsers.choices.map((String choice) {
@@ -350,7 +355,7 @@ List<User> listUsers;
     );
   }
 
-  void choiceActionReportedUsers(String choice, int userId, String firstname, String lastname) {
+  void choiceActionReportedUsers(String choice, int userId, String firstname, String lastname, User user) {
     if (choice == ConstantsReportedUsers.DetaljiPrijave) {
       print("Poseti detalje prijave.");
       Navigator.push(
@@ -362,6 +367,10 @@ List<User> listUsers;
       showAlertDialog(context, userId);
     } else if (choice == ConstantsReportedUsers.PosetiProfil){
       print("Poseti profil korisnika.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewUserProfilePage(user)),
+      );
     }
   }
 
