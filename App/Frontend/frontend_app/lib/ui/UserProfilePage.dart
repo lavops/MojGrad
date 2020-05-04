@@ -6,6 +6,7 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
+import 'package:frontend/ui/top10Page.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
 import '../main.dart';
@@ -103,6 +104,24 @@ class HeaderSection extends State<UserProfilePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => EditProfilePage(user)),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.star,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
+              title: Text(
+                'Top 10',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Top10Page(user)),
                 );
               },
             ),

@@ -15,15 +15,20 @@ class UserInfoWidget extends StatefulWidget {
 class _UserInfoWidgetState extends State<UserInfoWidget> {
   User user;
   int userKind;
+  
   _UserInfoWidgetState(User user1) {
     this.user = user1;
   }
-
+  int points;
+  String text1="Poeni";
   @override
   void initState() {
     super.initState();
+    setState(() {
+      points = user.points;
+    });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     Widget stats(String statName, int statCount) {
@@ -107,19 +112,37 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                     child: SizedBox(
                   width: 2,
                 )),
-                Column(
+                InkWell(
+                 child:   Column(
                   children: <Widget>[
-                    Text("Poeni",
+                    Text(text1,
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),
-                    Text("${user.points}",
+                    Text(points.toString(),
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                             fontSize: 16,
                             fontWeight: FontWeight.bold))
                   ],
+                ),
+                   onTap: () {
+                     if(text1 == "Poeni")
+                    {
+                      setState(() {
+                       text1 = "Donirani";
+                      points = user.donatedPoints;
+                      }); 
+                    }
+                    else
+                    {
+                      setState(() {
+                       text1 = "Poeni";
+                      points = user.points;
+                      });
+                    }
+                   },
                 ),
                 Expanded(
                     child: SizedBox(

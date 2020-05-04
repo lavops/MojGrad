@@ -13,6 +13,7 @@ class User{
   String _photo;
   int _postsNum;
   int _points;
+  int _donatedPoints;
   int _level;
 
   User();
@@ -33,6 +34,7 @@ class User{
   String get photo => _photo;
   int get postsNum => _postsNum;
   int get points => _points;
+  int get donatedPoints => _donatedPoints;
   int get level => _level;
 
   //Convert a User into a Map object
@@ -52,6 +54,7 @@ class User{
     data["photo"] = _photo;
     data["postsNum"] = _postsNum;
     data["points"] = _points;
+    data["donatedPoints"] = _donatedPoints;
     data["level"] = _level;
  
     if(_id != null){
@@ -77,6 +80,7 @@ class User{
     this._photo = data["photo"];
     this._postsNum = data["postsNum"];
     this._points = data["points"];
+    this._donatedPoints = data["donatedPoints"];
     this._level = data["level"];
   }
 
