@@ -8,6 +8,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import 'models/city.dart';
 
@@ -115,7 +116,7 @@ class _CreateEventPage extends State<CreateEventPage> {
           ),
         ),
       ),
-    );
+    ).showCursorTextOnHover;
   }
 
   Widget nameEvent() {
@@ -137,7 +138,7 @@ class _CreateEventPage extends State<CreateEventPage> {
           ),
         ),
       ),
-    );
+    ).showCursorTextOnHover;
   }
 
   Widget shortDescription() {
@@ -159,7 +160,7 @@ class _CreateEventPage extends State<CreateEventPage> {
           ),
         ),
       ),
-    );
+    ).showCursorTextOnHover;
   }
 
   Widget longDescription() {
@@ -182,7 +183,7 @@ class _CreateEventPage extends State<CreateEventPage> {
           ),
         ),
       ),
-    );
+    ).showCursorTextOnHover;
   }
 
   Widget calendar() {
@@ -220,7 +221,7 @@ class _CreateEventPage extends State<CreateEventPage> {
               )
             : Text('')
       ],
-    );
+    ).showCursorOnHover;
   }
 
   Widget dropdownTime(List<Time> times) {
@@ -269,7 +270,7 @@ class _CreateEventPage extends State<CreateEventPage> {
           ],
         )
       ],
-    );
+    ).showCursorOnHover;
   }
 
   Widget dropdownCity(List<City> listCities) {
@@ -306,7 +307,7 @@ class _CreateEventPage extends State<CreateEventPage> {
                   onChanged: null,
                   items: null,
                 ),
-        ]);
+        ]).showCursorOnHover;
   }
 
   Widget createEventButton() {
@@ -328,7 +329,7 @@ class _CreateEventPage extends State<CreateEventPage> {
         print(payload);
         APIServices.createEvent(
             str,
-            payload["sub"],
+            int.parse(payload["sub"]),
             nameController.toString(),
             shortDescriptionController.toString(),
             descriptionController.toString(),
@@ -339,66 +340,70 @@ class _CreateEventPage extends State<CreateEventPage> {
       },
       color: greenPastel,
       shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(1.0),
+          borderRadius: new BorderRadius.circular(18.0),
           side: BorderSide(color: greenPastel)),
-      child: Text("Napravi događaj", style: TextStyle(color: Colors.white)),
-    );
+      child: Text("Kreiraj", style: TextStyle(color: Colors.white)),
+    ).showCursorOnHover;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          title: Text("Kreiraj događaj", style: TextStyle(color: Colors.black)),
-          backgroundColor: Colors.white,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ),
-        body: Stack(children: <Widget>[
-          Material(
-              elevation: 5,
-              child: SingleChildScrollView(
-                  child: Container(
-                      margin: EdgeInsets.only(top: 25),
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        children: <Widget>[
-                          nameEvent(),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 50, right: 20, top: 10, bottom: 10),
-                          ),
-                          shortDescription(),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 50, right: 20, top: 10, bottom: 10),
-                          ),
-                          longDescription(),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 50, right: 20, top: 10, bottom: 10),
-                          ),
-                          locationWidget(),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 50, right: 20, top: 10, bottom: 10),
-                          ),
-                          calendar(),
-                          dropdownCity(listCities),
-                          dropdownTime(times),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 50, right: 20, top: 10, bottom: 10),
-                          ),
-                          createEventButton()
-                        ],
-                      )))),
-          CollapsingNavigationDrawer()
-        ]));
+    return Stack(children: <Widget>[
+      Material(
+          elevation: 5,
+          child: Container(
+              margin: EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment(-0.75, -0.75),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: greenPastel,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(18.0),
+                          side: BorderSide(color: greenPastel)),
+                      child: Text(
+                        "Vrati se nazad",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ).showCursorOnHover,
+                  nameEvent(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  shortDescription(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  longDescription(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  locationWidget(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  calendar(),
+                  dropdownCity(listCities),
+                  dropdownTime(times),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  createEventButton()
+                ],
+              ))),
+      CollapsingNavigationDrawer()
+    ]);
   }
 }
 

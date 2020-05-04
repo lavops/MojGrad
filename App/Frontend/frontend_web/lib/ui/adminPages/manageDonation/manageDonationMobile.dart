@@ -9,6 +9,8 @@ import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonat
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
+import '../../createDonationPage.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageDonationMobile extends StatefulWidget {
@@ -48,9 +50,13 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
             children: <Widget>[
               Expanded(child: SizedBox(),),
               RaisedButton(
-                onPressed: (){
-                  
-                },
+                onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateDonationPage()),
+                    );
+                  },
                 color: greenPastel,
                 shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(18.0),
