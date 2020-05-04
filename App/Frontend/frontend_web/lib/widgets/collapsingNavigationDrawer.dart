@@ -6,6 +6,7 @@ import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
+import 'package:frontend_web/ui/eventPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
@@ -132,10 +133,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                       setState(() {
                           currentSelectedIndex = 5;
                         }),
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => null),
-                      ),*/
+                        MaterialPageRoute(builder: (context) => EventPage()),
+                      ),
                     },
                     isSelected: currentSelectedIndex == 5,
                   ),

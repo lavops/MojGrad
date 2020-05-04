@@ -504,4 +504,28 @@ static Future registerInstitution(Institution ins) async {
     print(res.statusCode);
     return res;
   }
+
+   static Future createEvent(String jwt, int adminId, String nameEvent, String shortDesc, String longDesc, String location, String city, String startDate, String endDate) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event';
+		var data = Map();
+    data["adminId"] = adminId;
+		data["organizeName"] = nameEvent;
+		data["shortDescription"] = shortDesc;
+		data["description"] = longDesc;
+		data["adress"] = location;
+    data["cityName"] = city;
+    data["startDate"] = startDate;
+    data["endDate"] = endDate;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+	}
+
 }
+
