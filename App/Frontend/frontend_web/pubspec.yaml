@@ -39,7 +39,9 @@ dependencies:
   latlng: ^0.0.2
   intl: 0.16.0
   date_range_picker: ^1.0.3
-
+  mapbox_search_flutter: ^1.0.4
+  mapbox_search: ^2.0.0
+  flutter_mapbox_autocomplete: ^1.0.4
 
 dev_dependencies:
   flutter_test:

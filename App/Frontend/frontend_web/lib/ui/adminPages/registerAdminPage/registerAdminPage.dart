@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
 import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
-Color greenPastel = Color(0xFF00BFA6);
+final Color greenPastel = Color(0xFF00BFA6);
 
 class RegisterAdminPage extends StatefulWidget {
   @override
@@ -125,6 +127,8 @@ class _AddCityWidgetState extends State<AddCityWidget>{
   List<City> cities;
   TextEditingController newCity = new TextEditingController();
   String wrongRegText = "";
+  double lat;
+  double long;
 
   _getCity() {
     APIServices.getCity1().then((res) {
@@ -153,27 +157,33 @@ class _AddCityWidgetState extends State<AddCityWidget>{
       child: Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
-      child: TextField(
-        controller: newCity,
-        style: TextStyle(
-          //color: Colors.grey,
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        decoration: InputDecoration(
-          hintText: "Ime grada",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
-          prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.business, color: greenPastel),
+      child: CustomTextField(
+      prefixIcon: Icon(Icons.business, color: greenPastel),
+      hintText: "Ime grada",
+      textController: newCity,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapBoxAutoCompleteWidget(
+              apiKey: "pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+              hint: "Unesi ime grada.",
+              onSelect: (place) {
+                // TODO : Process the result gotten
+                place.placeName.split(',');
+                String cityNamae = place.placeName.split(',')[0];
+                lat = place.geometry.coordinates[0];
+                long = place.geometry.coordinates[1];
+                newCity.text = cityNamae;
+              },
+              limit: 10,
+              country: "rs",
+            ),
           ),
-          contentPadding: EdgeInsets.all(18),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: greenPastel),
-          ),
-        ),
-      ),
+        );
+      },
+      enabled: true,
+    ),
     ),);
 
     final submitButtonWidget = SizedBox(
@@ -203,7 +213,15 @@ class _AddCityWidgetState extends State<AddCityWidget>{
             }
             else{
               //Poziv funkcije
-              
+              APIServices.addNewCity(TokenSession.getToken, newCity.text, lat, long).then((response){
+                  setState(() {
+                    wrongRegText = "";
+                    newCity.text = "";
+                    _getCity();
+                  });
+                  _getCity();
+              });
+              _getCity();
             }
           }),
     );
