@@ -190,7 +190,7 @@ class HomeNavigationDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.business),
             title: Text(
-              'Prijavi se',
+              'Prijava',
               style: TextStyle(
                   fontSize: 16,
                   color: (selected == 4) ? greenPastel : Colors.black),

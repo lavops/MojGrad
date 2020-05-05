@@ -546,5 +546,21 @@ static Future registerInstitution(Institution ins) async {
     }, body: jsonBody);
 	}
 
+  static Future addNewCity(String jwt, String name, double latitude, double longitude) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'City';
+		var data = Map();
+    data["name"] = name;
+    data["latitude"] = latitude;
+    data["longitude"] = longitude;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+	}
 }
 

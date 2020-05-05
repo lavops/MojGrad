@@ -65,7 +65,7 @@ class _ViewPostMobileState extends State<ViewPostMobile> {
     return CenteredViewPost(
       child: TabBarView(
         children: <Widget>[
-        ListView(children: <Widget>[
+        Column(children: <Widget>[
           backButton(),
           SinglePostWidget(post),
         ],),

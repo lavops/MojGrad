@@ -1,16 +1,19 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
 import 'package:frontend_web/models/admin.dart';
+import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
-Color greenPastel = Color(0xFF00BFA6);
+final Color greenPastel = Color(0xFF00BFA6);
 
 class RegisterAdminPage extends StatefulWidget {
   @override
@@ -69,6 +72,9 @@ class _AdminRegisterMobilePageState extends State<AdminRegisterMobilePage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 40,),
+            Text("Unesite novi grad", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Container(width: 500, child: AddCityWidget()),
+            SizedBox(height: 40,),
             Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25), textAlign: TextAlign.center,),
             Container(width: 350, child: 
             AdminRegisterPageWidget(),
@@ -96,6 +102,9 @@ class _AdminRegisterDesktopPageState extends State<AdminRegisterDesktopPage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 50,),
+            Text("Unesite novi grad", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Container(width: 500, child: AddCityWidget()),
+            SizedBox(height: 50,),
             Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
             Container(width: 500, child: 
             AdminRegisterPageWidget(),
@@ -107,6 +116,143 @@ class _AdminRegisterDesktopPageState extends State<AdminRegisterDesktopPage>{
   }
 }
 
+class AddCityWidget extends StatefulWidget{
+
+  @override
+  _AddCityWidgetState createState() => new _AddCityWidgetState();
+}
+
+class _AddCityWidgetState extends State<AddCityWidget>{
+  
+  List<City> cities;
+  TextEditingController newCity = new TextEditingController();
+  String wrongRegText = "";
+  double lat;
+  double long;
+
+  _getCity() {
+    APIServices.getCity1().then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> listC = List<City>();
+      listC = list.map((model) => City.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          cities = listC;
+        });
+      }
+    });
+  } 
+
+  @override
+  void initState() {
+    super.initState();
+    _getCity();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final cityNameWidget = Container(
+      width: 600,
+      child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
+      elevation: 6.0,
+      child: CustomTextField(
+      prefixIcon: Icon(Icons.business, color: greenPastel),
+      hintText: "Ime grada",
+      textController: newCity,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapBoxAutoCompleteWidget(
+              apiKey: "pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+              hint: "Unesi ime grada.",
+              onSelect: (place) {
+                // TODO : Process the result gotten
+                place.placeName.split(',');
+                String cityNamae = place.placeName.split(',')[0];
+                lat = place.geometry.coordinates[0];
+                long = place.geometry.coordinates[1];
+                newCity.text = cityNamae;
+              },
+              limit: 10,
+              country: "rs",
+            ),
+          ),
+        );
+      },
+      enabled: true,
+    ),
+    ),);
+
+    final submitButtonWidget = SizedBox(
+      height: 48.0,
+      child: RaisedButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: Text(
+            "Dodaj grad",
+            style: TextStyle(fontSize: 16.0),
+          ),
+          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          textColor: Colors.white,
+          color: greenPastel,
+          onPressed: () {
+            int exists = 0;
+            for(int i = 0; i < cities.length; i++){
+              if(cities[i].name.toLowerCase() == newCity.text.toLowerCase()){
+                exists = 1;
+                break;
+              }
+            }
+            if(exists == 1){
+              setState(() {
+                wrongRegText = "Grad vec postoji.";
+              });
+            }
+            else{
+              //Poziv funkcije
+              APIServices.addNewCity(TokenSession.getToken, newCity.text, lat, long).then((response){
+                  setState(() {
+                    wrongRegText = "";
+                    newCity.text = "";
+                    _getCity();
+                  });
+                  _getCity();
+              });
+              _getCity();
+            }
+          }),
+    );
+
+    final wrongReg = Center(
+        child: Text(
+      '$wrongRegText',
+      style: TextStyle(color: Colors.red),
+    ));
+
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            height: 30.0,
+          ),
+          cityNameWidget,
+          wrongReg,
+          SizedBox(
+            height: 12.0,
+          ),
+          submitButtonWidget,
+        ],
+      ),
+    );
+  }
+  
+}
 
 class AdminRegisterPageWidget extends StatefulWidget{
   @override

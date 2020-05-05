@@ -28,7 +28,7 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
         endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-            ? HomeNavigationDrawer(1)
+            ? HomeNavigationDrawer(4)
             : null,
         appBar: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
             ? AppBar(
@@ -55,7 +55,7 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
         body: CenteredView(
           child: Column(
             children: <Widget>[
-              (sizingInformation.deviceScreenType != DeviceScreenType.Mobile) ? HomeNavigationBar(1) : SizedBox(),
+              (sizingInformation.deviceScreenType != DeviceScreenType.Mobile) ? HomeNavigationBar(4) : SizedBox(),
               Expanded(
                 child: ScreenTypeLayout(
                   mobile: InstitutionAdminLoginMobilePage(),
@@ -158,7 +158,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
             var jwt = str.split(".");
 
             if(jwt.length !=3) {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomeView()
@@ -169,14 +169,14 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
                 int type = int.parse(payload["nameid"]);
                 if(type == 1)
-                   Navigator.push(
+                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomePage(str, payload)
                     )
                   );
                 else
-                   Navigator.push(
+                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomePageInstitution(str,payload)
