@@ -8,6 +8,8 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 import '../../createDonationPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -68,7 +70,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
                     "Nova donacija",
                     style: TextStyle(color: Colors.white),
                   ),
-                ),
+                ).showCursorOnHover,
                 SizedBox(
                   width: 10.0,
                 ),
@@ -205,7 +207,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
             side: BorderSide(color: greenPastel)
         ),
           child: Text("Više informacija", style: TextStyle(color: Colors.white)),
-        ),
+        ).showCursorOnHover,
         Expanded(child: SizedBox(),),
         RaisedButton(
           onPressed: (){
@@ -217,7 +219,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
             side: BorderSide(color: Colors.red)
         ),
           child: Text("Obriši", style: TextStyle(color: Colors.white),),
-        ),
+        ).showCursorOnHover,
         SizedBox(width: 10.0,),
       ],
     );

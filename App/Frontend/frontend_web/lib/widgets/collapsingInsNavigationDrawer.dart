@@ -5,7 +5,7 @@ import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 
-
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 class CollapsingInsNavigationDrawer extends StatefulWidget {
   @override
@@ -133,6 +133,6 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
           ],
         ),
       ),
-    );
+    ).showCursorOnHover;
   }
 }

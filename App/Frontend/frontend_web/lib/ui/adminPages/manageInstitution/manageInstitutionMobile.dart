@@ -8,6 +8,8 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionMobile extends StatefulWidget {
@@ -144,7 +146,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
         });
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
@@ -153,7 +155,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -398,6 +400,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
         width: 300,
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {
@@ -430,6 +433,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
         width: 300,
         padding: const EdgeInsets.all(8.0),
         child:TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {

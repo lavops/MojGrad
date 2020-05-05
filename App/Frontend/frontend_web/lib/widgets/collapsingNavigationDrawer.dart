@@ -8,8 +8,9 @@ import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.d
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
 import 'package:frontend_web/ui/eventPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
-import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -204,6 +205,6 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
           ],
         ),
       ),
-    );
+    ).showCursorOnHover;
   }
 }

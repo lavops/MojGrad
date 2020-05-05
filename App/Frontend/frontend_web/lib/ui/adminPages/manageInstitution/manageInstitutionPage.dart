@@ -5,6 +5,8 @@ import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionTa
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionPage extends StatefulWidget {
@@ -59,6 +61,6 @@ class _ManageInstitutionPageState extends State<ManageInstitutionPage> {
           child: Text('ZAHTEVI ZA REGISTRACIJU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
         ),
       ]
-    );
+    ).showCursorOnHover;
   }
 }

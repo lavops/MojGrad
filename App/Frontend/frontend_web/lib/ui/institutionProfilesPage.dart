@@ -8,7 +8,7 @@ import 'package:frontend_web/ui/managementPage.dart';
 import 'dart:convert';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 class InstitutionProfilesPage extends StatefulWidget {
   @override
@@ -83,7 +83,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
     Widget okButton = FlatButton(
       child: Text(
         "Obriši",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
@@ -92,11 +92,11 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
           MaterialPageRoute(builder: (context) => InstitutionProfilesPage()),
         );
       },
-    );
+    ).showCursorOnHover;
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -104,7 +104,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
           MaterialPageRoute(builder: (context) => InstitutionProfilesPage()),
         );
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -213,7 +213,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
                               onPressed: () {
                                 showAlertDialog(context, listInst[index].id);
                               },
-                            )
+                            ).showCursorOnHover
                           ])
                     ],
                   ))),
@@ -270,13 +270,13 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
                               onPressed: () {
                                 showAlertDialog(context, listInst[index].id);
                               },
-                            ),
+                            ).showCursorOnHover,
                             SizedBox(width: 10,),
                             FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(11.0),
-                                  side: BorderSide(color: Colors.green[800])),
-                              color: Colors.green[800],
+                                  side: BorderSide(color: greenPastel)),
+                              color: greenPastel,
                               child: Text(
                                 "Prihvati zahtev",
                                 style: TextStyle(color: Colors.white),
@@ -290,7 +290,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
                                });
                                 _getUnauthInstitutions();
                               },
-                            )
+                            ).showCursorOnHover
                             ],),
                           ])
                     ],
@@ -308,6 +308,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
         width: 550,
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {
@@ -319,7 +320,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
           },
           autofocus: false,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.green[800]),
+            prefixIcon: Icon(Icons.search, color: greenPastel),
             hintText: 'Pretraži...',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
@@ -327,7 +328,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(width: 2, color: Colors.green[800]),
+              borderSide: BorderSide(width: 2, color: greenPastel),
             ),
           ),
           controller: searchController,
@@ -340,6 +341,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
         width: 550,
         padding: const EdgeInsets.all(8.0),
         child:TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {
@@ -351,7 +353,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
           },
           autofocus: false,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.green[800]),
+            prefixIcon: Icon(Icons.search, color: greenPastel),
             hintText: 'Pretraži...',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(
@@ -359,7 +361,7 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(width: 2, color: Colors.green[800]),
+              borderSide: BorderSide(width: 2, color: greenPastel),
             ),
           ),
           controller: searchRepController,
@@ -369,8 +371,8 @@ class _InstitutionProfilesPageState extends State<InstitutionProfilesPage> {
   Widget tabs() {
     return TabBar(
         //onTap
-        labelColor: Colors.green,
-        indicatorColor: Colors.green,
+        labelColor: greenPastel,
+        indicatorColor: greenPastel,
         unselectedLabelColor: Colors.black,
         tabs: <Widget>[
           Tab(

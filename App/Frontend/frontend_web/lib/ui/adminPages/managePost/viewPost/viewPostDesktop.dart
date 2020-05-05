@@ -6,10 +6,11 @@ import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
-import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -98,7 +99,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
         side: BorderSide(color: greenPastel)
       ),
       child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
-    );
+    ).showCursorOnHover;
   }
 
   Widget makeCommentsList(List<Comment> listComments){
@@ -136,7 +137,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
               onPressed: (){
                 showAlertDialogDeleteComment(context, listComents[index].id, index);
               },
-            ),
+            ).showCursorOnHover,
             SizedBox(width: 10,)
           ],),
         );
@@ -159,13 +160,13 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
         });
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -244,7 +245,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                           onPressed: (){
                             showAlertDialogDeleteSolution(context, listSolutions[index].id, index);
                           },
-                        ),
+                        ).showCursorOnHover,
                       SizedBox(width: 10,)
                     ],
                   ),
@@ -280,17 +281,17 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
         });
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Brisanje ponudjenog rešenja"),
+      title: Text("Brisanje ponuđenog rešenja"),
       content: Text("Da li ste sigurni da želite da obrišete ponudjeno rešenje?"),
       actions: [
         okButton,
