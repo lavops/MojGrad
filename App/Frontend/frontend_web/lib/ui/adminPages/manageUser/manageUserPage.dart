@@ -5,6 +5,8 @@ import 'package:frontend_web/ui/adminPages/manageUser/manageUserTablet.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageUserPage extends StatefulWidget {
@@ -59,6 +61,6 @@ class _ManageUserPageState extends State<ManageUserPage> {
           child: Text('PRIJAVLJENI KORISNICI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
         ),
       ]
-    );
+    ).showCursorOnHover;
   }
 }

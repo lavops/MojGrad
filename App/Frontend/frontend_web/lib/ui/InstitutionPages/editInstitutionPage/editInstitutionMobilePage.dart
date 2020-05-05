@@ -10,6 +10,8 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
 
+Color greenPastel = Color(0xFF00BFA6);
+
 class EditInstitutionMobilePage extends StatefulWidget {
   final Institution institution;
 
@@ -118,7 +120,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -132,7 +134,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Otkaži",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -142,7 +144,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Izmeni",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -190,7 +192,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Cilj institucije",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: greenPastel))
                       ],
                     ),
                     SizedBox(
@@ -205,7 +207,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -220,7 +222,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Otkaži",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -230,7 +232,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Izmeni",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -278,7 +280,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Broj telefona",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: greenPastel))
                       ],
                     ),
                     SizedBox(
@@ -289,7 +291,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -303,7 +305,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Otkaži",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -313,7 +315,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Izmeni",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -371,7 +373,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Email",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: greenPastel))
                       ],
                     ),
                     SizedBox(
@@ -382,7 +384,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -396,7 +398,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Otkaži",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -406,7 +408,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Izmeni",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -460,11 +462,12 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Šifra",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: greenPastel))
                       ],
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: password1,
                       autofocus: false,
                       obscureText: true,
@@ -472,16 +475,17 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Trenutna šifra",
                         hintStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color),
+                            color: greenPastel),
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
-                        fillColor: Theme.of(context).textTheme.bodyText1.color,
+                        fillColor: greenPastel,
                         contentPadding: const EdgeInsets.all(10.0),
                       ),
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: password2,
                       autofocus: false,
                       obscureText: true,
@@ -489,7 +493,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Nova šifra",
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -497,6 +501,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: password3,
                       autofocus: false,
                       obscureText: true,
@@ -504,7 +509,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Ponovi šifru",
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -518,7 +523,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Otkaži",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -528,7 +533,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "Izmeni",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -594,7 +599,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                   Text("Grad",
                       style: TextStyle(
                           fontSize: 24,
-                          color: Theme.of(context).textTheme.bodyText1.color))
+                          color: greenPastel))
                 ],
               ),
               SizedBox(height: 5),
@@ -604,10 +609,10 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
+                style: TextStyle(fontWeight: FontWeight.bold, color: greenPastel))),
         _city != null
             ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+                hint: Text("Izaberi", style: TextStyle(color: greenPastel)),
                 value: pomCity,
                 onChanged: (City value) {
                   setState(() {
@@ -638,7 +643,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     child: Text(
                       "Otkaži",
                       style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
+                          color: greenPastel),
                     ),
                     onPressed: () {
                       setState(() {
@@ -653,7 +658,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     child: Text(
                       "Izmeni",
                       style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
+                          color: greenPastel),
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
@@ -732,7 +737,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                 "Promeni profilnu sliku",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.bodyText1.color),
+                    color: greenPastel),
               ),
             ),
             SizedBox(
@@ -812,8 +817,8 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         borderRadius:
                             new BorderRadius.circular(11.0),
                         side: BorderSide(
-                            color: Colors.green[800])),
-                    color: Colors.green[800],
+                            color: greenPastel)),
+                    color: greenPastel,
                     child: Text(
                       "Sacuvaj izmene",
                       style: TextStyle(color: Colors.white),
@@ -869,7 +874,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                           child: Text(
                             "OK",
                             style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                                color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);

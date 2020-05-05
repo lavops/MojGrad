@@ -38,7 +38,7 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
   showAlertDialog(BuildContext context, int id) {
       // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
       onPressed: () {
         APIServices.deletePost(TokenSession.getToken,id);
         setState(() {
@@ -52,7 +52,7 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
         },
     );
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
         },

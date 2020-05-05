@@ -83,7 +83,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     Widget okButton = FlatButton(
       child: Text(
         "Obriši",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
@@ -397,6 +397,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
         width: 450,
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {
@@ -429,6 +430,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
         width: 450,
         padding: const EdgeInsets.only(left: 10, right: 10),
         child:TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {

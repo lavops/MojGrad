@@ -8,6 +8,8 @@ import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionDesktop extends StatefulWidget {
@@ -97,7 +99,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
         });
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
@@ -106,7 +108,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -145,7 +147,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
         });
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
@@ -154,7 +156,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -265,7 +267,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                               onPressed: () {
                                 showAlertDialog(context, listInst[index].id, index, 1);
                               },
-                            )
+                            ).showCursorOnHover
                           ])
                     ],
                   ))),
@@ -321,7 +323,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                               onPressed: () {
                                 showAlertDialog(context, listInst[index].id, index, 2);
                               },
-                            ),
+                            ).showCursorOnHover,
                             SizedBox(width: 10,),
                             FlatButton(
                               shape: RoundedRectangleBorder(
@@ -335,7 +337,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
                               onPressed: () {
                                 showAlertDialogAccept(context, listInst[index].id, listInst[index].email, index, 2);
                               },
-                            )
+                            ).showCursorOnHover
                             ],),
                           ])
                     ],
@@ -353,6 +355,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
         width: 550,
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {
@@ -376,7 +379,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
             ),
           ),
           controller: searchController,
-        ));
+        )).showCursorTextOnHover;
   }
 
   Widget searchUnath() {
@@ -385,6 +388,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
         width: 550,
         padding: const EdgeInsets.all(8.0),
         child:TextField(
+          cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
               setState(() {
@@ -408,7 +412,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop> wit
             ),
           ),
           controller: searchRepController,
-        ));
+        )).showCursorTextOnHover;
   }
 
   @override

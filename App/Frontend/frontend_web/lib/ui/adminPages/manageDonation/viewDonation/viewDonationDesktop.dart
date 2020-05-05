@@ -10,6 +10,8 @@ import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dar
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ViewDonationDesktop extends StatefulWidget {
@@ -71,7 +73,7 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
                       side: BorderSide(color: greenPastel)
                     ),
                     child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
-                  ),
+                  ).showCursorOnHover,
                   Expanded(child: SizedBox(),),
                   RaisedButton(
                     onPressed: (){
@@ -82,7 +84,7 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
                       side: BorderSide(color: greenPastel)
                     ),
                     child: Text("Izmeni", style: TextStyle(color: Colors.white),),
-                  ),
+                  ).showCursorOnHover,
                   RaisedButton(
                     onPressed: (){
                       showAlertDialog(context, donation.id);
@@ -93,7 +95,7 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
                       side: BorderSide(color: Colors.red)
                     ),
                     child: Text("Obriši", style: TextStyle(color: Colors.white),),
-                  ),
+                  ).showCursorOnHover,
                 ],),
                 SizedBox(height: 10.0,),
                 Text(
@@ -198,13 +200,13 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
           }
         });
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(

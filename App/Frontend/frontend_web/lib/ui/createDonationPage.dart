@@ -6,6 +6,7 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:intl/intl.dart';
+
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import 'adminPages/manageDonation/manageDonationDesktop.dart';
@@ -21,6 +22,7 @@ class _CreateDonationPage extends State<CreateDonationPage> {
   TextEditingController name = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController description = TextEditingController();
+  String wrongText = "";
 
   double _doubleValue = 0.0;
 
@@ -28,6 +30,7 @@ class _CreateDonationPage extends State<CreateDonationPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
@@ -50,6 +53,7 @@ class _CreateDonationPage extends State<CreateDonationPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
@@ -120,6 +124,15 @@ class _CreateDonationPage extends State<CreateDonationPage> {
         )).showCursorTextOnHover;
   }
 
+  Widget wrong() {
+    return Container(
+        child: Center(
+            child: Text(
+      '$wrongText',
+      style: TextStyle(color: Colors.red),
+    )));
+  }
+
   Widget donationButton() {
     return RaisedButton(
       onPressed: () {
@@ -129,18 +142,28 @@ class _CreateDonationPage extends State<CreateDonationPage> {
             json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
         print(payload);
 
-        APIServices.createDonation(
-            str,
-            int.parse(payload["sub"]),
-            titleController.text,
-            name.text,
-            description.text,
-            _doubleValue.toDouble());
+        if (name.text != '' && _doubleValue.toDouble() != 0.0) {
+          APIServices.createDonation(
+              str,
+              int.parse(payload["sub"]),
+              titleController.text,
+              name.text,
+              description.text,
+              _doubleValue.toDouble());
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
-        );
+          setState(() {
+            wrongText = "";
+          });
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
+          );
+        } else {
+          setState(() {
+            wrongText = "Morate uneti ime organizacije i novčani iznos!";
+          });
+        }
       },
       color: greenPastel,
       shape: RoundedRectangleBorder(
@@ -196,7 +219,8 @@ class _CreateDonationPage extends State<CreateDonationPage> {
                     margin: EdgeInsets.only(
                         left: 50, right: 20, top: 10, bottom: 10),
                   ),
-                  donationButton()
+                  donationButton(),
+                  wrong()
                 ],
               ))),
       CollapsingNavigationDrawer()

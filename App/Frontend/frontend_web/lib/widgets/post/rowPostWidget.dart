@@ -7,6 +7,8 @@ import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class RowPostWidget extends StatefulWidget {
@@ -38,7 +40,7 @@ class _RowPostWidgetState extends State<RowPostWidget> {
   showAlertDialog(BuildContext context, int id) {
       // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
       onPressed: () {
         APIServices.deletePost(TokenSession.getToken,id);
         setState(() {
@@ -50,13 +52,13 @@ class _RowPostWidgetState extends State<RowPostWidget> {
           MaterialPageRoute(builder: (context) => ManagePostPage()),
         );*/
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -142,7 +144,7 @@ class _RowPostWidgetState extends State<RowPostWidget> {
         onPressed: () {
           showAlertDialog(context, post.postId);
         },
-      ),
+      ).showCursorOnHover,
       SizedBox(width: 10,),
     ],
   );
@@ -212,7 +214,7 @@ class _RowPostWidgetState extends State<RowPostWidget> {
                 child: Text(
                   "Više informacija",
                   style: TextStyle(color: Colors.white),
-                ),
+                ).showCursorOnHover,
                 onPressed: () {
                   Navigator.push(
                     context,

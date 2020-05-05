@@ -6,6 +6,8 @@ import 'package:frontend_web/widgets/InstitutionCommentWidget.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class InstitutionUnsolvedPostWidget extends StatefulWidget {
@@ -37,7 +39,7 @@ class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostW
   showCommentsDialog(BuildContext context, int id) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Zatvori", style: TextStyle(color: Colors.green),),
+      child: Text("Zatvori", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -113,7 +115,7 @@ class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostW
         onPressed: () {
 
         },
-      ),
+      ).showCursorOnHover,
       SizedBox(width: 15,)
     ],
   );
@@ -169,7 +171,7 @@ class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostW
                 onPressed: () {
                   showCommentsDialog(context, postId);
                 },
-              ),
+              ).showCursorOnHover,
               Text(commNum.toString()),
               Expanded(child: SizedBox()),
               SizedBox(width: 10.0), // For padding

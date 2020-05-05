@@ -7,7 +7,8 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import '../../createDonationPage.dart';
 
@@ -63,7 +64,7 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
                   side: BorderSide(color: greenPastel)
               ),
                 child: Text("Nova donacija", style: TextStyle(color: Colors.white),),
-              ),
+              ).showCursorOnHover,
               SizedBox(width: 10.0,),
             ],
           ),
@@ -182,7 +183,7 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
             side: BorderSide(color: greenPastel)
         ),
           child: Text("Više informacija", style: TextStyle(color: Colors.white)),
-        ),
+        ).showCursorOnHover,
         Expanded(child: SizedBox(),),
         RaisedButton(
           onPressed: (){
@@ -194,7 +195,7 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
             side: BorderSide(color: Colors.red)
         ),
           child: Text("Obriši", style: TextStyle(color: Colors.white),),
-        ),
+        ).showCursorOnHover,
         SizedBox(width: 10.0,),
       ],
     );
@@ -215,13 +216,13 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
         });
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
