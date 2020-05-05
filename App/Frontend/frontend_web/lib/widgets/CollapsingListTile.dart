@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+Color greenPastel = Color(0xFF00BFA6);
+
 class CollapsingListTile extends StatefulWidget {
   final String title;
   final IconData icon;
@@ -48,14 +50,14 @@ class _CollapsingListTileState extends State<CollapsingListTile> {
             children: <Widget>[
               Icon(
                 widget.icon,
-                color: widget.isSelected ? Colors.green[800] : Colors.black54,
+                color: widget.isSelected ? greenPastel : Colors.black54,
                 size: 33.0,
               ),
               SizedBox(width: sizedBoxAnimation.value),
               (widthAnimation.value >= 190)
                   ? Text(widget.title,
                       style: widget.isSelected
-                          ? TextStyle(color: Colors.green[800], fontSize: 11.0, fontWeight: FontWeight.w500)
+                          ? TextStyle(color: greenPastel, fontSize: 11.0, fontWeight: FontWeight.w500)
                           : TextStyle(color: Colors.black54, fontSize: 11.0, fontWeight: FontWeight.w500))
                   : Container()
             ],

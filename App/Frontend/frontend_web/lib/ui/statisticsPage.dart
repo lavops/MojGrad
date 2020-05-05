@@ -490,7 +490,7 @@ Material newDonation(){
   Widget buildUserList(List<User> listUsers) {
     return Container(
       width: 70,
-      color:Colors.green,
+      color: greenPastel,
       child:ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {

@@ -8,6 +8,10 @@ import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/commentsWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
+
 class PostWidget extends StatefulWidget {
   final List<FullPost> listPosts;
 
@@ -37,7 +41,7 @@ class _PostWidgetState extends State<PostWidget> {
   showAlertDialog(BuildContext context, int id) {
       // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
       onPressed: () {
         APIServices.deletePost(TokenSession.getToken,id);
         Navigator.pushReplacement(
@@ -45,13 +49,13 @@ class _PostWidgetState extends State<PostWidget> {
           MaterialPageRoute(builder: (context) => PostPage(globalUser)),
         );
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -131,7 +135,7 @@ class _PostWidgetState extends State<PostWidget> {
             onPressed: () {
               showAlertDialog(context, postId);
             },
-          ),
+          ).showCursorOnHover,
           SizedBox(width: 15,)
         ],
       );
@@ -163,7 +167,7 @@ class _PostWidgetState extends State<PostWidget> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: Colors.green[800]),
+                icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel),
                 onPressed: () {
                   APIServices.addLike(TokenSession.getToken,postId, 1, 2);
                 },
@@ -183,7 +187,7 @@ class _PostWidgetState extends State<PostWidget> {
                 child: Text(dislikeNum.toString()),
               ),
               IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: Colors.green[800]),
+                icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
                 onPressed: () {
                 },
               ),
@@ -193,16 +197,16 @@ class _PostWidgetState extends State<PostWidget> {
                   ? FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.green[800])),
-                      color: Colors.green[800],
+                          side: BorderSide(color: greenPastel)),
+                      color: greenPastel,
                       child: Text(
                         "Reši",
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {},
-                    )
+                    ).showCursorOnHover
                   : IconButton(
-                      icon: Icon(Icons.done_all, color: Colors.green[800]),
+                      icon: Icon(Icons.done_all, color: greenPastel),
                       onPressed: () {},
                     ),
               SizedBox(width: 10.0), // For padding

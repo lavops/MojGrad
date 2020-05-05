@@ -265,13 +265,13 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
         });
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(

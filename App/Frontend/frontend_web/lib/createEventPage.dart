@@ -8,6 +8,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
+
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import 'models/city.dart';
@@ -32,6 +33,10 @@ class _CreateEventPage extends State<CreateEventPage> {
   TextEditingController shortDescriptionController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+
+  String wrongText = "";
+  String startDate = "";
+  String endDate = "";
 
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
@@ -97,6 +102,7 @@ class _CreateEventPage extends State<CreateEventPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
@@ -123,6 +129,7 @@ class _CreateEventPage extends State<CreateEventPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
@@ -145,6 +152,7 @@ class _CreateEventPage extends State<CreateEventPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         controller: shortDescriptionController,
         style: TextStyle(
           fontSize: 16,
@@ -310,33 +318,58 @@ class _CreateEventPage extends State<CreateEventPage> {
         ]).showCursorOnHover;
   }
 
+  Widget wrong() {
+    return Container(
+        child: Center(
+            child: Text(
+      '$wrongText',
+      style: TextStyle(color: Colors.red),
+    )));
+  }
+
   Widget createEventButton() {
     return RaisedButton(
       onPressed: () {
-        String _startDateString = DateFormat.yMd().format(_startDate);
-        String _endDateString = DateFormat.yMd().format(_endDate);
+        
         //print(_startDateString + ' ' + _selectedTipStart.toString());
         // print(_endDateString + ' ' + _selectedTipEnd.toString());
 
-        String startDate =
-            _startDateString + ' ' + _selectedTipStart.toString();
-        String endDate = _endDateString + ' ' + _selectedTipEnd.toString();
-
         var str = TokenSession.getToken;
         var jwt = str.split(".");
-        var payload =
-            json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+        var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
         print(payload);
-        APIServices.createEvent(
-            str,
-            int.parse(payload["sub"]),
-            nameController.toString(),
-            shortDescriptionController.toString(),
-            descriptionController.toString(),
-            locationController.toString(),
-            city.name,
-            startDate,
-            endDate);
+
+        if (nameController.text != '' &&
+            locationController.text != '' &&
+            _startDate != null &&
+            _endDate != null) {
+
+          String _startDateString = DateFormat.yMd().format(_startDate);
+          String _endDateString = DateFormat.yMd().format(_endDate);
+
+          startDate = _startDateString + ' ' + _selectedTipStart.toString();
+          endDate = _endDateString + ' ' + _selectedTipEnd.toString();
+
+          APIServices.createEvent(
+              str,
+              int.parse(payload["sub"]),
+              nameController.toString(),
+              shortDescriptionController.toString(),
+              descriptionController.toString(),
+              locationController.toString(),
+              city.name,
+              startDate,
+              endDate);
+
+          print('nisu dobri podaci');
+          setState(() {
+            wrongText = "";
+          });
+        } else {
+          setState(() {
+            wrongText = "Unesite sve podatke!";
+          });
+        }
       },
       color: greenPastel,
       shape: RoundedRectangleBorder(
@@ -349,59 +382,61 @@ class _CreateEventPage extends State<CreateEventPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      Material(
-          elevation: 5,
-          child: Container(
-              margin: EdgeInsets.only(top: 15),
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment(-0.75, -0.75),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: greenPastel,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: greenPastel)),
-                      child: Text(
-                        "Vrati se nazad",
-                        style: TextStyle(color: Colors.white),
+      SingleChildScrollView(
+          child: Material(
+              elevation: 5,
+              child: Container(
+                  margin: EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment(-0.75, -0.75),
+                        child: RaisedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          color: greenPastel,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(18.0),
+                              side: BorderSide(color: greenPastel)),
+                          child: Text(
+                            "Vrati se nazad",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ).showCursorOnHover,
+                      nameEvent(),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 50, right: 20, top: 10, bottom: 10),
                       ),
-                    ),
-                  ).showCursorOnHover,
-                  nameEvent(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  shortDescription(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  longDescription(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  locationWidget(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  calendar(),
-                  dropdownCity(listCities),
-                  dropdownTime(times),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  createEventButton()
-                ],
-              ))),
+                      shortDescription(),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 50, right: 20, top: 10, bottom: 10),
+                      ),
+                      longDescription(),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 50, right: 20, top: 10, bottom: 10),
+                      ),
+                      locationWidget(),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 50, right: 20, top: 10, bottom: 10),
+                      ),
+                      calendar(),
+                      dropdownCity(listCities),
+                      dropdownTime(times),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 50, right: 20, top: 10, bottom: 10),
+                      ),
+                      createEventButton(),
+                      wrong()
+                    ],
+                  )))),
       CollapsingNavigationDrawer()
     ]);
   }

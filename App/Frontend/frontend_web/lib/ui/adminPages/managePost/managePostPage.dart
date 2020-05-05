@@ -5,6 +5,8 @@ import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManagePostPage extends StatefulWidget {
@@ -79,7 +81,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           ),
         ),
       ]
-    );
+    ).showCursorOnHover;
   }
 
   Widget tabsMobile() {
@@ -112,6 +114,6 @@ class _ManagePostPageState extends State<ManagePostPage> {
           ),
         ),
       ]
-    );
+    ).showCursorOnHover;
   }
 }

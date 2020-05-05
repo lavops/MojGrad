@@ -182,7 +182,7 @@ List<User> listUsers;
   showAlertDialog(BuildContext context, int id) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
       onPressed: () {
         APIServices.deleteUser(TokenSession.getToken,id);
         deleteFromList(id);
@@ -190,7 +190,7 @@ List<User> listUsers;
         },
     );
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -430,6 +430,7 @@ List<User> listUsers;
       width: 200,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        cursorColor: Colors.black,
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {
@@ -551,6 +552,7 @@ Widget dropdownFRU(List<City> listCities) {
       width: 200,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        cursorColor: Colors.black,
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {

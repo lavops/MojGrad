@@ -9,6 +9,9 @@ import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -144,7 +147,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     Widget okButton = FlatButton(
       child: Text(
         "OK",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -279,6 +282,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         controller: name,
         style: TextStyle(
           //color: Colors.grey,
@@ -298,7 +302,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
 
@@ -308,6 +312,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     child: Padding(
     padding: const EdgeInsets.all(15.0),
     child: TextField(
+      cursorColor: Colors.black,
       controller: description,
       minLines: 5,
       maxLines: 15,
@@ -325,7 +330,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           borderSide: BorderSide(color: greenPastel),
         ),
       ),
-    ),
+    ).showCursorTextOnHover,
   ),
 );
 
@@ -335,6 +340,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         controller: email,
         style: TextStyle(
           //color: Colors.grey,
@@ -354,7 +360,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
     final mobileNumberWidget = Container(
@@ -363,6 +369,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         controller: mobile,
         style: TextStyle(
           //color: Colors.grey,
@@ -383,7 +390,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           ),
         ),
         keyboardType: TextInputType.number,
-      ),
+      ).showCursorTextOnHover,
     ),);
 
     final passwordWidget = Container(
@@ -392,6 +399,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         obscureText: _secureText,
         controller: password,
         style: TextStyle(
@@ -417,7 +425,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
 
@@ -451,7 +459,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
                   onChanged: null,
                   items: null,
                 ),
-        ]);
+        ]).showCursorOnHover;
 
     final registerButtonWidget = SizedBox(
       width: 200.0,
@@ -473,7 +481,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
             else
               _register(name.text, description.text, email.text, mobile.text,
                   password.text, 0);
-          }),
+          }).showCursorOnHover,
     );
 
     final loginLabelWidget = Row(
@@ -495,7 +503,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
               MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
             );
           },
-        ),
+        ).showCursorOnHover,
       ],
     );
 

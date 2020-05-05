@@ -6,6 +6,8 @@ import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class SinglePostWidget extends StatefulWidget {
@@ -37,7 +39,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
   showAlertDialog(BuildContext context, int id) {
       // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
       onPressed: () {
         APIServices.deletePost(TokenSession.getToken,id);
         setState(() {
@@ -48,13 +50,13 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
           MaterialPageRoute(builder: (context) => ManagePostPage()),
         );
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
         },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -127,7 +129,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
             onPressed: () {
               showAlertDialog(context, postId);
             },
-          ),
+          ).showCursorOnHover,
           SizedBox(width: 15,)
         ],
       );

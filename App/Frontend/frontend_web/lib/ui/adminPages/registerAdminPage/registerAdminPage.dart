@@ -8,6 +8,8 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class RegisterAdminPage extends StatefulWidget {
@@ -132,7 +134,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
     Widget okButton = FlatButton(
       child: Text(
         "OK",
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         Navigator.push(
@@ -236,6 +238,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         controller: firstName,
         style: TextStyle(
           //color: Colors.grey,
@@ -255,7 +258,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
         final lastNameWidget = Container(
@@ -264,6 +267,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         controller: firstName,
         style: TextStyle(
           //color: Colors.grey,
@@ -283,7 +287,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
      final emailWidget = Container(
@@ -292,6 +296,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         controller: email,
         style: TextStyle(
           //color: Colors.grey,
@@ -311,7 +316,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
     
@@ -322,6 +327,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: Colors.black,
         obscureText: _secureText,
         controller: password,
         style: TextStyle(
@@ -347,7 +353,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
             borderSide: BorderSide(width: 2, color: greenPastel),
           ),
         ),
-      ),
+      ).showCursorTextOnHover,
     ),);
 
     final registerButtonWidget = SizedBox(
@@ -364,7 +370,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
           color: greenPastel,
           onPressed: () {
                _register(firstName.text, lastName.text, email.text, password.text);
-          }),
+          }).showCursorOnHover,
     );
 
     final wrongReg = Center(
