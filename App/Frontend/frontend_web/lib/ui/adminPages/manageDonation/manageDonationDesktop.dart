@@ -9,6 +9,10 @@ import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonat
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
+import '../../createDonationPage.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageDonationDesktop extends StatefulWidget {
@@ -44,101 +48,132 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
     return Stack(
       children: <Widget>[
         CenteredViewDonation(
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(child: SizedBox(),),
-                  RaisedButton(
-                    onPressed: (){
-                      
-                    },
-                    color: greenPastel,
-                    shape: RoundedRectangleBorder(
+            child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateDonationPage()),
+                    );
+                  },
+                  color: greenPastel,
+                  shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(18.0),
-                      side: BorderSide(color: greenPastel)
+                      side: BorderSide(color: greenPastel)),
+                  child: Text(
+                    "Nova donacija",
+                    style: TextStyle(color: Colors.white),
                   ),
-                    child: Text("Nova donacija", style: TextStyle(color: Colors.white),),
-                  ),
-                  SizedBox(width: 10.0,),
-                ],
-              ),
-              Flexible(child: buildDonationList(donations),)
-            ],
-          )
-        ),
+                ).showCursorOnHover,
+                SizedBox(
+                  width: 10.0,
+                ),
+              ],
+            ),
+            Flexible(
+              child: buildDonationList(donations),
+            )
+          ],
+        )),
         CollapsingNavigationDrawer()
       ],
     );
   }
 
-  Widget buildDonationList(List<Donation> listDonations){
+  Widget buildDonationList(List<Donation> listDonations) {
     return GridView.builder(
-      padding: EdgeInsets.only(bottom: 30.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 2,
-        mainAxisSpacing: 2,
-        childAspectRatio: 1.7,
-      ),
-      itemCount: donations == null ? 0 : donations.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          child: Container(
+        padding: EdgeInsets.only(bottom: 30.0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 2,
+          childAspectRatio: 1.7,
+        ),
+        itemCount: donations == null ? 0 : donations.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+              child: Container(
             child: Row(
               children: <Widget>[
-                Expanded(child:Column(children: <Widget>[
-                  eventInfoRow(donations[index].organizationName),
-                  SizedBox(height: 10.0,),
-                  Expanded(child: SizedBox(),),
-                  titleRow(donations[index].title),
-                  descriptionRow(donations[index].description),
-                  Expanded(child: SizedBox(),),
-                  eventProgressRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
-                  pointsRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
-                  actionButtonRow(donations[index], donations[index].id, index)
-                ]),),
+                Expanded(
+                  child: Column(children: <Widget>[
+                    eventInfoRow(donations[index].organizationName),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    titleRow(donations[index].title),
+                    descriptionRow(donations[index].description),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    eventProgressRow(donations[index].pointsAccumulated,
+                        donations[index].pointsNeeded),
+                    pointsRow(donations[index].pointsAccumulated,
+                        donations[index].pointsNeeded),
+                    actionButtonRow(
+                        donations[index], donations[index].id, index)
+                  ]),
+                ),
                 Container(
-                  color: (donations[index].pointsAccumulated >= donations[index].pointsNeeded) ? greenPastel: Colors.white,
-                  child: SizedBox(width: 20,),
+                  color: (donations[index].pointsAccumulated >=
+                          donations[index].pointsNeeded)
+                      ? greenPastel
+                      : Colors.white,
+                  child: SizedBox(
+                    width: 20,
+                  ),
                 )
               ],
             ),
-          )
-        );
-      }
-    );
+          ));
+        });
   }
 
-  Widget eventInfoRow(String organizationName){
-    return Row(
-      children: <Widget>[
-        SizedBox(width: 10.0,),
-        Text(
-          organizationName, 
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
-        ),
-        Expanded(child: SizedBox()),
-        SizedBox(width: 10.0,),
-      ]
-    );
+  Widget eventInfoRow(String organizationName) {
+    return Row(children: <Widget>[
+      SizedBox(
+        width: 10.0,
+      ),
+      Text(organizationName,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+      Expanded(child: SizedBox()),
+      SizedBox(
+        width: 10.0,
+      ),
+    ]);
   }
 
-  Widget titleRow(String title){
+  Widget titleRow(String title) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 10.0,),
-          Flexible(child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0))),
-          SizedBox(width: 10.0,),
-        ],
-      )
-    );
+        child: Row(
+      children: <Widget>[
+        SizedBox(
+          width: 10.0,
+        ),
+        Flexible(
+            child: Text(title,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0))),
+        SizedBox(
+          width: 10.0,
+        ),
+      ],
+    ));
   }
 
-  Widget eventProgressRow(int pointsAccumulated, int pointsNeeded){
+  Widget eventProgressRow(int pointsAccumulated, int pointsNeeded) {
     return IconRoundedProgressBar(
-      icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
+      icon:
+          Padding(padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
       theme: RoundedProgressBarTheme.green,
       margin: EdgeInsets.symmetric(vertical: 16),
       borderRadius: BorderRadius.circular(6),
@@ -187,24 +222,30 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
           },
           color: greenPastel,
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: greenPastel)
+              borderRadius: new BorderRadius.circular(18.0),
+              side: BorderSide(color: greenPastel)),
+          child:
+              Text("Više informacija", style: TextStyle(color: Colors.white)),
+        ).showCursorOnHover,
+        Expanded(
+          child: SizedBox(),
         ),
-          child: Text("Više informacija", style: TextStyle(color: Colors.white)),
-        ),
-        Expanded(child: SizedBox(),),
         RaisedButton(
-          onPressed: (){
+          onPressed: () {
             showAlertDialog(context, id, index);
           },
           color: Colors.red,
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.red)
+              borderRadius: new BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.red)),
+          child: Text(
+            "Obriši",
+            style: TextStyle(color: Colors.white),
+          ),
+        ).showCursorOnHover,
+        SizedBox(
+          width: 10.0,
         ),
-          child: Text("Obriši", style: TextStyle(color: Colors.white),),
-        ),
-        SizedBox(width: 10.0,),
       ],
     );
   }
