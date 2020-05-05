@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/admin.dart';
+import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
@@ -67,6 +68,9 @@ class _AdminRegisterMobilePageState extends State<AdminRegisterMobilePage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 40,),
+            Text("Unesite novi grad", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Container(width: 500, child: AddCityWidget()),
+            SizedBox(height: 40,),
             Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25), textAlign: TextAlign.center,),
             Container(width: 350, child: 
             AdminRegisterPageWidget(),
@@ -94,6 +98,9 @@ class _AdminRegisterDesktopPageState extends State<AdminRegisterDesktopPage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 50,),
+            Text("Unesite novi grad", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
+            Container(width: 500, child: AddCityWidget()),
+            SizedBox(height: 50,),
             Text("Unesite podatke o novom administratoru", style: TextStyle(color: Color.fromRGBO(15, 32, 67,100), fontSize: 25),),
             Container(width: 500, child: 
             AdminRegisterPageWidget(),
@@ -105,6 +112,127 @@ class _AdminRegisterDesktopPageState extends State<AdminRegisterDesktopPage>{
   }
 }
 
+class AddCityWidget extends StatefulWidget{
+
+  @override
+  _AddCityWidgetState createState() => new _AddCityWidgetState();
+}
+
+class _AddCityWidgetState extends State<AddCityWidget>{
+  
+  List<City> cities;
+  TextEditingController newCity = new TextEditingController();
+  String wrongRegText = "";
+
+  _getCity() {
+    APIServices.getCity1().then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> listC = List<City>();
+      listC = list.map((model) => City.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          cities = listC;
+        });
+      }
+    });
+  } 
+
+  @override
+  void initState() {
+    super.initState();
+    _getCity();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final cityNameWidget = Container(
+      width: 600,
+      child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
+      elevation: 6.0,
+      child: TextField(
+        controller: newCity,
+        style: TextStyle(
+          //color: Colors.grey,
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
+        ),
+        decoration: InputDecoration(
+          hintText: "Ime grada",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+          prefixIcon: Padding(
+            padding: EdgeInsets.only(left: 20, right: 15),
+            child: Icon(Icons.business, color: greenPastel),
+          ),
+          contentPadding: EdgeInsets.all(18),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(width: 2, color: greenPastel),
+          ),
+        ),
+      ),
+    ),);
+
+    final submitButtonWidget = SizedBox(
+      height: 48.0,
+      child: RaisedButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: Text(
+            "Dodaj grad",
+            style: TextStyle(fontSize: 16.0),
+          ),
+          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          textColor: Colors.white,
+          color: greenPastel,
+          onPressed: () {
+            int exists = 0;
+            for(int i = 0; i < cities.length; i++){
+              if(cities[i].name.toLowerCase() == newCity.text.toLowerCase()){
+                exists = 1;
+                break;
+              }
+            }
+            if(exists == 1){
+              setState(() {
+                wrongRegText = "Grad vec postoji.";
+              });
+            }
+            else{
+              //Poziv funkcije
+              
+            }
+          }),
+    );
+
+    final wrongReg = Center(
+        child: Text(
+      '$wrongRegText',
+      style: TextStyle(color: Colors.red),
+    ));
+
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            height: 30.0,
+          ),
+          cityNameWidget,
+          wrongReg,
+          SizedBox(
+            height: 12.0,
+          ),
+          submitButtonWidget,
+        ],
+      ),
+    );
+  }
+  
+}
 
 class AdminRegisterPageWidget extends StatefulWidget{
   @override

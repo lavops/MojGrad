@@ -67,7 +67,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
       CenteredViewPost(
           child: TabBarView(
             children: <Widget>[
-            ListView(children: <Widget>[
+            Column(children: <Widget>[
               backButton(),
               SinglePostWidget(post),
             ],),
