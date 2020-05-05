@@ -24,7 +24,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpGet("userId={userID}")]
-        public ActionResult<IEnumerable<EventViewModel>> GetEvents(int userId)
+        public ActionResult<IEnumerable<EventViewModel>> GetAllEvents(int userId)
         {
             var events = _iEventUI.getAllEvents();
             List<EventViewModel> listEvents = new List<EventViewModel>();
@@ -131,7 +131,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("addGoingToEvent")]
-        public IActionResult GetReportingUser(UserEvent events)
+        public IActionResult AddGoingToEvent(UserEvent events)
         {
             bool ind = _iEventUI.addGoingToEvent(events);
             if (ind == true)
