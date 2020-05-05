@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
@@ -12,6 +13,7 @@ int insId;
 int icityId;
 
 class HomePageInstitution extends StatefulWidget {
+
   HomePageInstitution(this.jwt, this.payload);
   factory HomePageInstitution.fromBase64(String jwt) => HomePageInstitution(
       jwt,
@@ -30,6 +32,7 @@ class _HomePageInstitutionState extends State<HomePageInstitution> {
   Institution institution;
   final String jwt;
   final Map<String, dynamic> payload;
+  List<FullPost> listUnsolvedPosts;
 
   _HomePageInstitutionState(this.jwt, this.payload);
 
@@ -51,13 +54,13 @@ class _HomePageInstitutionState extends State<HomePageInstitution> {
       });
   }
 
+
   @override
   void initState() {
     super.initState();
     _getInstitutionId();
     _getInstitutionWithId(insId);
   }
-
 
 
   @override
@@ -78,7 +81,7 @@ class _HomePageInstitutionState extends State<HomePageInstitution> {
           backgroundColor: Colors.white,
           body: ScreenTypeLayout(
             mobile: HomeInstitutionMobile(),
-            tablet: HomeInstitutionDesktop(),
+            tablet: HomeInstitutionDesktop(id: icityId,),
           ),
         ),
       )

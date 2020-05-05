@@ -505,6 +505,7 @@ static Future registerInstitution(Institution ins) async {
     return res;
   }
 
+<<<<<<< HEAD
   //get events
   static Future getEvents(String jwt, int userId) async{
     var data = jsonDecode(jwt);
@@ -515,4 +516,48 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
+=======
+   static Future createEvent(String jwt, int adminId, String nameEvent, String shortDesc, String longDesc, String location, String city, String startDate, String endDate) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event';
+		var data = Map();
+    data["adminId"] = adminId;
+		data["organizeName"] = nameEvent;
+		data["shortDescription"] = shortDesc;
+		data["description"] = longDesc;
+		data["adress"] = location;
+    data["cityName"] = city;
+    data["startDate"] = startDate;
+    data["endDate"] = endDate;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+	}
+
+  static Future createDonation(String jwt, int adminId, String title, String organizationName, String description, double monetaryAmount) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Donation';
+		var data = Map();
+    data["adminId"] = adminId;
+		data["title"] = title;
+		data["organizationName"] = organizationName;
+		data["description"] = description;
+		data["monetaryAmount"] = monetaryAmount;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+	}
+
+>>>>>>> 11319d5cd32fb8987ac292378a9298fed86466c6
 }
+

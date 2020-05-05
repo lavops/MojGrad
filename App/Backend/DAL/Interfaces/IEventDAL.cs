@@ -11,6 +11,7 @@ namespace Backend.DAL.Interfaces
     public interface IEventDAL
     {
         List<Event> getAllEvents();
+        List<Event> getFinishedEvents();
         bool addGoingToEvent(UserEvent ue);
         List<Event> getAllEventsByCityId(long id);
         Event getByID(long id);

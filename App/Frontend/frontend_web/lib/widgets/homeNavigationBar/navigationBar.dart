@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/InstitutionPages/loginPage/loginPage.dart';
+import 'package:frontend_web/ui/home/aboutUs.dart';
+import 'package:frontend_web/ui/home/contactPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -32,7 +34,7 @@ class HomeNavigationBarMobile extends StatelessWidget{
         children: <Widget>[
           InkWell(
             child: SizedBox(
-              width: 200,
+              width: 180,
               child: Image.asset('assets/mojGrad4.png'),
             ),
             onTap: (){
@@ -73,7 +75,7 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
         children: <Widget>[
           InkWell(
             child: SizedBox(
-              width: 200,
+              width: 180,
               child: Image.asset('assets/mojGrad2.png'),
             ),
             onTap: (){
@@ -88,12 +90,49 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+               SizedBox(width: 10,),
               InkWell(
-                child: Text( "Prijavi se", 
+                child: Text( "O nama", 
                   style: TextStyle(
-                    fontSize: 20, 
+                    fontSize: 21, 
                     fontWeight: FontWeight.bold,
-                    color: (selected == 1)? greenPastel : Colors.black,
+                    color: (selected == 2)? greenPastel : Colors.black,
+                  ),
+                ),
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AboutUs()
+                    )
+                  );
+                },
+              ),
+               SizedBox(width: 15,),
+              InkWell(
+                child: Text( "Kontakt", 
+                  style: TextStyle(
+                    fontSize: 21, 
+                    fontWeight: FontWeight.bold,
+                    color: (selected == 3)? greenPastel : Colors.black,
+                  ),
+                ),
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ContactPage()
+                    )
+                  );
+                },
+              ),
+               SizedBox(width: 15,),
+              InkWell(
+                child: Text( "Prijava", 
+                  style: TextStyle(
+                    fontSize: 21, 
+                    fontWeight: FontWeight.bold,
+                    color: (selected == 4)? greenPastel : Colors.black,
                   ),
                 ),
                 onTap: (){
@@ -105,7 +144,7 @@ class HomeNavigationBarTabletDesktop extends StatelessWidget{
                   );
                 },
               ),
-              SizedBox(width: 10,),
+              SizedBox(width: 5,),
             ],
           ),
         ],
@@ -127,11 +166,41 @@ class HomeNavigationDrawer extends StatelessWidget{
             DrawerHeader(
               child: Center(child: Text("MOJ GRAD"),),
             ),
+              ListTile(
+              leading: Icon(Icons.people_outline),
+              title: Text(
+                'O nama',
+                style: TextStyle(fontSize: 16, color: (selected == 2)? greenPastel : Colors.black),
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AboutUs()
+                    )
+                  );
+              },
+            ),
+              ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text(
+                'Kontakt',
+                style: TextStyle(fontSize: 16, color: (selected == 3)? greenPastel : Colors.black),
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ContactPage()
+                    )
+                  );
+              },
+            ),
             ListTile(
               leading: Icon(Icons.business),
               title: Text(
-                'Institucija',
-                style: TextStyle(fontSize: 16, color: (selected == 1)? greenPastel : Colors.black),
+                'Prijavi se',
+                style: TextStyle(fontSize: 16, color: (selected == 4)? greenPastel : Colors.black),
               ),
               onTap: () {
                 Navigator.push(

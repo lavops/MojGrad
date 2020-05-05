@@ -859,7 +859,7 @@ class EditProfile extends State<EditProfilePage> {
                       city1Id = 0;
                       });
                      
-                      Navigator.pop(context,'');
+                      Navigator.pop(context);
                     },
                   )
                 ],
@@ -1307,7 +1307,6 @@ class EditProfile extends State<EditProfilePage> {
                       });
                       if (res != null) {
                         print("city1Id"+city1Id.toString());
-                        print("_selectedid"+_selectedId.id.toString());
                         if(city1Id == 0) city1Id=user.cityId;
                         APIServices.editUser(jwt, user.id, firstName, lastName,
                                 username1, email1, number1, city1Id)

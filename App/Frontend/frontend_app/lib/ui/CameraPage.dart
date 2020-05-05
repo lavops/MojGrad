@@ -476,7 +476,7 @@ class _CameraPageState extends State<CameraPage> {
             postTypeId = 1;
           else if (postType != null)
             postTypeId = postType.id;
-          else
+          else if(_vrstaObjave != 2)
             pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
 
           if (imageFile == null || addres == null) {

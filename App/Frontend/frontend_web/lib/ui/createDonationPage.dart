@@ -1,0 +1,228 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:intl/intl.dart';
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
+import 'adminPages/manageDonation/manageDonationDesktop.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
+
+class CreateDonationPage extends StatefulWidget {
+  @override
+  _CreateDonationPage createState() => _CreateDonationPage();
+}
+
+class _CreateDonationPage extends State<CreateDonationPage> {
+  TextEditingController name = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController description = TextEditingController();
+
+  double _doubleValue = 0.0;
+
+  Widget nameOrganizationWidget() {
+    return Container(
+      width: 500,
+      child: TextField(
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
+        ),
+        controller: name,
+        decoration: InputDecoration(
+          hintText: "Ime ogranizacije",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+          contentPadding: EdgeInsets.all(18),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(width: 2, color: greenPastel),
+          ),
+        ),
+      ),
+    ).showCursorTextOnHover;
+  }
+
+  Widget title() {
+    return Container(
+      width: 500,
+      child: TextField(
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
+        ),
+        controller: titleController,
+        decoration: InputDecoration(
+          hintText: "Naslov",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+          contentPadding: EdgeInsets.all(18),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(width: 2, color: greenPastel),
+          ),
+        ),
+      ),
+    ).showCursorTextOnHover;
+  }
+
+  Widget longDescription() {
+    return Container(
+      width: 500,
+      child: TextFormField(
+        maxLines: 5,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
+        ),
+        controller: description,
+        decoration: InputDecoration(
+          hintText: "Opis donacije",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+          contentPadding: EdgeInsets.all(18),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(width: 2, color: greenPastel),
+          ),
+        ),
+      ),
+    ).showCursorTextOnHover;
+  }
+
+  Widget money() {
+    return Container(
+        width: 500,
+        child: TextFormField(
+          cursorColor: Colors.black,
+          decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: greenPastel),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              labelText: 'Novčani iznos',
+              labelStyle: TextStyle(color: Colors.black)),
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            WhitelistingTextInputFormatter.digitsOnly,
+            CurrencyPtBrInputFormatter(maxDigits: 8),
+          ],
+          onChanged: (value) {
+            String _onlyDigits = value.replaceAll(RegExp('[^0-9]'), "");
+            _doubleValue = double.parse(_onlyDigits) / 100;
+
+            return _doubleValue;
+          },
+        )).showCursorTextOnHover;
+  }
+
+  Widget donationButton() {
+    return RaisedButton(
+      onPressed: () {
+        var str = TokenSession.getToken;
+        var jwt = str.split(".");
+        var payload =
+            json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+        print(payload);
+
+        APIServices.createDonation(
+            str,
+            int.parse(payload["sub"]),
+            titleController.text,
+            name.text,
+            description.text,
+            _doubleValue.toDouble());
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
+        );
+      },
+      color: greenPastel,
+      shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(18.0),
+          side: BorderSide(color: greenPastel)),
+      child: Text("Kreiraj", style: TextStyle(color: Colors.white)),
+    ).showCursorOnHover;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: <Widget>[
+      Material(
+          elevation: 5,
+          child: Container(
+              margin: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment(-0.75, -0.75),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: greenPastel,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(18.0),
+                          side: BorderSide(color: greenPastel)),
+                      child: Text(
+                        "Vrati se nazad",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ).showCursorOnHover,
+                  nameOrganizationWidget(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  title(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  longDescription(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  money(),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 50, right: 20, top: 10, bottom: 10),
+                  ),
+                  donationButton()
+                ],
+              ))),
+      CollapsingNavigationDrawer()
+    ]);
+  }
+}
+
+class CurrencyPtBrInputFormatter extends TextInputFormatter {
+  CurrencyPtBrInputFormatter({this.maxDigits});
+  final int maxDigits;
+
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    if (maxDigits != null && newValue.selection.baseOffset > maxDigits) {
+      return oldValue;
+    }
+
+    double value = double.parse(newValue.text);
+    final formatter = new NumberFormat("0.00", "pt_BR");
+    String newText = "RSD " + formatter.format(value / 100);
+    return newValue.copyWith(
+        text: newText,
+        selection: new TextSelection.collapsed(offset: newText.length));
+  }
+}

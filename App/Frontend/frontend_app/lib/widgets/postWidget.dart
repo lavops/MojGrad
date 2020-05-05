@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/models/likeViewModel.dart';
@@ -32,11 +33,14 @@ class _PostWidgetState extends State<PostWidget> {
   TextEditingController opisController = new TextEditingController();
   ReportType _selectedId;
   List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
-
+  int _currentImageIndex = 0;
   _PostWidgetState(FullPost post1) {
     this.post = post1;
   }
 
+   void _updateImageIndex(int index) {
+    setState(() => _currentImageIndex = index);
+  }
   getReportTypes() async {
     var jwt = await APIServices.jwtOrEmpty();
     APIServices.getReportType(jwt).then((res) {
@@ -79,10 +83,11 @@ class _PostWidgetState extends State<PostWidget> {
         child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             //mainAxisAlignment: MainAxisAlignment.center,
+            
             children: <Widget>[
           userInfoRow(post.userId, post.username, post.typeName, post.userPhoto,
               post.statusId),
-          imageGallery(post.photoPath),
+          imageGallery(post.photoPath, post.solvedPhotoPath),
           SizedBox(height: 2.0),
           Align(
               alignment: Alignment.centerLeft,
@@ -311,23 +316,64 @@ class _PostWidgetState extends State<PostWidget> {
     }
   }
 
-  Widget imageGallery(String image) => Container(
-        constraints: BoxConstraints(
-          maxHeight: 300.0, // changed to 400
-          minHeight: 200.0, // changed to 200
-          maxWidth: double.infinity,
-          minWidth: double.infinity,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey[200],
-              width: 1.0,
-            ),
+Widget imageGallery(String image, String image2) { 
+   List<String> imgList=[]; 
+  imgList.add(serverURLPhoto + image);
+  image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
+  return Column(children: <Widget>[ 
+        GestureDetector(
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              CarouselSlider(
+               options: CarouselOptions(
+                 viewportFraction: 1.0,
+                 onPageChanged: (index, reason) {
+                   _updateImageIndex(index);
+                 },
+                 enableInfiniteScroll: false,
+               ),
+                items: imgList.map((item) => Container(
+                   constraints: BoxConstraints(
+                    maxHeight: 300.0, // changed to 400
+                    minHeight: 200.0, // changed to 200
+                    maxWidth: double.infinity,
+                    minWidth: double.infinity,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey[200],
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Center(
+                    child: Image.network(item, fit: BoxFit.fitWidth, width: MediaQuery.of(context).size.width, )
+                  ),
+                )).toList(),
+                
+              ),
+            ],
           ),
         ),
-        child: Image(image: NetworkImage(serverURLPhoto + image)),
-      );
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          (imgList.length > 1) ?
+          Container(
+            height: 30,
+             child: PhotoCarouselIndicator(
+                photoCount: imgList.length,
+                activePhotoIndex: _currentImageIndex,
+           )) : Container( width: 1, height: 1,),
+        ],)
+        ],
+        );
+}
+
+
 
   Widget actionsButtons(int statusId, int postId, int likeNum, int dislikeNum,
           int commNum, int isLiked) =>
@@ -584,6 +630,42 @@ class MyDialogState extends State<MyDialog> {
           },
         )
       ],
+    );
+  }
+}
+
+
+class PhotoCarouselIndicator extends StatelessWidget {
+  final int photoCount;
+  final int activePhotoIndex;
+
+  PhotoCarouselIndicator({
+    @required this.photoCount,
+    @required this.activePhotoIndex,
+  });
+
+  Widget _buildDot({bool isActive}) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+        child: Container(
+          height: isActive ? 7.5 : 6.0,
+          width: isActive ? 7.5 : 6.0,
+          decoration: BoxDecoration(
+            color: isActive ? Colors.green : Colors.grey,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(photoCount, (i) => i)
+          .map((i) => _buildDot(isActive: i == activePhotoIndex))
+          .toList(),
     );
   }
 }

@@ -106,6 +106,11 @@ namespace Backend.DAL
             return _context.events.Where(x => x.id == id).Include(x => x.institution).Include(l => l.admin).Include(c => c.city).FirstOrDefault();
         }
 
+        public List<Event> getFinishedEvents()
+        {
+            return _context.events.Where(x => x.endDate < DateTime.Now).Include(x => x.institution).Include(l => l.admin).Include(c => c.city).ToList();
+        }
+
         public Event insertEvent(EventViewModel events)
         {
             Event eve = new Event();

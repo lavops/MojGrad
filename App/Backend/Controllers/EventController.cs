@@ -37,6 +37,20 @@ namespace Backend.Controllers
         }
 
         [Authorize]
+        [HttpGet("FinishedEvent")]
+        public ActionResult<IEnumerable<EventViewModel>> GetFinishedEvents()
+        {
+            var events = _iEventUI.getFinishedEvents();
+            List<EventViewModel> listEvents = new List<EventViewModel>();
+            foreach (var eve in events)
+            {
+                listEvents.Add(new EventViewModel(eve, 0));
+            }
+
+            return listEvents;
+        }
+
+        [Authorize]
         [HttpGet("byCityId={cityId}/userId={userID}")]
         public ActionResult<IEnumerable<EventViewModel>> GetFromCityId(int cityId,int userId)
         {

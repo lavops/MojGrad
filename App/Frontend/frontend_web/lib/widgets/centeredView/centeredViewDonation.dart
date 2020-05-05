@@ -24,7 +24,7 @@ class CenteredViewDonationTabletDesktop extends StatelessWidget{
       padding: const EdgeInsets.only(left: 100, right: 100, top: 30),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 500),
+        constraints: BoxConstraints(maxWidth: 1000),
         child: child,
       ),
     );

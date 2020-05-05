@@ -22,6 +22,11 @@ namespace Backend.UI
             return _iAdminBL.deleteAdmin(id);
         }
 
+        public Admin editAdimnProfilePhoto(long id, string photoPath)
+        {
+            return _iAdminBL.editAdimnProfilePhoto(id, photoPath);
+        }
+
         public Admin editAdminData(Admin admin)
         {
             return _iAdminBL.editAdminData(admin);

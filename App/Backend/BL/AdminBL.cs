@@ -22,6 +22,11 @@ namespace Backend.BL
             return _iAdminDAL.deleteAdmin(id);
         }
 
+        public Admin editAdimnProfilePhoto(long id, string photoPath)
+        {
+            return _iAdminDAL.editAdimnProfilePhoto(id, photoPath);
+        }
+
         public Admin editAdminData(Admin admin)
         {
             return _iAdminDAL.editAdminData(admin);

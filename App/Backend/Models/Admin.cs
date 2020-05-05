@@ -12,6 +12,7 @@ namespace Backend.Models
         public string lastName { get; set; }
         public string password { get; set; }
         public string email { get; set; }
+        public string photoPath { get; set; }
         public DateTime createdAt { get; set; }
     }
 }

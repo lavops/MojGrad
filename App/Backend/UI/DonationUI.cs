@@ -42,6 +42,11 @@ namespace Backend.UI
             return _iDonationBL.getByID(id);
         }
 
+        public List<Donation> getFinishedDonations()
+        {
+            return _iDonationBL.getFinishedDonations();
+        }
+
         public Donation insertDonation(Donation donation)
         {
             return _iDonationBL.insertDonation(donation);

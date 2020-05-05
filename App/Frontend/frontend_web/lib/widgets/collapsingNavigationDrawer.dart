@@ -7,6 +7,7 @@ import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
+import 'package:frontend_web/ui/eventPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
@@ -135,7 +136,11 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         }),
                       Navigator.push(
                         context,
+<<<<<<< HEAD
                         MaterialPageRoute(builder: (context) => ManageEventsPageDesktop()),
+=======
+                        MaterialPageRoute(builder: (context) => EventPage()),
+>>>>>>> 11319d5cd32fb8987ac292378a9298fed86466c6
                       ),
                     },
                     isSelected: currentSelectedIndex == 5,

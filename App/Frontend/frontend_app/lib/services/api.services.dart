@@ -578,4 +578,18 @@ class APIServices
     print(res.statusCode);
     return res;
   }
+
+    static Future getTop10(String jwt, int cityId1) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'User/Top10';
+    var data = Map();
+    data["cityId"] = cityId1;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    },body: jsonBody);
+  }
 }

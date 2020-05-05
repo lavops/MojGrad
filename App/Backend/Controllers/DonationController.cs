@@ -46,6 +46,19 @@ namespace Backend.Controllers
         }
 
         [Authorize]
+        [HttpGet("FinishedDonation")]
+        public ActionResult<IEnumerable<DonationViewModel>> GetFinishedDonation()
+        {
+            var donations = _iDonationUI.getFinishedDonations();
+            List<DonationViewModel> listDonation = new List<DonationViewModel>();
+            foreach (var don in donations)
+            {
+                listDonation.Add(new DonationViewModel(don));
+            }
+            return listDonation;
+        }
+
+        [Authorize]
         [HttpPost]
         public IActionResult InsertDonation(Donation donation)
         {

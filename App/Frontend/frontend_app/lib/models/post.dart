@@ -5,13 +5,14 @@ class Post{
   DateTime  _createdAt;
   String _description;
   String _photoPath;
+  String _solvedPhotoPath;
   int _statusId;
   double _latitude;
   double _longitude;
 
 
-  Post(this._id, this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
-  Post.withoutId(this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath, this._statusId, this._latitude, this._longitude);
+  Post(this._id, this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath,this._solvedPhotoPath, this._statusId, this._latitude, this._longitude);
+  Post.withoutId(this._userId, this._postTypeId, this._createdAt, this._description, this._photoPath,this._solvedPhotoPath, this._statusId, this._latitude, this._longitude);
 
   int get id => _id;
   String get userId => _userId;
@@ -19,6 +20,7 @@ class Post{
   DateTime get createdAt => _createdAt;
   String get description => _description;
   String get photoPath => _photoPath;
+  String get solvedPhotoPath => _solvedPhotoPath;
   int get statusId => _statusId;
   double get latitude => _latitude;
   double get longitude => _longitude;  
@@ -33,6 +35,7 @@ class Post{
     data["createdAt"] = _createdAt;
     data["description"] = _description;
     data["photoPath"] = _photoPath;
+    data["solvedPhotoPath"] = _solvedPhotoPath;
     data["statusId"] = _statusId;
     data["latitude"] = _latitude;
     data["longitude"] =_longitude;
@@ -52,6 +55,7 @@ class Post{
     this._createdAt = data["createdAt"];
     this._description = data["description"];
     this._photoPath = data["photoPath"];
+    this._solvedPhotoPath = data["solvedPhotoPath"];
     this._statusId = data["statusId"];
     this._latitude = data["latitude"];
     this._longitude = data["longitude"];

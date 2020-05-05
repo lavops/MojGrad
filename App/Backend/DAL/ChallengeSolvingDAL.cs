@@ -135,6 +135,14 @@ namespace Backend.DAL
                         exist1.solvedPhotoPath = exist.solvingPhoto;
                         _context.Update(exist1);
                         _context.SaveChanges();
+
+                        var existUser = _context.user.Where(x => x.id == exist.userId).FirstOrDefault();
+                        if(existUser != null)
+                        {
+                            existUser.points = existUser.points + 10;
+                            _context.Update(existUser);
+                            _context.SaveChanges();
+                        }
                     }
                     return _context.challengeSolving.Where(x => x.postId == postId).OrderByDescending(x => x.selected).Include(u => u.user).Include(s => s.institution).Include(po => po.post).ToList();
                 }

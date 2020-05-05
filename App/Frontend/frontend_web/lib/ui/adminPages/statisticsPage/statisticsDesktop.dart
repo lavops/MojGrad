@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+import '../../../models/user.dart';
+import '../../../services/api.services.dart';
+import '../../../services/token.session.dart';
+import '../../../widgets/circleImageWidget.dart';
 
 class StatisticsDesktop extends StatefulWidget {
   @override
@@ -10,6 +18,28 @@ class StatisticsDesktop extends StatefulWidget {
 }
 
 class _StatisticsDesktopState extends State<StatisticsDesktop> {
+
+  List<User> listUsers;
+
+  _getUsers() {
+    APIServices.getUsers(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<User> listU = List<User>();
+      listU = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listUsers = listU;
+        });
+      }
+    });
+  }
+
+  void initState() {
+    super.initState();
+    _getUsers();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -19,30 +49,157 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
           shrinkWrap: true,
           children: <Widget>[
             Row(children: <Widget>[
-              Expanded(child: SizedBox()),
+            //  Expanded(child: SizedBox()),
               stats("OBJAVE", Icons.photo_library, 5),
-              Expanded(child: SizedBox()),
+              SizedBox(width: 40),
               stats("DOGAĐAJI", Icons.calendar_today, 1),
-              Expanded(child: SizedBox()),
+              SizedBox(width: 15),
               stats("KORISNICI", Icons.account_circle, 5),
-              Expanded(child: SizedBox()),
+              SizedBox(width: 50),
               stats("INSTITUCIJE", Icons.account_balance, 2),
-              Expanded(child: SizedBox()),
+            //  Expanded(child: SizedBox()),
             ],),
-            SizedBox(height: 100,),
+            SizedBox(height: 15,),
             Row(children: <Widget>[
-              Expanded(child: SizedBox()),
-              newDonation(),
-              Expanded(child: SizedBox()),
+           ///   Expanded(child: SizedBox()),
+              myCircularItems(),
+              SizedBox(width:15),
               eventPost(),
-              Expanded(child: SizedBox()),
+             // Expanded(child: SizedBox()),
             ],),
+            SizedBox(height: 15,),
+            Row(children: <Widget>[
+            //  Expanded(child: SizedBox(),),
+              buildUserList(listUsers),
+              SizedBox(width:15),
+              newDonation(),
+            //  Expanded(child: SizedBox()),
+            ],)
+
             
           ],
         ),
       ),
       CollapsingNavigationDrawer()
     ]);
+  }
+
+
+  Widget buildUserList(List<User> listUsers) {
+    return Card(
+        child:Container(
+        width: 400,
+        height: 265,
+        child:ListView.builder(
+          itemCount: listUsers == null ? 0 : listUsers.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+
+                          color: Colors.white,
+                          padding: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(children: [
+                            CircleImage(
+                              userPhotoURL + listUsers[index].photo,
+                              imageSize: 40.0,
+                              whiteMargin: 2.0,
+                              imageMargin: 6.0,
+                            ),
+                            Container(
+                              // width: 80,
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(listUsers[index].username,
+                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  Text(
+                                      listUsers[index].firstName +
+                                          " " +
+                                          listUsers[index].lastName,
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic, fontSize: 15))
+                                ],
+                              ),
+                            ),
+                          ])),
+                    ],
+                  ),
+                ));
+          },
+        )));
+  }
+
+  List<CircularStackEntry> circularData = <CircularStackEntry>[
+    new CircularStackEntry(
+      <CircularSegmentEntry>[
+        new CircularSegmentEntry(4.0, Color(0xff4285F4), rankKey: 'Rešeno'),
+        new CircularSegmentEntry(6.0, Color(0xffcdf4f9), rankKey: 'Nerešeno'),
+      ],
+      rankKey: 'Quarterly Profits',
+    ),
+  ];
+
+  Material myCircularItems(){
+    return Material(
+      color: Colors.white,
+      child: Card(
+        child:Padding(
+          padding: EdgeInsets.all(4.0),
+          child: Row(
+            mainAxisAlignment:MainAxisAlignment.start,
+            children: <Widget>[
+              Column(
+                  mainAxisAlignment:MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child:Text("STATISTIKA",style:TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.grey,
+                      ),
+                        textAlign: TextAlign.left,),
+                    ),
+                    SizedBox(height: 45),
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.remove_circle,color:Color(0xffcdf4f9)),
+                        Text("UKUPAN BROJ OBJAVA",style:TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
+                        ),),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.check_circle,color:Color(0xff4285F4)),
+                        Text("UKUPAN BROJ REŠENIH OBJAVA",style:TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
+                        ),),
+                      ],
+                    ),
+                  ]),
+              Padding(
+                padding:EdgeInsets.all(8.0),
+                child:AnimatedCircularChart(
+                  size: const Size(160.0, 160.0),
+                  initialChartData: circularData,
+                  chartType: CircularChartType.Pie,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget stats(String name, IconData icon, int number){

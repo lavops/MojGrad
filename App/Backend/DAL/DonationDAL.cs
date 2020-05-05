@@ -54,6 +54,20 @@ namespace Backend.DAL
                 existDon.collectedMoney += ue.donatedPoints * 10;
                 if (existDon.monetaryAmount >= existDon.collectedMoney)
                     this.editDonation(existDon);
+                var exist1 = _context.user.Where(x => x.id == ue.userId ).FirstOrDefault();
+                try
+                {
+                    exist1.donatedPoints += ue.donatedPoints;
+                    exist1.points -= ue.donatedPoints;
+                    exist1.level = exist1.donatedPoints / 100 + 1;
+                    _context.Update(exist1);
+                    _context.SaveChanges();
+                    ret = true;
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             if (ret == true)
                 return _context.donation.Where(x => x.id == ue.donationId).FirstOrDefault();
@@ -110,6 +124,11 @@ namespace Backend.DAL
         public Donation getByID(long id)
         {
             return _context.donation.Where(x => x.id == id).FirstOrDefault();
+        }
+
+        public List<Donation> getFinishedDonations()
+        {
+            return _context.donation.Where(x => x.collectedMoney == x.monetaryAmount).ToList();
         }
 
         public Donation insertDonation(Donation donation)
