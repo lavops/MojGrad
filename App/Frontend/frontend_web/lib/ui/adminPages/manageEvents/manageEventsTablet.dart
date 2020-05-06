@@ -9,12 +9,12 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
 
 
-class ManageEventsPageDesktop extends StatefulWidget {
+class ManageEventsPageTablet extends StatefulWidget {
   @override
-  ManageEventsPageDesktopState createState() => ManageEventsPageDesktopState();
+  ManageEventsPageTabletState createState() => ManageEventsPageTabletState();
 }
 
-class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
+class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
   List<Events> events;
 
   _getEvents()

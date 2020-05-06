@@ -5,16 +5,15 @@ import 'package:frontend_web/createEventPage.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
 
 
-class ManageEventsPageDesktop extends StatefulWidget {
+class ManageEventsPageMobile extends StatefulWidget {
   @override
-  ManageEventsPageDesktopState createState() => ManageEventsPageDesktopState();
+  ManageEventsPageMobileState createState() => ManageEventsPageMobileState();
 }
 
-class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
+class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
   List<Events> events;
 
   _getEvents()
@@ -139,15 +138,13 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(child: ConstrainedBox(child: Column(children: <Widget>[
-           Row(children: <Widget>[
-           Expanded(child: SizedBox(),),
-           RaisedButton(onPressed: () {
-             Navigator.pushReplacement(context, 
-               MaterialPageRoute(builder: (context) => CreateEventPage()),
-              );
+    return Container(child: ConstrainedBox(child: Column(children: <Widget>[
+        Row(children: <Widget>[
+          Expanded(child: SizedBox(),),
+          RaisedButton(onPressed: () {
+            Navigator.pushReplacement(context, 
+              MaterialPageRoute(builder: (context) => CreateEventPage()),
+            );
             },
             shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
             child: Row(children: <Widget>[ Text("Dodaj dogđaj", style: TextStyle(color: Colors.white),), Icon(Icons.add, color: Colors.white,)],),
@@ -158,12 +155,8 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           ]),
           constraints: BoxConstraints(maxWidth: 500),
           ),
-          padding: const EdgeInsets.only(left: 100, right: 100, top: 30),
+          padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
           alignment: Alignment.topCenter,
-        ),
-
-        CollapsingNavigationDrawer(),
-      ],
-    );
+        );
   }
 }

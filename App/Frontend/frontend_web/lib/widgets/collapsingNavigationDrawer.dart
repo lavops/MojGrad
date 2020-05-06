@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsDesktop.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
 import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
@@ -136,11 +137,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         }),
                       Navigator.push(
                         context,
-<<<<<<< HEAD
-                        MaterialPageRoute(builder: (context) => ManageEventsPageDesktop()),
-=======
-                        MaterialPageRoute(builder: (context) => EventPage()),
->>>>>>> 11319d5cd32fb8987ac292378a9298fed86466c6
+                        MaterialPageRoute(builder: (context) => ManageEventsPage()),
                       ),
                     },
                     isSelected: currentSelectedIndex == 5,

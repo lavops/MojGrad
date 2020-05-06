@@ -505,7 +505,6 @@ static Future registerInstitution(Institution ins) async {
     return res;
   }
 
-<<<<<<< HEAD
   //get events
   static Future getEvents(String jwt, int userId) async{
     var data = jsonDecode(jwt);
@@ -516,7 +515,8 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
-=======
+
+  
    static Future createEvent(String jwt, int adminId, String nameEvent, String shortDesc, String longDesc, String location, String city, String startDate, String endDate) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
@@ -558,6 +558,19 @@ static Future registerInstitution(Institution ins) async {
     }, body: jsonBody);
 	}
 
->>>>>>> 11319d5cd32fb8987ac292378a9298fed86466c6
+  static Future removeEvent(String jwt, int eventId) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event/Delete';
+    var data = Map();
+    data['id'] = eventId;
+    var jsonBody = convert.jsonEncode(data);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    return res;
+  }
 }
 
