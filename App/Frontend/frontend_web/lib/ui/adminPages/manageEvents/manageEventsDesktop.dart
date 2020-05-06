@@ -52,14 +52,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
                   startEndDateRow(listEvents[index]),
                   locationRow(listEvents[index]),
-                  RaisedButton(
-                    child: Text("Obriši", style: TextStyle(color: Colors.white),),
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
-                    onPressed: () {
-                      showAlertDialog(context, listEvents[index].id, index);
-                    },
-                  ),
+                  buttonsRow(listEvents[index], index),
                  ],
                 ),
               ),
@@ -79,21 +72,43 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
 
   Widget startEndDateRow(Events event) {
     return Row(children: <Widget>[
-      SizedBox(width: 8.0),
+      SizedBox(width: 15.0),
       Text("Počinje: "),
       Text(event.startDate),
       Expanded(child: SizedBox(),),
       Text("Završava se: "),
       Text(event.endDate),
-      SizedBox(width: 8.0,),
+      SizedBox(width: 15.0,),
     ],);
   }
 
   Widget locationRow(Events event) {
     return Row(children: <Widget>[
-      SizedBox(width: 8.0,),
+      SizedBox(width: 10.0,),
       Icon(Icons.location_on),
       Text(event.address),
+    ],);
+  }
+
+  Widget buttonsRow(Events event, index) {
+    return Row(children: <Widget>[
+      SizedBox(width: 15.0,),
+      RaisedButton(
+        onPressed: () {},
+        color: Color(0xFF00BFA6),
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
+      ),
+      Expanded(child: SizedBox()),
+      RaisedButton(
+        child: Text("Obriši", style: TextStyle(color: Colors.white),),
+        color: Colors.red,
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        onPressed: () {
+          showAlertDialog(context, event.id, index);
+        },
+      ),
+      SizedBox(width: 15.0,),
     ],);
   }
 
@@ -156,7 +171,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           ],),
             Flexible(child: buildEventsList(events),),
           ]),
-          constraints: BoxConstraints(maxWidth: 500),
+          constraints: BoxConstraints(maxWidth: 600),
           ),
           padding: const EdgeInsets.only(left: 100, right: 100, top: 30),
           alignment: Alignment.topCenter,

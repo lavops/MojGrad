@@ -51,14 +51,7 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
                   startEndDateRow(listEvents[index]),
                   locationRow(listEvents[index]),
-                  RaisedButton(
-                    child: Text("Obriši", style: TextStyle(color: Colors.white),),
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
-                    onPressed: () {
-                      showAlertDialog(context, listEvents[index].id, index);
-                    },
-                  ),
+                  buttonsRow(listEvents[index], index),
                  ],
                 ),
               ),
@@ -93,6 +86,28 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
       SizedBox(width: 8.0,),
       Icon(Icons.location_on),
       Text(event.address),
+    ],);
+  }
+
+  Widget buttonsRow(Events event, index) {
+    return Row(children: <Widget>[
+      SizedBox(width: 10.0,),
+      RaisedButton(
+        onPressed: () {},
+        color: Color(0xFF00BFA6),
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
+      ),
+      Expanded(child: SizedBox()),
+      RaisedButton(
+        child: Text("Obriši", style: TextStyle(color: Colors.white),),
+        color: Colors.red,
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        onPressed: () {
+          showAlertDialog(context, event.id, index);
+        },
+      ),
+      SizedBox(width: 10.0,),
     ],);
   }
 

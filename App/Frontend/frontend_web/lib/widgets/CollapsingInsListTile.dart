@@ -38,7 +38,7 @@ class _CollapsingInsListTileState extends State<CollapsingInsListTile> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(16.0)),
           color: widget.isSelected
-              ? Colors.transparent.withOpacity(0.3)
+              ? Color(0xFF00BFA6)
               : Colors.transparent,
         ),
         width: widthAnimation.value,
@@ -48,14 +48,14 @@ class _CollapsingInsListTileState extends State<CollapsingInsListTile> {
           children: <Widget>[
             Icon(
               widget.icon,
-              color: widget.isSelected ? Colors.green[800] : Colors.black54,
+              color: widget.isSelected ? Colors.white : Colors.black54,
               size: 33.0,
             ),
             SizedBox(width: sizedBoxAnimation.value),
             (widthAnimation.value >= 190)
                 ? Text(widget.title,
                 style: widget.isSelected
-                    ? TextStyle(color: Colors.black54, fontSize: 11.0, fontWeight: FontWeight.w500)
+                    ? TextStyle(color: Colors.white, fontSize: 11.0, fontWeight: FontWeight.w500)
                     : TextStyle(color: Colors.black54, fontSize: 11.0, fontWeight: FontWeight.w500))
                 : Container()
           ],
