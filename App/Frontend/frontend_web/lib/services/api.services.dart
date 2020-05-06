@@ -589,6 +589,17 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
 	}
+
+
+  static Future getUser(String jwt, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL +'User/'+userId.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }); 
+  }
 	
 	// solve a post as institution
 

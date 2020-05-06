@@ -8,6 +8,7 @@ import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/InstitutionUnsolvedPostWidget.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
+import 'package:frontend_web/widgets/post/insRowPost/insRowPostDesktop.dart';
 
 
 class HomeInstitutionDesktop extends StatefulWidget {
@@ -62,6 +63,8 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
         padding: EdgeInsets.only(bottom: 30.0),
         itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
         itemBuilder: (BuildContext context, int index) {
+          //return InsRowPostDesktopWidget(listUnsolvedPosts[index]);
+
           return InstitutionUnsolvedPostWidget(posts: listUnsolvedPosts[index], id: institution.id);
         }
       ),
