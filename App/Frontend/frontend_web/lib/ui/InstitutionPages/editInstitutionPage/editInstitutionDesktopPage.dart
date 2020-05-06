@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -9,8 +8,11 @@ import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
-import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
+Color greenPastel = Color(0xFF00BFA6);
 
 class EditInstitutionDesktopPage extends StatefulWidget {
   final Institution institution;
@@ -18,19 +20,27 @@ class EditInstitutionDesktopPage extends StatefulWidget {
   EditInstitutionDesktopPage(this.institution);
 
   @override
-  _EditInstitutionDesktopPageState createState() => _EditInstitutionDesktopPageState();
+  _EditInstitutionDesktopPageState createState() =>
+      _EditInstitutionDesktopPageState();
 }
 
-class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage> {
+class _EditInstitutionDesktopPageState
+    extends State<EditInstitutionDesktopPage> {
   String wrongRegText = "";
   Institution institution;
   Image imageFile;
 
-  String name = '',password = '', oldPassword = '', email = '',description = '',phone = '',cityName = '';
+  String name = '',
+      password = '',
+      oldPassword = '',
+      email = '',
+      description = '',
+      phone = '',
+      cityName = '';
   int cityId = 0;
   String spoljasnjeIme = '';
   String baseString;
-  String city1='';
+  String city1 = '';
   int city1Id = 0;
 
   _getCity() {
@@ -46,24 +56,24 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
     });
   }
 
-
   @override
   void initState() {
     super.initState();
     institution = widget.institution;
     _getCity();
   }
+
   String namePhoto = '';
   String error;
   Uint8List data;
   Color greenPastel = Color(0xFF00BFA6);
- 
+
   pickImage() {
     final html.InputElement input = html.document.createElement('input');
     input
       ..type = 'file'
       ..accept = 'image/*';
- 
+
     input.onChange.listen((e) {
       if (input.files.isEmpty) return;
       final reader = html.FileReader();
@@ -76,7 +86,7 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
         // remove data:image/*;base64 preambule
         final stripped =
             encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
- 
+
         setState(() {
           namePhoto = input.files[0].name;
           data = base64.decode(stripped);
@@ -84,7 +94,7 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
         });
       });
     });
- 
+
     input.click();
   }
 
@@ -112,41 +122,43 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[Text("Naziv institucije:")],
+                      children: <Widget>[
+                        Text(
+                          "Naziv institucije",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextFormField(
+                      cursorColor: Colors.black,
                       controller: customController,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /*decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
+                            color: greenPastel, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -157,7 +169,16 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                             });
                             Navigator.pop(context);
                           },
-                        ),
+                        ).showCursorOnHover,
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: greenPastel),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ).showCursorOnHover,
                       ],
                     )
                   ],
@@ -193,48 +214,45 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                       children: <Widget>[
                         Text("Cilj institucije",
                             style: TextStyle(
-                                fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))
                       ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextFormField(
+                      cursorColor: Colors.black,
                       key: Key('atext'),
                       keyboardType: TextInputType.multiline,
                       minLines: 3,
                       maxLines: 15,
                       controller: customController,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /* decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
+                            color: greenPastel, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         SizedBox(width: 50),
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -245,7 +263,16 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                             });
                             Navigator.pop(context);
                           },
-                        ),
+                        ).showCursorOnHover,
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: greenPastel),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ).showCursorOnHover,
                       ],
                     )
                   ],
@@ -279,45 +306,42 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Broj telefona",
+                        Text("Kontakt telefon",
                             style: TextStyle(
-                                fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))
                       ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextFormField(
+                      cursorColor: Colors.black,
                       controller: customController,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /* decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
+                            color: greenPastel, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -332,13 +356,22 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                               check = "Greska";
                               setState(() {
                                 wrongRegText =
-                                    "Broj telefona nije u dobrom formatu";
+                                    "Broj telefona nije u dobrom formatu.";
                               });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
                           },
-                        ),
+                        ).showCursorOnHover,
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: greenPastel),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ).showCursorOnHover,
                       ],
                     )
                   ],
@@ -374,43 +407,40 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                       children: <Widget>[
                         Text("Email",
                             style: TextStyle(
-                                fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))
                       ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextFormField(
+                      cursorColor: Colors.black,
                       controller: customController,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /*decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
+                            color: greenPastel, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -425,12 +455,21 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                               check = "Greska";
                               print(check);
                               setState(() {
-                                wrongRegText = "Email nije ispravno unet";
+                                wrongRegText = "Neispravno uneta email adresa.";
                               });
                               Navigator.of(context).pop(check.toString());
                             }
                           },
-                        ),
+                        ).showCursorOnHover,
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: greenPastel),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ).showCursorOnHover,
                       ],
                     )
                   ],
@@ -463,76 +502,90 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                       children: <Widget>[
                         Text("Šifra",
                             style: TextStyle(
-                                fontSize: 24,
-                                color: Theme.of(context).textTheme.bodyText1.color))
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))
                       ],
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: password1,
                       autofocus: false,
                       obscureText: true,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelText: 'Trenutna šifra',
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /*decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Trenutna šifra",
-                        hintStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color),
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
-                        fillColor: Theme.of(context).textTheme.bodyText1.color,
+                            color: greenPastel, fontStyle: FontStyle.italic),
+                        fillColor: greenPastel,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: password2,
                       autofocus: false,
                       obscureText: true,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelText: 'Nova šifra',
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /* decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Nova šifra",
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
+                            color: greenPastel, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: password3,
                       autofocus: false,
                       obscureText: true,
                       decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: greenPastel),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelText: 'Ponovi šifru',
+                          labelStyle: TextStyle(color: Colors.black)),
+                      /*decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Ponovi šifru",
                         labelStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontStyle: FontStyle.italic),
+                            color: greenPastel, fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
-                      ),
-                    ),
+                      ),*/
+                    ).showCursorTextOnHover,
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -553,7 +606,8 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                               } else {
                                 check = "Greska regEx";
                                 setState(() {
-                                  wrongRegText = "Šifra mora imati najmanje 6 karaktera";
+                                  wrongRegText =
+                                      "Šifra mora imati najmanje 6 karaktera.";
                                 });
                                 print(check);
                                 Navigator.of(context).pop(check.toString());
@@ -562,7 +616,16 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                               print("Nova i ponovljena nisu iste");
                             }
                           },
-                        ),
+                        ).showCursorOnHover,
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: greenPastel),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ).showCursorOnHover,
                       ],
                     )
                   ],
@@ -574,105 +637,96 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
   List<City> _city;
   City city;
 
-  
- Future<String> editCity(BuildContext context, String cityName) async {
+  Future<String> editCity(BuildContext context, String cityName) async {
     // show the dialog
-   return showDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         City pomCity;
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16))),
-      content: Container(
-          width: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("Grad",
-                      style: TextStyle(
-                          fontSize: 24,
-                          color: Theme.of(context).textTheme.bodyText1.color))
-                ],
-              ),
-              SizedBox(height: 5),
-              Center(
-                child:Row(
-      children: <Widget>[
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
-        _city != null
-            ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
-                value: pomCity,
-                onChanged: (City value) {
-                  setState(() {
-                    pomCity = value;
-                    city1 = value.name;
-                    city1Id = value.id;
-                  });
-                },
-                items: _city.map((City option) {
-                  return DropdownMenuItem<City>(
-                    value: option,
-                    child: Text(option.name),
-                  );
-                }).toList(),
-              )
-            : DropdownButton<String>(
-                hint: Text("Izaberi"),
-                onChanged: null,
-                items: null,
-              ),
-              ],)
-              ),
-              SizedBox(height: 20),
-              Row(
-                 mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FlatButton(
-                    child: Text(
-                      "Otkaži",
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: Container(
+                width: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text("Grad", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
+                      ],
                     ),
-                    onPressed: () {
-                      setState(() {
-                       city1 = '';
-                      city1Id = 0;
-                      });
-                     
-                      Navigator.pop(context,'');
-                    },
-                  ),
-                   MaterialButton(
-                    child: Text(
-                      "Izmeni",
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
-                      textAlign: TextAlign.center,
-                    ),
-                    onPressed: () {
-                      if(pomCity != null){
-                        Navigator.pop(context,pomCity.name);
-                      }
-                      
-                    },
-                  ),
-                ],
-              )
-            ],
-          )),
-    );
+                    SizedBox(height: 5),
+                    Center(
+                        child: Row(
+                      children: <Widget>[
+                        _city != null
+                            ? DropdownButton<City>(
+                                hint: Text("Izaberi",
+                                    style: TextStyle(color: Colors.black)),
+                                value: pomCity,
+                                onChanged: (City value) {
+                                  setState(() {
+                                    pomCity = value;
+                                    city1 = value.name;
+                                    city1Id = value.id;
+                                  });
+                                },
+                                items: _city.map((City option) {
+                                  return DropdownMenuItem<City>(
+                                    value: option,
+                                    child: Text(option.name),
+                                  );
+                                }).toList(),
+                              )
+                            : DropdownButton<String>(
+                                hint: Text("Izaberi",
+                                    style: TextStyle(color: Colors.black)),
+                                onChanged: null,
+                                items: null,
+                              ),
+                      ],
+                    ).showCursorOnHover),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Izmeni",
+                            style: TextStyle(color: greenPastel),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {
+                            if (pomCity != null) {
+                              Navigator.pop(context, pomCity.name);
+                            }
+                          },
+                        ).showCursorOnHover,
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(color: greenPastel),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              city1 = '';
+                              city1Id = 0;
+                            });
+
+                            Navigator.pop(context, '');
+                          },
+                        ).showCursorOnHover,
+                      ],
+                    )
+                  ],
+                )),
+          );
         });
       },
     );
@@ -692,202 +746,205 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
               color: Colors.redAccent[800], fontWeight: FontWeight.bold),
         ),
         onTap: () {},
-      ),
+      ).showCursorOnHover,
     ],
   );
 
   @override
   Widget build(BuildContext context) {
-  return
-      Center(
-          child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(top: 5),
-        width: 600,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              margin:EdgeInsets.all(10) ,
+    return Center(
+        child: Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 5),
+      width: 600,
+      child: ListView(
+        children: <Widget>[
+          Container(
+              margin: EdgeInsets.all(10),
               child: Column(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  pickImage();
-                },
-                child: error != null
-              ? Text(error)
-              : data != null
-              ? ClipOval(
-                  child: Image.memory(data, height: 100.0,
-                  width: 100.0,
-                  fit: BoxFit.cover,)
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      pickImage();
+                    },
+                    child: error != null
+                        ? Text(error)
+                        : data != null
+                            ? ClipOval(
+                                child: Image.memory(
+                                data,
+                                height: 100.0,
+                                width: 100.0,
+                                fit: BoxFit.cover,
+                              ))
+                            : CircleImage(
+                                userPhotoURL + institution.photoPath,
+                                imageSize: 100.0,
+                                whiteMargin: 0.0,
+                                imageMargin: 0.0,
+                              ),
+                  ).showCursorOnHover,
+                  GestureDetector(
+                    onTap: () {
+                      pickImage();
+                    },
+                    child: Text(
+                      "Promeni profilnu sliku",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                  ).showCursorOnHover,
+                  SizedBox(
+                    height: 10,
                   )
-                  : CircleImage(
-                  userPhotoURL + institution.photoPath,
-                  imageSize: 100.0,
-                  whiteMargin: 0.0,
-                  imageMargin: 0.0,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  pickImage();
-                },
-                child: Text(
-                  "Promeni profilnu sliku",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.bodyText1.color),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              )
-            ],
+                ],
+              )),
+          ListTile(
+            leading:
+                Icon(Icons.business, color: Color.fromRGBO(15, 32, 67, 100)),
+            title: Text('Naziv institucije',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: name == '' ? Text(institution.name) : Text(name),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                institutionName(context, institution.name);
+              },
+            ),
+          ).showCursorOnHover,
+          ListTile(
+            leading:
+                Icon(Icons.description, color: Color.fromRGBO(15, 32, 67, 100)),
+            title: Text('Opis institucije',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: description == ''
+                ? Text(institution.description)
+                : Text(description),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                instDescription(context, institution.description);
+              },
+            ),
+          ).showCursorOnHover,
+          ListTile(
+            leading: Icon(Icons.email, color: Color.fromRGBO(15, 32, 67, 100)),
+            title: Text(
+              'Email',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: email == '' ? Text(institution.email) : Text(email),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                instEmail(context, institution.email);
+              },
+            ),
+          ).showCursorOnHover,
+          ListTile(
+            leading: Icon(Icons.phone, color: Color.fromRGBO(15, 32, 67, 100)),
+            title: Text(
+              'Kontakt telefon',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: phone == '' ? Text(institution.phone) : Text(phone),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                instPhone(context, institution.phone);
+              },
+            ),
+          ).showCursorOnHover,
+          ListTile(
+            leading: Icon(Icons.phonelink_lock,
+                color: Color.fromRGBO(15, 32, 67, 100)),
+            title: Text(
+              'Šifra',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text("******"),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                instPassword(context);
+              },
+            ),
+          ).showCursorOnHover,
+          ListTile(
+            leading: Icon(Icons.phonelink_lock,
+                color: Color.fromRGBO(15, 32, 67, 100)),
+            title: Text(
+              'Grad',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(city1 == '' ? institution.cityName : city1),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () async {
+                var res = await editCity(context, institution.cityName);
+                setState(() {
+                  city1 = res;
+                });
+              },
+            ),
+          ).showCursorOnHover,
+          Center(
+              child: Container(
+                  width: 600,
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(11.0),
+                    ),
+                    color: greenPastel,
+                    child: Text(
+                      "Sačuvaj izmene",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      if (city1Id != 0) {
+                        edit(name, description, email, phone, city1Id,
+                            institution, oldPassword, password);
+                      } else {
+                        edit(name, description, email, phone, 0, institution,
+                            oldPassword, password);
+                      }
+                    },
+                  ).showCursorOnHover)),
+          Center(
+              child: Text(
+            wrongRegText,
+            style: TextStyle(
+              color: Colors.red,
+            ),
           )),
-
-            ListTile(
-              leading: Icon(Icons.business,
-                  color: Color.fromRGBO(15, 32, 67,100)),
-              title: Text('Naziv institucije'),
-              subtitle: name == ''? Text(institution.name): Text(name),
-              trailing: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  institutionName(context, institution.name);
-                },
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.description,
-                  color: Color.fromRGBO(15, 32, 67,100)),
-              title: Text('Opis'),
-              subtitle: description == ''? Text(institution.description): Text(description),
-              trailing: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  instDescription(
-                      context, institution.description);
-                },
-              ),
-            ),
-            ListTile(
-              leading:
-                  Icon(Icons.email, color: Color.fromRGBO(15, 32, 67,100)),
-              title: Text('Email'),
-              subtitle: email == ''? Text(institution.email): Text(email),
-              trailing: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  instEmail(context, institution.email);
-                },
-              ),
-            ),
-            ListTile(
-              leading:
-                  Icon(Icons.phone, color: Color.fromRGBO(15, 32, 67,100)),
-              title: Text('Telefon'),
-              subtitle: phone == ''? Text(institution.phone): Text(phone),
-              trailing: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  instPhone(context, institution.phone);
-                },
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.phonelink_lock,
-                  color:Color.fromRGBO(15, 32, 67,100)),
-              title: Text('Šifra'),
-              subtitle: Text("******"),
-              trailing: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  instPassword(context);
-                },
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.phonelink_lock,
-                  color:Color.fromRGBO(15, 32, 67,100)),
-              title: Text('Grad'),
-              subtitle: Text(city1 == '' ? institution.cityName : city1),
-              trailing: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () async{
-                    var res = await editCity(context, institution.cityName);
-                    setState(() {
-                      city1 = res;
-                    });       
-                  },
-              ),
-            ),
-            Center(
-                child: Container(
-                    width: 600,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              new BorderRadius.circular(11.0),
-                          side: BorderSide(
-                              color: Color.fromRGBO(15, 32, 67,100))),
-                      color: Colors.green[800],
-                      child: Text(
-                        "Sacuvaj izmene",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        if (city1Id != 0) {
-                          edit(name,description,email,phone,city1Id,institution,oldPassword,password);
-                        } else {
-                          edit(name,description,email,phone,0,institution,oldPassword,password);
-                        }
-                      },
-                    ))),
-            Center(
-                child: Text(
-              wrongRegText,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 25,
-              ),
-            )),
-            deactLabelWidget,
-          ],
-        ),
-      ));
-
-
+          deactLabelWidget,
+        ],
+      ),
+    ));
   }
 
   Future<String> showDial(BuildContext context) {
@@ -916,8 +973,7 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
                         FlatButton(
                           child: Text(
                             "OK",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -937,7 +993,6 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
 
   edit(String nname, String ndescription, String nemail, String nmobile,
       int ncityId, Institution institution, String pass1, String pass2) {
-
     if (ncityId == 0) {
       ncityId = institution.cityId;
     }
@@ -953,56 +1008,53 @@ class _EditInstitutionDesktopPageState extends State<EditInstitutionDesktopPage>
     if (nmobile == "") {
       nmobile = institution.phone;
     }
-       if (nname == institution.name &&
+    if (nname == institution.name &&
         ndescription == institution.description &&
         nemail == institution.email &&
         nmobile == institution.phone &&
         ncityId == institution.cityId &&
         pass1 == "" &&
-        pass2 == "" && namePhoto == "") {
+        pass2 == "" &&
+        namePhoto == "") {
       setState(() {
-        wrongRegText = "Nista niste izmenili.";
+        wrongRegText = "Niste izmenili ništa.";
       });
       throw Exception("Nista niste izmenili");
-    }
-    else {
-      
-        if (namePhoto != "") {
-            String base64Image = base64Encode(data);
-            APIServices.addImageWeb(base64Image).then((res){
-              var res1 = jsonDecode(res);
-              print("usloo");
-                APIServices.editInstitutionProfilePhoto(TokenSession.getToken, institution.id,res1);
-            } );
-            
-         }
-      if (pass1 == "" && pass2 == "") {
-      String jwt = TokenSession.getToken;
-      APIServices.editInstitutionData(
-          jwt, institution.id, nname, nemail, nmobile, ndescription, ncityId).then((value) {
-          });
     } else {
-      String jwt = TokenSession.getToken;
+      if (namePhoto != "") {
+        String base64Image = base64Encode(data);
+        APIServices.addImageWeb(base64Image).then((res) {
+          var res1 = jsonDecode(res);
+          APIServices.editInstitutionProfilePhoto(
+              TokenSession.getToken, institution.id, res1);
+        });
+      }
+      if (pass1 == "" && pass2 == "") {
+        String jwt = TokenSession.getToken;
+        APIServices.editInstitutionData(jwt, institution.id, nname, nemail,
+                nmobile, ndescription, ncityId)
+            .then((value) {});
+      } else {
+        String jwt = TokenSession.getToken;
 
-      var tempPass1 = utf8.encode(pass1);
-      var shaPass1 = sha1.convert(tempPass1);
-      var tempPass2 = utf8.encode(pass2);
-      var shaPass2 = sha1.convert(tempPass2);
-      APIServices.editInstitutionData(
-          jwt, institution.id, nname, nemail, nmobile, ndescription, ncityId);
-      APIServices.editInstitutionPassword(
-              jwt, institution.id, shaPass1.toString(), shaPass2.toString())
-          .then((res) {
-        if (res.statusCode == 200) {
-          setState(() {
-            password='';
-            oldPassword = '';
-          });
-        } 
-      });
+        var tempPass1 = utf8.encode(pass1);
+        var shaPass1 = sha1.convert(tempPass1);
+        var tempPass2 = utf8.encode(pass2);
+        var shaPass2 = sha1.convert(tempPass2);
+        APIServices.editInstitutionData(
+            jwt, institution.id, nname, nemail, nmobile, ndescription, ncityId);
+        APIServices.editInstitutionPassword(
+                jwt, institution.id, shaPass1.toString(), shaPass2.toString())
+            .then((res) {
+          if (res.statusCode == 200) {
+            setState(() {
+              password = '';
+              oldPassword = '';
+            });
+          }
+        });
+      }
+      showDial(context);
     }
-    showDial(context);
-    }
-   
   }
 }

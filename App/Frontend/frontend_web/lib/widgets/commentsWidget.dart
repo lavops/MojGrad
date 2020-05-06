@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/comment.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionDesktop.dart';
 import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/ui/postPage.dart';
-import 'package:http/http.dart' as http;
 import 'circleImageWidget.dart';
 
 
@@ -59,7 +59,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   showAlertDialog(BuildContext context, int id) {
     //set up buttons
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.green),),
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
       onPressed: () {
         APIServices.deleteComment(TokenSession.getToken, id);
         Navigator.pushReplacement(
@@ -69,7 +69,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
         },
     );
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.green),),
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
         },

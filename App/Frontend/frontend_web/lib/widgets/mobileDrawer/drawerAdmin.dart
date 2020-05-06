@@ -9,7 +9,8 @@ import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/ui/institutionProfilesPage.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -141,6 +142,6 @@ class DrawerAdmin extends StatelessWidget{
           ),
         ],)
       )
-    );
+    ).showCursorOnHover;
   }
 }

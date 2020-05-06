@@ -9,6 +9,9 @@ import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import '../homePage/homePage.dart';
 
@@ -25,7 +28,7 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
         endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-            ? HomeNavigationDrawer(1)
+            ? HomeNavigationDrawer(4)
             : null,
         appBar: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
             ? AppBar(
@@ -52,7 +55,7 @@ class _InstitutionLoginPageState extends State<InstitutionLoginPage>{
         body: CenteredView(
           child: Column(
             children: <Widget>[
-              (sizingInformation.deviceScreenType != DeviceScreenType.Mobile) ? HomeNavigationBar(1) : SizedBox(),
+              (sizingInformation.deviceScreenType != DeviceScreenType.Mobile) ? HomeNavigationBar(4) : SizedBox(),
               Expanded(
                 child: ScreenTypeLayout(
                   mobile: InstitutionAdminLoginMobilePage(),
@@ -155,7 +158,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
             var jwt = str.split(".");
 
             if(jwt.length !=3) {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomeView()
@@ -166,14 +169,14 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
                 int type = int.parse(payload["nameid"]);
                 if(type == 1)
-                   Navigator.push(
+                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomePage(str, payload)
                     )
                   );
                 else
-                   Navigator.push(
+                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomePageInstitution(str,payload)
@@ -203,6 +206,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
 
     //text box for email
     final emailText = TextField(
+      cursorColor: Colors.black,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
@@ -218,10 +222,11 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
         ),
       ),
       controller: _emailController,
-    );
+    ).showCursorTextOnHover;
 
     //text box for password
     final passwordText = TextField(
+      cursorColor: Colors.black,
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
@@ -237,7 +242,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
         ),
       ),
       controller: _passwordController,
-    );
+    ).showCursorTextOnHover;
 
     //button for login
     final loginButton = Padding(
@@ -265,7 +270,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
               color: Colors.white,
             ),
           ),
-        ),
+        ).showCursorOnHover,
       ),
     );
 
@@ -295,7 +300,7 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
               MaterialPageRoute(builder: (context) => InstitutionRegisterPage()),
             );
           },
-        ),
+        ).showCursorOnHover,
       ],
     );
 

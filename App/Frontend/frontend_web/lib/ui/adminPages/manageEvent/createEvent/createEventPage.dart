@@ -1,25 +1,152 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
-import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
+import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
-import 'dart:async';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
-import 'models/city.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
+
 class CreateEventPage extends StatefulWidget {
   @override
-  _CreateEventPage createState() => _CreateEventPage();
+  _CreateEventPageState createState() => _CreateEventPageState();
 }
 
-class _CreateEventPage extends State<CreateEventPage> {
+class _CreateEventPageState extends State<CreateEventPage> {
+  
+  @override
+  Widget build(BuildContext context) {
+     return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+          ? DrawerAdmin(6)
+          : null,
+        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+          ? null
+          : AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+          ),
+        backgroundColor: Colors.white,
+        body: Row(
+            children: <Widget>[
+              sizingInformation.deviceScreenType != DeviceScreenType.Mobile 
+            ? CollapsingNavigationDrawer(): SizedBox(),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile:CreateEventMobilePage(),
+                  desktop: CreateEventDesktopPage(),
+                  tablet: CreateEventDesktopPage(),
+                ),
+              )
+            ],
+          ),
+        )
+    );
+
+  }
+}
+
+
+class CreateEventMobilePage extends StatefulWidget{
+  @override
+  _CreateEventMobilePageState createState() => new _CreateEventMobilePageState();
+}
+
+class _CreateEventMobilePageState extends State<CreateEventMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 20,),
+            Align(
+              alignment: Alignment(-0.75, -0.50),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                color: greenPastel,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)),
+                child: Text(
+                  "Vrati se nazad",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ).showCursorOnHover,   
+            Container(width: 350, child: 
+            CreateEventWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class CreateEventDesktopPage extends StatefulWidget{
+  @override
+  _CreateEventDesktopPageState createState() => new _CreateEventDesktopPageState();
+}
+
+class _CreateEventDesktopPageState extends State<CreateEventDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+                    alignment: Alignment(-0.65, -0.65),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: greenPastel,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(18.0),
+                          side: BorderSide(color: greenPastel)),
+                      child: Text(
+                        "Vrati se nazad",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ).showCursorOnHover,
+            SizedBox(height: 10,),
+            Container(width: 500, child: 
+            CreateEventWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+
+
+class CreateEventWidget extends StatefulWidget {
+  @override
+  _CreateEventWidget createState() => _CreateEventWidget();
+}
+
+class _CreateEventWidget extends State<CreateEventWidget> {
   DateTime _startDate;
   DateTime _endDate;
   List<DropdownMenuItem<Time>> _dropdownMenuItems;
@@ -32,6 +159,10 @@ class _CreateEventPage extends State<CreateEventPage> {
   TextEditingController shortDescriptionController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+
+  String wrongText = "";
+  String startDate = "";
+  String endDate = "";
 
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
@@ -97,6 +228,7 @@ class _CreateEventPage extends State<CreateEventPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
@@ -123,6 +255,7 @@ class _CreateEventPage extends State<CreateEventPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
@@ -145,6 +278,7 @@ class _CreateEventPage extends State<CreateEventPage> {
     return Container(
       width: 500,
       child: TextField(
+        cursorColor: Colors.black,
         controller: shortDescriptionController,
         style: TextStyle(
           fontSize: 16,
@@ -310,33 +444,58 @@ class _CreateEventPage extends State<CreateEventPage> {
         ]).showCursorOnHover;
   }
 
+  Widget wrong() {
+    return Container(
+        child: Center(
+            child: Text(
+      '$wrongText',
+      style: TextStyle(color: Colors.red),
+    )));
+  }
+
   Widget createEventButton() {
     return RaisedButton(
       onPressed: () {
-        String _startDateString = DateFormat.yMd().format(_startDate);
-        String _endDateString = DateFormat.yMd().format(_endDate);
+        
         //print(_startDateString + ' ' + _selectedTipStart.toString());
         // print(_endDateString + ' ' + _selectedTipEnd.toString());
 
-        String startDate =
-            _startDateString + ' ' + _selectedTipStart.toString();
-        String endDate = _endDateString + ' ' + _selectedTipEnd.toString();
-
         var str = TokenSession.getToken;
         var jwt = str.split(".");
-        var payload =
-            json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+        var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
         print(payload);
-        APIServices.createEvent(
-            str,
-            int.parse(payload["sub"]),
-            nameController.toString(),
-            shortDescriptionController.toString(),
-            descriptionController.toString(),
-            locationController.toString(),
-            city.name,
-            startDate,
-            endDate);
+
+        if (nameController.text != '' &&
+            locationController.text != '' &&
+            _startDate != null &&
+            _endDate != null) {
+
+          String _startDateString = DateFormat.yMd().format(_startDate);
+          String _endDateString = DateFormat.yMd().format(_endDate);
+
+          startDate = _startDateString + ' ' + _selectedTipStart.toString();
+          endDate = _endDateString + ' ' + _selectedTipEnd.toString();
+
+          APIServices.createEvent(
+              str,
+              int.parse(payload["sub"]),
+              nameController.toString(),
+              shortDescriptionController.toString(),
+              descriptionController.toString(),
+              locationController.toString(),
+              city.name,
+              startDate,
+              endDate);
+
+          print('nisu dobri podaci');
+          setState(() {
+            wrongText = "";
+          });
+        } else {
+          setState(() {
+            wrongText = "Unesite sve podatke!";
+          });
+        }
       },
       color: greenPastel,
       shape: RoundedRectangleBorder(
@@ -348,62 +507,42 @@ class _CreateEventPage extends State<CreateEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      Material(
-          elevation: 5,
-          child: Container(
-              margin: EdgeInsets.only(top: 15),
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment(-0.75, -0.75),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: greenPastel,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: greenPastel)),
-                      child: Text(
-                        "Vrati se nazad",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ).showCursorOnHover,
-                  nameEvent(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  shortDescription(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  longDescription(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  locationWidget(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  calendar(),
-                  dropdownCity(listCities),
-                  dropdownTime(times),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  createEventButton()
-                ],
-              ))),
-      CollapsingNavigationDrawer()
-    ]);
+    return  Container(
+      margin: EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: <Widget>[
+          nameEvent(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          shortDescription(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          longDescription(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          locationWidget(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          calendar(),
+          dropdownCity(listCities),
+          dropdownTime(times),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          createEventButton(),
+          wrong()
+        ],
+      ));
   }
 }
 

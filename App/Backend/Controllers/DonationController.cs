@@ -117,7 +117,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("addParcipate")]
-        public IActionResult GetReportingUser(UserDonation donation)
+        public IActionResult AddParticipate(UserDonation donation)
         {
             Donation don = _iDonationUI.addParticipate(donation);
             if (don != null)

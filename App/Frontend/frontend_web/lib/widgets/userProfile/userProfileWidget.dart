@@ -4,6 +4,8 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class UserInfoWidget extends StatefulWidget {
@@ -21,10 +23,14 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
   _UserInfoWidgetState(User user1) {
     this.user = user1;
   }
-
+  int points;
+  String text1="Poeni";
   @override
   void initState() {
     super.initState();
+    setState(() {
+      points = user.points;
+    });
   }
 
   @override
@@ -35,7 +41,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
           Text(
             statCount.toString(),
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
             ),
@@ -71,7 +77,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                     side: BorderSide(color: greenPastel)
                   ),
                   child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
-                ),
+                ).showCursorOnHover,
                 Expanded(child: SizedBox(),),
                 RaisedButton(
                   onPressed: (){
@@ -83,7 +89,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                     side: BorderSide(color: Colors.red)
                   ),
                   child: Text("Obriši", style: TextStyle(color: Colors.white),),
-                ),
+                ).showCursorOnHover,
               ],
             ),
             SizedBox(height: 10,),
@@ -97,7 +103,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                       Text(
                         user.firstName + ' ' + user.lastName,
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 20.0,
                         ),
@@ -106,7 +112,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                       Text(
                         'Lokacija: ' + user.cityName,
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color),
+                            color: Colors.black),
                       ),
                     ],
                   ),
@@ -122,13 +128,13 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                     Text(
                       "Objave",
                       style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
                     Text("${user.postsNum}",
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),
                   ],
@@ -137,19 +143,37 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                     child: SizedBox(
                   width: 2,
                 )),
-                Column(
+                InkWell(
+                 child:   Column(
                   children: <Widget>[
-                    Text("Poeni",
+                    Text(text1,
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),
-                    Text("${user.points}",
+                    Text(points.toString(),
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                             fontSize: 16,
                             fontWeight: FontWeight.bold))
                   ],
+                ),
+                   onTap: () {
+                     if(text1 == "Poeni")
+                    {
+                      setState(() {
+                       text1 = "Donirani";
+                      points = user.donatedPoints;
+                      }); 
+                    }
+                    else
+                    {
+                      setState(() {
+                       text1 = "Poeni";
+                      points = user.points;
+                      });
+                    }
+                   },
                 ),
                 Expanded(
                     child: SizedBox(
@@ -159,12 +183,12 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                   children: <Widget>[
                     Text("Nivo",
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),
                     Text("${user.level}",
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold))
                   ],
@@ -203,13 +227,13 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
           }
         });
         },
-    );
+    ).showCursorOnHover;
      Widget notButton = FlatButton(
       child: Text("Otkaži", style: TextStyle(color: greenPastel),),
       onPressed: () {
         Navigator.pop(context);
       },
-    );
+    ).showCursorOnHover;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(

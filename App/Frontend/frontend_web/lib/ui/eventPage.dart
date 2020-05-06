@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/ui/adminPages/manageEvent/createEvent/createEventPage.dart';
 
-import '../createEventPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 

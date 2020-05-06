@@ -146,6 +146,10 @@ namespace Backend
             services.AddTransient<IChallengeSolvingBL, ChallengeSolvingBL>();
             services.AddTransient<IChallengeSolvingDAL, ChallengeSolvingDAL>();
 
+            services.AddTransient<IStatisticsUI, StatisticsUI>();
+            services.AddTransient<IStatisticsBL, StatisticsBL>();
+            services.AddTransient<IStatisticsDAL, StatisticsDAL>();
+
 
         }
 
