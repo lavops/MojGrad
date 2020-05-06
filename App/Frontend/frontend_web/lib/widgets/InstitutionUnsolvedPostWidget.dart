@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/InstitutionCommentWidget.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -12,8 +13,9 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class InstitutionUnsolvedPostWidget extends StatefulWidget {
   FullPost posts;
+  final int id;
 
-  InstitutionUnsolvedPostWidget(this.posts);
+  InstitutionUnsolvedPostWidget({Key key, this.posts, this.id});
 
   @override
   _InstitutionUnsolvedPostWidgetState createState() => _InstitutionUnsolvedPostWidgetState(posts);
@@ -21,6 +23,7 @@ class InstitutionUnsolvedPostWidget extends StatefulWidget {
 
 class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostWidget> {
   FullPost post;
+
 
   _InstitutionUnsolvedPostWidgetState(FullPost post1) {
     this.post = post1;
@@ -69,7 +72,7 @@ class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostW
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               userInfoRow(post.username,
-                  post.typeName, post.userPhoto, post.postId),
+                  post.typeName, post.userPhoto, post.postId, widget.id),
               imageGallery(post.photoPath),
               SizedBox(height: 2.0),
               actionsButtons(
@@ -88,7 +91,7 @@ class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostW
     );
   }
 
-  Widget userInfoRow(String username, String category, String userPhoto, int postId) => Row(
+  Widget userInfoRow(String username, String category, String userPhoto, int postId, int instId) => Row(
     children: <Widget>[
       CircleImage(
         userPhotoURL + userPhoto,
@@ -113,10 +116,12 @@ class _InstitutionUnsolvedPostWidgetState extends State<InstitutionUnsolvedPostW
           style: TextStyle(color: Colors.white),
         ),
         onPressed: () {
-
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: postId, id: instId)),
+          );
         },
-      ).showCursorOnHover,
-      SizedBox(width: 15,)
+      )
     ],
   );
 
