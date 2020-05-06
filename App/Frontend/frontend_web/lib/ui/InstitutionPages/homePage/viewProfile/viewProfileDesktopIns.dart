@@ -5,6 +5,7 @@ import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostDesktop.dart';
 import 'package:frontend_web/widgets/post/rowPostWidget.dart';
@@ -84,7 +85,7 @@ class _ViewUserProfileDesktopInsState extends State<ViewUserProfileDesktopIns> {
           ))
         ],)
       ),
-      CollapsingNavigationDrawer()
+      CollapsingInsNavigationDrawer()
     ],);
   }
 }

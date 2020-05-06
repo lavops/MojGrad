@@ -4,6 +4,7 @@ import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfil
 import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfileDesktop.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfileMobile.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -32,7 +33,7 @@ class _ViewUserProfilePageInsState extends State<ViewUserProfilePageIns> {
         length: 3,
         child: Scaffold(
           drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-            ? DrawerAdmin(4)
+            ? DrawerInstitution(2)
             : null,
           appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
             ? null
