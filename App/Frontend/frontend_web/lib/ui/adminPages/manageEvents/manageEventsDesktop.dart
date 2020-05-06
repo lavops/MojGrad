@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:frontend_web/createEventPage.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageEvent/createEvent/createEventPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
-
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 class ManageEventsPageDesktop extends StatefulWidget {
   @override
@@ -98,7 +98,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
         color: Color(0xFF00BFA6),
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
-      ),
+      ).showCursorOnHover,
       Expanded(child: SizedBox()),
       RaisedButton(
         child: Text("Obriši", style: TextStyle(color: Colors.white),),
@@ -107,7 +107,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
         onPressed: () {
           showAlertDialog(context, event.id, index);
         },
-      ),
+      ).showCursorOnHover,
       SizedBox(width: 15.0,),
     ],);
   }
@@ -139,8 +139,8 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
       title: Text("Brisanje događaja"),
       content: Text("Da li ste sigurni da želite da obrišete događaj?"),
       actions: [
-        okButton,
-        notButton,
+        okButton.showCursorOnHover,
+        notButton.showCursorOnHover,
       ],
     );
 
@@ -167,7 +167,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
             shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
             child: Row(children: <Widget>[ Text("Dodaj dogđaj", style: TextStyle(color: Colors.white),), Icon(Icons.add, color: Colors.white,)],),
             color: Color(0xFF00BFA6),
-          ),
+          ).showCursorOnHover,
           ],),
             Flexible(child: buildEventsList(events),),
           ]),
