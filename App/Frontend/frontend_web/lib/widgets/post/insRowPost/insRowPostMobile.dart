@@ -4,11 +4,9 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -54,7 +52,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget solvedColor() => Container(
     constraints: BoxConstraints(
-      maxHeight: 180,
+      minHeight: 180,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -80,15 +78,33 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget userInfoRow() => Row(
     children: <Widget>[
-      CircleImage(
-        userPhotoURL + post.userPhoto,
-        imageSize: 36.0,
-        whiteMargin: 2.0,
-        imageMargin: 6.0,
+      InkWell(
+        child: CircleImage(
+          userPhotoURL + post.userPhoto,
+          imageSize: 36.0,
+          whiteMargin: 2.0,
+          imageMargin: 6.0,
+        ),
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewUserProfilePageIns(post.userId)),
+          );
+        },
       ),
-      Text(
-        post.username,
-        style: TextStyle(fontWeight: FontWeight.bold),
+      InkWell(
+        child: Text(
+          post.username,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewUserProfilePageIns(post.userId)),
+          );
+        },
       ),
       Expanded(child: SizedBox()),
       PopupMenuButton<String>(
@@ -149,7 +165,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
             ),
             items: imgList.map((item) => Container(
                 constraints: BoxConstraints(
-                maxHeight: 200.0, // changed to 400
+                maxHeight: 180.0, // changed to 400
                 minHeight: 100.0, // changed to 200
                 maxWidth: 250,
                 minWidth: 250,

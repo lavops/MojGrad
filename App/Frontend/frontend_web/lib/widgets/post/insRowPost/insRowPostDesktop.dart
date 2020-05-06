@@ -1,13 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -53,7 +51,7 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
 
   Widget solvedColor() => Container(
     constraints: BoxConstraints(
-      maxHeight: 180,
+      minHeight: 180,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -81,15 +79,33 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
 
   Widget userInfoRow() => Row(
     children: <Widget>[
-      CircleImage(
-        userPhotoURL + post.userPhoto,
-        imageSize: 36.0,
-        whiteMargin: 2.0,
-        imageMargin: 6.0,
+      InkWell(
+        child: CircleImage(
+          userPhotoURL + post.userPhoto,
+          imageSize: 36.0,
+          whiteMargin: 2.0,
+          imageMargin: 6.0,
+        ),
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewUserProfilePageIns(post.userId)),
+          );
+        },
       ),
-      Text(
-        post.username,
-        style: TextStyle(fontWeight: FontWeight.bold),
+      InkWell(
+        child: Text(
+          post.username,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewUserProfilePageIns(post.userId)),
+          );
+        },
       ),
       Expanded(child: SizedBox()),
       SizedBox(width: 10,),
