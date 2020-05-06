@@ -1,26 +1,152 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
-import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
+import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
-import 'dart:async';
-
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
-import 'models/city.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
+
 class CreateEventPage extends StatefulWidget {
   @override
-  _CreateEventPage createState() => _CreateEventPage();
+  _CreateEventPageState createState() => _CreateEventPageState();
 }
 
-class _CreateEventPage extends State<CreateEventPage> {
+class _CreateEventPageState extends State<CreateEventPage> {
+  
+  @override
+  Widget build(BuildContext context) {
+     return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+          ? DrawerAdmin(6)
+          : null,
+        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+          ? null
+          : AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+          ),
+        backgroundColor: Colors.white,
+        body: Row(
+            children: <Widget>[
+              sizingInformation.deviceScreenType != DeviceScreenType.Mobile 
+            ? CollapsingNavigationDrawer(): SizedBox(),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile:CreateEventMobilePage(),
+                  desktop: CreateEventDesktopPage(),
+                  tablet: CreateEventDesktopPage(),
+                ),
+              )
+            ],
+          ),
+        )
+    );
+
+  }
+}
+
+
+class CreateEventMobilePage extends StatefulWidget{
+  @override
+  _CreateEventMobilePageState createState() => new _CreateEventMobilePageState();
+}
+
+class _CreateEventMobilePageState extends State<CreateEventMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 20,),
+            Align(
+              alignment: Alignment(-0.75, -0.50),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                color: greenPastel,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)),
+                child: Text(
+                  "Vrati se nazad",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ).showCursorOnHover,   
+            Container(width: 350, child: 
+            CreateEventWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class CreateEventDesktopPage extends StatefulWidget{
+  @override
+  _CreateEventDesktopPageState createState() => new _CreateEventDesktopPageState();
+}
+
+class _CreateEventDesktopPageState extends State<CreateEventDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+                    alignment: Alignment(-0.65, -0.65),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: greenPastel,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(18.0),
+                          side: BorderSide(color: greenPastel)),
+                      child: Text(
+                        "Vrati se nazad",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ).showCursorOnHover,
+            SizedBox(height: 10,),
+            Container(width: 500, child: 
+            CreateEventWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+
+
+class CreateEventWidget extends StatefulWidget {
+  @override
+  _CreateEventWidget createState() => _CreateEventWidget();
+}
+
+class _CreateEventWidget extends State<CreateEventWidget> {
   DateTime _startDate;
   DateTime _endDate;
   List<DropdownMenuItem<Time>> _dropdownMenuItems;
@@ -381,64 +507,42 @@ class _CreateEventPage extends State<CreateEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      SingleChildScrollView(
-          child: Material(
-              elevation: 5,
-              child: Container(
-                  margin: EdgeInsets.only(top: 15),
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment(-0.75, -0.75),
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          color: greenPastel,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(18.0),
-                              side: BorderSide(color: greenPastel)),
-                          child: Text(
-                            "Vrati se nazad",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ).showCursorOnHover,
-                      nameEvent(),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 50, right: 20, top: 10, bottom: 10),
-                      ),
-                      shortDescription(),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 50, right: 20, top: 10, bottom: 10),
-                      ),
-                      longDescription(),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 50, right: 20, top: 10, bottom: 10),
-                      ),
-                      locationWidget(),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 50, right: 20, top: 10, bottom: 10),
-                      ),
-                      calendar(),
-                      dropdownCity(listCities),
-                      dropdownTime(times),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 50, right: 20, top: 10, bottom: 10),
-                      ),
-                      createEventButton(),
-                      wrong()
-                    ],
-                  )))),
-      CollapsingNavigationDrawer()
-    ]);
+    return  Container(
+      margin: EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: <Widget>[
+          nameEvent(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          shortDescription(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          longDescription(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          locationWidget(),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          calendar(),
+          dropdownCity(listCities),
+          dropdownTime(times),
+          Container(
+            margin: EdgeInsets.only(
+                left: 50, right: 20, top: 10, bottom: 10),
+          ),
+          createEventButton(),
+          wrong()
+        ],
+      ));
   }
 }
 

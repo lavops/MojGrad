@@ -12,6 +12,7 @@ class User{
   String _photo;
   int _postsNum;
   int _points;
+  int _donatedPoints;
   int _level;
   int _reportsNum;
 
@@ -32,6 +33,7 @@ class User{
   String get photo => _photo;
   int get postsNum => _postsNum;
   int get points => _points;
+  int get donatedPoints => _donatedPoints;
   int get level => _level;
   int get reportsNum => _reportsNum;
 
@@ -51,6 +53,7 @@ class User{
     data["photo"] = _photo;
     data["postsNum"] = _postsNum;
     data["points"] = _points;
+    data["donatedPoints"] = _donatedPoints;
     data["level"] = _level;
     data["reportsNum"] = _reportsNum;
  
@@ -76,6 +79,7 @@ class User{
     this._photo = data["photo"];
     this._postsNum = data["postsNum"];
     this._points = data["points"];
+    this._donatedPoints = data["donatedPoints"];
     this._level = data["level"];
     this._reportsNum = data["reportsNum"];
   }
