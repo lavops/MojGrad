@@ -4,21 +4,148 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
-import 'adminPages/manageDonation/manageDonationDesktop.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
+
 class CreateDonationPage extends StatefulWidget {
   @override
-  _CreateDonationPage createState() => _CreateDonationPage();
+  _CreateDonationPageState createState() => _CreateDonationPageState();
 }
 
-class _CreateDonationPage extends State<CreateDonationPage> {
+class _CreateDonationPageState extends State<CreateDonationPage> {
+  
+  @override
+  Widget build(BuildContext context) {
+     return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+          ? DrawerAdmin(7)
+          : null,
+        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+          ? null
+          : AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+          ),
+        backgroundColor: Colors.white,
+        body: Row(
+            children: <Widget>[
+              sizingInformation.deviceScreenType != DeviceScreenType.Mobile 
+            ? CollapsingNavigationDrawer(): SizedBox(),
+              Expanded(
+                child: ScreenTypeLayout(
+                  mobile:CreateDonationMobilePage(),
+                  desktop: CreateDonationDesktopPage(),
+                  tablet: CreateDonationDesktopPage(),
+                ),
+              )
+            ],
+          ),
+        )
+    );
+
+  }
+}
+
+
+class CreateDonationMobilePage extends StatefulWidget{
+  @override
+  _CreateDonationMobilePageState createState() => new _CreateDonationMobilePageState();
+}
+
+class _CreateDonationMobilePageState extends State<CreateDonationMobilePage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 20,),
+            Align(
+              alignment: Alignment(-0.75, -0.50),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                color: greenPastel,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)),
+                child: Text(
+                  "Vrati se nazad",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ).showCursorOnHover,   
+            Container(width: 350, child: 
+            CreateDonationWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class CreateDonationDesktopPage extends StatefulWidget{
+  @override
+  _CreateDonationDesktopPageState createState() => new _CreateDonationDesktopPageState();
+}
+
+class _CreateDonationDesktopPageState extends State<CreateDonationDesktopPage>{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+                    alignment: Alignment(-0.65, -0.65),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: greenPastel,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(18.0),
+                          side: BorderSide(color: greenPastel)),
+                      child: Text(
+                        "Vrati se nazad",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ).showCursorOnHover,
+            SizedBox(height: 10,),
+            Container(width: 500, child: 
+            CreateDonationWidget(),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class CreateDonationWidget extends StatefulWidget {
+  @override
+  _CreateDonationWidget createState() => _CreateDonationWidget();
+}
+
+class _CreateDonationWidget extends State<CreateDonationWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -154,10 +281,10 @@ class _CreateDonationPage extends State<CreateDonationPage> {
           setState(() {
             wrongText = "";
           });
-
+          
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
+            MaterialPageRoute(builder: (context) => ManageDonationPage()),
           );
         } else {
           setState(() {
@@ -175,30 +302,12 @@ class _CreateDonationPage extends State<CreateDonationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      Material(
-          elevation: 5,
-          child: Container(
+    return  Container(
               margin: EdgeInsets.only(top: 25),
               padding: const EdgeInsets.all(8),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment(-0.75, -0.75),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: greenPastel,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: greenPastel)),
-                      child: Text(
-                        "Vrati se nazad",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ).showCursorOnHover,
                   nameOrganizationWidget(),
                   Container(
                     margin: EdgeInsets.only(
@@ -222,9 +331,9 @@ class _CreateDonationPage extends State<CreateDonationPage> {
                   donationButton(),
                   wrong()
                 ],
-              ))),
-      CollapsingNavigationDrawer()
-    ]);
+              )
+              );
+
   }
 }
 

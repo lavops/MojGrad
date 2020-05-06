@@ -5,13 +5,13 @@ import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/createDonation/createDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
-import '../../createDonationPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -57,12 +57,11 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
                 ),
                 RaisedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateDonationPage()),
-                    );
-                  },
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateDonationPage()),
+                  );
+                              },
                   color: greenPastel,
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(18.0),
