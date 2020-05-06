@@ -590,6 +590,7 @@ static Future registerInstitution(Institution ins) async {
     }, body: jsonBody);
 	}
 
+
   static Future getUser(String jwt, int userId) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
@@ -598,6 +599,29 @@ static Future registerInstitution(Institution ins) async {
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }); 
+  }
+	
+	// solve a post as institution
+
+  static Future solveFromTheInstitution(String jwt, int postId, int institutionId, String description, String photo) async {
+
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'ChallengeSolving/solutionFromTheInstitution';
+
+    var data = Map();
+    data['postId'] = postId;
+    data['institutionId'] = institutionId;
+    data['description'] = description;
+    data['solvingPhoto'] = photo;
+
+    var jsonBody = convert.jsonEncode(data);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    return res.body;
   }
 }
 
