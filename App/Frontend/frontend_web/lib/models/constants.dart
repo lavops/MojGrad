@@ -55,3 +55,13 @@ class ConstantsPostAdmin {
     ObrisiObjavu
   ];
 }
+
+class ConstantsPostIns {
+  static const String PogledajObjavu = "Pogledaj objavu";
+  static const String Resi = 'Reši';
+
+  static const List<String> choices = <String> [
+    PogledajObjavu,
+    Resi
+  ];
+}

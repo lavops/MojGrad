@@ -7,24 +7,25 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class InsRowPostDesktopWidget extends StatefulWidget {
+class InsRowPostMobileWidget extends StatefulWidget {
   FullPost posts;
 
-  InsRowPostDesktopWidget(this.posts);
+  InsRowPostMobileWidget(this.posts);
 
   @override
-  _InsRowPostDesktopWidgetState createState() => _InsRowPostDesktopWidgetState(posts);
+  _InsRowPostMobileWidgetState createState() => _InsRowPostMobileWidgetState(posts);
 }
 
-class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
+class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
   FullPost post;
   int _currentImageIndex = 0;
 
-  _InsRowPostDesktopWidgetState(FullPost post1) {
+  _InsRowPostMobileWidgetState(FullPost post1) {
     this.post = post1;
   }
 
@@ -69,11 +70,9 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
     child: Column(
       children: <Widget>[
         userInfoRow(),
-        category(),
         Expanded(child: SizedBox()),
         description(),
         Expanded(child: SizedBox()),
-        location(),
         actionsButtons(),
       ],
     ),
@@ -92,9 +91,30 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       Expanded(child: SizedBox()),
+      PopupMenuButton<String>(
+        onSelected: (String choice) {
+          choicePostIns(choice);
+        },
+        itemBuilder: (BuildContext context) {
+          return ConstantsPostIns.choices.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
+            );
+          }).toList();
+        },
+      ),
       SizedBox(width: 10,),
     ],
   );
+
+  void choicePostIns(String choice) {
+    if (choice == ConstantsPostIns.PogledajObjavu) {
+      print("Pogledaj objavu.");
+    } else if (choice == ConstantsPostIns.Resi) {
+      print("Resi.");
+    }
+  }
 
   Widget imageGallery() => Container(
     constraints: BoxConstraints(
