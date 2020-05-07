@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageAdmins.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsDesktop.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
@@ -66,14 +67,27 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  CollapsingListTile(title: 'Administrator', icon: Icons.perm_identity, animationController: _animationController,),
+                  CollapsingListTile(title: 'Administrator', 
+                  icon: Icons.perm_identity, 
+                  animationController: _animationController,
+                  onTap: () {
+                    setState(() {
+                          currentSelectedIndex = 1;
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ManageAdminsPage()),
+                        );
+                      },           
+                      isSelected: currentSelectedIndex == 1,
+                  ),
                   CollapsingListTile(
                       title: 'Početna strana',
                       icon: Icons.home,
                       animationController: _animationController,
                       onTap: () {
                         setState(() {
-                          currentSelectedIndex = 1;
+                          currentSelectedIndex = 2;
                         });
                         String jwt = TokenSession.getToken;
                         Navigator.push(
@@ -81,7 +95,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           MaterialPageRoute(builder: (context) => StatisticsPage()),
                         );
                       },
-                      isSelected: currentSelectedIndex == 1,
+                      isSelected: currentSelectedIndex == 2,
                       ),
                   CollapsingListTile(
                     title: 'Upravljanje objavama',
@@ -89,14 +103,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     animationController: _animationController,
                     onTap: () {
                       setState(() {
-                          currentSelectedIndex = 2;
+                          currentSelectedIndex = 3;
                         });
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ManagePostPage())//PostPage(globalUser)),
                       );
                     },
-                    isSelected: currentSelectedIndex == 2,
+                    isSelected: currentSelectedIndex == 3,
                     ),
                   CollapsingListTile(
                     title: 'Upravljanje korisnicima',
@@ -104,14 +118,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
-                          currentSelectedIndex = 3;
+                          currentSelectedIndex = 4;
                         }),
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ManageUserPage()),
                       ),
                     },
-                    isSelected: currentSelectedIndex == 3,
+                    isSelected: currentSelectedIndex == 4,
                   ),
                   CollapsingListTile(
                     title: 'Upravljanje institucijama',
@@ -119,14 +133,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
-                          currentSelectedIndex = 4;
+                          currentSelectedIndex = 5;
                         }),
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ManageInstitutionPage()),
                       ),
                     },
-                    isSelected: currentSelectedIndex == 4,
+                    isSelected: currentSelectedIndex == 5,
                   ),
                   CollapsingListTile(
                     title: 'Upravljanje događajima',
@@ -134,14 +148,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
-                          currentSelectedIndex = 5;
+                          currentSelectedIndex = 6;
                         }),
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ManageEventsPage()),
                       ),
                     },
-                    isSelected: currentSelectedIndex == 5,
+                    isSelected: currentSelectedIndex == 6,
                   ),
                   CollapsingListTile(
                     title: 'Upravljanje donacijama',
@@ -149,14 +163,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
-                          currentSelectedIndex = 6;
+                          currentSelectedIndex = 7;
                         }),
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ManageDonationPage()),
                       ),
                     },
-                    isSelected: currentSelectedIndex == 6,
+                    isSelected: currentSelectedIndex == 7,
                   ),
                   CollapsingListTile(
                     title: 'Dodavanje administratora',
@@ -164,14 +178,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
-                          currentSelectedIndex = 7;
+                          currentSelectedIndex = 8;
                         }),
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => RegisterAdminPage()),
                       ),
                     },
-                    isSelected: currentSelectedIndex == 7,
+                    isSelected: currentSelectedIndex == 8,
                   ),
                   CollapsingListTile(
                     title: 'Odjavite se',

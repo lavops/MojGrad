@@ -4,6 +4,7 @@ class Admin{
   String _lastName;
   String _password;
   String _email;
+  String _photoPath;
 
 
   Admin();
@@ -15,6 +16,7 @@ class Admin{
   String get lastName => _lastName;
   String get password => _password;
   String get email => _email;
+  String get photoPath => _photoPath;
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
@@ -24,6 +26,7 @@ class Admin{
     data["lastName"] = _lastName;
     data["password"] = _password;
     data["email"] = _email;
+    data["photoPath"] = _photoPath;
  
     if(_id != null){
       data["id"] = _id;
@@ -39,6 +42,7 @@ class Admin{
     this._lastName = data["lastName"];
     this._password = data["password"];
     this._email = data["email"];
+    this._photoPath = data["photoPath"];
   }
 
 }
