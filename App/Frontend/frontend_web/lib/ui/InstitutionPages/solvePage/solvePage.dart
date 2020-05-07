@@ -51,6 +51,7 @@ class _InstitutionSolvePageState extends State<InstitutionSolvePage> {
 
         var res1 = jsonDecode(res);
         APIServices.solveFromTheInstitution(TokenSession.getToken, postId, institutionId, description, res1);
+        Navigator.pop(context);
 
         setState(() {
           successText = "Uspešno ste rešili objavu.";
@@ -151,11 +152,28 @@ class _InstitutionSolvePageState extends State<InstitutionSolvePage> {
               height: 25,
             ),
             data != null ?
-            ClipRect(
-                child: Image.memory(data, height: 100.0,
-                  width: 100.0,
-                  fit: BoxFit.cover,)
-            ) :
+            Container(
+              constraints: BoxConstraints(
+                maxHeight: 400.0, // changed to 400
+                minHeight: 200.0, // changed to 200
+                maxWidth: double.infinity,
+                minWidth: double.infinity,
+              ),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey[200],
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              child: ClipRect(
+                  child: Image.memory(data, height: 400.0,
+                    width: 200.0,
+                    fit: BoxFit.cover,)
+              ),
+            )
+             :
             SizedBox(
               height: 25,
             ),
