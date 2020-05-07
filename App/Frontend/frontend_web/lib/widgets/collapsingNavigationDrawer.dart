@@ -31,7 +31,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
   static bool isCollapsed = true;
   static AnimationController _animationController;
   Animation<double> widthAnimation;
-  static int currentSelectedIndex = 1;
+  static int currentSelectedIndex = 2;
 
   _removeToken() async {
     TokenSession.setToken = "";

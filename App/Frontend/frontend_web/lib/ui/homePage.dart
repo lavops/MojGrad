@@ -68,6 +68,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double width1 = MediaQuery.of(context).size.width -300; //> 400 ? MediaQuery.of(context).size.width - 300 : MediaQuery.of(context).size.width;
-    return ManageAdminsPage( id: admin1.id);
+    return StatisticsPage();
   }
 }

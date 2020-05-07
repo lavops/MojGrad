@@ -22,6 +22,7 @@ namespace Backend.Models.ViewsModel
         public string title { get; set; }
         public string description { get; set; }
         public int userNum { get; set; }
+        public int instNum { get; set; }
         public int isGoing { get; set; }
         private AppDbContext _context = new AppDbContext();
         public EventViewModel() { }
@@ -47,7 +48,8 @@ namespace Backend.Models.ViewsModel
             this.longitude = e.longitude;
             this.shortDescription = e.shortDescription;
             this.title = e.title;
-            this.userNum = _context.userEvent.Where(x => x.eventId == e.id).Count();
+            this.userNum = _context.userEvent.Where(x => x.eventId == e.id && x.userId != null).Count();
+            this.instNum = _context.userEvent.Where(x => x.eventId == e.id && x.institutionId != null).Count();
             if (userId != null)
             {
                 var user = _context.userEvent.Where(x => x.eventId == e.id && x.userId == userId).FirstOrDefault();

@@ -64,6 +64,11 @@ namespace Backend.UI
             return _iEventBL.insertEvent(events);
         }
 
+        public List<UserEvent> institutionsGoingToEvent(long eventId)
+        {
+            return _iEventBL.institutionsGoingToEvent(eventId);
+        }
+
         public List<UserEvent> usersGoingToEvent(long eventId)
         {
             return _iEventBL.usersGoingToEvent(eventId);

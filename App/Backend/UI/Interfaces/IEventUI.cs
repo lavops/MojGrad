@@ -19,6 +19,7 @@ namespace Backend.UI.Interfaces
         bool deleteEvent(long id);
         Event editEvent(EventViewModel events);
         List<UserEvent> usersGoingToEvent(long eventId);
+        List<UserEvent> institutionsGoingToEvent(long eventId);
         bool cancelArrival(UserEvent ue);
     }
 }

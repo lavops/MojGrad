@@ -11,6 +11,7 @@ namespace Backend.UI.Interfaces
         List<Post> getAllPosts();
         List<Post> getAllPostsByCityId(long cityId);
         List<Post> getAllPostsForOneUser(long id);
+        List<Post> getAllPostsSolvedByOneInstitution(long id);
         Post getByID(long id);
         Post insertPost(Post post);
         List<Post> getAllSolvedPosts();

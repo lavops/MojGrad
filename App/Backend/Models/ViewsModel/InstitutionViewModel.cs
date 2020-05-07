@@ -16,10 +16,11 @@ namespace Backend.Models.ViewsModel
         public string cityName { get; set; }
         public string photoPath { get; set; }
         public bool authentication { get; set; }
+        public int postsNum { get; set; }
         public DateTime createdAt { get; set; }
         public long cityId { get; set; }
         public virtual City city { get; set; }
-
+        private AppDbContext _context = new AppDbContext();
         public InstitutionViewModel(Institution inst)
         {
             this.id = inst.id;
@@ -33,6 +34,7 @@ namespace Backend.Models.ViewsModel
             this.authentication = inst.authentication;
             this.cityName = inst.city.name;
             this.photoPath = inst.photoPath;
+            this.postsNum = _context.challengeSolving.Where(x => x.institutionId == inst.id).Count();
         }
     }
 }

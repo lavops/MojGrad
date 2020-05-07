@@ -101,8 +101,6 @@ namespace Backend.DAL
                     exist.title = donation.title;
                     exist.monetaryAmount = donation.monetaryAmount;
                     exist.organizationName = donation.organizationName;
-                    exist.description = donation.description;
-                    exist.collectedMoney = donation.collectedMoney;
                     _context.Update(exist);
                     _context.SaveChanges();
                     return _context.donation.Where((u) => u.id == donation.id).FirstOrDefault();

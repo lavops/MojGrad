@@ -154,5 +154,21 @@ namespace Backend.Controllers
             else
                 return BadRequest(new { message = "Greska" });
         }
+
+        [Authorize]
+        [HttpPost("InstitutionsForEvent")]
+        public IEnumerable<Institution> InstitutionsForEvents(Event events)
+        {
+            var institutions = _iEventUI.institutionsGoingToEvent(events.id);
+            List<Institution> listInstitutions = new List<Institution>();
+            foreach (var inst in institutions)
+            {
+                Institution institution = inst.institution;
+                institution.password = null;
+                listInstitutions.Add(institution);
+
+            }
+            return listInstitutions;
+        }
     }
 }

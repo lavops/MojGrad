@@ -36,7 +36,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult insertCity(City city1)
+        public IActionResult InsertCity(City city1)
         {
             var city = _iCityUI.insertCity(city1);
             if(city != null)

@@ -42,6 +42,11 @@ namespace Backend.UI
             return _iPostBL.getAllPostsForOneUser(id);
         }
 
+        public List<Post> getAllPostsSolvedByOneInstitution(long id)
+        {
+            return _iPostBL.getAllPostsSolvedByOneInstitution(id);
+        }
+
         public List<Post> getAllSolvedPosts()
         {
             return _iPostBL.getAllSolvedPosts();

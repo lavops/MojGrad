@@ -11,6 +11,7 @@ class Institution {
   String _cityName;
   String _createdAt;
   String _city;
+  int _postsNum;
   String _photoPath;
   
 
@@ -21,6 +22,7 @@ class Institution {
   String get name => _name;
   String get description => _description;
   int get cityId =>_cityId;
+  int get postsNum =>_postsNum;
   String get email => _email;
   String get phone => _phone;
   String get password => _password;
@@ -44,6 +46,7 @@ class Institution {
     data["createdAt"] = _createdAt;
     data["authentication"] = _authentication;
     data["city"] = _city;
+    data["postsNum"] = _postsNum;
     data["photoPath"] = _photoPath;
  
     if(_id != null){
@@ -63,6 +66,7 @@ class Institution {
     this._phone = data["phone"];
     this._cityId = data["cityId"];
     this._city = data["city"];
+    this._postsNum = data["postsNum"];
     this._authentication = data["authentication"];
     this._createdAt = data["createdAt"];
     this._cityName = data["cityName"];

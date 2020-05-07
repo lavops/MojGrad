@@ -42,6 +42,11 @@ namespace Backend.BL
             return _iPostDAL.getAllPostsForOneUser(id);
         }
 
+        public List<Post> getAllPostsSolvedByOneInstitution(long id)
+        {
+            return _iPostDAL.getAllPostsSolvedByOneInstitution(id);
+        }
+
         public List<Post> getAllSolvedPosts()
         {
             return _iPostDAL.getAllSolvedPosts();

@@ -19,13 +19,23 @@ namespace Backend.DAL
             _context = context;
         }
 
-        public bool addGoingToEvent(UserEvent ue)
+        public bool addGoingToEvent1(UserEvent ue)
         {
             UserEvent eve = new UserEvent();
-            eve.userId = ue.userId;
+            UserEvent exist = null;
+            if (ue.userId != null)
+            {
+                eve.userId = ue.userId;
+                exist = _context.userEvent.Where(x => x.eventId == ue.eventId && x.userId == ue.userId).FirstOrDefault();
+            }
+            else if(ue.institutionId != null)
+            {
+                eve.institutionId = ue.institutionId;
+                exist = _context.userEvent.Where(x => x.eventId == ue.eventId && x.institutionId == ue.institutionId).FirstOrDefault();
+            } 
             eve.eventId = ue.eventId;
             
-            if (eve != null)
+            if (exist != null)
             {
                 _context.userEvent.Add(eve);
                 _context.SaveChangesAsync();
@@ -37,18 +47,68 @@ namespace Backend.DAL
             }
         }
 
-        public bool cancelArrival(UserEvent ue)
+        public bool addGoingToEvent(UserEvent ue)
         {
-            var events = _context.userEvent.Where(x => x.userId == ue.userId && x.eventId == ue.eventId).FirstOrDefault();
-            if (events == null)
+            if (ue.userId != null)
             {
+                var events = _context.userEvent.Where(x => x.userId == ue.userId && x.eventId == ue.eventId).FirstOrDefault();
+                if (events == null)
+                {
+                    UserEvent eve = new UserEvent();
+                    eve.userId = ue.userId;
+                    eve.eventId = ue.eventId;
+                    _context.userEvent.Add(eve);
+                    _context.SaveChangesAsync();
+                    return true;
+                }
+
                 return false;
             }
+            else if (ue.institutionId != null)
+            {
+                var events = _context.userEvent.Where(x => x.institutionId == ue.institutionId && x.eventId == ue.eventId).FirstOrDefault();
+                if (events == null)
+                {
+                    UserEvent eve = new UserEvent();
+                    eve.institutionId = ue.institutionId;
+                    eve.eventId = ue.eventId;
+                    _context.userEvent.Add(eve);
+                    _context.SaveChangesAsync();
+                    return true;
+                }
 
-            _context.userEvent.Remove(events);
-            _context.SaveChangesAsync();
+                return false;
+            }
+            return false;
+        }
 
-            return true;
+        public bool cancelArrival(UserEvent ue)
+        {
+            if(ue.userId != null) 
+            { 
+                var events = _context.userEvent.Where(x => x.userId == ue.userId && x.eventId == ue.eventId).FirstOrDefault();
+                if (events == null)
+                {
+                    return false;
+                }
+
+                _context.userEvent.Remove(events);
+                _context.SaveChangesAsync();
+                return true;
+            }
+            else if(ue.institutionId != null)
+            {
+                var events = _context.userEvent.Where(x => x.institutionId == ue.institutionId && x.eventId == ue.eventId).FirstOrDefault();
+                if (events == null)
+                {
+                    return false;
+                }
+
+                _context.userEvent.Remove(events);
+                _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public bool deleteEvent(long id)
@@ -138,9 +198,15 @@ namespace Backend.DAL
             }
         }
 
+        public List<UserEvent> institutionsGoingToEvent(long eventId)
+        {
+            return _context.userEvent.Where(x => x.eventId == eventId && x.institutionId != null).Include(u => u.user).Include(u => u.institution).ToList();
+
+        }
+
         public List<UserEvent> usersGoingToEvent(long eventId)
         {
-            return _context.userEvent.Where(x => x.eventId == eventId).Include(u => u.user).ToList();
+            return _context.userEvent.Where(x => x.eventId == eventId && x.userId != null).Include(u => u.user).Include(u => u.institution).ToList();
         }
     }
 }

@@ -163,5 +163,19 @@ namespace Backend.Controllers
                 return BadRequest(new { message = "Greska" });
         }
 
+        [Authorize]
+        [HttpPost("PostsSolvedByInstitution")]
+        public ActionResult<IEnumerable<PostViewModel>> PostsSolvedByInstitution(Institution inst)
+        {
+            var posts = _iPostUI.getAllPostsSolvedByOneInstitution(inst.id);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, 0));
+            }
+
+            return listPosts;
+        }
+
     }
 }

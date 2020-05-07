@@ -63,6 +63,22 @@ namespace Backend.DAL
             return _context.post.Where(c=> c.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(c => c.city).OrderByDescending(x => x.id).ToList();
         }
 
+        public List<Post> getAllPostsSolvedByOneInstitution(long id)
+        {
+            var solutions = _context.challengeSolving.Where(x => x.institutionId == id && x.selected == 1).ToList();
+            List<Post> listPosts = new List<Post>();
+
+            foreach (var sol in solutions)
+            {
+                var post = _context.post.Where(x => x.id == sol.postId).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).Include(c => c.city).FirstOrDefault();
+                listPosts.Add(post);
+            }
+
+            listPosts.OrderByDescending(x => x.id);
+            return listPosts;
+            
+        }
+
         public List<Post> getAllPostsForOneUser(long id)
         {
             return _context.post.Where(x => x.userId == id).Include(u => u.user).Include(s => s.status).Include(po => po.postType).Include(l => l.likes).Include(c => c.comments).Include(c => c.city).OrderByDescending(x => x.id).ToList();
