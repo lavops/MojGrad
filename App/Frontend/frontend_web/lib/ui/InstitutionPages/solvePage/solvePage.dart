@@ -101,31 +101,33 @@ class _InstitutionSolvePageState extends State<InstitutionSolvePage> {
   }
 
   Widget descriptionPart() {
-    return Container(
-      width:600,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: TextField(
-          cursorColor: Colors.black,
-          controller: description,
-          minLines: 5,
-          maxLines: 15,
-          autocorrect: false,
-          decoration: InputDecoration(
-            hintText: 'Opis rešenja',
-            filled: true,
-            fillColor: Color(0xffffffff),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(color: Colors.grey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(color: Colors.green),
+    return Material(
+      child: Container(
+        width:600,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: TextField(
+            cursorColor: Colors.black,
+            controller: description,
+            minLines: 5,
+            maxLines: 15,
+            autocorrect: false,
+            decoration: InputDecoration(
+              hintText: 'Opis rešenja',
+              filled: true,
+              fillColor: Color(0xffffffff),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.green),
+              ),
             ),
           ),
         ),
-      ),
+      )
     );
   }
 
