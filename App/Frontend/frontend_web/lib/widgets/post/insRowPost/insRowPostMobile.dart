@@ -4,7 +4,9 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
+import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -12,19 +14,22 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class InsRowPostMobileWidget extends StatefulWidget {
   FullPost posts;
+  int indicator;
 
-  InsRowPostMobileWidget(this.posts);
+  InsRowPostMobileWidget(this.posts, this.indicator);
 
   @override
-  _InsRowPostMobileWidgetState createState() => _InsRowPostMobileWidgetState(posts);
+  _InsRowPostMobileWidgetState createState() => _InsRowPostMobileWidgetState(posts, indicator);
 }
 
 class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
   FullPost post;
   int _currentImageIndex = 0;
+  int indicator;
 
-  _InsRowPostMobileWidgetState(FullPost post1) {
+  _InsRowPostMobileWidgetState(FullPost post1, int indicator1) {
     this.post = post1;
+    this.indicator = indicator1;
   }
 
   @override
@@ -86,11 +91,12 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
           imageMargin: 6.0,
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewUserProfilePageIns(post.userId)),
-          );
+          if(indicator == 1)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewUserProfilePageIns(post.userId)),
+            );
         },
       ),
       InkWell(
@@ -99,11 +105,12 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewUserProfilePageIns(post.userId)),
-          );
+          if(indicator == 1)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewUserProfilePageIns(post.userId)),
+            );
         },
       ),
       Expanded(child: SizedBox()),
@@ -129,6 +136,10 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
       print("Pogledaj objavu.");
     } else if (choice == ConstantsPostIns.Resi) {
       print("Resi.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
+      );
     }
   }
 

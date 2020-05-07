@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
+import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -11,19 +13,22 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class InsRowPostDesktopWidget extends StatefulWidget {
   FullPost posts;
+  int indicator;
 
-  InsRowPostDesktopWidget(this.posts);
+  InsRowPostDesktopWidget(this.posts, this.indicator);
 
   @override
-  _InsRowPostDesktopWidgetState createState() => _InsRowPostDesktopWidgetState(posts);
+  _InsRowPostDesktopWidgetState createState() => _InsRowPostDesktopWidgetState(posts, indicator);
 }
 
 class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
   FullPost post;
   int _currentImageIndex = 0;
+  int indicator;
 
-  _InsRowPostDesktopWidgetState(FullPost post1) {
+  _InsRowPostDesktopWidgetState(FullPost post1, int indicator1) {
     this.post = post1;
+    this.indicator = indicator1;
   }
 
   @override
@@ -87,11 +92,12 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
           imageMargin: 6.0,
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewUserProfilePageIns(post.userId)),
-          );
+          if(indicator == 1)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewUserProfilePageIns(post.userId)),
+            );
         },
       ),
       InkWell(
@@ -100,14 +106,33 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewUserProfilePageIns(post.userId)),
-          );
+          if(indicator == 1)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewUserProfilePageIns(post.userId)),
+            );
         },
       ),
       Expanded(child: SizedBox()),
+      (post.statusId == 2)
+        ? FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(11.0),
+            side: BorderSide(color: greenPastel)),
+        color: greenPastel,
+        child: Text(
+          "Reši",
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
+          );
+        },
+      )
+        : SizedBox(),
       SizedBox(width: 10,),
     ],
   );

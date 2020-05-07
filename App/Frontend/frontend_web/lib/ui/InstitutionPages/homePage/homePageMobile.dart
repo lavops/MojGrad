@@ -52,7 +52,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         padding: EdgeInsets.only(bottom: 30.0),
         itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
         itemBuilder: (BuildContext context, int index) {
-          return InsRowPostMobileWidget(listUnsolvedPosts[index]);
+          return InsRowPostMobileWidget(listUnsolvedPosts[index], 1);
         }
       ),
     );
