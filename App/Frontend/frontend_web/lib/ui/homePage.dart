@@ -9,6 +9,7 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/postWidget.dart';
 import 'dart:convert';
 import './navDrawer.dart';
+import 'adminPages/manageAdmins.dart';
 
 int globalAdminId;
 class HomePage extends StatefulWidget {
@@ -67,6 +68,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double width1 = MediaQuery.of(context).size.width -300; //> 400 ? MediaQuery.of(context).size.width - 300 : MediaQuery.of(context).size.width;
-    return StatisticsPage();
+    return ManageAdminsPage( id: admin1.id);
   }
 }

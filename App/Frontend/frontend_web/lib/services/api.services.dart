@@ -623,5 +623,17 @@ static Future registerInstitution(Institution ins) async {
     }, body: jsonBody);
     return res.body;
   }
+  
+  
+    static Future getAdmins(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Admin',  headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+  
 }
 
