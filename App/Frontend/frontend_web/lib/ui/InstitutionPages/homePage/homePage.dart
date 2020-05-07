@@ -11,7 +11,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 int insId;
 int icityId;
-
+Color greenPastel = Color(0xFF00BFA6);
 class HomePageInstitution extends StatefulWidget {
 
   HomePageInstitution(this.jwt, this.payload);

@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageAdmins.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
-import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsDesktop.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
 import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
-import 'package:frontend_web/ui/eventPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
 
