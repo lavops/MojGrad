@@ -13,6 +13,8 @@ import 'package:frontend_web/widgets/CollapsingListTile.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
+import '../ui/homePage.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class CollapsingNavigationDrawer extends StatefulWidget {
@@ -74,7 +76,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         });
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ManageAdminsPage()),
+                          MaterialPageRoute(builder: (context) => ManageAdminsPage(id: globalAdminId)),
                         );
                       },           
                       isSelected: currentSelectedIndex == 1,

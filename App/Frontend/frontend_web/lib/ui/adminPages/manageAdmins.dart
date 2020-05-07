@@ -104,6 +104,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              listAdmins[index].id != idA ?
               Container(
                   color: Colors.white,
                   padding: EdgeInsets.all(5),
@@ -138,7 +139,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                         showAlertDialog(context, listAdmins[index].id);
                       },
                     ),
-                  ])),
+                  ])) : Container(width: 1, height: 1),
             ],
           ),
         ));
@@ -295,16 +296,41 @@ Widget loginAdmin(){
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
                   child: Column(children: [
-                    loginAdmin(),
+                     Flexible(child:RefreshIndicator(
+                      onRefresh: _handleRefresh,
+                    child:     (admin1 != null) ? loginAdmin() : Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    ),
+                  ),)),
                     Container(
                       color:Colors.white,
                       child: Column(children:[
                         Text('Informacije o ostalim administratorima:',style: TextStyle(fontWeight: FontWeight.bold)),
                         search(),])),
-                    Flexible(child: buildAdminList()),
+                    Flexible(child:RefreshIndicator(
+                      onRefresh: _handleRefresh,
+                    child:     (listAdmins != null) ? buildAdminList() : Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    ),
+                  ),))
                   ])),
         CollapsingNavigationDrawer(),
           ])
             );
   }
+
+
+    Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 3));
+    setState(() {
+      listAdmins = [];
+    });
+    _getAdmins();
+    return null;
+  }
+
 }
