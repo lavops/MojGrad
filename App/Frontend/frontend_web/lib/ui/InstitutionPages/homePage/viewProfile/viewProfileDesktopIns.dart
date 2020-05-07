@@ -80,7 +80,7 @@ class _ViewUserProfileDesktopInsState extends State<ViewUserProfileDesktopIns> {
             padding: EdgeInsets.only(bottom: 30.0),
             itemCount: posts == null ? 0 : posts.length,
             itemBuilder: (BuildContext context, int index) {
-              return InsRowPostDesktopWidget(posts[index]);
+              return InsRowPostDesktopWidget(posts[index], 2);
             }
           ))
         ],)

@@ -63,9 +63,9 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
         padding: EdgeInsets.only(bottom: 30.0),
         itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
         itemBuilder: (BuildContext context, int index) {
-          //return InsRowPostDesktopWidget(listUnsolvedPosts[index]);
+          return InsRowPostDesktopWidget(listUnsolvedPosts[index], 1);
 
-          return InstitutionUnsolvedPostWidget(posts: listUnsolvedPosts[index], id: institution.id);
+          //return InstitutionUnsolvedPostWidget(posts: listUnsolvedPosts[index], id: institution.id);
         }
       ),
     ),

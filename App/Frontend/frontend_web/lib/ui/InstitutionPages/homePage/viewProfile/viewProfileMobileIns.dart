@@ -85,7 +85,7 @@ class _ViewUserProfileMobileInsState extends State<ViewUserProfileMobileIns> {
                     padding: EdgeInsets.only(bottom: 30.0),
                     itemCount: posts == null ? 0 : posts.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return InsRowPostMobileWidget(posts[index]);
+                      return InsRowPostMobileWidget(posts[index], 2);
                     })
       )
     );
