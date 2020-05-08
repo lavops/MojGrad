@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -69,9 +70,9 @@ class DrawerInstitution extends StatelessWidget{
               style: TextStyle(fontSize: 16, color: (selected == 4) ? greenPastel : Colors.black),
             ),
             onTap: (){
-              /*Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => null),
-              );*/
+              Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => EventsPage()),
+              );
             },
           ),
           ListTile(
