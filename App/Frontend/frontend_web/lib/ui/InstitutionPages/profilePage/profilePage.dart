@@ -97,17 +97,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 subtitle: Text(institution.name),
               ),
               ListTile(
-                leading: Icon(Icons.person_outline,  color: greenPastel),
+                leading: Icon(Icons.description,  color: greenPastel),
                 title: Text('Opis delatnosti institucije'),
                 subtitle: Text(institution.description),
               ),
               ListTile(
-                leading: Icon(Icons.email,  color: greenPastel),
+                leading: Icon(Icons.location_city,  color: greenPastel),
                 title: Text('Sedište'),
                 subtitle: Text(institution.cityName),
               ),
               ListTile(
-                leading: Icon(Icons.email,  color: greenPastel),
+                leading: Icon(Icons.confirmation_number,  color: greenPastel),
                 title: Text('Broj rešenih objava'),
                 subtitle: Text(institution.postsNum.toString()),
               ),
