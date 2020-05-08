@@ -11,7 +11,6 @@ import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
-
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageDonationMobile extends StatefulWidget {
@@ -19,8 +18,7 @@ class ManageDonationMobile extends StatefulWidget {
   _ManageDonationMobileState createState() => _ManageDonationMobileState();
 }
 
-class _ManageDonationMobileState extends State<ManageDonationMobile>{
-  
+class _ManageDonationMobileState extends State<ManageDonationMobile> {
   List<Donation> donations;
 
   _getDonations() async {
@@ -45,91 +43,121 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
   @override
   Widget build(BuildContext context) {
     return CenteredViewDonation(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(child: SizedBox(),),
-              RaisedButton(
-                onPressed: () {
-                    Navigator.push(
+        child: Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: SizedBox(),
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CreateDonationPage()),
                 );
-                  },
-                color: greenPastel,
-                shape: RoundedRectangleBorder(
+              },
+              color: greenPastel,
+              shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(18.0),
-                  side: BorderSide(color: greenPastel)
+                  side: BorderSide(color: greenPastel)),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "Nova donacija",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  )
+                ],
               ),
-                child: Text("Nova donacija", style: TextStyle(color: Colors.white),),
-              ).showCursorOnHover,
-              SizedBox(width: 10.0,),
-            ],
-          ),
-          Flexible(child: buildDonationList(donations),)
-        ],
-      )
-    );
+            ).showCursorOnHover,
+            SizedBox(
+              width: 10.0,
+            ),
+          ],
+        ),
+        Flexible(
+          child: buildDonationList(donations),
+        )
+      ],
+    ));
   }
 
-  Widget buildDonationList(List<Donation> listDonations){
+  Widget buildDonationList(List<Donation> listDonations) {
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: 30.0),
-      itemCount: donations == null ? 0 : donations.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          child: Row(
+        padding: EdgeInsets.only(bottom: 30.0),
+        itemCount: donations == null ? 0 : donations.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+              child: Row(
             children: <Widget>[
-              Expanded(child:Column(children: <Widget>[
-                eventInfoRow(donations[index].organizationName),
-                SizedBox(height: 10.0,),
-                titleRow(donations[index].title),
-                descriptionRow(donations[index].description),
-                eventProgressRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
-                pointsRow(donations[index].pointsAccumulated, donations[index].pointsNeeded),
-                actionButtonRow(donations[index], donations[index].id, index)
-              ]),),
+              Expanded(
+                child: Column(children: <Widget>[
+                  eventInfoRow(donations[index].organizationName),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  titleRow(donations[index].title),
+                  descriptionRow(donations[index].description),
+                  eventProgressRow(donations[index].pointsAccumulated,
+                      donations[index].pointsNeeded),
+                  pointsRow(donations[index].pointsAccumulated,
+                      donations[index].pointsNeeded),
+                  actionButtonRow(donations[index], donations[index].id, index)
+                ]),
+              ),
               Container(
-                color: (donations[index].pointsAccumulated >= donations[index].pointsNeeded) ? greenPastel: Colors.white,
-                child: SizedBox(width: 20,),
+                color: (donations[index].pointsAccumulated >=
+                        donations[index].pointsNeeded)
+                    ? greenPastel
+                    : Colors.white,
+                child: SizedBox(
+                  width: 20,
+                ),
               )
             ],
-          )
-        );
-      }
-    );
+          ));
+        });
   }
 
-  Widget eventInfoRow(String organizationName){
-    return Row(
-      children: <Widget>[
-        SizedBox(width: 10.0,),
-        Text(
-          organizationName, 
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
-        ),
-        Expanded(child: SizedBox()),
-        SizedBox(width: 10.0,),
-      ]
-    );
+  Widget eventInfoRow(String organizationName) {
+    return Row(children: <Widget>[
+      SizedBox(
+        width: 10.0,
+      ),
+      Text(organizationName,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+      Expanded(child: SizedBox()),
+      SizedBox(
+        width: 10.0,
+      ),
+    ]);
   }
 
-  Widget titleRow(String title){
+  Widget titleRow(String title) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 10.0,),
-          Flexible(child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0))),
-          SizedBox(width: 10.0,),
-        ],
-      )
-    );
+        child: Row(
+      children: <Widget>[
+        SizedBox(
+          width: 10.0,
+        ),
+        Flexible(
+            child: Text(title,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0))),
+        SizedBox(
+          width: 10.0,
+        ),
+      ],
+    ));
   }
 
-  Widget eventProgressRow(int pointsAccumulated, int pointsNeeded){
+  Widget eventProgressRow(int pointsAccumulated, int pointsNeeded) {
     return IconRoundedProgressBar(
-      icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
+      icon:
+          Padding(padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
       theme: RoundedProgressBarTheme.green,
       margin: EdgeInsets.symmetric(vertical: 16),
       borderRadius: BorderRadius.circular(6),
@@ -137,40 +165,49 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
     );
   }
 
-  Widget pointsRow(int pointsAccumulated, int pointsNeeded){
+  Widget pointsRow(int pointsAccumulated, int pointsNeeded) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
         Text("Skupljeno: "),
         Text("$pointsAccumulated poena"),
         Expanded(child: SizedBox()),
         Text("Potrebno: "),
         Text("$pointsNeeded poena"),
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
       ],
     );
   }
 
-  Widget descriptionRow(String description){
+  Widget descriptionRow(String description) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 10.0,),
-          (description != null)?
-            Flexible(child: Text(description)) :
-            Text("Nema opis."),
-          SizedBox(width: 10.0,),
-        ],
-      )
-    );
+        child: Row(
+      children: <Widget>[
+        SizedBox(
+          width: 10.0,
+        ),
+        (description != null)
+            ? Flexible(child: Text(description))
+            : Text("Nema opis."),
+        SizedBox(
+          width: 10.0,
+        ),
+      ],
+    ));
   }
 
-  Widget actionButtonRow(Donation don, int id, int index){
+  Widget actionButtonRow(Donation don, int id, int index) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
         RaisedButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ViewDonationPage(don)),
@@ -178,24 +215,30 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
           },
           color: greenPastel,
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: greenPastel)
-        ),
-          child: Text("Više informacija", style: TextStyle(color: Colors.white)),
+              borderRadius: new BorderRadius.circular(18.0),
+              side: BorderSide(color: greenPastel)),
+          child:
+              Text("Više informacija", style: TextStyle(color: Colors.white)),
         ).showCursorOnHover,
-        Expanded(child: SizedBox(),),
+        Expanded(
+          child: SizedBox(),
+        ),
         RaisedButton(
-          onPressed: (){
+          onPressed: () {
             showAlertDialog(context, id, index);
           },
           color: Colors.red,
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.red)
-        ),
-          child: Text("Obriši", style: TextStyle(color: Colors.white),),
+              borderRadius: new BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.red)),
+          child: Text(
+            "Obriši",
+            style: TextStyle(color: Colors.white),
+          ),
         ).showCursorOnHover,
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
       ],
     );
   }
@@ -203,10 +246,13 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
   showAlertDialog(BuildContext context, int id, int index) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
+      child: Text(
+        "Obriši",
+        style: TextStyle(color: Colors.red),
+      ),
       onPressed: () {
         APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
+          if (res.statusCode == 200) {
             print("Uspesno brisanje donacije.");
             setState(() {
               donations.removeAt(index);
@@ -214,10 +260,13 @@ class _ManageDonationMobileState extends State<ManageDonationMobile>{
           }
         });
         Navigator.pop(context);
-        },
+      },
     ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: greenPastel),
+      ),
       onPressed: () {
         Navigator.pop(context);
       },

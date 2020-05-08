@@ -165,7 +165,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
               );
             },
             shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-            child: Row(children: <Widget>[ Text("Dodaj dogđaj", style: TextStyle(color: Colors.white),), Icon(Icons.add, color: Colors.white,)],),
+            child: Row(children: <Widget>[ Text("Dodaj događaj", style: TextStyle(color: Colors.white),), Icon(Icons.add, color: Colors.white,)],),
             color: Color(0xFF00BFA6),
           ).showCursorOnHover,
           ],),

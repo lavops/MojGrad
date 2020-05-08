@@ -11,6 +11,8 @@ import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:frontend_web/extensions/hoverExtension.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../manageEventsDesktop.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 
@@ -307,6 +309,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: descriptionController,
+        cursorColor: Colors.black,
         decoration: InputDecoration(
           hintText: "Opis događaja",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -491,6 +494,11 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           setState(() {
             wrongText = "";
           });
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ManageEventsPageDesktop()),
+          );
         } else {
           setState(() {
             wrongText = "Unesite sve podatke!";

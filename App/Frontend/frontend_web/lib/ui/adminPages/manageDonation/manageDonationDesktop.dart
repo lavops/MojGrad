@@ -5,13 +5,13 @@ import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageDonation/createDonation/createDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
+import 'createDonation/createDonationPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -20,8 +20,7 @@ class ManageDonationDesktop extends StatefulWidget {
   _ManageDonationDesktopState createState() => _ManageDonationDesktopState();
 }
 
-class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
-  
+class _ManageDonationDesktopState extends State<ManageDonationDesktop> {
   List<Donation> donations;
 
   _getDonations() async {
@@ -57,18 +56,27 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
                 ),
                 RaisedButton(
                   onPressed: () {
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateDonationPage()),
-                  );
-                              },
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateDonationPage()),
+                    );
+                  },
                   color: greenPastel,
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(18.0),
                       side: BorderSide(color: greenPastel)),
-                  child: Text(
-                    "Nova donacija",
-                    style: TextStyle(color: Colors.white),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Nova donacija",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
                 ).showCursorOnHover,
                 SizedBox(
@@ -180,40 +188,49 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
     );
   }
 
-  Widget pointsRow(int pointsAccumulated, int pointsNeeded){
+  Widget pointsRow(int pointsAccumulated, int pointsNeeded) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
         Text("Skupljeno: "),
         Text("$pointsAccumulated poena"),
         Expanded(child: SizedBox()),
         Text("Potrebno: "),
         Text("$pointsNeeded poena"),
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
       ],
     );
   }
 
-  Widget descriptionRow(String description){
+  Widget descriptionRow(String description) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 10.0,),
-          (description != null)?
-            Flexible(child: Text(description)) :
-            Text("Nema opis."),
-          SizedBox(width: 10.0,),
-        ],
-      )
-    );
+        child: Row(
+      children: <Widget>[
+        SizedBox(
+          width: 10.0,
+        ),
+        (description != null)
+            ? Flexible(child: Text(description))
+            : Text("Nema opis."),
+        SizedBox(
+          width: 10.0,
+        ),
+      ],
+    ));
   }
 
-  Widget actionButtonRow(Donation don, int id, int index){
+  Widget actionButtonRow(Donation don, int id, int index) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
         RaisedButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ViewDonationPage(don)),
@@ -252,10 +269,13 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
   showAlertDialog(BuildContext context, int id, int index) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
+      child: Text(
+        "Obriši",
+        style: TextStyle(color: Colors.red),
+      ),
       onPressed: () {
         APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
+          if (res.statusCode == 200) {
             print("Uspesno brisanje donacije.");
             setState(() {
               donations.removeAt(index);
@@ -263,10 +283,13 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop>{
           }
         });
         Navigator.pop(context);
-        },
+      },
     ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: greenPastel),
+      ),
       onPressed: () {
         Navigator.pop(context);
       },

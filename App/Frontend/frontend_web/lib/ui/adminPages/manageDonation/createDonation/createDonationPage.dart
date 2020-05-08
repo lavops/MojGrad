@@ -208,6 +208,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
           fontSize: 16,
           fontWeight: FontWeight.w300,
         ),
+        cursorColor: Colors.black,
         controller: description,
         decoration: InputDecoration(
           hintText: "Opis donacije",

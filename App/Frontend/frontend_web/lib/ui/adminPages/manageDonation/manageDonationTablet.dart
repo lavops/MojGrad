@@ -11,7 +11,6 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
-
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageDonationTablet extends StatefulWidget {
@@ -19,8 +18,7 @@ class ManageDonationTablet extends StatefulWidget {
   _ManageDonationTabletState createState() => _ManageDonationTabletState();
 }
 
-class _ManageDonationTabletState extends State<ManageDonationTablet>{
-  
+class _ManageDonationTabletState extends State<ManageDonationTablet> {
   List<Donation> donations;
 
   _getDonations() async {
@@ -56,18 +54,27 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
                 ),
                 RaisedButton(
                   onPressed: () {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateDonationPage()),
-                  );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateDonationPage()),
+                    );
                   },
                   color: greenPastel,
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(18.0),
                       side: BorderSide(color: greenPastel)),
-                  child: Text(
-                    "Nova donacija",
-                    style: TextStyle(color: Colors.white),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Nova donacija",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
                 ).showCursorOnHover,
                 SizedBox(
@@ -164,62 +171,75 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
     );
   }
 
-  Widget pointsRow(int pointsAccumulated, int pointsNeeded){
+  Widget pointsRow(int pointsAccumulated, int pointsNeeded) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
         Text("Skupljeno: "),
         Text("$pointsAccumulated poena"),
         Expanded(child: SizedBox()),
         Text("Potrebno: "),
         Text("$pointsNeeded poena"),
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
       ],
     );
   }
 
-  Widget descriptionRow(String description){
+  Widget descriptionRow(String description) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 10.0,),
-          (description != null)?
-            Flexible(child: Text(description)) :
-            Text("Nema opis."),
-          SizedBox(width: 10.0,),
-        ],
-      )
-    );
+        child: Row(
+      children: <Widget>[
+        SizedBox(
+          width: 10.0,
+        ),
+        (description != null)
+            ? Flexible(child: Text(description))
+            : Text("Nema opis."),
+        SizedBox(
+          width: 10.0,
+        ),
+      ],
+    ));
   }
 
-  Widget actionButtonRow(Donation don, int id, int index){
+  Widget actionButtonRow(Donation don, int id, int index) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
         RaisedButton(
-          onPressed: (){
-            
-          },
+          onPressed: () {},
           color: greenPastel,
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: greenPastel)
-        ),
-          child: Text("Više informacija", style: TextStyle(color: Colors.white)),
+              borderRadius: new BorderRadius.circular(18.0),
+              side: BorderSide(color: greenPastel)),
+          child:
+              Text("Više informacija", style: TextStyle(color: Colors.white)),
         ).showCursorOnHover,
-        Expanded(child: SizedBox(),),
+        Expanded(
+          child: SizedBox(),
+        ),
         RaisedButton(
-          onPressed: (){
+          onPressed: () {
             showAlertDialog(context, id, index);
           },
           color: Colors.red,
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.red)
-        ),
-          child: Text("Obriši", style: TextStyle(color: Colors.white),),
+              borderRadius: new BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.red)),
+          child: Text(
+            "Obriši",
+            style: TextStyle(color: Colors.white),
+          ),
         ).showCursorOnHover,
-        SizedBox(width: 10.0,),
+        SizedBox(
+          width: 10.0,
+        ),
       ],
     );
   }
@@ -227,10 +247,13 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
   showAlertDialog(BuildContext context, int id, int index) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
+      child: Text(
+        "Obriši",
+        style: TextStyle(color: Colors.red),
+      ),
       onPressed: () {
         APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
+          if (res.statusCode == 200) {
             print("Uspesno brisanje donacije.");
             setState(() {
               donations.removeAt(index);
@@ -238,10 +261,13 @@ class _ManageDonationTabletState extends State<ManageDonationTablet>{
           }
         });
         Navigator.pop(context);
-        },
+      },
     );
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: greenPastel),
+      ),
       onPressed: () {
         Navigator.pop(context);
       },
