@@ -33,31 +33,37 @@ class _InstitutionSolvePageState extends State<InstitutionSolvePage> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Scaffold(
-            drawer:sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-                    ? DrawerInstitution(2) : null,
-            appBar:sizingInformation.deviceScreenType != DeviceScreenType.Mobile
-                    ? null
-                    : AppBar(
-                        backgroundColor: Colors.white,
-                        iconTheme: IconThemeData(color: Colors.black),
-                      ),
-            backgroundColor: Colors.white,
-            body: Row(
-              children: <Widget>[
-                sizingInformation.deviceScreenType != DeviceScreenType.Mobile
-                    ? CollapsingInsNavigationDrawer() : SizedBox(),
-                Expanded(
-                  child: ScreenTypeLayout(
-                    mobile:InstitutionSolveMobilePage(postId: postId, id: id),
-                    desktop:InstitutionSolveDesktopPage(postId: postId, id: id),
-                    tablet:InstitutionSolveDesktopPage(postId: postId, id: id),
-                  ),
-                )
-              ],
-            ),
-          )
-        );
+        builder: (context, sizingInformation) => Scaffold(
+              drawer:
+                  sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                      ? DrawerInstitution(2)
+                      : null,
+              appBar:
+                  sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+                      ? null
+                      : AppBar(
+                          backgroundColor: Colors.white,
+                          iconTheme: IconThemeData(color: Colors.black),
+                        ),
+              backgroundColor: Colors.white,
+              body: Row(
+                children: <Widget>[
+                  sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+                      ? CollapsingInsNavigationDrawer()
+                      : SizedBox(),
+                  Expanded(
+                    child: ScreenTypeLayout(
+                      mobile:
+                          InstitutionSolveMobilePage(postId: postId, id: id),
+                      desktop:
+                          InstitutionSolveDesktopPage(postId: postId, id: id),
+                      tablet:
+                          InstitutionSolveDesktopPage(postId: postId, id: id),
+                    ),
+                  )
+                ],
+              ),
+            ));
   }
 }
 
@@ -273,6 +279,7 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
           fontSize: 16,
           fontWeight: FontWeight.w300,
         ),
+        cursorColor: Colors.black,
         controller: description,
         decoration: InputDecoration(
           hintText: "Opis rešenja",
@@ -361,8 +368,8 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
             SizedBox(
               height: 10,
             ),
-            unknownImageText != ''? 
-                Center(
+            unknownImageText != ''
+                ? Center(
                     child: Text(
                     unknownImageText,
                     style: TextStyle(

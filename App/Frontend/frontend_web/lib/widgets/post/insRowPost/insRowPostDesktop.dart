@@ -2,12 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
-import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -131,7 +132,7 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
             MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
           );
         },
-      )
+      ).showCursorOnHover
         : SizedBox(),
       SizedBox(width: 10,),
     ],

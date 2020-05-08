@@ -223,7 +223,7 @@ class _AddCityWidgetState extends State<AddCityWidget>{
               });
               _getCity();
             }
-          }),
+          }).showCursorOnHover,
     );
 
     final wrongReg = Center(

@@ -12,28 +12,30 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
+import '../../../editDonationPage.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ViewDonationDesktop extends StatefulWidget {
-
   Donation donation;
   ViewDonationDesktop(this.donation);
 
   @override
-  _ViewDonationDesktopState createState() => _ViewDonationDesktopState(donation);
+  _ViewDonationDesktopState createState() =>
+      _ViewDonationDesktopState(donation);
 }
 
 class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
   Donation donation;
   List<User> users;
-  
-  _ViewDonationDesktopState(Donation donation1){
+
+  _ViewDonationDesktopState(Donation donation1) {
     this.donation = donation1;
   }
-  
 
   _getUsersFromDonation() async {
-    APIServices.getUsersFromDonation(TokenSession.getToken, donation.id).then((res) {
+    APIServices.getUsersFromDonation(TokenSession.getToken, donation.id)
+        .then((res) {
       Iterable list = json.decode(res);
       List<User> users1 = List<User>();
       users1 = list.map((model) => User.fromObject(model)).toList();
@@ -60,84 +62,107 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
             height: double.infinity,
             width: double.infinity,
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
-            child: Column(
-              children: <Widget>[
-                Row(children: <Widget>[
+            child: Column(children: <Widget>[
+              Row(
+                children: <Widget>[
                   RaisedButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context);
                     },
                     color: greenPastel,
                     shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(18.0),
-                      side: BorderSide(color: greenPastel)
+                        borderRadius: new BorderRadius.circular(18.0),
+                        side: BorderSide(color: greenPastel)),
+                    child: Text(
+                      "Vrati se nazad",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
                   ).showCursorOnHover,
-                  Expanded(child: SizedBox(),),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
                   RaisedButton(
-                    onPressed: (){
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditDonationPage(this.donation)),
+                      );
                     },
                     color: greenPastel,
                     shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(18.0),
-                      side: BorderSide(color: greenPastel)
+                        borderRadius: new BorderRadius.circular(18.0),
+                        side: BorderSide(color: greenPastel)),
+                    child: Text(
+                      "Izmeni",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    child: Text("Izmeni", style: TextStyle(color: Colors.white),),
                   ).showCursorOnHover,
                   RaisedButton(
-                    onPressed: (){
+                    onPressed: () {
                       showAlertDialog(context, donation.id);
                     },
                     color: Colors.red,
                     shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.red)
+                        borderRadius: new BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.red)),
+                    child: Text(
+                      "Obriši",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    child: Text("Obriši", style: TextStyle(color: Colors.white),),
                   ).showCursorOnHover,
-                ],),
-                SizedBox(height: 10.0,),
-                Text(
-                  donation.organizationName, 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0)
-                ),
-                SizedBox(height: 10.0,),
-                eventProgressRow(),
-                Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text("Skupljeno:"),
-                        Text("${donation.pointsAccumulated} poena")
-                      ],
-                    ),
-                    Expanded(child: SizedBox()),
-                    Column(
-                      children: <Widget>[
-                        Text("Potrebno:"),
-                        Text("${donation.pointsNeeded} poena")
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: 20.0,),
-                Flexible(child: Text(donation.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))),
-                Flexible(child: Text(donation.description)),
-                SizedBox(height: 10.0,),
-                Row(
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(donation.organizationName,
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0)),
+              SizedBox(
+                height: 10.0,
+              ),
+              eventProgressRow(),
+              Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text("Skupljeno:"),
+                      Text("${donation.pointsAccumulated} poena")
+                    ],
+                  ),
+                  Expanded(child: SizedBox()),
+                  Column(
+                    children: <Widget>[
+                      Text("Potrebno:"),
+                      Text("${donation.pointsNeeded} poena")
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Flexible(
+                  child: Text(donation.title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0))),
+              Flexible(child: Text(donation.description)),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
                 children: <Widget>[
                   Text("Učesnici:"),
                   Expanded(child: SizedBox()),
                   //Text("${donation.userNum} korisnika"),
                   Text("${donation.userNum}" == '1'
-                        ? "${donation.userNum} korisnik"
-                        : "${donation.userNum} korisnika"),
+                      ? "${donation.userNum} korisnik"
+                      : "${donation.userNum} korisnika"),
                 ],
               ),
-              (users != null)?listUsers():SizedBox(),
-              ]
-            ),
+              (users != null) ? listUsers() : SizedBox(),
+            ]),
           ),
         ),
         CollapsingNavigationDrawer()
@@ -145,53 +170,52 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
     );
   }
 
-  
-
-  Widget eventProgressRow(){
+  Widget eventProgressRow() {
     return IconRoundedProgressBar(
-      icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
+      icon:
+          Padding(padding: EdgeInsets.all(8), child: Icon(Icons.attach_money)),
       theme: RoundedProgressBarTheme.green,
       margin: EdgeInsets.symmetric(vertical: 16),
       borderRadius: BorderRadius.circular(6),
-      percent:  (donation.pointsAccumulated / donation.pointsNeeded) * 22, // 80
+      percent: (donation.pointsAccumulated / donation.pointsNeeded) * 22, // 80
     );
   }
 
-  Widget listUsers(){
+  Widget listUsers() {
     return Align(
-      alignment: Alignment.topLeft,
-      child: Wrap(
-        spacing: 10.0,
-        runSpacing: 10.0,
-        direction: Axis.horizontal,
-        children: users.map((User user) => InputChip(
-          avatar: CircleAvatar(child: Container(
-            decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              image: new DecorationImage(
-                  fit: BoxFit.fill,
-                  image: new NetworkImage(userPhotoURL + user.photo)
-                )
-              )
-            ),
-          ),
-          label: Text(user.firstName + " " + user.lastName),
-          onPressed: (){
-            
-          },
-        )).toList(),
-      )
-    );
+        alignment: Alignment.topLeft,
+        child: Wrap(
+          spacing: 10.0,
+          runSpacing: 10.0,
+          direction: Axis.horizontal,
+          children: users
+              .map((User user) => InputChip(
+                    avatar: CircleAvatar(
+                      child: Container(
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(
+                                      userPhotoURL + user.photo)))),
+                    ),
+                    label: Text(user.firstName + " " + user.lastName),
+                    onPressed: () {},
+                  ))
+              .toList(),
+        ));
   }
-
 
   showAlertDialog(BuildContext context, int id) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
+      child: Text(
+        "Obriši",
+        style: TextStyle(color: Colors.red),
+      ),
       onPressed: () {
         APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
+          if (res.statusCode == 200) {
             print("Uspesno brisanje donacije.");
             Navigator.pushReplacement(
               context,
@@ -199,10 +223,13 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
             );
           }
         });
-        },
+      },
     ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: greenPastel),
+      ),
       onPressed: () {
         Navigator.pop(context);
       },
