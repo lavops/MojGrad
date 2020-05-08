@@ -5,6 +5,7 @@ import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/profilePage/profilePage.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
@@ -56,7 +57,17 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  CollapsingInsListTile(title: 'Institucija', icon: Icons.business, animationController: _animationController,),
+                  CollapsingInsListTile(
+                    title: 'Institucija',
+                    icon: Icons.business,
+                    animationController: _animationController,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage(insId: insId,)),
+                      );
+                    },
+                  ),
                   CollapsingInsListTile(
                     title: 'Početna strana',
                     icon: Icons.home,

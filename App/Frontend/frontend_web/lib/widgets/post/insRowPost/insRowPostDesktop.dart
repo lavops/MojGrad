@@ -10,6 +10,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
+import '../../InstitutionCommentWidget.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class InsRowPostDesktopWidget extends StatefulWidget {
@@ -209,6 +211,33 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
     );
   }
 
+
+  showCommentsDialog(BuildContext context, int id) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("Zatvori", style: TextStyle(color: greenPastel),),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      actions: [
+        InstitutionCommentWidget(id),
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
   Widget actionsButtons() =>
       Stack(
         alignment: Alignment.center,
@@ -237,6 +266,7 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
                 onPressed: () {
+                  showCommentsDialog(context, post.postId);
                 },
               ),
               Text(post.commNum.toString()),
