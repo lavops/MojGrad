@@ -210,25 +210,29 @@ class _EditDonationPage extends State<EditDonationPage> {
         var jwt = str.split(".");
         var payload =
             json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
-        print(payload);
+        //print(payload);
 
         if (name.text != '' && _doubleValue.toDouble() != 0.0) {
           APIServices.editDonationData(
               str,
+              donation.id,
               int.parse(payload["sub"]),
               titleController.text,
               name.text,
               description.text,
-              _doubleValue.toDouble());
+              _doubleValue.toDouble()).then((value){
+                if(value.statusCode)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
+                  );
+              });
 
           setState(() {
             wrongText = "";
           });
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
-          );
+          
         } else {
           setState(() {
             wrongText = "Niste izmenili podatke.";
