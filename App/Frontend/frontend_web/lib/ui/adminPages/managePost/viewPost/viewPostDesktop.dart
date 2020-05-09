@@ -16,7 +16,7 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class ViewPostDesktop extends StatefulWidget {
 
-  FullPost post;
+  final FullPost post;
   ViewPostDesktop(this.post);
 
   @override

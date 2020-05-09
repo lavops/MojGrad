@@ -7,16 +7,14 @@ import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfil
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
 import '../../InstitutionCommentWidget.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
 class InsRowPostDesktopWidget extends StatefulWidget {
-  FullPost posts;
-  int indicator;
+  final FullPost posts;
+  final int indicator;
 
   InsRowPostDesktopWidget(this.posts, this.indicator);
 

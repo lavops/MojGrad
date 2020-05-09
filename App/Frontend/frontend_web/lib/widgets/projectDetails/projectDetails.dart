@@ -5,7 +5,6 @@ class ProjectDetails extends StatelessWidget{
  
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return  ResponsiveBuilder(
       builder: (context, sizingInformation){
         var textAligment = sizingInformation.deviceScreenType == DeviceScreenType.Desktop
@@ -17,7 +16,6 @@ class ProjectDetails extends StatelessWidget{
         double descSize = sizingInformation.deviceScreenType == DeviceScreenType.Mobile
           ? 16
           : 21;  
-
 
         return Container(
           width: 600,

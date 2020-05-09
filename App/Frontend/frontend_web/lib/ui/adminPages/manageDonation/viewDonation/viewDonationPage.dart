@@ -9,7 +9,7 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class ViewDonationPage extends StatefulWidget {
   
-  Donation donation;
+  final Donation donation;
   ViewDonationPage(this.donation);
 
   @override

@@ -9,8 +9,6 @@ import 'package:frontend_web/ui/homePage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import '../homePage/homePage.dart';

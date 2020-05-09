@@ -5,12 +5,11 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionDesktop.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
-Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionMobile extends StatefulWidget {
   @override

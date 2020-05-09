@@ -12,7 +12,7 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class ViewPostPage extends StatefulWidget {
   
-  FullPost post;
+  final FullPost post;
   ViewPostPage(this.post);
 
   @override

@@ -3,19 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend_web/models/donation.dart';
-import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:intl/intl.dart';
-
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
 import 'adminPages/manageDonation/manageDonationDesktop.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
 class EditDonationPage extends StatefulWidget {
-  Donation donation;
+  final Donation donation;
   EditDonationPage(this.donation);
 
   @override
@@ -215,6 +212,7 @@ class _EditDonationPage extends State<EditDonationPage> {
         print(payload);
 
         if (name.text != '' && _doubleValue.toDouble() != 0.0) {
+          /*
           APIServices.editDonationData(
               str,
               int.parse(payload["sub"]),
@@ -222,7 +220,7 @@ class _EditDonationPage extends State<EditDonationPage> {
               name.text,
               description.text,
               _doubleValue.toDouble());
-
+          */
           setState(() {
             wrongText = "";
           });

@@ -14,7 +14,7 @@ import '../../../editDonationPage.dart';
 Color greenPastel = Color(0xFF00BFA6);
 
 class ViewDonationMobile extends StatefulWidget {
-  Donation donation;
+  final Donation donation;
   ViewDonationMobile(this.donation);
 
   @override

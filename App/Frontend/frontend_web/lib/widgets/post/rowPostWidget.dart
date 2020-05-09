@@ -6,14 +6,12 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
 class RowPostWidget extends StatefulWidget {
-  FullPost posts;
-
+  final FullPost posts;
   RowPostWidget(this.posts);
 
   @override

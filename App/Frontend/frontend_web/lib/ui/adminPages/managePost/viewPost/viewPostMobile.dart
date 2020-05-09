@@ -14,7 +14,7 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class ViewPostMobile extends StatefulWidget {
 
-  FullPost post;
+  final FullPost post;
   ViewPostMobile(this.post);
 
   @override

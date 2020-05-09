@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/rowPostWidget.dart';
-import 'package:frontend_web/widgets/post/singlePostWidget.dart';
 
 class ManagePostDesktop extends StatefulWidget {
   @override

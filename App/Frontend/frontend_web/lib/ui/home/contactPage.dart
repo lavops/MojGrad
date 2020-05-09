@@ -1,10 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend_web/models/city.dart';
-import 'package:frontend_web/models/institution.dart';
-import 'package:frontend_web/services/api.services.dart';
-import 'package:frontend_web/ui/InstitutionPages/loginPage/loginPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';

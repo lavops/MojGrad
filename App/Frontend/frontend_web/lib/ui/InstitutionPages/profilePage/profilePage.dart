@@ -2,15 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../models/fullPost.dart';
 import '../../../models/institution.dart';
 import '../../../services/api.services.dart';
 import '../../../services/token.session.dart';
-import '../../../services/token.session.dart';
 import '../../../widgets/circleImageWidget.dart';
 import '../../../widgets/collapsingInsNavigationDrawer.dart';
-import '../../../widgets/post/insRowPost/insRowPostDesktop.dart';
 import '../../../widgets/post/insRowPost/insRowPostDesktop.dart';
 
 Color greenPastel = Color(0xFF00BFA6);

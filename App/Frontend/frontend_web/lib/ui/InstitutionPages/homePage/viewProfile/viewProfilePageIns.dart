@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfileDesktopIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfileMobileIns.dart';
-import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfileDesktop.dart';
-import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfileMobile.dart';
-import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -11,7 +8,7 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class ViewUserProfilePageIns extends StatefulWidget {
   
-  int userId;
+  final int userId;
   ViewUserProfilePageIns(this.userId);
 
   @override

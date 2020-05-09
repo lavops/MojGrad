@@ -5,18 +5,14 @@ import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-import 'package:frontend_web/widgets/post/insRowPost/insRowPostDesktop.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostMobile.dart';
-import 'package:frontend_web/widgets/post/rowPostWidget.dart';
 import 'package:frontend_web/widgets/userProfile/userProfileInsWidget.dart';
-import 'package:frontend_web/widgets/userProfile/userProfileWidget.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
 class ViewUserProfileMobileIns extends StatefulWidget {
   
-  int userId;
+  final int userId;
   ViewUserProfileMobileIns(this.userId);
 
   @override

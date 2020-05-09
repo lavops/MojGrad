@@ -13,7 +13,7 @@ Color greenPastel = Color(0xFF00BFA6);
 
 class ViewUserProfileDesktop extends StatefulWidget {
   
-  User user;
+  final User user;
   ViewUserProfileDesktop(this.user);
 
   @override

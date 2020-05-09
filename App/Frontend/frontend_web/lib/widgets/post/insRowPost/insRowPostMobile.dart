@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
-import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
@@ -13,8 +12,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 Color greenPastel = Color(0xFF00BFA6);
 
 class InsRowPostMobileWidget extends StatefulWidget {
-  FullPost posts;
-  int indicator;
+  final FullPost posts;
+  final int indicator;
 
   InsRowPostMobileWidget(this.posts, this.indicator);
 

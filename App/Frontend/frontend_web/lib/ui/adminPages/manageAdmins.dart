@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/managementPage.dart';
 import 'dart:convert';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import '../../models/admin.dart';
@@ -282,10 +281,7 @@ Widget loginAdmin(){
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ManagementPage()));
+                    
                   }),
               
             ),

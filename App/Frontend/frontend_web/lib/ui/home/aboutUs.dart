@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/centeredView/centeredView.dart';
 import 'package:frontend_web/widgets/homeNavigationBar/navigationBar.dart';
-import 'package:frontend_web/widgets/projectDetails/projectDetails.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AboutUs extends StatelessWidget{

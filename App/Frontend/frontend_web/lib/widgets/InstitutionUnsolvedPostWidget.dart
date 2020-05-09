@@ -12,7 +12,7 @@ import 'package:frontend_web/extensions/hoverExtension.dart';
 Color greenPastel = Color(0xFF00BFA6);
 
 class InstitutionUnsolvedPostWidget extends StatefulWidget {
-  FullPost posts;
+  final FullPost posts;
   final int id;
 
   InstitutionUnsolvedPostWidget({Key key, this.posts, this.id});

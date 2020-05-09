@@ -10,12 +10,9 @@ import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.d
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/CollapsingListTile.dart';
-
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
 import '../ui/homePage.dart';
 
-Color greenPastel = Color(0xFF00BFA6);
 
 class CollapsingNavigationDrawer extends StatefulWidget {
   @override

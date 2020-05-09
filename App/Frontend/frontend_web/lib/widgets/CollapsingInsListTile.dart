@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-Color greenPastel = Color(0xFF00BFA6);
-
 class CollapsingInsListTile extends StatefulWidget {
   final String title;
   final IconData icon;

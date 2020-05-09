@@ -10,8 +10,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 Color greenPastel = Color(0xFF00BFA6);
 
 class RowPostMobileWidget extends StatefulWidget {
-  FullPost posts;
-
+  final FullPost posts;
   RowPostMobileWidget(this.posts);
 
   @override
