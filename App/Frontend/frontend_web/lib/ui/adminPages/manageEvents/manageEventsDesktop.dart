@@ -116,7 +116,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.red),),
       onPressed: () {
-        APIServices.deleteDonation(TokenSession.getToken, eventId).then((res) {
+        APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
           if(res.statusCode == 200){
             print("Događaj je uspešno obrisan.");
             setState(() {

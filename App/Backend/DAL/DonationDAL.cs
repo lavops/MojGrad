@@ -139,7 +139,7 @@ namespace Backend.DAL
             exist.monetaryAmount = donation.monetaryAmount;
             exist.organizationName = donation.organizationName;
             exist.description = donation.description;
-            exist.collectedMoney = donation.collectedMoney;
+            exist.collectedMoney = 0;
             if (exist != null)
             {
                 _context.donation.Add(exist);

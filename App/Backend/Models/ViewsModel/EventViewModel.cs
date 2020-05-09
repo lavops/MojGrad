@@ -40,8 +40,8 @@ namespace Backend.Models.ViewsModel
             {
                 this.organizeName = e.institution.name;
             }
-            this.startDate = e.startDate.ToString("dd/MM/yyyy hh:mm");
-            this.endDate = e.endDate.ToString("dd/MM/yyyy hh:mm");
+            this.startDate = e.startDate.ToString("dd/MM/yyyy HH:mm");
+            this.endDate = e.endDate.ToString("dd/MM/yyyy HH:mm");
             this.address = e.address;
             this.description = e.description;
             this.latitude = e.latitude;

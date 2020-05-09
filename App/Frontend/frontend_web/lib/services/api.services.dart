@@ -520,7 +520,7 @@ static Future registerInstitution(Institution ins) async {
 		var data = Map();
     data["cityId"] = cityId;
     data["adminId"] = adminId;
-    data["institutionId"] = 0;
+    data["institutionId"] = null;
     data["latitude"] = latitude;
     data["longitude"] = longitude;
     data["shortDescription"] = shortDesc;

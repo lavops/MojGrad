@@ -4,6 +4,7 @@ using Backend.Models.ViewsModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static Backend.Controllers.EventController;
@@ -113,13 +114,13 @@ namespace Backend.DAL
 
         public bool deleteEvent(long id)
         {
-            var events = _context.events.Where(x => x.id == id).FirstOrDefault();
-            if (events == null)
+            var eve = _context.events.Where(x => x.id == id).FirstOrDefault();
+            if (eve == null)
             {
                 return false;
             }
 
-            _context.events.Remove(events);
+            _context.events.Remove(eve);
             _context.SaveChangesAsync();
 
             return true;
@@ -134,8 +135,9 @@ namespace Backend.DAL
                 {
 
                     exist.description = events.description;
-                    exist.startDate = DateTime.Parse(events.startDate);
-                    exist.endDate = DateTime.Parse(events.endDate);
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    exist.startDate = DateTime.ParseExact(events.startDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
+                    exist.endDate = DateTime.ParseExact(events.endDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
                     exist.shortDescription = events.shortDescription;
                     exist.title = events.title;
                     _context.Update(exist);
@@ -179,10 +181,11 @@ namespace Backend.DAL
             eve.adminId = events.adminId;
             eve.institutionId = events.institutionId;
             eve.latitude = events.latitude;
-            eve.longitude = eve.longitude;
-            eve.shortDescription = eve.shortDescription;
-            eve.startDate = DateTime.Parse(events.startDate);
-            eve.endDate = DateTime.Parse(events.endDate);
+            eve.longitude = events.longitude;
+            eve.shortDescription = events.shortDescription;
+            CultureInfo enUS = new CultureInfo("en-US");
+            eve.startDate = DateTime.ParseExact(events.startDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
+            eve.endDate = DateTime.ParseExact(events.endDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
             eve.address = events.address;
             eve.description = events.description;
             eve.title = events.title;

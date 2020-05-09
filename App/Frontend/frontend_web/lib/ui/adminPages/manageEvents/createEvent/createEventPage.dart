@@ -471,7 +471,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
         if (nameController.text != '' &&
             locationController.text != '' &&
             _startDate != null &&
-            _endDate != null) {
+            _endDate != null && city != null) {
 
           String _startDateString = DateFormat.yMd().format(_startDate);
           String _endDateString = DateFormat.yMd().format(_endDate);
