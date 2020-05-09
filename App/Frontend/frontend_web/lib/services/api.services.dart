@@ -635,5 +635,19 @@ static Future registerInstitution(Institution ins) async {
     });
   }
   
+  // solved by inst
+
+  static Future getPostsSolvedByInstitution(String jwt, int id) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    var jbody = jsonEncode({'id' : id.toString()});
+
+    return await http.post(serverURL + 'Post/PostsSolvedByInstitution', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body : jbody);
+  }
+
 }
 
