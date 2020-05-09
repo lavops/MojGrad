@@ -276,16 +276,17 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
               titleController.text,
               name.text,
               description.text,
-              _doubleValue.toDouble());
-
-          setState(() {
-            wrongText = "";
-          });
-          
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ManageDonationPage()),
-          );
+              _doubleValue.toDouble()).then((value){
+                if(value.statusCode == 200){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageDonationPage()),
+                  );
+                  setState(() {
+                    wrongText = "";
+                  });
+                }
+              });
         } else {
           setState(() {
             wrongText = "Morate uneti ime organizacije i novčani iznos!";

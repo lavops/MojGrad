@@ -513,19 +513,23 @@ static Future registerInstitution(Institution ins) async {
   }
 
   
-   static Future createEvent(String jwt, int adminId, String nameEvent, String shortDesc, String longDesc, String location, String city, String startDate, String endDate) async  {
+   static Future createEvent(String jwt, int adminId, String nameEvent, String shortDesc, String longDesc, String location, int cityId, String startDate, String endDate, double latitude, double longitude) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Event';
 		var data = Map();
+    data["cityId"] = cityId;
     data["adminId"] = adminId;
-		data["organizeName"] = nameEvent;
-		data["shortDescription"] = shortDesc;
-		data["description"] = longDesc;
-		data["adress"] = location;
-    data["cityName"] = city;
+    data["institutionId"] = 0;
+    data["latitude"] = latitude;
+    data["longitude"] = longitude;
+    data["shortDescription"] = shortDesc;
     data["startDate"] = startDate;
     data["endDate"] = endDate;
+    data["address"] = location;
+		data["description"] = longDesc;
+		data["title"] = nameEvent;
+    
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
 		return await http.post(url, headers: {
@@ -645,11 +649,12 @@ static Future registerInstitution(Institution ins) async {
     }, body : jbody);
   }
 
-  static Future editDonationData(String jwt, int adminId, String title, String organizationName, String description, double monetaryAmount) async  {
+  static Future editDonationData(String jwt,int id, int adminId, String title, String organizationName, String description, double monetaryAmount) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
-    String url = serverURL + 'Donation';
+    String url = serverURL + 'Donation/editDonation';
 		var data = Map();
+    data["id"] = id;
     data["adminId"] = adminId;
 		data["title"] = title;
 		data["organizationName"] = organizationName;

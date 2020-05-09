@@ -466,7 +466,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
         var str = TokenSession.getToken;
         var jwt = str.split(".");
         var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
-        print(payload);
+        
 
         if (nameController.text != '' &&
             locationController.text != '' &&
@@ -482,23 +482,28 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           APIServices.createEvent(
               str,
               int.parse(payload["sub"]),
-              nameController.toString(),
-              shortDescriptionController.toString(),
-              descriptionController.toString(),
-              locationController.toString(),
-              city.name,
+              nameController.text,
+              shortDescriptionController.text,
+              descriptionController.text,
+              locationController.text,
+              city.id,
               startDate,
-              endDate);
+              endDate, 44.007392, 20.925238).then((value){
+                print(value.statusCode);
+                print(value.body);
+                if(value.statusCode == 200)
+                  print("HEJJJ");
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageEventsPageDesktop()),
+                  );
+              });
 
-          print('nisu dobri podaci');
           setState(() {
             wrongText = "";
           });
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ManageEventsPageDesktop()),
-          );
+          
         } else {
           setState(() {
             wrongText = "Unesite sve podatke!";
