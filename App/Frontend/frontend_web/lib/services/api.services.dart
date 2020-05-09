@@ -645,5 +645,24 @@ static Future registerInstitution(Institution ins) async {
     }, body : jbody);
   }
 
+  static Future editDonationData(String jwt, int adminId, String title, String organizationName, String description, double monetaryAmount) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Donation';
+		var data = Map();
+    data["adminId"] = adminId;
+		data["title"] = title;
+		data["organizationName"] = organizationName;
+		data["description"] = description;
+		data["monetaryAmount"] = monetaryAmount;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+	}
+
 }
 
