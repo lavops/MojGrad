@@ -35,6 +35,14 @@ namespace Backend.Controllers
 
             return listPosts;
         }
+        [Authorize]
+        [HttpGet("GetById/postId={postId}/userId={userId}")]
+        public ActionResult<PostViewModel> GetPostById(int postId, int userId)
+        {
+            var posts = _iPostUI.getByID(postId);
+            PostViewModel post = new PostViewModel(posts, userId);
+            return post;
+        }
 
         [Authorize]
         [HttpGet("ByCityId/userId={userId}/cityId={cityId}")]
