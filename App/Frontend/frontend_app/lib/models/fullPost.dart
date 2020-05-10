@@ -21,6 +21,7 @@ class FullPost
   String _address;
   int _isLiked;
   
+  FullPost.nothing();
   FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum, this._latitude, this._longitude, this._userPhoto, this._address, this._solvedPhotoPath);
  
 
