@@ -309,11 +309,20 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           ));
     }else if(choice == ConstantsDeleteEdit.PogledajResenja){
-      Navigator.push(
-        context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-      );
+      _getSolvedStatus();
     }
+  }
+
+  _getSolvedStatus() async {
+    print("HEJ USAO SAM U STRANICU");
+    int result = await Navigator.push(
+      context,
+      MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+    );
+    print("Status id ${post.statusId} a result je $result");
+    setState(() {
+      if (result != null && result == 1) post.statusId = 1;
+    });
   }
 
 Widget imageGallery(String image, String image2) { 
@@ -472,19 +481,13 @@ Widget imageGallery(String image, String image2) {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-                        );
+                        _getSolvedStatus();
                       },
                     )
                   : IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green[800]),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-                        );
+                        _getSolvedStatus();
                       },
                     ),
               SizedBox(width: 10.0), // For padding
