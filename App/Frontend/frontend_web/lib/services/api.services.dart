@@ -621,7 +621,7 @@ static Future registerInstitution(Institution ins) async {
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
-    return res.body;
+    return res;
   }
   
   

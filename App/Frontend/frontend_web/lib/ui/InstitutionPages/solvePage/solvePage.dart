@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -224,8 +225,14 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
       APIServices.addImageWeb(base64Image).then((res) {
         var res1 = jsonDecode(res);
         APIServices.solveFromTheInstitution(
-            TokenSession.getToken, postId, institutionId, description, res1);
-        Navigator.pop(context);
+            TokenSession.getToken, postId, institutionId, description, res1).then((value){
+              String jwt = TokenSession.getToken;
+              if(value.statusCode == 200)
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageInstitution.fromBase64(jwt)),
+                );
+            });
 
         setState(() {
           successText = "Uspešno ste rešili objavu.";

@@ -7,10 +7,9 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
-
-Color greenPastel = Color(0xFF00BFA6);
 
 class EditInstitutionMobilePage extends StatefulWidget {
   final Institution institution;

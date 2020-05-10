@@ -5,7 +5,11 @@ import 'package:frontend/models/challengeSolving.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/ChallengeSolvingCameraPage.dart';
 import 'package:frontend/ui/homePage.dart';
-import 'package:frontend/widgets/solvingPostWidget.dart';
+import 'package:frontend/ui/othersProfilePage.dart';
+import 'package:frontend/widgets/circleImageWidget.dart';
+import 'package:frontend/models/constants.dart';
+import '../services/api.services.dart';
+//import 'package:frontend/widgets/solvingPostWidget.dart';
 
 import '../main.dart';
 
@@ -27,13 +31,15 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
   String textForSolving = "REŠI";
   List<ChallengeSolving> listChallengeSolving;
 
+  final GlobalKey<_SolvingPostWidgetState> _key = GlobalKey();
+
   _ChallengeSolvingPageState(int postId1, int ownerId1, int solved1) {
     this.postId = postId1;
     this.ownerId = ownerId1;
     this.solved = solved1;
   }
 
-  _setIsSolved(){
+  void _setIsSolved(){
     setState(() {
       if(this.solved == 2)
         isSolved = 0;
@@ -94,12 +100,20 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
             ),
             SizedBox(width: 10.0,)
           ],
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context, isSolved);
+            },
+            child: Icon(Icons.arrow_back,
+                color: Theme.of(context).copyWith().iconTheme.color,
+                size: Theme.of(context).copyWith().iconTheme.size),
+          ),
         ),
         body:ListView.builder(
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listChallengeSolving == null ? 0 : listChallengeSolving.length,
           itemBuilder: (BuildContext context, int index) {
-            return SolvingPostWidget(listChallengeSolving[index], ownerId);
+            return SolvingPostWidget(listChallengeSolving[index], ownerId, key: _key, function: _setIsSolved,);
           }
         )
     );
@@ -115,4 +129,295 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
     _getChallengeSolving();
     _getChallengeSolving();
   }
+}
+
+class SolvingPostWidget extends StatefulWidget {
+  final ChallengeSolving solvingPost;
+  final int ownerId;
+  final Function() function;
+
+  SolvingPostWidget(this.solvingPost, this.ownerId, {Key key, this.function}) : super(key: key);
+
+  @override
+  _SolvingPostWidgetState createState() => _SolvingPostWidgetState(solvingPost, ownerId);
+}
+
+class _SolvingPostWidgetState extends State<SolvingPostWidget> {
+  ChallengeSolving solvingPost;
+  int ownerId;
+  _SolvingPostWidgetState(ChallengeSolving solvingPost1, int ownerId1) {
+    this.solvingPost = solvingPost1;
+    this.ownerId = ownerId1;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return (solvingPost == null) ? Center() : newPost(); //buildPostList()
+  }
+
+  Widget newPost() {
+    return Card(
+        child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+          userInfoRow(),
+          imageGallery(),
+          SizedBox(height: 10.0),
+          description(),
+          SizedBox(height: 10.0),
+        ]));
+  }
+
+  Widget userInfoRow() =>
+      Row(
+        children: <Widget>[
+          InkWell(
+              onTap: () {
+                if (userId != solvingPost.userId)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OthersProfilePage(solvingPost.userId)),
+                  );
+              },
+              child: CircleImage(
+                serverURLPhoto + solvingPost.userPhoto,
+                imageSize: 36.0,
+                whiteMargin: 2.0,
+                imageMargin: 6.0,
+              )),
+          InkWell(
+              onTap: () {
+                if (userId != solvingPost.userId)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OthersProfilePage(solvingPost.userId)),
+                  );
+              },
+              child: Text(
+                solvingPost.username,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+          Expanded(child: SizedBox()),
+          (solvingPost.selected == 1)
+          ?
+          Text(
+            "REŠENJE",
+            style: TextStyle(color:Colors.green[800], fontWeight: FontWeight.bold),
+          ):
+          SizedBox(),
+          (ownerId == userId)
+          ? PopupMenuButton<String>(
+            onSelected: choiceActionSolvingDelete,
+            itemBuilder: (BuildContext context) {
+              return ConstantsChallengeSolvingDelete.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ): SizedBox(),
+          (ownerId != userId && solvingPost.userId == userId)
+          ?
+          PopupMenuButton<String>(
+            onSelected: choiceActionSolvingDelete,
+            itemBuilder: (BuildContext context) {
+              return ConstantsChallengeDelete.choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ): SizedBox(),
+        ],
+      );
+
+  void choiceActionSolvingDelete(String choice) {
+    if (choice == ConstantsChallengeSolvingDelete.IzbrisiResenje) {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text("Brisanje rešenja?"),
+          actions: <Widget>[
+                FlatButton(
+              child: Text(
+                "Izbriši",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onPressed: () {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
+                      if(res.statusCode == 200){
+                        print('Uspesno ste izbrisali resenje.');
+                        setState(() {
+                          solvingPost = null;
+                        });
+                      }
+                    });
+                    
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+    }else if(choice == ConstantsChallengeSolvingDelete.IzaberiResenje){
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text("Prihvati resenje?"),
+          actions: <Widget>[
+                FlatButton(
+              child: Text(
+                "Izaberi",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onPressed: () {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.challengeSolving(jwt, solvingPost.id, solvingPost.postId).then((res){
+                      if(res.statusCode == 200){
+                        print('Uspesno ste izabrali resenje.');
+                        widget.function();
+                        setState(() {
+                          solvingPost.selected = 1;
+                          solvingPost.postStatusId = 1;
+                          isSolved = 1;
+                        });
+                      }
+                    });
+                    
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Otkazi",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+    }else if(choice == ConstantsChallengeDelete.IzbrisiSvojeResenje){
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text("Brisanje rešenja?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                "Izbriši",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onPressed: () {
+                APIServices.jwtOrEmpty().then((res) {
+                  String jwt;
+                  setState(() {
+                    jwt = res;
+                  });
+                  if (res != null) {
+                    APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
+                      if(res.statusCode == 200){
+                        print('Uspesno ste izbrisali resenje.');
+                        setState(() {
+                          solvingPost = null;
+                        });
+                      }
+                    });
+                    
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+    }
+  }
+
+  
+
+  Widget imageGallery() => Container(
+        constraints: BoxConstraints(
+          maxHeight: 300.0, // changed to 400
+          minHeight: 200.0, // changed to 200
+          maxWidth: double.infinity,
+          minWidth: double.infinity,
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey[200],
+              width: 1.0,
+            ),
+          ),
+        ),
+        child: Image(image: NetworkImage(serverURLPhoto + solvingPost.solvingPhoto)),
+      );
+
+  Widget description() =>
+      Container(
+          child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 10,
+          ),
+          InkWell(
+              onTap: () {
+                if (userId != solvingPost.userId)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute( builder: (context) => OthersProfilePage(solvingPost.userId)),
+                  );
+              },
+              child: Text(solvingPost.username, style: TextStyle(fontWeight: FontWeight.bold))),
+          SizedBox(
+            width: 10,
+          ),
+          Flexible(child: Text(solvingPost.description),
+          )
+        ],
+      ));
 }
