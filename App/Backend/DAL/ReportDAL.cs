@@ -42,6 +42,7 @@ namespace Backend.DAL
             report1.reportedUserId = report.reportedUserId;
             report1.reportingUserId = report.reportingUserId;
             report1.reportTypeId = report.reportTypeId;
+            report1.description = report.description; 
             report1.time = DateTime.Now;
 
 

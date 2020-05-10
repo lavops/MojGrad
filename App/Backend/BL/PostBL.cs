@@ -72,6 +72,11 @@ namespace Backend.BL
             return _iPostDAL.getByID(id);
         }
 
+        public List<Post> getPostsByFilter(List<int> filterList, int statusId)
+        {
+            return _iPostDAL.getPostsByFilter(filterList, statusId);
+        }
+
         public Post insertPost(Post post)
         {
             return _iPostDAL.insertPost(post);

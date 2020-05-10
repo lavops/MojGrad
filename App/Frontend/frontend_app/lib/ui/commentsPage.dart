@@ -87,7 +87,7 @@ class StateComents extends State<CommentsPage> {
                   _getComms();
                 },
               ),
-              FlatButton(
+                FlatButton(
                 child: Text(
                   "Otkaži",
                   style: TextStyle(
@@ -113,10 +113,10 @@ class StateComents extends State<CommentsPage> {
                   TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
             ),
             actions: <Widget>[
-              FlatButton(
+               FlatButton(
                 child: Text(
                   "Prijavi",
-                  style: TextStyle(color: Colors.red),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -139,7 +139,7 @@ class StateComents extends State<CommentsPage> {
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style: TextStyle(color: Colors.green[800]),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();

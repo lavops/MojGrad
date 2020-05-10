@@ -10,8 +10,8 @@ import 'package:path/path.dart';
 import '../main.dart';
 
 class ChallengeSolvingCameraPage extends StatefulWidget {
-  int postId;
-  int ownerId;
+  final int postId;
+  final int ownerId;
 
   ChallengeSolvingCameraPage(this.postId, this.ownerId);
 
@@ -45,7 +45,8 @@ class _ChallengeSolvingCameraPageState
   _openGalery() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 50);
-    print("Kompresovana " + picture.lengthSync().toString());
+    if(picture != null)
+      print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });
@@ -55,7 +56,8 @@ class _ChallengeSolvingCameraPageState
   _openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50);
-    print("Kompresovana " + picture.lengthSync().toString());
+    if(picture != null)
+      print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });

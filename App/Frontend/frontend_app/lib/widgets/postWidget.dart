@@ -223,10 +223,10 @@ class _PostWidgetState extends State<PostWidget> {
             title: Text("Brisanje objave?", style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color),),
             actions: <Widget>[
-              FlatButton(
+                FlatButton(
                 child: Text(
-                  "Izbrisi",
-                  style: TextStyle(color: Colors.red),
+                  "Izbriši",
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -248,7 +248,7 @@ class _PostWidgetState extends State<PostWidget> {
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style: TextStyle(color: Colors.green[800]),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -274,10 +274,10 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
             actions: <Widget>[
-              FlatButton(
+                FlatButton(
                 child: Text(
                   "Sačuvaj",
-                  style: TextStyle(color: Colors.green[800]),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -293,14 +293,14 @@ class _PostWidgetState extends State<PostWidget> {
                       });
                     }
                   });
-                  print('Uspesno ste izmenili objavu.');
+                  print('Uspesno ste izmenili opis');
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style: TextStyle(color: Colors.red),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -585,16 +585,24 @@ class MyDialogState extends State<MyDialog> {
             items: widget.reportTypes,
           ),
           TextFormField(
-            maxLines: 2,
-            controller: messageController,
-            decoration: InputDecoration(
-                labelText: "Komentar",
+              controller: messageController,
+              autocorrect: false,
+              decoration: InputDecoration(
                 hoverColor: Colors.grey,
-                labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)   ),
+                hintText: 'Komentar',
+                labelStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontStyle: FontStyle.italic),
+                fillColor: Colors.black,
+                contentPadding: const EdgeInsets.all(10.0),
+                focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ),  
+              ),
           )
         ])),
       actions: <Widget>[
-        FlatButton(
+         FlatButton(
           child: Text(
             "Prijavi",
             style:

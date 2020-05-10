@@ -161,15 +161,25 @@ class _DonationsWidgetState extends State<DonationsWidget> {
               TextField(
                 controller: donateController,
                 keyboardType: TextInputType.number,
+                 decoration: InputDecoration(
+                labelStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontStyle: FontStyle.italic),
+                fillColor: Colors.black,
+                contentPadding: const EdgeInsets.all(10.0),
+                focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ),  
+              ),
               ),
             ],
           ),
         ),
         actions: <Widget>[
-          FlatButton(
+           FlatButton(
             child: Text(
               "Doniraj",
-              style: TextStyle(color: Colors.green[800]),
+              style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
             ),
             onPressed: () {
               int donationAmount = int.parse(donateController.text);
@@ -193,6 +203,10 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                         });
                         Navigator.of(context).pop();
                       }
+                      else
+                      {
+                        Navigator.of(context).pop();
+                      }
                     });
                   }
                 });
@@ -202,7 +216,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne mozete donirati 0 poena.\n ")),));
+                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne možete donirati 0 poena.\n ")),));
 
                   setState(() {
                     donateController.text = "";
@@ -212,7 +226,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne mozete donirati vise poena nego sto imate.\n ")),));
+                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne možete donirati vise poena nego sto imate.\n ")),));
                   
                   setState(() {
                     donateController.text = "";
@@ -221,10 +235,10 @@ class _DonationsWidgetState extends State<DonationsWidget> {
               }
             },
           ),
-          FlatButton(
+           FlatButton(
           child: Text(
             "Otkaži",
-            style: TextStyle(color: Colors.red),
+            style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
           ),
           onPressed: () {
               setState(() {

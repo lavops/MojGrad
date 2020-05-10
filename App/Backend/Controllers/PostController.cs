@@ -177,5 +177,24 @@ namespace Backend.Controllers
             return listPosts;
         }
 
+        public class ListOfFilter
+        {
+            public List<int> listFilter { get; set; }
+        }
+
+        [Authorize]
+        [HttpPost("UnsolvedPostsByFilter")]
+        public ActionResult<IEnumerable<PostViewModel>> PostsByFilter(ListOfFilter filter)
+        {
+            var posts = _iPostUI.getPostsByFilter(filter.listFilter, 2);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, 0));
+            }
+
+            return listPosts;
+        }
+
     }
 }

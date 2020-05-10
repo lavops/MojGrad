@@ -163,10 +163,8 @@ class HeaderSection extends State<UserProfilePage> {
                       title: Text("Daktivacija profila?"),
                       content: Container(
                         height: 100,
-                        child: Flexible(
                           child: Text(
-                              "Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vasa rešenja."),
-                        ),
+                              "Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vaša rešenja."),
                       ),
                       actions: <Widget>[
                         FlatButton(
@@ -195,7 +193,7 @@ class HeaderSection extends State<UserProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: Colors.green[800]),
+                            style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();

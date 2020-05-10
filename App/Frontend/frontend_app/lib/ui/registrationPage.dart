@@ -64,17 +64,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _register(String firstName, String lastName, String email, String mobile,
       String password, String username, int cityId) {
-    final flNameRegex = RegExp(r'^[a-zA-Z]{1,10}$');
-    final mobRegex = RegExp(r'^06[0-9]{7,8}$');
-    final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
-    final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
-    final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
+    final flNameRegex = RegExp(r'^[a-zA-Z]{1,14}$');
+    final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+    final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
+    final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,8}[.][a-z]{2,3}$');
+    final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,19}');
 
     if (flNameRegex.hasMatch(firstName)) {
       if (flNameRegex.hasMatch(lastName)) {
         if (usernameRegex.hasMatch(username)) {
           if (mobRegex.hasMatch(mobile)) {
             if (emailRegex.hasMatch(email)) {
+              if(city != null){
               if (passRegex.hasMatch(password)) {
                 var pom = utf8.encode(password);
                 var pass = sha1.convert(pom);
@@ -95,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   } else {
                     setState(() {
-                      wrongRegText = "Podaci nisu ispravni".toUpperCase();
+                      wrongRegText = "Email ili username već zauseti".toUpperCase();
                     });
                     throw Exception('Email ili username već zauseti');
                   }
@@ -103,11 +104,17 @@ class _RegisterPageState extends State<RegisterPage> {
               } else {
                 setState(() {
                   wrongRegText =
-                      "Loša sifra. Sifra mora imati najmanje 6 karaktera."
+                      "Loša šifra. Šifra mora imati najmanje 6 karaktera."
                           .toUpperCase();
                 });
                 throw Exception(
-                    "Loša sifra. Sifra mora imati najmanje 6 karaktera.");
+                    "Loša šifra. Šifra mora imati najmanje 6 karaktera.");
+              }
+              }else{
+                setState(() {
+                wrongRegText = "Grad nije izabran".toUpperCase();
+              });
+              throw Exception("Grad nije izabran");
               }
             } else {
               setState(() {
@@ -123,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
           }
         } else {
           setState(() {
-            wrongRegText = "Unesite ponovo korisnocko ime.".toUpperCase();
+            wrongRegText = "Unesite ponovo korisnočko ime.".toUpperCase();
           });
           throw Exception("Unesite ponovo korisnocko ime");
         }
@@ -242,7 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.adb, color: Colors.green[800]),
           ),
           contentPadding: EdgeInsets.all(18),
-          hintText: "Korisnicko ime",
+          hintText: "Korisničko ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Colors.green[800]),
@@ -393,7 +400,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final loginLabelWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('Vec imate nalog? '),
+        Text('Već imate nalog? '),
         SizedBox(
           width: 5.0,
         ),

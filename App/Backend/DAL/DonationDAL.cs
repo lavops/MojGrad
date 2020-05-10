@@ -21,7 +21,8 @@ namespace Backend.DAL
         {
             bool ret = false;
             var exist = _context.userDonation.Where(x => x.userId == ue.userId && x.donationId == ue.donationId).FirstOrDefault();
-            if (exist == null)
+            var exist1 = _context.user.Where(x => x.id == ue.userId).FirstOrDefault();
+            if (exist == null && exist1.points >= ue.donatedPoints)
             {
                 UserDonation eve = new UserDonation();
                 eve.userId = ue.userId;
@@ -34,7 +35,7 @@ namespace Backend.DAL
                     ret = true;
                 }
             }
-            else
+            else if(exist1.points >= ue.donatedPoints)
             {
                 try
                 {
@@ -54,7 +55,7 @@ namespace Backend.DAL
                 existDon.collectedMoney += ue.donatedPoints * 10;
                 if (existDon.monetaryAmount >= existDon.collectedMoney)
                     this.editDonation(existDon);
-                var exist1 = _context.user.Where(x => x.id == ue.userId ).FirstOrDefault();
+               
                 try
                 {
                     exist1.donatedPoints += ue.donatedPoints;

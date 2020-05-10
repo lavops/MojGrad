@@ -102,10 +102,10 @@ class EditProfile extends State<EditProfilePage> {
   List<DropdownMenuItem<City>> _dropdownMenuItems;
   City _selectedId;
 
-  final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,}$');
+  final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,25}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
-  final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
-  final emailRegex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
+  final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
+  final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
   final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
 
   editProfilePhotoo(BuildContext context) {
@@ -264,8 +264,8 @@ class EditProfile extends State<EditProfilePage> {
                   ],
                 )),
             actions: [
-              okButton,
-              closeButton,
+              okButton, 
+              closeButton  
             ],
           );
         });
@@ -354,6 +354,9 @@ class EditProfile extends State<EditProfilePage> {
                             color: Theme.of(context).textTheme.bodyText1.color),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                      ), 
                       ),
                     ),
                     SizedBox(height: 20),
@@ -464,6 +467,9 @@ class EditProfile extends State<EditProfilePage> {
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green[800]),
+                      ), 
                       ),
                     ),
                     SizedBox(height: 20),
@@ -567,6 +573,9 @@ class EditProfile extends State<EditProfilePage> {
                             fontStyle: FontStyle.italic),
                         fillColor: Theme.of(context).textTheme.bodyText1.color,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ), 
                       ),
                     ),
                     SizedBox(height: 5),
@@ -582,6 +591,9 @@ class EditProfile extends State<EditProfilePage> {
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ), 
                       ),
                     ),
                     SizedBox(height: 5),
@@ -597,6 +609,9 @@ class EditProfile extends State<EditProfilePage> {
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                     ), 
                       ),
                     ),
                     SizedBox(height: 20),
@@ -709,6 +724,9 @@ class EditProfile extends State<EditProfilePage> {
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ), 
                       ),
                     ),
                     SizedBox(height: 20),
@@ -769,6 +787,7 @@ class EditProfile extends State<EditProfilePage> {
  Future<String> editCity(BuildContext context, String email) async {
     // show the dialog
    return showDialog(
+     barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         City pomCity;
@@ -859,7 +878,7 @@ class EditProfile extends State<EditProfilePage> {
                       city1Id = 0;
                       });
                      
-                      Navigator.pop(context);
+                      Navigator.pop(context,'');
                     },
                   )
                 ],
@@ -917,6 +936,9 @@ class EditProfile extends State<EditProfilePage> {
                             color: Theme.of(context).textTheme.bodyText1.color),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ), 
                       ),
                     ),
                     SizedBox(height: 20),
@@ -1226,8 +1248,13 @@ class EditProfile extends State<EditProfilePage> {
                   onTap: () async{
                     var res = await editCity(context, user.cityName);
                     setState(() {
+                      if(res!=''){
                       city1 = res;
                        _selectedOption = index - 6;
+                       }
+                       else{
+                          _selectedOption = 0;
+                       }
                     });       
                   },
                 ),
