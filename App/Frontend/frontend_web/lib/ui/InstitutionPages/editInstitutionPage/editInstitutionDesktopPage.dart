@@ -12,7 +12,6 @@ import 'package:universal_html/prefer_universal/html.dart' as html;
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
-Color greenPastel = Color(0xFF00BFA6);
 
 class EditInstitutionDesktopPage extends StatefulWidget {
   final Institution institution;
