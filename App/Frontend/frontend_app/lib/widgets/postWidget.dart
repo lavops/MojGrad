@@ -55,6 +55,18 @@ class _PostWidgetState extends State<PostWidget> {
     });
   }
 
+  _getPostById() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getPostById(jwt, post.postId, userId).then((res) {
+      Map<String, dynamic> list = json.decode(res.body);
+      FullPost post1 = FullPost.nothing();
+      post1 = FullPost.fromObject(list);
+      setState(() {
+        post = post1;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -320,6 +332,7 @@ class _PostWidgetState extends State<PostWidget> {
       MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
     );
     print("Status id ${post.statusId} a result je $result");
+    _getPostById();
     setState(() {
       if (result != null && result == 1) post.statusId = 1;
     });
@@ -501,10 +514,11 @@ Widget imageGallery(String image, String image2) {
       context,
       MaterialPageRoute(builder: (context) => CommentsPage(postId)),
     );
-
+    
     setState(() {
       if (result != null) post.commNum = result;
     });
+    _getPostById();
   }
 
   Widget description(

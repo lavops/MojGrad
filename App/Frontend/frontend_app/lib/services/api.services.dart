@@ -592,4 +592,14 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     },body: jsonBody);
   }
+
+  static Future getPostById(String jwt, int postId, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Post/GetById/postId=$postId/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
