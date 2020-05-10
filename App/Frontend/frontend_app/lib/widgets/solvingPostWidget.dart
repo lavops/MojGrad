@@ -123,12 +123,12 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Brisanje resenja?"),
+          title: Text("Brisanje rešenja?"),
           actions: <Widget>[
-            FlatButton(
+                FlatButton(
               child: Text(
-                "Izbrisi",
-                style: TextStyle(color: Colors.red),
+                "Izbriši",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -153,8 +153,8 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.green[800]),
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -168,10 +168,10 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
         child: AlertDialog(
           title: Text("Prihvati resenje?"),
           actions: <Widget>[
-            FlatButton(
+                FlatButton(
               child: Text(
                 "Izaberi",
-                style: TextStyle(color: Colors.green[800]),
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -199,7 +199,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             FlatButton(
               child: Text(
                 "Otkazi",
-                style: TextStyle(color: Colors.red),
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -211,12 +211,12 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Brisanje resenja?"),
+          title: Text("Brisanje rešenja?"),
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "Izbrisi",
-                style: TextStyle(color: Colors.red),
+                "Izbriši",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -241,8 +241,8 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.green[800]),
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

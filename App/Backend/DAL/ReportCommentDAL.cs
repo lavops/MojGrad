@@ -29,9 +29,16 @@ namespace Backend.DAL
             report1.commentId = report.commentId;
             report1.userId = report.userId;
             report1.time = DateTime.Now;
-
-
-            if (report1 != null && exist == null)
+            int number = _context.reportComment.Where(x => x.commentId == report.commentId).Count();
+            if(number >= 10)
+            {
+                var comment = _context.comment.Where(x => x.id == report.commentId).FirstOrDefault();
+              
+                _context.comment.Remove(comment);
+                _context.SaveChangesAsync();
+                return null;
+            }
+            else if (report1 != null && exist == null)
             {
                 _context.reportComment.Add(report1);
                 _context.SaveChangesAsync();

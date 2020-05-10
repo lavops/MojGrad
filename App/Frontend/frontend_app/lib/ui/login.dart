@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       var pom = utf8.encode(_password);
       var pass = sha1.convert(pom);
-      APIServices.login(_email, pass.toString()).then((response) {
+      APIServices.login(_email.trim(), pass.toString()).then((response) {
         if (response != null) {
           storage.write(key: "jwt", value: response);
           Navigator.pushReplacement(

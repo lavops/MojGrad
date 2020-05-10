@@ -89,7 +89,8 @@ class _CameraPageState extends State<CameraPage> {
   // Function for opening a camera
   _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-    print("Kompresovana " + picture.lengthSync().toString());
+    if(picture != null)
+      print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });
@@ -112,7 +113,8 @@ class _CameraPageState extends State<CameraPage> {
   // Function for opening a gallery
   _openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
-    print("Kompresovana " + picture.lengthSync().toString());
+    if(picture != null)
+      print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });
@@ -159,8 +161,8 @@ class _CameraPageState extends State<CameraPage> {
           context: context,
           builder: (BuildContext ctx) {
             return NominatimLocationPicker(
-              searchHint: 'Pretrazi',
-              awaitingForLocation: "Ceka se lokacija.",
+              searchHint: 'Pretraži',
+              awaitingForLocation: "Čeka se lokacija.",
               customMapLayer: new TileLayerOptions(
                 urlTemplate:
                     "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
@@ -468,16 +470,16 @@ class _CameraPageState extends State<CameraPage> {
             jwt = res;
           });
           if (_problemResava == 1)
-            statusId = 2;
-          else
             statusId = 1;
+          else
+            statusId = 2;
 
           if (_vrstaObjave == 2) //pohvala
             postTypeId = 1;
           else if (postType != null)
             postTypeId = postType.id;
           else if(_vrstaObjave != 2)
-            pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+            pogresanText = "Popuni obavezna polja: tip objave, grad i lokaciju.";
 
           if (imageFile == null || addres == null) {
             setState(() {
@@ -485,7 +487,7 @@ class _CameraPageState extends State<CameraPage> {
             });
             throw Exception('Greskaaaa');
           }
-          if (res != null && imageFile != null && addres != null) {
+          if (res != null && imageFile != null && addres != null && city!= null) {
             APIServices.addPost(
                 jwt,
                 user.id,

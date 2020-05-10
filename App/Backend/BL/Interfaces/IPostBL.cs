@@ -17,6 +17,7 @@ namespace Backend.BL.Interfaces
         bool deletePost(long id);
         Post editPost(long id, string description);
         List<Post> getAllSolvedPosts();
+        List<Post> getPostsByFilter(List<int> filterList, int statusId);
         List<Post> getAllUnsolvedPosts();
         List<Post> getAllSolvedPostsByCityId(long cityId);
         List<Post> getAllUnsolvedPostsByCityId(long cityId);

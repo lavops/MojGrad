@@ -72,6 +72,11 @@ namespace Backend.UI
             return _iPostBL.getByID(id);
         }
 
+        public List<Post> getPostsByFilter(List<int> filterList, int statusId)
+        {
+            return _iPostBL.getPostsByFilter(filterList, statusId);
+        }
+
         public Post insertPost(Post post)
         {
             return _iPostBL.insertPost(post);

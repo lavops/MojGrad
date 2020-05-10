@@ -12,9 +12,9 @@ import '../main.dart';
 int isSolved = 0;
 
 class ChallengeSolvingPage extends StatefulWidget {
-  int postId;
-  int ownerId;
-  int solved;
+  final int postId;
+  final int ownerId;
+  final int solved;
   ChallengeSolvingPage(this.postId, this.ownerId, this.solved);
   @override
   _ChallengeSolvingPageState createState() => _ChallengeSolvingPageState(postId, ownerId, solved);
@@ -24,7 +24,7 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
   int postId;
   int ownerId;
   int solved;
-  String textForSolving = "RESI";
+  String textForSolving = "REŠI";
   List<ChallengeSolving> listChallengeSolving;
 
   _ChallengeSolvingPageState(int postId1, int ownerId1, int solved1) {
