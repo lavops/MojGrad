@@ -198,6 +198,8 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                         donation1 = Donation.fromObject(list);
                         print('Uspesno ste donirali');
                         setState(() {
+                          publicUser.donatedPoints = publicUser.donatedPoints + donationAmount;
+                          publicUser.points = publicUser.points - donationAmount;
                           donation.pointsAccumulated = donation1.pointsAccumulated;
                           donateController.text = "";
                         });
