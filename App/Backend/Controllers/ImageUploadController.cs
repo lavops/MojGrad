@@ -34,11 +34,11 @@ namespace Backend.Controllers
             {
                 if (objFile.files.Length > 0)
                 {
-                    if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
+                    if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\Post\\"))
                     {
-                        Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
+                        Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\Post\\");
                     }
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + objFile.files.FileName))
+                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\Post\\" + objFile.files.FileName))
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
@@ -93,7 +93,7 @@ namespace Backend.Controllers
 
         [Route("test")]
         [HttpPost]
-        public async Task<string> test(WebImage webImage)
+        public async Task<string> Test(WebImage webImage)
         {
            
             if (webImage.img != null || webImage.img != "")
@@ -102,6 +102,26 @@ namespace Backend.Controllers
                 //var ext = "img";
                 //var fullpath = Constant.ImagesRoot + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "." + ext; 
                 var path = "Upload//InstitutionProfilePhoto//" + Guid.NewGuid() + ".jpg";
+                var filePath = Path.Combine($"{_environment.ContentRootPath}/wwwroot/" + path);
+                System.IO.File.WriteAllBytes(filePath, bytes);
+                return path;
+            }
+
+            return "";
+
+        }
+
+        [Route("WebSolution")]
+        [HttpPost]
+        public async Task<string> WebPost(WebImage webImage)
+        {
+
+            if (webImage.img != null || webImage.img != "")
+            {
+                byte[] bytes = Convert.FromBase64String(webImage.img);
+                //var ext = "img";
+                //var fullpath = Constant.ImagesRoot + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "." + ext; 
+                var path = "Upload//Post//" + Guid.NewGuid() + ".jpg";
                 var filePath = Path.Combine($"{_environment.ContentRootPath}/wwwroot/" + path);
                 System.IO.File.WriteAllBytes(filePath, bytes);
                 return path;

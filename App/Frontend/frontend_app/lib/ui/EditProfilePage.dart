@@ -527,7 +527,7 @@ class EditProfile extends State<EditProfilePage> {
   }
 
   //dialog password
-  Future<String> password(BuildContext context, String myPassword) {
+  Future<String> password(BuildContext context) {
     TextEditingController customController = new TextEditingController();
     TextEditingController customController2 = new TextEditingController();
     TextEditingController customController3 = new TextEditingController();
@@ -633,8 +633,6 @@ class EditProfile extends State<EditProfilePage> {
                             var checkAgain = customController3.text;
 
                             print(temp2);
-                            print(myPassword);
-
                             if (check == checkAgain) {
                               if (passRegex.hasMatch(check)) {
                                 print(check);
@@ -1144,14 +1142,13 @@ class EditProfile extends State<EditProfilePage> {
                     setState(() {
                       _selectedOption = index - 3;
                     });
-                    password(context,
-                            user.password) /*.then((onValue) {
+                    password(context); /*.then((onValue) {
                       String newPassword = "$onValue";
                       SnackBar snackPassword =
                           SnackBar(content: Text(newPassword));
                       Scaffold.of(context).showSnackBar(snackPassword);
                     })*/
-                        ;
+                        
                   },
                 ),
               ),

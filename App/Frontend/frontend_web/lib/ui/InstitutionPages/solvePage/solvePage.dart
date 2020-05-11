@@ -222,7 +222,7 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
   solve(int postId, int institutionId, String description) {
     if (photoName != null && photoName != '') {
       String base64Image = base64Encode(data);
-      APIServices.addImageWeb(base64Image).then((res) {
+      APIServices.addImageWebSolution(base64Image).then((res) {
         var res1 = jsonDecode(res);
         APIServices.solveFromTheInstitution(
             TokenSession.getToken, postId, institutionId, description, res1).then((value){

@@ -170,7 +170,7 @@ class _ChallengeSolvingCameraPageState
           }
           if (res != null && imageFile != null) {
             APIServices.insertSolution(jwt, userId, postId, description.text,
-                    "Upload//" + basename(imageFile.path), 0)
+                    "Upload//Post//" + basename(imageFile.path), 0)
                 .then((res) {
               if (res.statusCode == 200) {
                 print("Uspesno ste objavili resenje");

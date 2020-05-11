@@ -18,5 +18,6 @@ namespace Backend.UI.Interfaces
         User editUserPhoto(long id, string photoPathn);
         List<User> getUsersByCityId(long cityId);
         IEnumerable<User> getTop10UserFromCity(long cityId);
+        string forgetPassword(User user);
     }
 }

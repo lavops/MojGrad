@@ -6,16 +6,16 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  String serverURLPhoto = 'http://192.168.1.2:45455//';
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //String serverURLPhoto = 'http://192.168.1.2:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://192.168.1.2:45455/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://192.168.1.2:45455/api/';
   //static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
@@ -601,5 +601,14 @@ class APIServices
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     });
+  }
+
+  static Future forgottenPassword(String email) async  {
+   String url = serverURL + 'User/ForgetPassword';
+    var data = Map();
+    data["email"] = email;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    return await http.post(url, headers: header, body: jsonBody);
   }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,7 +26,24 @@ namespace Backend.DAL
             {
                 return false;
             }
+            List<String> listStr;
+            listStr = post.photoPath.Split('/').ToList();
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload\\Post\\", listStr[listStr.Count - 1]);
 
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            if(post.solvedPhotoPath != null && post.solvedPhotoPath != "")
+            { 
+                listStr = post.solvedPhotoPath.Split('/').ToList();
+                path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload\\Post\\", listStr[listStr.Count - 1]);
+
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+            }
             _context.post.Remove(post);
             _context.SaveChangesAsync();
 

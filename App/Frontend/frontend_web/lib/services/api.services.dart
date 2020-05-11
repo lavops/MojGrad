@@ -669,5 +669,20 @@ static Future registerInstitution(Institution ins) async {
     }, body: jsonBody);
 	}
 
+   static Future<String> addImageWebSolution(String img) async {
+    var url = serverURL + 'ImageUpload/WebSolution';
+    var map = Map();
+    map['img'] = img;
+    var putBody = json.encode(map);
+    var res = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: putBody);
+    print("kraj ovoga");
+    print(res.body);
+    return res.body;
+  }
 }
 

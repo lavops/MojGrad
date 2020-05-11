@@ -37,6 +37,11 @@ namespace Backend.UI
             return _iUserBL.editUserPhoto(id, photoPathn);
         }
 
+        public string forgetPassword(User user)
+        {
+            return _iUserBL.forgetPassword(user);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserBL.getAllUsers();

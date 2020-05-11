@@ -493,7 +493,7 @@ class _CameraPageState extends State<CameraPage> {
                 user.id,
                 postTypeId,
                 description.text,
-                "Upload//" + basename(imageFile.path),
+                "Upload//Post//" + basename(imageFile.path),
                 statusId,
                 latitude1,
                 longitude2,

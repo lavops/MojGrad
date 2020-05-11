@@ -152,6 +152,116 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
 
+    emailAlert(BuildContext context) {
+    TextEditingController customController = TextEditingController();
+    String errorMessage ="";
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: Container(
+                width: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text("Zaboravili ste lozinku?",
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color))
+                      ],
+                    ),
+                    SizedBox(height: 5),
+                    Text("Unesite email vašeg naloga i na njemu će Vam stići poruka u kojoj se nalazi Vaša nova šifra."),
+                    TextField(
+                      controller: customController,
+                      decoration: InputDecoration(
+                        hoverColor: Colors.grey,
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontStyle: FontStyle.italic),
+                        fillColor: Colors.black,
+                        contentPadding: const EdgeInsets.all(10.0),
+                        focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green[800]),
+                   ), 
+                      ),
+                    ),
+                  SizedBox(height: 10),
+                  Text(
+                    '$errorMessage',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: <Widget>[
+                        MaterialButton(
+                          child: Text(
+                            "Pošalji",
+                            style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {
+                             APIServices.forgottenPassword(customController.text.trim()).then((response) {
+                            if (response.statusCode == 200) {
+                              Navigator.pop(context);
+                            } else {
+                              setState(() {
+                                errorMessage = "Email nije ispravan";
+                                customController.text="";
+                              });
+                            }
+                          });
+                          },
+                        ),
+                        SizedBox(width: 50),
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                )),
+          );
+        });
+  }
+
+
+    final forgottenPassword = Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(width: 10,),
+        InkWell(
+          child: Text(
+            'Zaboravili ste lozinku?',
+            style: TextStyle(
+                color: Colors.green[800], fontWeight: FontWeight.bold),
+          ),
+          onTap: () {
+           emailAlert(context);
+          },
+        ),
+      ],
+    );
+
     //in case of wrong login
     final pogresanLogin = Center(
         child: Text(
@@ -180,7 +290,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   passwordText,
                   SizedBox(
-                    height: 10.0,
+                    height: 5.0,
+                  ),
+                  forgottenPassword,
+                  SizedBox(
+                    height: 8.0,
                   ),
                   pogresanLogin,
                   SizedBox(
