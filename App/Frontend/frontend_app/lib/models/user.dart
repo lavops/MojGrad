@@ -34,7 +34,9 @@ class User{
   String get photo => _photo;
   int get postsNum => _postsNum;
   int get points => _points;
+  set points(int points){_points = points;}
   int get donatedPoints => _donatedPoints;
+  set donatedPoints(int points){_donatedPoints = points;}
   int get level => _level;
 
   //Convert a User into a Map object

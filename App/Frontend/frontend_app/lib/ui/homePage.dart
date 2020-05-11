@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       MapPage(),
       CameraPage(),
       SponsorshipPage(),
-      UserProfilePage(user1),
+      UserProfilePage(publicUser),
     ];
 
     final _kBottomNavBarItems = <BottomNavigationBarItem>[
