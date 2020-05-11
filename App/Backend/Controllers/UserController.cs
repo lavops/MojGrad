@@ -114,7 +114,8 @@ namespace Backend.Controllers
             if (user != null)
             {
                 user.password = null;
-                return Ok(user);
+                UserViewModel user1 = new UserViewModel(user);
+                return Ok(user1);
             }
             else
                 return BadRequest(new { message = "Nevalidni podaci" });

@@ -93,7 +93,7 @@ namespace Backend.DAL
                     exist.cityId = user.cityId;
                     _context.Update(exist);
                     _context.SaveChanges();
-                    return exist;
+                    return _context.user.Where(x=>x.id == user.id).Include(x=> x.city).Include(p => p.posts).FirstOrDefault();
                 }
                 catch (DbUpdateException ex)
                 {

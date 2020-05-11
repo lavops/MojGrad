@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -211,6 +212,17 @@ namespace Backend.DAL
             {
                 try
                 {
+                    if (exist.photoPath != "Upload//ProfilePhoto//default.jpg")
+                    {
+                        List<String> listStr;
+                        listStr = exist.photoPath.Split('/').ToList();
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload\\InstitutionProfilePhoto\\", listStr[listStr.Count - 1]);
+
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                    }
                     exist.photoPath = photoPath;
                     _context.Update(exist);
                     _context.SaveChanges();
