@@ -483,6 +483,7 @@ Widget imageGallery(String image, String image2) {
               ),
               Text(commNum.toString()),
               Expanded(child: SizedBox()),
+              post.postTypeId == 1 ? SizedBox() :
               statusId == 2 && post.postTypeId != 1
                   ? FlatButton(
                       shape: RoundedRectangleBorder(

@@ -8,6 +8,8 @@ import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/UserProfilePage.dart';
 import 'dart:convert';
 
+import 'package:frontend/ui/newCamera.dart';
+
 User publicUser;
 int userId;
 
@@ -57,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     final _kTabPages = <Widget>[
       FeedPage(user1),
       MapPage(),
-      CameraPage(),
+      NewCameraPage(),//CameraPage()
       SponsorshipPage(),
       UserProfilePage(publicUser),
     ];
