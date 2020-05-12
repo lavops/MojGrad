@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/cameraOne.dart';
 import 'package:frontend/widgets/cameraThree.dart';
+import 'package:frontend/widgets/cameraTwo.dart';
 import 'package:path/path.dart';
 
 class NewCameraPage extends StatefulWidget {
@@ -36,6 +38,11 @@ class _NewCameraPageState extends State<NewCameraPage>{
       ),
       onTap: (){
         print("Camera 1");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CameraOne()),
+        );
       },
     );
 
