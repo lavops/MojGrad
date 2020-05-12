@@ -348,6 +348,7 @@ class _CameraOneState extends State<CameraOne>{
     // Description of assigment or praise
     final opis = TextField(
       controller: description,
+      maxLength: 150,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         hintText: 'Opis pohvale',
