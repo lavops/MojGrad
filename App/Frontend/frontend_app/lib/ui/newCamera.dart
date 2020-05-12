@@ -67,6 +67,11 @@ class _NewCameraPageState extends State<NewCameraPage>{
       ),
       onTap: (){
         print("Camera 2");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CameraTwo()),
+        );
       },
     );
 
