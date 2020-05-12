@@ -281,6 +281,7 @@ class StateComents extends State<CommentsPage> {
                 Flexible(
                   child: TextFormField(
                     controller: myController,
+                    maxLength: 150,
                     decoration: InputDecoration(
                       hoverColor: Colors.grey,
                       labelText: 'Dodaj komentar...',

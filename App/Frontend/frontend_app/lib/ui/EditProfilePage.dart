@@ -6,6 +6,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
 import 'package:frontend/ui/UserProfilePage.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -1335,8 +1336,13 @@ class EditProfile extends State<EditProfilePage> {
                         APIServices.editUser(jwt, user.id, firstName, lastName,
                                 username1, email1, number1, city1Id)
                             .then((response) {
-                          if (response.statusCode == 200 ||
-                              password1 == '' && oldPassword == '') {
+                          if (response.statusCode == 200 || password1 == '' && oldPassword == '') {
+                              print(response.body);
+                              Map<String, dynamic> jsonUser = jsonDecode(response.body);
+                              User user1 = User.fromObject(jsonUser);
+                              setState(() {
+                                publicUser = user1;
+                              });
                             showAlertDialog(context);
                           }
                         });

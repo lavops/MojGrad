@@ -185,6 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
       elevation: 6.0,
       child: TextField(
         controller: firstName,
+        maxLength: 15,
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
@@ -211,6 +212,7 @@ class _RegisterPageState extends State<RegisterPage> {
       elevation: 6.0,
       child: TextField(
         controller: lastName,
+        maxLength: 15,
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
@@ -237,6 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
       elevation: 6.0,
       child: TextField(
         controller: username,
+        maxLength: 15,
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
