@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         child: Icon(Icons.nature_people, color: Theme.of(context).copyWith().iconTheme.color),
-        backgroundColor: Colors.green[800],
+        backgroundColor: Color(0xFF00BFA6),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
               _currentTabIndex = index;
             });
           },
-          selectedItemColor: Colors.green[800],
+          selectedItemColor: Color(0xFF00BFA6),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

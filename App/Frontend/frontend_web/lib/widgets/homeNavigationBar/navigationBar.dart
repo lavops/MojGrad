@@ -36,7 +36,7 @@ class HomeNavigationBarMobile extends StatelessWidget {
           InkWell(
             child: SizedBox(
               width: 180,
-              child: Image.asset('assets/mojGrad4.png'),
+              child: Image.asset('assets/mojGrad2.png'),
             ),
             onTap: () {
               Navigator.push(

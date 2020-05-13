@@ -124,7 +124,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.green[800]
+            side: BorderSide(color: Color(0xFF00BFA6)
           )
         ),
           child: Text("Više informacija"),
@@ -134,10 +134,10 @@ class _DonationsWidgetState extends State<DonationsWidget> {
           onPressed: (){
             donateActionButton();
           },
-          color: Colors.green[800],
+          color: Color(0xFF00BFA6),
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.green[800]
+            side: BorderSide(color: Color(0xFF00BFA6)
           )
         ),
           child: Text("Doniraj", style: TextStyle(color: Colors.white),),
@@ -159,6 +159,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
             children: <Widget>[
               Text("Imate ukupno " + publicUser.points.toString() + " poena!"),
               TextField(
+               cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                 controller: donateController,
                 keyboardType: TextInputType.number,
                  decoration: InputDecoration(
@@ -168,7 +169,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                 fillColor: Colors.black,
                 contentPadding: const EdgeInsets.all(10.0),
                 focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ),  
               ),
               ),

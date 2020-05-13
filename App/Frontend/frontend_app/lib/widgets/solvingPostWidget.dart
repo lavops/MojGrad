@@ -87,7 +87,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
           ?
           Text(
             "REŠENJE",
-            style: TextStyle(color:Colors.green[800], fontWeight: FontWeight.bold),
+            style: TextStyle(color:Color(0xFF00BFA6), fontWeight: FontWeight.bold),
           ):
           SizedBox(),
           (ownerId == userId)
