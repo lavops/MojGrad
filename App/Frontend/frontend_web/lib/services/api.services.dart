@@ -708,5 +708,59 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
 	}
+	
+	
+//Admin
+
+  static Future editAdminData(String jwt, int id, String firstName, String lastName, String email) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Admin/EditAdminData';
+    var data = Map();
+    data["id"] = id;
+    data["firstName"] = firstName;
+    data["lastName"] = lastName;
+    data["email"] = email;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
+ static Future editAdminProfilePhoto(String jwt, int userId, String photo) async {
+     var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Admin/EditPhoto';
+    var data = Map();
+    data["id"] = userId;
+    data["photoPath"] = photo;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    var res = await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+    print(res.statusCode);
+    return res.body;
+  }
+
+    static Future editAdminPassword(String jwt, int id, String password, String password1) async {
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Admin/editAdminPassword';
+    var data = Map();
+    data["id"] = id;
+    data["password"] = password;
+    data["password1"] = password1;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
 }
 
