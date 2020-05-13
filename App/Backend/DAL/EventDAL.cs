@@ -135,11 +135,22 @@ namespace Backend.DAL
                 {
 
                     exist.description = events.description;
-                    CultureInfo enUS = new CultureInfo("en-US");
-                    exist.startDate = DateTime.ParseExact(events.startDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
-                    exist.endDate = DateTime.ParseExact(events.endDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
+                    if (events.startDate != null)
+                    {
+                        CultureInfo enUS = new CultureInfo("en-US");
+                        exist.startDate = DateTime.ParseExact(events.startDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
+                    }
+                    if (events.endDate != null)
+                    {
+                        CultureInfo enUS = new CultureInfo("en-US");
+                        exist.endDate = DateTime.ParseExact(events.endDate, "M/dd/yyyy HH:mm", enUS, DateTimeStyles.None);
+                    } 
                     exist.shortDescription = events.shortDescription;
                     exist.title = events.title;
+                    exist.cityId = events.cityId;
+                    exist.latitude = events.latitude;
+                    exist.longitude = events.longitude;
+                    exist.address = events.address;
                     _context.Update(exist);
                     _context.SaveChanges();
                     return _context.events.Where((u) => u.id == events.id).Include(x => x.institution).Include(l => l.admin).Include(c=> c.city).FirstOrDefault();

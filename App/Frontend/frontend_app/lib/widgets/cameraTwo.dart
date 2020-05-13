@@ -445,16 +445,17 @@ class _CameraTwoState extends State<CameraTwo>{
             throw Exception('Greskaaaa');
           }
           if (res != null && imageFile != null && imageFile2 != null && addres != null && city!= null && postType != null) {
-            /*APIServices.addPost(
+            APIServices.addPost(
                 jwt,
                 userId,
                 postType.id,
                 description.text,
                 "Upload//Post//" + basename(imageFile.path),
+                "Upload//Post//" + basename(imageFile2.path),
                 1,
                 latitude1,
                 longitude2,
-                addres, city.id);*/
+                addres, city.id);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState(() {

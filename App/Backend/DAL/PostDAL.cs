@@ -140,12 +140,24 @@ namespace Backend.DAL
             post1.statusId = post.statusId;
             post1.latitude = post.latitude;
             post1.longitude = post.longitude;
+            post1.solvedPhotoPath = post.solvedPhotoPath;
             post1.cityId = post.cityId;
 
             if (post != null)
             {
                 _context.post.Add(post1);
                 _context.SaveChangesAsync();
+
+                if(post.statusId == 1)
+                {
+                    var user = _context.user.Where(x => x.id == post.userId).FirstOrDefault();
+                    if(user != null)
+                    {
+                        user.points += 10;
+                        _context.Update(user);
+                        _context.SaveChangesAsync();
+                    }
+                }
                 return post1;
             }
             else

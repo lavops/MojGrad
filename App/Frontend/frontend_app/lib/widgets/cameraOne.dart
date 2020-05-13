@@ -390,6 +390,7 @@ class _CameraOneState extends State<CameraOne>{
                 postType.id,
                 description.text,
                 "Upload//Post//" + basename(imageFile.path),
+                null,
                 2,
                 latitude1,
                 longitude2,

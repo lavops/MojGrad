@@ -340,6 +340,7 @@ class _CameraThreeState extends State<CameraThree>{
                 1,
                 description.text,
                 "Upload//Post//" + basename(imageFile.path),
+                null,
                 1,
                 latitude1,
                 longitude2,

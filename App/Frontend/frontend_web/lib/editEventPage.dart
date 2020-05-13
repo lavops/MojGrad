@@ -16,7 +16,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 Color greenPastel = Color(0xFF00BFA6);
 
 class EditEventPage extends StatefulWidget {
-  Events event;
+  final Events event;
   EditEventPage(this.event);
 
   @override
@@ -446,7 +446,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
               ),
-              controller: shortDescriptionController,
+              controller: description,
               cursorColor: Colors.black,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -613,8 +613,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
 
           APIServices.editEventData(
                   str,
-                  int.parse(payload["sub"]),
-                  1,
+                  event.id,
                   nameEventController.text,
                   shortDescriptionController.text,
                   description.text,

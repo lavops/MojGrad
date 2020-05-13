@@ -6,16 +6,16 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  String serverURLPhoto = 'http://192.168.1.8:45455//';
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //String serverURLPhoto = 'http://192.168.1.8:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
   
 class APIServices
 {
 
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://192.168.1.8:45455/api/';
+  static String serverURL = 'http://10.0.2.2:60676/api/';
+  //static String serverURL = 'http://192.168.1.8:45455/api/';
   //static String serverURL = 'http://192.168.1.4:45455/api/';
 
 
@@ -63,7 +63,7 @@ class APIServices
   }
 
   //send a new post to the database
-  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address, int cityId) async {
+  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,String photoPath2,  int statusId, double latitude, double longitude, String address, int cityId) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Post';
@@ -72,6 +72,7 @@ class APIServices
     data["postTypeId"] = postTypeId;
     data["description"] = description;
     data["photoPath"] = photoPath;
+    data["solvedPhotoPath"] = photoPath2;
     data["statusId"] = statusId;
     data["latitude"] = latitude;
     data["longitude"] = longitude;

@@ -685,15 +685,13 @@ static Future registerInstitution(Institution ins) async {
     return res.body;
   }
 
-  static Future editEventData(String jwt, int id, int adminId, String nameEvent, String shortDesc, String longDesc, String location, int cityId, String startDate, String endDate, double latitude, double longitude) async  {
+  static Future editEventData(String jwt, int id, String nameEvent, String shortDesc, String longDesc, String location, int cityId, String startDate, String endDate, double latitude, double longitude) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Event/editEvent';
 		var data = Map();
     data["id"] = id;
     data["cityId"] = cityId;
-    data["adminId"] = adminId;
-    data["institutionId"] = null;
     data["latitude"] = latitude;
     data["longitude"] = longitude;
     data["shortDescription"] = shortDesc;
