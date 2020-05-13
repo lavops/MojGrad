@@ -600,8 +600,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
       onPressed: () {
         var str = TokenSession.getToken;
         var jwt = str.split(".");
-        var payload =
-            json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+        var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
 
         if (nameEventController.text != '' && locationController.text != '' && city != null) {
 
@@ -610,6 +609,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
 
           startDate = _startDateString + ' ' + _selectedTipStart.toString();
           endDate = _endDateString + ' ' + _selectedTipEnd.toString();
+
+          print(startDate.toString());
 
           APIServices.editEventData(
                   str,

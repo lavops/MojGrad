@@ -134,7 +134,7 @@ class _EventsWidgetState extends State<EventsWidget> {
           },
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(18.0),
-              side: BorderSide(color: Colors.green[800])),
+              side: BorderSide(color: Color(0xFF00BFA6))),
           child: Text("Više informacija"),
         ),
         Expanded(child: SizedBox()),
@@ -143,10 +143,10 @@ class _EventsWidgetState extends State<EventsWidget> {
                 onPressed: () {
                   joinEventActionButton();
                 },
-                color: Colors.green[800],
+                color: Color(0xFF00BFA6),
                 shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(18.0),
-                    side: BorderSide(color: Colors.green[800])),
+                    side: BorderSide(color: Color(0xFF00BFA6))),
                 child:
                     Text("Pridruži se", style: TextStyle(color: Colors.white)),
               )

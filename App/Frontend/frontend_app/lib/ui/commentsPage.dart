@@ -280,6 +280,7 @@ class StateComents extends State<CommentsPage> {
                 ),
                 Flexible(
                   child: TextFormField(
+                    cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                     controller: myController,
                     maxLength: 150,
                     decoration: InputDecoration(
@@ -297,7 +298,7 @@ class StateComents extends State<CommentsPage> {
                   //splashColor: Colors.black,
                   elevation: 7,
                   padding: const EdgeInsets.all(10.0),
-                  color: Colors.green[800],
+                  color: Color(0xFF00BFA6),
                   child: Text(
                     'Komentariši',
                     style: TextStyle(

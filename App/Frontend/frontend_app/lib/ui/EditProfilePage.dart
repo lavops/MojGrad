@@ -186,7 +186,7 @@ class EditProfile extends State<EditProfilePage> {
                       children: <Widget>[
                         Expanded(
                           child: RaisedButton.icon(
-                            color: Colors.green[800],
+                            color: Color(0xFF00BFA6),
                             label: Flexible(
                               child: Text('Kamera'),
                             ),
@@ -216,7 +216,7 @@ class EditProfile extends State<EditProfilePage> {
                         ),
                         Expanded(
                           child: RaisedButton.icon(
-                            color: Colors.green[800],
+                            color: Color(0xFF00BFA6),
                             label: Flexible(
                               child: Text(
                                 'Galerija',
@@ -279,7 +279,7 @@ class EditProfile extends State<EditProfilePage> {
     Widget okButton = FlatButton(
       child: Text(
         "OK",
-        style: TextStyle(color: Colors.green[800]),
+        style: TextStyle(color: Color(0xFF00BFA6)),
       ),
       onPressed: () {
        Navigator.of(context).popUntil((route) => route.isFirst);
@@ -348,6 +348,7 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
@@ -356,7 +357,7 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                       ), 
                       ),
                     ),
@@ -469,7 +470,7 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green[800]),
+                        borderSide: BorderSide(color: Color(0xFF00BFA6)),
                       ), 
                       ),
                     ),
@@ -561,6 +562,7 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       autofocus: false,
                       obscureText: true,
@@ -575,12 +577,13 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Theme.of(context).textTheme.bodyText1.color,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ), 
                       ),
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController2,
                       autofocus: false,
                       obscureText: true,
@@ -593,12 +596,13 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ), 
                       ),
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor:MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController3,
                       autofocus: false,
                       obscureText: true,
@@ -611,7 +615,7 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                      ), 
                       ),
                     ),
@@ -715,6 +719,7 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
@@ -724,7 +729,7 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ), 
                       ),
                     ),
@@ -927,6 +932,7 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
@@ -936,7 +942,7 @@ class EditProfile extends State<EditProfilePage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ), 
                       ),
                     ),
@@ -1350,7 +1356,7 @@ class EditProfile extends State<EditProfilePage> {
                     });
                   }
                 },
-                color: Colors.green[800],
+                color: Color(0xFF00BFA6),
                 child: Text(
                   'Sačuvaj',
                   style: TextStyle(

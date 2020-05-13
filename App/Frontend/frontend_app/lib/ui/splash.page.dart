@@ -35,13 +35,13 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     // Image element with our logo
     // If we get new logo we will just change it here
     final logo = Hero(
       tag: 'hero',
       child: Center(
-        child: Image.asset('assets/mojGrad4.png', width: 300),
+        child: Image.asset('assets/mojGradPastelna.png', width: 300),
       ),
     );
 

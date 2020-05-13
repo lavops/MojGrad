@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Widget okButton = FlatButton(
       child: Text(
         "OK",
-        style: TextStyle(color: Colors.green[800]),
+        style: TextStyle(color: Color(0xFF00BFA6)),
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -175,7 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
       tag: 'hero',
       child: Center(
           child: Image.asset(
-        'assets/mojGrad4.png',
+        'assets/mojGradPastelna.png',
         width: 300,
       )),
     );
@@ -184,6 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: firstName,
         maxLength: 15,
         style: TextStyle(
@@ -195,13 +196,13 @@ class _RegisterPageState extends State<RegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.person, color: Colors.green[800]),
+            child: Icon(Icons.person, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
           hintText: "Ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
           ),
         ),
       ),
@@ -211,6 +212,7 @@ class _RegisterPageState extends State<RegisterPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: lastName,
         maxLength: 15,
         style: TextStyle(
@@ -222,13 +224,13 @@ class _RegisterPageState extends State<RegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.person, color: Colors.green[800]),
+            child: Icon(Icons.person, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
           hintText: "Prezime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
           ),
         ),
       ),
@@ -238,6 +240,7 @@ class _RegisterPageState extends State<RegisterPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: username,
         maxLength: 15,
         style: TextStyle(
@@ -249,13 +252,13 @@ class _RegisterPageState extends State<RegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.adb, color: Colors.green[800]),
+            child: Icon(Icons.adb, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
           hintText: "Korisničko ime",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
           ),
         ),
       ),
@@ -265,6 +268,7 @@ class _RegisterPageState extends State<RegisterPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: email,
         style: TextStyle(
           //color: Colors.grey,
@@ -275,13 +279,13 @@ class _RegisterPageState extends State<RegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.email, color: Colors.green[800]),
+            child: Icon(Icons.email, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
           hintText: "E-mail",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
           ),
         ),
       ),
@@ -291,6 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: mobile,
         style: TextStyle(
           //color: Colors.grey,
@@ -301,13 +306,13 @@ class _RegisterPageState extends State<RegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phone, color: Colors.green[800]),
+            child: Icon(Icons.phone, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
           hintText: "Mobilni telefon",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
           ),
         ),
         keyboardType: TextInputType.number,
@@ -318,6 +323,7 @@ class _RegisterPageState extends State<RegisterPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         obscureText: _secureText,
         controller: password,
         style: TextStyle(
@@ -330,17 +336,17 @@ class _RegisterPageState extends State<RegisterPage> {
           suffixIcon: IconButton(
             onPressed: showHide,
             icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility,
-                color: Colors.green[800]),
+                color: Color(0xFF00BFA6)),
           ),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phonelink_lock, color: Colors.green[800]),
+            child: Icon(Icons.phonelink_lock, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
           hintText: "Šifra",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Colors.green[800]),
+            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
           ),
         ),
       ),
@@ -389,7 +395,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           textColor: Colors.white,
-          color: Colors.green[800],
+          color: Color(0xFF00BFA6),
           onPressed: () {
             if (city != null)
               _register(firstName.text, lastName.text, email.text, mobile.text,
@@ -411,7 +417,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Text(
             'Prijavite se.',
             style: TextStyle(
-                color: Colors.green[800], fontWeight: FontWeight.bold),
+                color: Color(0xFF00BFA6), fontWeight: FontWeight.bold),
           ),
           onTap: () {
             Navigator.pushReplacement(
