@@ -125,6 +125,6 @@ class _ViewPostPageState extends State<ViewPostPage> {
           ),
         ),
       ]
-    ).showCursorOnHover;
+    );
   }
 }

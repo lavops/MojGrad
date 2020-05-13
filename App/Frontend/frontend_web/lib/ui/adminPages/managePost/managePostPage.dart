@@ -114,6 +114,6 @@ class _ManagePostPageState extends State<ManagePostPage> {
           ),
         ),
       ]
-    ).showCursorOnHover;
+    );
   }
 }
