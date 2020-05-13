@@ -221,11 +221,10 @@ List<User> listUsers;
               Container(
                   color: Colors.white,
                   padding: EdgeInsets.only(left:10,right: 10),
-                  margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
                       userPhotoURL + listUsers[index].photo,
-                      imageSize: 56.0,
+                      imageSize: 36.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
                     ),
@@ -294,18 +293,17 @@ List<User> listUsers;
                 children: <Widget>[
                   Container(
                       color: Colors.white,
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(top: 5),
+                      padding: EdgeInsets.only(left:10.0,right: 10),
                       child: Row(children: [
                         CircleImage(
                           userPhotoURL + listRepUsers[index].photo,
-                          imageSize: 56.0,
+                          imageSize: 36.0,
                           whiteMargin: 2.0,
                           imageMargin: 6.0,
                         ),
                         Container(
                           width: 120,
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.only(left:10.0,right: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,

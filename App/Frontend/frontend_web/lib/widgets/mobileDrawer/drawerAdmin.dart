@@ -10,8 +10,6 @@ import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.d
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
 
-import 'package:frontend_web/extensions/hoverExtension.dart';
-
 Color greenPastel = Color(0xFF00BFA6);
 
 class DrawerAdmin extends StatelessWidget{
@@ -142,6 +140,6 @@ class DrawerAdmin extends StatelessWidget{
           ),
         ],)
       )
-    ).showCursorOnHover;
+    );
   }
 }

@@ -240,19 +240,10 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
     return ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-            child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  //margin: EdgeInsets.only(top: 5),
-                  child: Row(children: [
+        return Row(children: [
                     CircleImage(
                       userPhotoURL + listUsers[index].photo,
-                      imageSize: 56.0,
+                      imageSize: 36.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
                     ),
@@ -347,10 +338,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                         showAlertDialog(context, listUsers[index].id, index, 1);
                       },
                     ).showCursorOnHover
-                  ])),
-            ],
-          ),
-        ));
+                  ]);
       },
     );
   }
@@ -367,11 +355,10 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               Container(
                   color: Colors.white,
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  margin: EdgeInsets.only(top: 5),
                   child: Row(children: [
                     CircleImage(
                       userPhotoURL + listRepUsers[index].photo,
-                      imageSize: 56.0,
+                      imageSize: 36.0,
                       whiteMargin: 2.0,
                       imageMargin: 6.0,
                     ),
@@ -394,7 +381,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.all(10.0),
+                      //margin: const EdgeInsets.all(10.0),
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Column(
                         children: <Widget>[
@@ -520,14 +507,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Container(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-          ),
-          new Text("Izaberite grad korisnika: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          new Container(
-            padding: new EdgeInsets.all(20.0),
-          ),
+          new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           listCities != null
               ? new DropdownButton<City>(
                   hint: Text("Izaberi"),
@@ -565,11 +545,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           new Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
           ),
-          new Text("Izaberite grad korisnika: ",
+          new Text("Grad: ",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          new Container(
-            padding: new EdgeInsets.all(20.0),
-          ),
           listCities != null
               ? new DropdownButton<City>(
                   hint: Text("Izaberi"),
