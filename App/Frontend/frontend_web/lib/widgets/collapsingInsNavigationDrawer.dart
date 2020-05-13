@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/profilePage/institutionProfilePage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/widgets/CollapsingInsListTile.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
-import 'package:frontend_web/ui/InstitutionPages/profilePage/profilePage.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
@@ -23,7 +23,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
   static bool isCollapsed = true;
   AnimationController _animationController;
   Animation<double> widthAnimation;
-  static int currentSelectedIndex = 1;
+  static int currentSelectedIndex = 2;
 
   _removeToken() async {
     TokenSession.setToken = "";
@@ -62,11 +62,15 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                     icon: Icons.business,
                     animationController: _animationController,
                     onTap: () {
+                      setState(() {
+                        currentSelectedIndex = 1;
+                      });
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProfilePage(insId: insId,)),
+                        MaterialPageRoute(builder: (context) => InstitutionProfilePage(insId)),
                       );
                     },
+                    isSelected: currentSelectedIndex == 1,
                   ),
                   CollapsingInsListTile(
                     title: 'Početna strana',
@@ -74,7 +78,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                     animationController: _animationController,
                     onTap: () {
                       setState(() {
-                        currentSelectedIndex = 1;
+                        currentSelectedIndex = 2;
                       });
                       String jwt = TokenSession.getToken;
                       Navigator.push(
@@ -82,7 +86,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                         MaterialPageRoute(builder: (context) => HomePageInstitution.fromBase64(jwt)),
                       );
                     },
-                    isSelected: currentSelectedIndex == 1,
+                    isSelected: currentSelectedIndex == 2,
                   ),
                   CollapsingInsListTile(
                     title: 'Izmena podataka',
@@ -90,7 +94,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                     animationController: _animationController,
                     onTap: () {
                       setState(() {
-                        currentSelectedIndex = 2;
+                        currentSelectedIndex = 3;
                       });
 
                       Navigator.push(
@@ -98,7 +102,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                         MaterialPageRoute(builder: (context) => EditInstitutionPage(insId)),
                       );
                     },
-                    isSelected: currentSelectedIndex == 2,
+                    isSelected: currentSelectedIndex == 3,
                   ),
                   CollapsingInsListTile(
                     title: 'Kreiranje događaja',
@@ -106,14 +110,14 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                     animationController: _animationController,
                     onTap: () => {
                       setState(() {
-                        currentSelectedIndex = 3;
+                        currentSelectedIndex = 4;
                       }),
 
                       Navigator.push(context, 
                         MaterialPageRoute(builder: (context) => EventsPage()),
                       )
                     },
-                    isSelected: currentSelectedIndex == 3,
+                    isSelected: currentSelectedIndex == 4,
                   ),
                   CollapsingInsListTile(
                     title: 'Odjavite se',

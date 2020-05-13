@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/editInstitutionPage/editInstitutionPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/profilePage/institutionProfilePage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
-
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import '../../ui/InstitutionPages/homePage/homePage.dart';
@@ -16,7 +16,7 @@ class DrawerInstitution extends StatelessWidget{
   _removeToken() async {
     TokenSession.setToken = "";
   }
-
+  Color greenPastel = Color(0xFF00BFA6);
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -32,9 +32,9 @@ class DrawerInstitution extends StatelessWidget{
               style: TextStyle(fontSize: 16, color: (selected == 1) ? greenPastel : Colors.black),
             ),
             onTap: (){
-              /*Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => null),
-              );*/
+             Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => InstitutionProfilePage(insId)),
+              );
             },
           ),
           ListTile(
