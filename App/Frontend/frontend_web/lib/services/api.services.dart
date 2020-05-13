@@ -762,5 +762,43 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
   }
+
+  static Future getStatistics(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Statistics', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+  static Future getLastDonation(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Donation/GetLastDonation', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getTop10(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Statistics/Top10', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+  static Future getMonthlyUsers(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Statistics/MonthlyUsers', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
 

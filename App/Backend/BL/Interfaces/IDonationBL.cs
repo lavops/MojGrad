@@ -11,6 +11,7 @@ namespace Backend.BL.Interfaces
         List<Donation> getAllDonations();
         List<Donation> getFinishedDonations();
         Donation addParticipate(UserDonation ue);
+        Donation getLastDonation();
         Donation getByID(long id);
         Donation insertDonation(Donation donation);
         bool deleteDonation(long id);

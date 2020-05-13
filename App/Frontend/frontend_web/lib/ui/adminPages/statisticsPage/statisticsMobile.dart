@@ -1,7 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'package:frontend_web/models/donation.dart';
+import 'package:frontend_web/models/statistics.dart';
+import 'package:frontend_web/models/user.dart';
+import 'package:frontend_web/services/api.services.dart';
+import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
+import 'package:frontend_web/widgets/circleImageWidget.dart';
 
 class StatisticsMobile extends StatefulWidget {
   @override
@@ -9,245 +19,417 @@ class StatisticsMobile extends StatefulWidget {
 }
 
 class _StatisticsMobileState extends State<StatisticsMobile> {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return CenteredViewManageUser(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Row(children: <Widget>[
-              Expanded(child: SizedBox()),
-              stats("OBJAVE", Icons.photo_library, 5),
-              Expanded(child: SizedBox()),
-              stats("DOGAĐAJI", Icons.calendar_today, 1),
-              Expanded(child: SizedBox()),
-            ],),
-            Row(children: <Widget>[
-              Expanded(child: SizedBox()),
-              stats("KORISNICI", Icons.account_circle, 5),
-              Expanded(child: SizedBox()),
-              stats("INSTITUCIJE", Icons.account_balance, 2),
-              Expanded(child: SizedBox()),
-            ],),
-            SizedBox(height: 10,),
-            Row(children: <Widget>[
-              Expanded(child: SizedBox()),
-              newDonation(),
-              Expanded(child: SizedBox()),
-            ],),
-            Row(children: <Widget>[
-              Expanded(child: SizedBox()),
-              eventPost(),
-              Expanded(child: SizedBox()),
-            ],),
-          ],
-        ),
-      );
+  Color greenPastel = Color(0xFF00BFA6);
+
+  List<User> listUsers;
+  Statistics stat;
+  List<double> monthlyUsers;
+  Donation donation;
+
+  _getUsers() {
+    APIServices.getTop10(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<User> listU = List<User>();
+      listU = list.map((model) => User.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listUsers = listU;
+        });
+      }
+    });
   }
 
-  Widget stats(String name, IconData icon, int number){
-    return Card(
-        child:Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment:MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment:MainAxisAlignment.center,
-               children: <Widget>[
-                  Padding(
-                   padding: EdgeInsets.all(8.0),
-                      child:Text(name,style:TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.grey
-                      ),),
+  _getMonthlyUsers() {
+    APIServices.getMonthlyUsers(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<double> listU = List<double>();
+      listU = list.cast<double>();
+      if (mounted) {
+        setState(() {
+          monthlyUsers = listU;
+        });
+      }
+    });
+  }
+
+  _getStatistics() async {
+    var res = await APIServices.getStatistics(TokenSession.getToken);
+    Map<String, dynamic> jsonUser = jsonDecode(res.body);
+    Statistics statistics = Statistics.fromObject(jsonUser);
+    setState(() {
+      stat = statistics;
+    });
+  }
+
+  _getDonation() async {
+    var res = await APIServices.getLastDonation(TokenSession.getToken);
+    Map<String, dynamic> jsonUser = jsonDecode(res.body);
+    Donation don = Donation.fromObject(jsonUser);
+    setState(() {
+      donation = don;
+    });
+  }
+
+  void initState() {
+    super.initState();
+    _getUsers();
+    _getStatistics();
+    _getMonthlyUsers();
+    _getDonation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: _handleRefresh,
+      child: (stat != null && donation != null && monthlyUsers != null)
+          ? Container(
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 20),
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 800),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox(width: 5)),
+                        stats("KORISNICI", Icons.account_circle,
+                            stat.numberOfUsers, stat.numberOfNewUsersIn24h),
+                        Expanded(child: SizedBox(width: 5)),
+                        stats(
+                            "INSTITUCIJE",
+                            Icons.account_balance,
+                            stat.numberOfInstitutions,
+                            stat.numberOfNewInstitutionIn24h),
+                        Expanded(child: SizedBox(width: 5)),
+                      ],
                     ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                     child: Row(
-                          children: <Widget>[
-                            Icon(icon, color:Colors.black, size:80),
-                            SizedBox(width: 20),
-                            Text("$number", style: TextStyle(color: Colors.grey, fontSize: 40.0)),
-                            SizedBox(width: 20),
-                          ],
-                        ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox(width: 5)),
+                        stats("DOGAĐAJI", Icons.calendar_today,
+                            stat.numberOfEvents, stat.numberOfActiveEvents),
+                        Expanded(child: SizedBox(width: 5)),
+                        stats(
+                            "DONACIJE",
+                            Icons.calendar_today,
+                            stat.numberOfDonations,
+                            stat.numberOfActiveDonations),
+                        Expanded(child: SizedBox(width: 5)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    buildUserList(listUsers),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox()),
+                        newDonation(),
+                        Expanded(child: SizedBox()),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox()),
+                        eventPost(),
+                        Expanded(child: SizedBox()),
+                      ],
+                    ),
+                  ],
+                ),
+              ))
+          : Center(
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(greenPastel),
+              ),
+            ),
+    );
+  }
+
+  Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 4));
+    setState(() {
+      stat = new Statistics();
+      donation = new Donation();
+    });
+    _getStatistics();
+    _getDonation();
+    _getMonthlyUsers();
+    return null;
+  }
+
+  Widget buildUserList(List<User> listUsers) {
+    return Card(
+        child: Column(
+      children: [
+        Text(
+          "Top 10 najboljih korisnika",
+          style: TextStyle(fontSize: 15),
+        ),
+        Container(
+            width: 350,
+            height: 265,
+            child: ListView.builder(
+              itemCount: listUsers == null ? 0 : listUsers.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                    child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(children: [
+                            CircleImage(
+                              userPhotoURL + listUsers[index].photo,
+                              imageSize: 40.0,
+                              whiteMargin: 2.0,
+                              imageMargin: 6.0,
+                            ),
+                            Container(
+                              // width: 80,
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(listUsers[index].username,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      listUsers[index].firstName +
+                                          " " +
+                                          listUsers[index].lastName,
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 15))
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                                child: SizedBox(
+                              width: 10,
+                            )),
+                            Text(
+                              (listUsers[index].points +
+                                      listUsers[index].donatedPoints)
+                                  .toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 20),
+                            ),
+                          ])),
+                    ],
                   ),
-               ],
+                ));
+              },
+            ))
+      ],
+    ));
+  }
+
+  Widget stats(String name, IconData icon, int number, int number2) {
+    return Card(
+        child: Padding(
+      padding: EdgeInsets.all(2.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text(
+                  name,
+                  style: TextStyle(fontSize: 10.0, color: Colors.grey),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Row(
+                  children: <Widget>[
+                    Icon(icon, color: Colors.black, size: 40),
+                    SizedBox(width: 10),
+                    Column(
+                      children: [
+                        Text("$number",
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 20.0)),
+                        Text("+ " + "$number2",
+                            style: TextStyle(
+                                color: Colors.lightGreen, fontSize: 20.0)),
+                      ],
+                    ),
+                    SizedBox(width: 10),
+                  ],
+                ),
               ),
             ],
           ),
-        )
-    );
+        ],
+      ),
+    ));
   }
 
-  Widget newDonation(){
+  Widget newDonation() {
     return Card(
-        child: Column( children: <Widget>[   
+        child: Column(
+      children: <Widget>[
         Padding(
           padding: EdgeInsets.all(8.0),
-          child:Text("NOVE DONACIJE",style:TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.grey
-                      ),),),
-          new Card(
-            margin: EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment:MainAxisAlignment.center,
-               children: <Widget>[
-                   SizedBox(width: 5),
-                  new Column(
-                children: <Widget>[
-                      SizedBox(height: 5),
-                      Text("PMF Kragujevac",style:TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),),
-                    
-                      Text("Donacija za sadnju drveća",style:TextStyle(
-                        fontSize: 13.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),),
-
-                      Text("Kratak opis koji će se ostaviti nakon ovog okupljanja.",style:TextStyle(
+          child: Text(
+            "POSLEDNJA DONACIJA",
+            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+          ),
+        ),
+        new Card(
+          margin: EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(width: 5),
+              new Column(children: <Widget>[
+                SizedBox(height: 5),
+                Text(
+                  donation.organizationName,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  donation.title,
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                    width: 300,
+                    child: IconRoundedProgressBar(
+                      icon: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.monetization_on)),
+                      theme: RoundedProgressBarTheme.green,
+                      margin: EdgeInsets.symmetric(vertical: 16),
+                      borderRadius: BorderRadius.circular(6),
+                      percent:
+                          (donation.pointsAccumulated / donation.pointsNeeded) *
+                              22,
+                    )),
+                Row(children: <Widget>[
+                  new Column(children: <Widget>[
+                    Text(
+                      "Skupljeno:",
+                      style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
-                      ),),
-                     Container(
-                       width: 300,
-                        child:IconRoundedProgressBar(
-                          icon: Padding( padding: EdgeInsets.all(8), child: Icon(Icons.monetization_on)),
-                          theme: RoundedProgressBarTheme.green,
-                          margin: EdgeInsets.symmetric(vertical: 16),
-                          borderRadius: BorderRadius.circular(6),
-                          percent: 10,
-                          )
+                      ),
                     ),
-                    
-                      Row(
-                          children: <Widget>[
-                           new Column(
-                              children: <Widget>[
-                              Text("Skupljeno:",style:TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                ),),                            
-                                  Text("30 poena",style:TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                ),)                
-                              ]),
-                              SizedBox(width:200),
-                             Column(
-                              children: <Widget>[
-                              Text("Potrebno:",style:TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                ),),                             
-                                  Text("100 poena",style:TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.black,
-                                ),),                  
-                          ],)
-                          ]),
-                      RaisedButton(
-                        shape:
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                        child: Text(
-                          "Više informacija",
-                          style: TextStyle(fontSize: 13.0),
+                    Text(
+                      donation.pointsAccumulated.toString(),
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.black,
+                      ),
+                    )
+                  ]),
+                  SizedBox(width: 200),
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        "Potrebno:",
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
                         ),
-                        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        textColor: Colors.black,
-                        color: Colors.white,
-                        onPressed: () {
-                        }
-                        ),                   
-                        SizedBox(height: 5),
-                    ]),
-                      
-                            ],
+                      ),
+                      Text(
+                        donation.pointsNeeded.toString(),
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
                         ),
-                  ),
-               ],
-              ));
-  }       
+                      ),
+                    ],
+                  )
+                ]),
+                RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: Text(
+                      "Više informacija",
+                      style: TextStyle(fontSize: 13.0),
+                    ),
+                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    textColor: Colors.black,
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewDonationPage(donation)),
+                      );
+                    }),
+                SizedBox(height: 5),
+              ]),
+            ],
+          ),
+        ),
+      ],
+    ));
+  }
 
-  Widget eventPost(){
+  Widget eventPost() {
     return Card(
-        child: Column( children: <Widget>[   
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child:Text("NOVI DOGAĐAJI",style:TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.grey
-                      ),),),
-          new Card(
-            margin: EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment:MainAxisAlignment.center,
-               children: <Widget>[
-                   SizedBox(width: 5),
-                  new Column(
+      color: Colors.white,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                      SizedBox(height: 5),
-                      Text("Gradska čistoća",style:TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),),
-                    
-                    Text("Početak:",style:TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                      ),),
-
-                      Text("03/06/2020 08:50",style:TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                      ),),
-
-                      Text("Čišćenje parka",style:TextStyle(
-                        fontSize: 13.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),),
-
-                      Text("Kratak opis koji će se ostaviti nakon ovog okupljanja.",style:TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                      ),),
-                    
-                      Text("Ulica Brđanska 48, Kragujevac, Srbija",style:TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                      ),),
-
-                      RaisedButton(
-                        shape:
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                        child: Text(
-                          "Više informacija",
-                          style: TextStyle(fontSize: 13.0),
-                        ),
-                        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        textColor: Colors.black,
-                        color: Colors.white,
-                        onPressed: () {
-                        }
-                        ),                   
-                        SizedBox(height: 5),
-                    ]),
-                       SizedBox(width: 20), 
-                          SizedBox(width: 5),
-                        ],
-                        ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Novi korisnici u prethodnih mesec dana",
+                      style: TextStyle(fontSize: 15.0),
+                    ),
                   ),
-               ],
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: new Sparkline(
+                      fallbackWidth: 200,
+                      data: monthlyUsers,
+                      lineColor: Color(0xffff6101),
+                      pointsMode: PointsMode.all,
+                      pointSize: 8.0,
+                    ),
+                  ),
+                ],
               ),
+            ],
+          ),
+        ),
+      ),
     );
-  }           
+  }
 }

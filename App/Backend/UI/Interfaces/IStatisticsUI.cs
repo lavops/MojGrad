@@ -9,5 +9,7 @@ namespace Backend.UI.Interfaces
     public interface IStatisticsUI
     {
         StatisticsViewModel basicStatistics();
+        List<UserViewModel> top10Users();
+        List<int> monthlyUsers();
     }
 }

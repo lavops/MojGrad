@@ -9,5 +9,7 @@ namespace Backend.BL.Interfaces
     public interface IStatisticsBL
     {
         StatisticsViewModel basicStatistics();
+        List<UserViewModel> top10Users();
+        List<int> monthlyUsers();
     }
 }

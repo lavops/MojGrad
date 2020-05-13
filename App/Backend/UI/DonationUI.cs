@@ -47,6 +47,11 @@ namespace Backend.UI
             return _iDonationBL.getFinishedDonations();
         }
 
+        public Donation getLastDonation()
+        {
+            return _iDonationBL.getLastDonation();
+        }
+
         public Donation insertDonation(Donation donation)
         {
             return _iDonationBL.insertDonation(donation);

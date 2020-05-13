@@ -47,6 +47,11 @@ namespace Backend.BL
             return _iDonationDAL.getFinishedDonations();
         }
 
+        public Donation getLastDonation()
+        {
+            return _iDonationDAL.getLastDonation();
+        }
+
         public Donation insertDonation(Donation donation)
         {
             return _iDonationDAL.insertDonation(donation);

@@ -27,5 +27,21 @@ namespace Backend.Controllers
         {
             return _iStatisticsUI.basicStatistics();
         }
+        [Authorize]
+        [HttpGet("Top10")]
+        public IEnumerable<UserViewModel> GetTop10Users()
+        {
+            var users = _iStatisticsUI.top10Users();
+            return users;
+
+        }
+        [Authorize]
+        [HttpGet("MonthlyUsers")]
+        public IEnumerable<int> GetMonthlyUsers()
+        {
+            var users = _iStatisticsUI.monthlyUsers();
+            return users;
+
+        }
     }
 }

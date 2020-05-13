@@ -12,10 +12,12 @@ namespace Backend.Models.ViewsModel
         public int numberOfUnsolvedPosts { get; set; }
         public int numberOfUsers { get; set; }
         public int numberOfInstitutions { get; set; }
+        public int numberOfEvents { get; set; }
+        public int numberOfActiveEvents { get; set; }
+        public int numberOfDonations { get; set; }
+        public int numberOfActiveDonations { get; set; }
         public int numberOfNewPostsIn24h { get; set; }
         public int numberOfNewUsersIn24h { get; set; }
         public int numberOfNewInstitutionIn24h { get; set; }
-        public List<int> monthlyUsers { get; set; }
-        public List<UserViewModel> top10Users { get; set; }
     }
 }
