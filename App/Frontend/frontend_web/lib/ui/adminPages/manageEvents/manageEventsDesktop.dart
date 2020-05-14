@@ -5,6 +5,7 @@ import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/createEvent/createEventPage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventDesktop.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -100,7 +101,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => EditEventPage(listEvents[index])),
+                builder: (context) => ViewEventDesktop(listEvents[index])),
           );
         },
         color: Color(0xFF00BFA6),

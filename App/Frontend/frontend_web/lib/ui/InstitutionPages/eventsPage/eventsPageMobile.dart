@@ -48,7 +48,7 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
           child: Row( children: <Widget>[
             Expanded(child: Column(children: <Widget>[
               titleColumn(listEvents[index].title, listEvents[index].shortDescription),
-              startEndDateRow(listEvents[index]),
+              startEndDateColumn(listEvents[index]),
               locationRow(listEvents[index]),
               buttonsRow(listEvents[index], index),
             ],)),
@@ -67,15 +67,10 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
     ],);
   }
 
-  Widget startEndDateRow(Events event) {
-    return Row(children: <Widget>[
-      SizedBox(width: 8.0,),
-      Text("Počinje: "),
-      Text(event.startDate),
-      Expanded(child: SizedBox(),),
-      Text("Završava se: "),
-      Text(event.endDate),
-      SizedBox(width: 8.0,),
+  Widget startEndDateColumn(Events event) {
+    return Column(children: <Widget>[
+      Text("Počinje: " + event.startDate),
+      Text("Završava se: " + event.endDate),
     ],);
   }
 
