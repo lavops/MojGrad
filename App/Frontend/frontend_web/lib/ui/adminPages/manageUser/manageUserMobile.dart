@@ -50,6 +50,9 @@ List<User> listUsers;
   CategoryDropDown catF;
   List<MaxMinDropDown> maxMinFilter = MaxMinDropDown.getMaxMinDropDown();
   MaxMinDropDown maxMinF;
+  List<NumRepDropDown> repNums = NumRepDropDown.getNumRepDropDown();
+  NumRepDropDown repNumF;
+  
 
   _getUsers() {
     APIServices.getUsers(TokenSession.getToken).then((res) {
@@ -60,6 +63,7 @@ List<User> listUsers;
         setState(() {
           listUsers = listU;
         });
+        _sortListBy();
       }
     });
   }
@@ -73,6 +77,7 @@ List<User> listUsers;
         setState( () {
           listRepUsers = listU;
         });
+        _sortRepListBy();
       }
     });
   }
@@ -101,6 +106,7 @@ List<User> listUsers;
         setState(() {
           filteredUsers = listFU;
         });
+        _sortListBy();
       }
     });
   }
@@ -114,6 +120,7 @@ List<User> listUsers;
         setState(() {
           filteredRepUsers = listFRU;
         });
+        _sortRepListBy();
       }
     });
   }
@@ -163,6 +170,31 @@ List<User> listUsers;
           filteredUsers.sort((x, y) => x.level.compareTo(y.level));
         else if(maxMinF.name == "Opadajući")
           filteredUsers.sort((x, y) => y.level.compareTo(x.level));
+      }
+    }
+  }
+
+  _sortRepListBy(){
+    if(filteredRepUsers == null){
+      if(repNumF.name == "Svi"){
+        filteredRepUsers = listRepUsers;
+      } else if(repNumF.name == "Više od 10"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
+      } else if(repNumF.name == "Više od 20"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 20).toList();
+      } else if(repNumF.name == "Više od 50"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 50).toList();
+      }
+    }
+    else{
+      if(repNumF.name == "Svi"){
+        filteredRepUsers = listRepUsers;
+      } else if(repNumF.name == "Više od 10"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
+      } else if(repNumF.name == "Više od 20"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 20).toList();
+      } else if(repNumF.name == "Više od 50"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 50).toList();
       }
     }
   }
@@ -435,8 +467,11 @@ List<User> listUsers;
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {
-              filteredUsers = listUsers.where((u) => (u.username.contains(string) 
-                || ((u.firstName.toString()+" "+u.lastName.toString()).contains(string)))).toList();
+              filteredUsers = listUsers
+                    .where((u) => (u.username.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+                            .contains(string.toLowerCase()))))
+                    .toList();
             });
           });
         },
@@ -555,43 +590,73 @@ List<User> listUsers;
       ]);
   }
 
-Widget dropdownFRU(List<City> listCities) {
-        return new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Text("Grad: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          SizedBox(width: 10,),   
-          listCities != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                  if (newValue.name == "Svi korisnici") {
-                      filteredRepUsers = null;
-                    } 
-                    else {
-                       _getReportedUsersFromCity(newValue.id);
-                    }                    
-                      setState(() {
-                      city = newValue;               
-                    });
-                  },
-                  items: listCities.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
-        ]);
-}
+  Widget dropdownFRU(List<City> listCities) {
+    return new Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        listCities != null
+        ? new DropdownButton<City>(
+            hint: Text("Izaberi"),
+            value: city,
+            onChanged: (City newValue) {
+              if (newValue.name == "Svi korisnici") {
+                filteredRepUsers = null;
+              } else {
+                _getReportedUsersFromCity(newValue.id);
+              }
+              setState(() {
+                city = newValue;
+              });
+            },
+            items: listCities.map((City option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          )
+        : new DropdownButton<String>(
+            hint: Text("Izaberi"),
+            onChanged: null,
+            items: null,
+          ),
+        new Text("Broj prijava: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        DropdownButton<NumRepDropDown>(
+          hint: Text("Izaberi"),
+          value: repNumF,
+          onChanged: (NumRepDropDown newValue) {
+            setState(() {
+              repNumF = newValue;
+            });
+            if (newValue.name == "Svi") {
+              print("Svi");
+              filteredRepUsers = null;
+              _sortRepListBy();
+            } else if(newValue.name == "Više od 10"){
+              print("Više od 10");
+              setState(() {
+                filteredRepUsers = listRepUsers;
+              });
+              _sortRepListBy();
+            } else if(newValue.name == "Više od 20"){
+              print("Više od 20");
+              _sortRepListBy();
+            } else if(newValue.name == "Više od 50"){
+              print("Više od 50");
+              _sortRepListBy();
+            }
+          },
+          items: repNums.map((NumRepDropDown option) {
+            return DropdownMenuItem(
+              child: new Text(option.name),
+              value: option,
+            );
+          }).toList(),
+        )
+      ]);
+  }
 
   Widget searchRep() {
     return Container(
@@ -603,8 +668,11 @@ Widget dropdownFRU(List<City> listCities) {
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {
-              filteredRepUsers = listRepUsers.where((u) => (u.username.contains(string) 
-                || ((u.firstName.toString()+" "+u.lastName.toString()).contains(string)))).toList();
+              filteredRepUsers = listRepUsers
+                    .where((u) => (u.username.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+                            .contains(string.toLowerCase()))))
+                    .toList();
             });
           });
         },
@@ -654,6 +722,22 @@ class MaxMinDropDown{
     return <MaxMinDropDown>[
       MaxMinDropDown(1,"Rastući"),
       MaxMinDropDown(2,"Opadajući"),
+    ];
+  }
+}
+
+class NumRepDropDown{
+  int id;
+  String name;
+
+  NumRepDropDown(this.id, this.name);
+
+  static List<NumRepDropDown> getNumRepDropDown(){
+    return <NumRepDropDown>[
+      NumRepDropDown(1,"Svi"),
+      NumRepDropDown(2,"Više od 10"),
+      NumRepDropDown(3,"Više od 20"),
+      NumRepDropDown(4,"Više od 50"),
     ];
   }
 }
