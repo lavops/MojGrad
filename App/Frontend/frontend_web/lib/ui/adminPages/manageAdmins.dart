@@ -10,6 +10,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'dart:convert';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import '../../models/admin.dart';
+import '../../widgets/centeredView/centeredViewManageUser.dart';
 import '../../widgets/collapsingNavigationDrawer.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -32,7 +33,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
   Admin admin;
   Image imageFile;
 
-  String name = '', password = '', oldPassword = '', email = '', lname = '';
+  String firstName = '', password = '', oldPassword = '', email = '', lastName = '';
   String spoljasnjeIme = '';
   String baseString;
 
@@ -58,6 +59,8 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
       }
     });
   }
+
+
 
   @override
   initState() {
@@ -102,13 +105,13 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
     input.click();
   }
 
-  Future<String> firstName(BuildContext context, String firstName) {
+  Future<String> firstLastName(BuildContext context, String name) {
     TextEditingController customController;
-    if (name == '') {
-      customController = new TextEditingController(text: "$firstName");
+    if (firstName == '') {
+      customController = new TextEditingController(text: "$name");
     } else {
-      String _firstName = name;
-      customController = new TextEditingController(text: "$_firstName");
+      String _name = firstName + " " + lastName;
+      customController = new TextEditingController(text: "$_name");
     }
     return showDialog(
         context: context,
@@ -128,7 +131,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
-                          "Ime administratora",
+                          "Ime i prezime",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                       ],
@@ -161,8 +164,11 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                           onPressed: () {
                             var check = customController.text;
                             print(check);
+                            var array = check.split(" ");
+                            print(array[0] + ", " + array[1]);
                             setState(() {
-                              name = check;
+                                firstName = array[0];
+                                lastName = array[1];
                             });
                             Navigator.pop(context);
                           },
@@ -184,87 +190,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
         });
   }
 
-  Future<String> lastName(BuildContext context, String lastName) {
-    TextEditingController customController;
-    if (lname == '') {
-      customController = new TextEditingController(text: "$lastName");
-    } else {
-      String _lastName = lname;
-      customController = new TextEditingController(text: "$_lastName");
-    }
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: Container(
-                width: 400,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          "Ime administratora",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      controller: customController,
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: greenPastel),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          labelStyle: TextStyle(color: Colors.black)),
-                    ).showCursorTextOnHover,
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        MaterialButton(
-                          child: Text(
-                            "Izmeni",
-                            style: TextStyle(color: greenPastel),
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {
-                            var check = customController.text;
-                            print(check);
-                            setState(() {
-                              lname = check;
-                            });
-                            Navigator.pop(context);
-                          },
-                        ).showCursorOnHover,
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ).showCursorOnHover,
-                      ],
-                    )
-                  ],
-                )),
-          );
-        });
-  }
+ 
 
   Future<String> adminEmail(BuildContext context, String adminEmail) {
     TextEditingController customController;
@@ -497,11 +423,9 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
         style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
-        APIServices.deleteUser(TokenSession.getToken, id);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageAdminsPage()),
-        );
+       APIServices.deleteAdmin(TokenSession.getToken, id);
+        deleteFromList(id);
+        Navigator.pop(context);
       },
     );
     Widget notButton = FlatButton(
@@ -510,10 +434,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
         style: TextStyle(color: Colors.redAccent),
       ),
       onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageAdminsPage()),
-        );
+        Navigator.pop(context);
       },
     );
 
@@ -618,11 +539,8 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
         width: 750,
         height: 550,
         child: ListView(children: <Widget>[
-          SizedBox(height: 10),
-          Center(
-            child: Text('Informacije o prijavljenom administratoru:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
+          SizedBox(height: 50),
+       
           Container(
               margin: EdgeInsets.all(10),
               child: Column(
@@ -668,8 +586,13 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
               )),
           ListTile(
             leading: Icon(Icons.person, color: greenPastel),
-            title: Text('Ime'),
-            subtitle: name == '' ? Text(admin1.firstName) : Text(name),
+            title: Text('Ime i prezime'),
+            subtitle: Text(
+                      firstName == ''
+                          ? admin1.firstName + ' ' + admin1.lastName
+                          : firstName + " " + lastName == ''
+                              ? admin1.lastName
+                              : firstName + ' ' + lastName),
             trailing: FlatButton(
               shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(11.0),
@@ -677,22 +600,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
               color: Colors.grey,
               child: Icon(Icons.edit, color: Colors.white),
               onPressed: () {
-                firstName(context, admin1.firstName);
-              },
-            ),
-          ).showCursorOnHover,
-          ListTile(
-            leading: Icon(Icons.person_outline, color: greenPastel),
-            title: Text('Prezime'),
-            subtitle: lname == '' ? Text(admin1.lastName) : Text(lname),
-            trailing: FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(11.0),
-                  side: BorderSide(color: Colors.grey)),
-              color: Colors.grey,
-              child: Icon(Icons.edit, color: Colors.white),
-              onPressed: () {
-                lastName(context, admin1.lastName);
+               firstLastName(context, admin1.firstName + " " + admin1.lastName);
               },
             ),
           ).showCursorOnHover,
@@ -739,7 +647,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-                      edit(name, lname, email, admin1, idA, oldPassword,
+                      edit(firstName, lastName, email, admin1, idA, oldPassword,
                           password);
                     },
                   ).showCursorOnHover)),
@@ -795,23 +703,40 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
         });
   }
 
+  Widget tabs() {
+    return TabBar(
+      labelColor: greenPastel,
+      indicatorColor: greenPastel,
+      tabs: <Widget>[
+        Tab(
+          child: Text('PODACI O PRIJAVLJENOM ADMINISTRATORU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+        ),
+        Tab(
+          child: Text('OSTALI ADMINISTRATORI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+        ),
+      ]
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text('Upravljanje administratorima',
-              style: TextStyle(color: Colors.black)),
-          backgroundColor: Colors.white,
-        ),
-        body: Stack(children: <Widget>[
-          Container(
-              margin: EdgeInsets.only(left: 400, right: 400),
-              padding: EdgeInsets.only(top: 0),
-              color: Colors.grey[100],
-              child: Flexible(
-                  child: Column(children: [
-                RefreshIndicator(
+ 
+    return Stack(
+      children: <Widget>[
+    DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              flexibleSpace:tabs(),
+            ),
+            body: TabBarView(children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left:400, right: 400),
+                  padding: EdgeInsets.only(top: 0),
+                  color: Colors.grey[100],
+                  child: 
+                    Flexible(child:RefreshIndicator(
                   onRefresh: _handleRefresh,
                   child: (admin1 != null)
                       ? loginAdmin()
@@ -821,16 +746,15 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                                 Colors.green[800]),
                           ),
                         ),
-                ),
-                Container(
-                    color: Colors.white,
-                    child: Column(children: [
-                      Text('Informacije o ostalim administratorima:',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      search(),
-                    ])),
-                Flexible(
-                    child: RefreshIndicator(
+                ),),
+                  ),
+              Container(
+                  margin: EdgeInsets.only(left:400, right: 400),
+                  padding: EdgeInsets.only(top: 0),
+                  color: Colors.grey[100],
+                  child: Column(children: [
+                    search(),
+                    Flexible(child: RefreshIndicator(
                   onRefresh: _handleRefresh,
                   child: (listAdmins != null)
                       ? buildAdminList()
@@ -841,10 +765,15 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                           ),
                         ),
                 ))
-              ]))),
-          CollapsingNavigationDrawer(),
-        ]));
+              ])),
+                  ])),
+            ),
+             CollapsingNavigationDrawer(),
+      ],
+    );;
   }
+
+
 
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 3));
@@ -917,4 +846,14 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
       showDial(context);
     }
   }
-}
+
+   deleteFromList(int userId) {
+    for (int i = 0; i < listAdmins.length; i++) {
+      if (listAdmins[i].id == userId) {
+        setState(() {
+          listAdmins.removeAt(i);
+        });
+        break;
+      }
+    }
+}}

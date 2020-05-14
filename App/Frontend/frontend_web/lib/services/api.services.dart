@@ -762,6 +762,19 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
   }
+  
+    static Future deleteAdmin(String jwt, int id) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    String url = serverURL + 'Admin/Delete';
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+      }, body: convert.jsonEncode({
+          'id': id,
+        }));
+  }
 
   static Future getStatistics(String jwt) async {
     var data = jsonDecode(jwt);
