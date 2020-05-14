@@ -813,5 +813,21 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
+  // filter
+  static Future getFiltered(String jwt, List<int> ids) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    var jbody = jsonEncode({'listFilter': ids});
+    var res =  await http.post(serverURL + 'Post/UnsolvedPostsByFilter',  headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jbody);
+    print(res.body);
+    return res;
+  }
+
+
+
 }
 
