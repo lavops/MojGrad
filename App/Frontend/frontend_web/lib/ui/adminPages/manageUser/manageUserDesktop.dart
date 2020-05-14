@@ -233,7 +233,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               new Row(
                 children: [
                   dropdownFU(listCities),
-                  search(),
+                  Expanded(child: search()),
                 ],
               ),
               Flexible(
@@ -245,7 +245,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               new Row(
                 children: [
                   dropdownFRU(listCities),
-                  searchRep(),
+                  Expanded(child: searchRep()),
                 ],
               ),
               Flexible(
@@ -557,7 +557,10 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
   Widget search() {
     return Container(
         margin: EdgeInsets.only(left: 50, top: 5, bottom: 5),
-        width: 400,
+        constraints: BoxConstraints(
+          maxWidth: 400,
+          minWidth: 200
+        ),
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           cursorColor: Colors.black,
@@ -754,7 +757,10 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
   Widget searchRep() {
     return Container(
         margin: EdgeInsets.only(left: 50, top: 5, bottom: 5),
-        width: 400,
+        constraints: BoxConstraints(
+          maxWidth: 400,
+          minWidth: 200
+        ),
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           cursorColor: Colors.black,
