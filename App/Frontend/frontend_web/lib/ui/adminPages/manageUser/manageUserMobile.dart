@@ -435,8 +435,11 @@ List<User> listUsers;
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {
-              filteredUsers = listUsers.where((u) => (u.username.contains(string) 
-                || ((u.firstName.toString()+" "+u.lastName.toString()).contains(string)))).toList();
+              filteredUsers = listUsers
+                    .where((u) => (u.username.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+                            .contains(string.toLowerCase()))))
+                    .toList();
             });
           });
         },
@@ -603,8 +606,11 @@ Widget dropdownFRU(List<City> listCities) {
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {
-              filteredRepUsers = listRepUsers.where((u) => (u.username.contains(string) 
-                || ((u.firstName.toString()+" "+u.lastName.toString()).contains(string)))).toList();
+              filteredRepUsers = listRepUsers
+                    .where((u) => (u.username.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+                            .contains(string.toLowerCase()))))
+                    .toList();
             });
           });
         },

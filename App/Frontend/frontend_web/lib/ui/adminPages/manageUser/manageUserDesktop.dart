@@ -536,9 +536,9 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
             _debouncer.run(() {
               setState(() {
                 filteredUsers = listUsers
-                    .where((u) => (u.username.contains(string) ||
-                        ((u.firstName.toString() + " " + u.lastName.toString())
-                            .contains(string))))
+                    .where((u) => (u.username.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+                            .contains(string.toLowerCase()))))
                     .toList();
               });
             });
@@ -700,9 +700,9 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
             _debouncer.run(() {
               setState(() {
                 filteredRepUsers = listRepUsers
-                    .where((u) => (u.username.contains(string) ||
-                        ((u.firstName.toString() + " " + u.lastName.toString())
-                            .contains(string))))
+                    .where((u) => (u.username.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+                            .contains(string.toLowerCase()))))
                     .toList();
               });
             });
