@@ -48,6 +48,12 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
   Animation<double> animation;
   AnimationController animationController;
 
+  List<CategoryDropDown> categories = CategoryDropDown.getCategoriesDropDown();
+  CategoryDropDown catF;
+  List<MaxMinDropDown> maxMinFilter = MaxMinDropDown.getMaxMinDropDown();
+  MaxMinDropDown maxMinF;
+
+
   _getUsers() {
     APIServices.getUsers(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
@@ -57,6 +63,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         setState(() {
           listUsers = listU;
         });
+        _sortListBy();
       }
     });
   }
@@ -98,6 +105,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         setState(() {
           filteredUsers = listFU;
         });
+        _sortListBy();
       }
     });
   }
@@ -114,6 +122,55 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         });
       }
     });
+  }
+
+  _sortListBy(){
+    if(filteredUsers == null){
+      if(catF.name == "Id"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.id.compareTo(y.id));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.id.compareTo(x.id));
+      } else if(catF.name == "Objave"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+      } else if(catF.name == "Poeni"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.donatedPoints.compareTo(y.donatedPoints));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.donatedPoints.compareTo(x.donatedPoints));
+      } else if(catF.name == "Nivoi"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.level.compareTo(y.level));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.level.compareTo(x.level));
+      }
+    }
+    else{
+      if(catF.name == "Id"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.id.compareTo(y.id));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.id.compareTo(x.id));
+      } else if(catF.name == "Objave"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+      } else if(catF.name == "Poeni"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.donatedPoints.compareTo(y.donatedPoints));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.donatedPoints.compareTo(x.donatedPoints));
+      } else if(catF.name == "Nivoi"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.level.compareTo(y.level));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.level.compareTo(x.level));
+      }
+    }
   }
 
   @override
@@ -241,104 +298,110 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
         return Row(children: [
-                    CircleImage(
-                      userPhotoURL + listUsers[index].photo,
-                      imageSize: 36.0,
-                      whiteMargin: 2.0,
-                      imageMargin: 6.0,
-                    ),
-                    Container(
-                      width: 180,
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(listUsers[index].username,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text(
-                              listUsers[index].firstName +
-                                  " " +
-                                  listUsers[index].lastName,
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic, fontSize: 15))
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          listUsers[index].postsNum.toString(),
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          'Broj objava',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          listUsers[index].points.toString(),
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          'Broj poena',
-                          style: TextStyle(color: Colors.grey),
-                        )
-                      ],
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          listUsers[index].level.toString(),
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          'Nivo',
-                          style: TextStyle(color: Colors.grey),
-                        )
-                      ],
-                    ),
-                    Expanded(child: SizedBox()),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: greenPastel)),
-                      color: greenPastel,
-                      child: Text(
-                        "Poseti profil",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ViewUserProfilePage(listUsers[index])),
-                        );
-                      },
-                    ).showCursorOnHover,
-                    SizedBox(
-                      width: 20,
-                    ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.redAccent)),
-                      color: Colors.redAccent,
-                      child: Text(
-                        "Obriši korisnika",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        showAlertDialog(context, listUsers[index].id, index, 1);
-                      },
-                    ).showCursorOnHover
-                  ]);
+          CircleImage(
+            userPhotoURL + listUsers[index].photo,
+            imageSize: 36.0,
+            whiteMargin: 2.0,
+            imageMargin: 6.0,
+          ),
+          Container(
+            width: 180,
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(listUsers[index].username,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    listUsers[index].firstName +
+                        " " +
+                        listUsers[index].lastName,
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic, fontSize: 15))
+              ],
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Text(
+                listUsers[index].donatedPoints.toString(),
+                style: TextStyle(color: Colors.grey),
+              ),
+              Text(
+                'Broj objava',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+          SizedBox(width: 10),
+          Column(
+            children: <Widget>[
+              Text(
+                listUsers[index].points.toString(),
+                style: TextStyle(color: Colors.grey),
+              ),
+              Text(
+                'Broj poena',
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          ),
+          SizedBox(width: 10),
+          Column(
+            children: <Widget>[
+              Text(
+                listUsers[index].level.toString(),
+                style: TextStyle(color: Colors.grey),
+              ),
+              Text(
+                'Nivo',
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          ),
+          Expanded(child: SizedBox()),
+          SizedBox(
+            height: 30,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: greenPastel)),
+              color: greenPastel,
+              child: Text(
+                "Poseti profil",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ViewUserProfilePage(listUsers[index])),
+                );
+              },
+            ).showCursorOnHover,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            height: 30,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.redAccent)),
+              color: Colors.redAccent,
+              child: Text(
+                "Obriši korisnika",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                showAlertDialog(context, listUsers[index].id, index, 1);
+              },
+            ).showCursorOnHover
+          )
+        ]);
       },
     );
   }
@@ -347,122 +410,119 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
     return ListView.builder(
       itemCount: listRepUsers == null ? 0 : listRepUsers.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-            child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: Row(children: [
-                    CircleImage(
-                      userPhotoURL + listRepUsers[index].photo,
-                      imageSize: 36.0,
-                      whiteMargin: 2.0,
-                      imageMargin: 6.0,
-                    ),
-                    Container(
-                      width: 180,
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(listRepUsers[index].username,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text(
-                              listRepUsers[index].firstName +
-                                  " " +
-                                  listRepUsers[index].lastName,
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic, fontSize: 15))
-                        ],
-                      ),
-                    ),
-                    Container(
-                      //margin: const EdgeInsets.all(10.0),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            listRepUsers[index].reportsNum.toString(),
-                            style: TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'Broj prijava',
-                            style: TextStyle(color: Colors.red),
-                          )
-                        ],
-                      ),
-                    ),
-                    Expanded(child: SizedBox()),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.grey)),
-                      color: Colors.grey,
-                      child: Text(
-                        "Detalji prijave",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReportedUserDetailsPage(
-                                    id: listRepUsers[index].id,
-                                    firstName: listRepUsers[index].firstName,
-                                    lastName: listRepUsers[index].lastName,
-                                  )),
-                        );
-                      },
-                    ).showCursorOnHover,
-                    SizedBox(
-                      width: 20,
-                    ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: greenPastel)),
-                      color: greenPastel,
-                      child: Text(
-                        "Poseti profil",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ViewUserProfilePage(listRepUsers[index])),
-                        );
-                      },
-                    ).showCursorOnHover,
-                    SizedBox(
-                      width: 20,
-                    ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.redAccent)),
-                      color: Colors.redAccent,
-                      child: Text(
-                        "Obriši korisnika",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        showAlertDialog(
-                            context, listRepUsers[index].id, index, 2);
-                      },
-                    ).showCursorOnHover
-                  ])),
-            ],
+        return Row(children: [
+          CircleImage(
+            userPhotoURL + listRepUsers[index].photo,
+            imageSize: 36.0,
+            whiteMargin: 2.0,
+            imageMargin: 6.0,
           ),
-        ));
-      },
-    );
+          Container(
+            width: 180,
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(listRepUsers[index].username,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    listRepUsers[index].firstName +
+                        " " +
+                        listRepUsers[index].lastName,
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic, fontSize: 15))
+              ],
+            ),
+          ),
+          Container(
+            //margin: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  listRepUsers[index].reportsNum.toString(),
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Broj prijava',
+                  style: TextStyle(color: Colors.red),
+                )
+              ],
+            ),
+          ),
+          Expanded(child: SizedBox()),
+          SizedBox(
+            height: 30,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Text(
+                "Detalji prijave",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ReportedUserDetailsPage(
+                            id: listRepUsers[index].id,
+                            firstName: listRepUsers[index].firstName,
+                            lastName: listRepUsers[index].lastName,
+                          )),
+                );
+              },
+            ).showCursorOnHover,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            height: 30,
+            child: FlatButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(11.0),
+                side: BorderSide(color: greenPastel)),
+            color: greenPastel,
+            child: Text(
+              "Poseti profil",
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ViewUserProfilePage(listRepUsers[index])),
+              );
+            },
+          ).showCursorOnHover,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            height: 30,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.redAccent)),
+              color: Colors.redAccent,
+              child: Text(
+                "Obriši korisnika",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                showAlertDialog(
+                    context, listRepUsers[index].id, index, 2);
+              },
+            ).showCursorOnHover
+          )
+        ]);
+      });
   }
 
   Widget search() {
@@ -509,32 +569,86 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         children: <Widget>[
           new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           listCities != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                    if (newValue.name == "Svi korisnici") {
-                      filteredUsers = null;
-                    } else {
-                      _getUsersFromCity(newValue.id);
-                    }
-                    setState(() {
-                      city = newValue;
-                    });
-                  },
-                  items: listCities.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
-        ]).showCursorOnHover;
+          ? new DropdownButton<City>(
+              hint: Text("Izaberi"),
+              value: city,
+              onChanged: (City newValue) {
+                if (newValue.name == "Svi korisnici") {
+                  filteredUsers = null;
+                } else {
+                  _getUsersFromCity(newValue.id);
+                  _sortListBy();
+                }
+                setState(() {
+                  city = newValue;
+                });
+              },
+              items: listCities.map((City option) {
+                return DropdownMenuItem(
+                  child: new Text(option.name),
+                  value: option,
+                );
+              }).toList(),
+            ).showCursorOnHover
+          : new DropdownButton<String>(
+              hint: Text("Izaberi"),
+              onChanged: null,
+              items: null,
+            ).showCursorOnHover,
+          new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          DropdownButton<CategoryDropDown>(
+            hint: Text("Izaberi"),
+            value: catF,
+            onChanged: (CategoryDropDown newValue) {
+              setState(() {
+                catF = newValue;
+              });
+
+              if (newValue.name == "Objave") {
+                print("Objave");
+                _sortListBy();
+              } else if(newValue.name == "Poeni"){
+                print("Poeni");
+                _sortListBy();
+              } else if(newValue.name == "Nivoi"){
+                print("Nivoi");
+                _sortListBy();
+              } else if(newValue.name == "Id"){
+                print("Id");
+                _sortListBy();
+              }
+            },
+            items: categories.map((CategoryDropDown option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          ).showCursorOnHover,
+          new Text("Redosled: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          DropdownButton<MaxMinDropDown>(
+            hint: Text("Izaberi"),
+            value: maxMinF,
+            onChanged: (MaxMinDropDown newValue) {
+              setState(() {
+                maxMinF = newValue;
+              });
+              if(newValue.name == "Rastući"){
+                print("Rastući");
+                _sortListBy();
+              } else if(newValue.name == "Opadajući"){
+                print("Opadajući");
+                _sortListBy();
+              }
+            },
+            items: maxMinFilter.map((MaxMinDropDown option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          ).showCursorOnHover,
+        ]);
   }
 
   Widget dropdownFRU(List<City> listCities) {
@@ -545,34 +659,33 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           new Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
           ),
-          new Text("Grad: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           listCities != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                    if (newValue.name == "Svi korisnici") {
-                      filteredRepUsers = null;
-                    } else {
-                      _getReportedUsersFromCity(newValue.id);
-                    }
-                    setState(() {
-                      city = newValue;
-                    });
-                  },
-                  items: listCities.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
+          ? new DropdownButton<City>(
+              hint: Text("Izaberi"),
+              value: city,
+              onChanged: (City newValue) {
+                if (newValue.name == "Svi korisnici") {
+                  filteredRepUsers = null;
+                } else {
+                  _getReportedUsersFromCity(newValue.id);
+                }
+                setState(() {
+                  city = newValue;
+                });
+              },
+              items: listCities.map((City option) {
+                return DropdownMenuItem(
+                  child: new Text(option.name),
+                  value: option,
+                );
+              }).toList(),
+            )
+          : new DropdownButton<String>(
+              hint: Text("Izaberi"),
+              onChanged: null,
+              items: null,
+            ),
         ]);
   }
 
@@ -609,5 +722,35 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           ),
           controller: searchRepController,
         )).showCursorTextOnHover;
+  }
+}
+
+class CategoryDropDown{
+  int id;
+  String name;
+
+  CategoryDropDown(this.id, this.name);
+
+  static List<CategoryDropDown> getCategoriesDropDown(){
+    return <CategoryDropDown>[
+      CategoryDropDown(1,"Id"),
+      CategoryDropDown(2,"Objave"),
+      CategoryDropDown(3,"Poeni"),
+      CategoryDropDown(4,"Nivoi"),
+    ];
+  }
+}
+
+class MaxMinDropDown{
+  int id;
+  String name;
+
+  MaxMinDropDown(this.id, this.name);
+
+  static List<MaxMinDropDown> getMaxMinDropDown(){
+    return <MaxMinDropDown>[
+      MaxMinDropDown(1,"Rastući"),
+      MaxMinDropDown(2,"Opadajući"),
+    ];
   }
 }

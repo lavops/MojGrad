@@ -47,6 +47,11 @@ List<User> listUsers;
   Animation<double> animation;
   AnimationController animationController;
 
+  List<CategoryDropDown> categories = CategoryDropDown.getCategoriesDropDown();
+  CategoryDropDown catF;
+  List<MaxMinDropDown> maxMinFilter = MaxMinDropDown.getMaxMinDropDown();
+  MaxMinDropDown maxMinF;
+
   _getUsers() {
     APIServices.getUsers(TokenSession.getToken).then((res) {
       Iterable list = json.decode(res.body);
@@ -114,6 +119,55 @@ List<User> listUsers;
     });
   }
 
+  _sortListBy(){
+    if(filteredUsers == null){
+      if(catF.name == "Id"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.id.compareTo(y.id));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.id.compareTo(x.id));
+      } else if(catF.name == "Objave"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+      } else if(catF.name == "Poeni"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.donatedPoints.compareTo(y.donatedPoints));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.donatedPoints.compareTo(x.donatedPoints));
+      } else if(catF.name == "Nivoi"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          listUsers.sort((x, y) => x.level.compareTo(y.level));
+        else if(maxMinF.name == "Opadajući")
+          listUsers.sort((x, y) => y.level.compareTo(x.level));
+      }
+    }
+    else{
+      if(catF.name == "Id"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.id.compareTo(y.id));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.id.compareTo(x.id));
+      } else if(catF.name == "Objave"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+      } else if(catF.name == "Poeni"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.donatedPoints.compareTo(y.donatedPoints));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.donatedPoints.compareTo(x.donatedPoints));
+      } else if(catF.name == "Nivoi"){
+        if(maxMinF == null || maxMinF.name == "Rastući")
+          filteredUsers.sort((x, y) => x.level.compareTo(y.level));
+        else if(maxMinF.name == "Opadajući")
+          filteredUsers.sort((x, y) => y.level.compareTo(x.level));
+      }
+    }
+  }
+
   @override
   initState() {
     super.initState();
@@ -141,9 +195,8 @@ List<User> listUsers;
       CenteredViewManageUser(
         child: TabBarView(children: <Widget>[
           Column(children: [
-            new Row(children:[
               dropdownFU(listCities),                 
-              search(),],),
+              search(),
             Flexible(child: filteredUsers==null ?  buildUserList(listUsers) : buildUserList(filteredUsers)),
           ]),
           Column(children: [
@@ -268,7 +321,7 @@ List<User> listUsers;
                     Column(
                       children: <Widget>[
                         Text(
-                          listUsers[index].points.toString(),
+                          listUsers[index].donatedPoints.toString(),
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
@@ -425,7 +478,7 @@ List<User> listUsers;
   Widget search() {
     return Container(
       margin: EdgeInsets.only(left: 50, top:5, bottom: 5),
-      width: 200,
+      width: 400,
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         cursorColor: Colors.black,
@@ -459,47 +512,93 @@ List<User> listUsers;
 
 
 Widget dropdownFU(List<City> listCities) {
-        return new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Container(
-          margin: EdgeInsets.only(left: 10, right: 10, top:10, bottom: 10),
-          ),  
-          new Text("Izaberite grad korisnika: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          new Container(
-            padding: new EdgeInsets.all(20.0),
-          ),  
-          listCities != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                    if (newValue.name == "Svi korisnici") {
-                      filteredUsers = null;
-                    } 
-                    else {
-                       _getUsersFromCity(newValue.id);
-                    }                          
-                    setState(() {
-                      city = newValue;               
-                    });
-                  },
-                  items: listCities.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
-        ]);
-}
+    return new Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        listCities != null
+        ? new DropdownButton<City>(
+            hint: Text("Izaberi"),
+            value: city,
+            onChanged: (City newValue) {
+              if (newValue.name == "Svi korisnici") {
+                filteredUsers = null;
+              } else {
+                _getUsersFromCity(newValue.id);
+                _sortListBy();
+              }
+              setState(() {
+                city = newValue;
+              });
+            },
+            items: listCities.map((City option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          )
+        : new DropdownButton<String>(
+            hint: Text("Izaberi"),
+            onChanged: null,
+            items: null,
+          ),
+        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        DropdownButton<CategoryDropDown>(
+          hint: Text("Izaberi"),
+          value: catF,
+          onChanged: (CategoryDropDown newValue) {
+            setState(() {
+              catF = newValue;
+            });
+
+            if (newValue.name == "Objave") {
+              print("Objave");
+              _sortListBy();
+            } else if(newValue.name == "Poeni"){
+              print("Poeni");
+              _sortListBy();
+            } else if(newValue.name == "Nivoi"){
+              print("Nivoi");
+              _sortListBy();
+            } else if(newValue.name == "Id"){
+              print("Id");
+              _sortListBy();
+            }
+          },
+          items: categories.map((CategoryDropDown option) {
+            return DropdownMenuItem(
+              child: new Text(option.name),
+              value: option,
+            );
+          }).toList(),
+        ),
+        new Text("Redosled: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        DropdownButton<MaxMinDropDown>(
+          hint: Text("Izaberi"),
+          value: maxMinF,
+          onChanged: (MaxMinDropDown newValue) {
+            setState(() {
+              maxMinF = newValue;
+            });
+            if(newValue.name == "Rastući"){
+              print("Rastući");
+              _sortListBy();
+            } else if(newValue.name == "Opadajući"){
+              print("Opadajući");
+              _sortListBy();
+            }
+          },
+          items: maxMinFilter.map((MaxMinDropDown option) {
+            return DropdownMenuItem(
+              child: new Text(option.name),
+              value: option,
+            );
+          }).toList(),
+        ),
+      ]);
+  }
 
 Widget dropdownFRU(List<City> listCities) {
         return new Row(
@@ -509,7 +608,7 @@ Widget dropdownFRU(List<City> listCities) {
           new Container(
           margin: EdgeInsets.only(left: 10, right: 10, top:10, bottom: 10),
           ),  
-          new Text("Izaberite grad korisnika: ",
+          new Text("Grad: ",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           new Container(
             padding: new EdgeInsets.all(20.0),
@@ -577,4 +676,34 @@ Widget dropdownFRU(List<City> listCities) {
     );
   }
   
+}
+
+class CategoryDropDown{
+  int id;
+  String name;
+
+  CategoryDropDown(this.id, this.name);
+
+  static List<CategoryDropDown> getCategoriesDropDown(){
+    return <CategoryDropDown>[
+      CategoryDropDown(1,"Id"),
+      CategoryDropDown(2,"Objave"),
+      CategoryDropDown(3,"Poeni"),
+      CategoryDropDown(4,"Nivoi"),
+    ];
+  }
+}
+
+class MaxMinDropDown{
+  int id;
+  String name;
+
+  MaxMinDropDown(this.id, this.name);
+
+  static List<MaxMinDropDown> getMaxMinDropDown(){
+    return <MaxMinDropDown>[
+      MaxMinDropDown(1,"Rastući"),
+      MaxMinDropDown(2,"Opadajući"),
+    ];
+  }
 }
