@@ -52,6 +52,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
   CategoryDropDown catF;
   List<MaxMinDropDown> maxMinFilter = MaxMinDropDown.getMaxMinDropDown();
   MaxMinDropDown maxMinF;
+  List<NumRepDropDown> repNums = NumRepDropDown.getNumRepDropDown();
+  NumRepDropDown repNumF;
 
 
   _getUsers() {
@@ -77,6 +79,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         setState(() {
           listRepUsers = listU;
         });
+        _sortRepListBy();
       }
     });
   }
@@ -120,6 +123,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         setState(() {
           filteredRepUsers = listFRU;
         });
+        _sortRepListBy();
       }
     });
   }
@@ -169,6 +173,31 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           filteredUsers.sort((x, y) => x.level.compareTo(y.level));
         else if(maxMinF.name == "Opadajući")
           filteredUsers.sort((x, y) => y.level.compareTo(x.level));
+      }
+    }
+  }
+
+  _sortRepListBy(){
+    if(filteredRepUsers == null){
+      if(repNumF.name == "Svi"){
+        filteredRepUsers = listRepUsers;
+      } else if(repNumF.name == "Više od 10"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
+      } else if(repNumF.name == "Više od 20"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 20).toList();
+      } else if(repNumF.name == "Više od 50"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 50).toList();
+      }
+    }
+    else{
+      if(repNumF.name == "Svi"){
+        filteredRepUsers = listRepUsers;
+      } else if(repNumF.name == "Više od 10"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
+      } else if(repNumF.name == "Više od 20"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 20).toList();
+      } else if(repNumF.name == "Više od 50"){
+        filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 50).toList();
       }
     }
   }
@@ -325,7 +354,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           Column(
             children: <Widget>[
               Text(
-                listUsers[index].donatedPoints.toString(),
+                listUsers[index].postsNum.toString(),
                 style: TextStyle(color: Colors.grey),
               ),
               Text(
@@ -338,7 +367,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           Column(
             children: <Widget>[
               Text(
-                listUsers[index].points.toString(),
+                listUsers[index].donatedPoints.toString(),
                 style: TextStyle(color: Colors.grey),
               ),
               Text(
@@ -686,6 +715,39 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               onChanged: null,
               items: null,
             ),
+          new Text("Broj prijava: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          DropdownButton<NumRepDropDown>(
+            hint: Text("Izaberi"),
+            value: repNumF,
+            onChanged: (NumRepDropDown newValue) {
+              setState(() {
+                repNumF = newValue;
+              });
+              if (newValue.name == "Svi") {
+                print("Svi");
+                filteredRepUsers = null;
+                _sortRepListBy();
+              } else if(newValue.name == "Više od 10"){
+                print("Više od 10");
+                setState(() {
+                  filteredRepUsers = listRepUsers;
+                });
+                _sortRepListBy();
+              } else if(newValue.name == "Više od 20"){
+                print("Više od 20");
+                _sortRepListBy();
+              } else if(newValue.name == "Više od 50"){
+                print("Više od 50");
+                _sortRepListBy();
+              }
+            },
+            items: repNums.map((NumRepDropDown option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          ).showCursorOnHover,
         ]);
   }
 
@@ -751,6 +813,22 @@ class MaxMinDropDown{
     return <MaxMinDropDown>[
       MaxMinDropDown(1,"Rastući"),
       MaxMinDropDown(2,"Opadajući"),
+    ];
+  }
+}
+
+class NumRepDropDown{
+  int id;
+  String name;
+
+  NumRepDropDown(this.id, this.name);
+
+  static List<NumRepDropDown> getNumRepDropDown(){
+    return <NumRepDropDown>[
+      NumRepDropDown(1,"Svi"),
+      NumRepDropDown(2,"Više od 10"),
+      NumRepDropDown(3,"Više od 20"),
+      NumRepDropDown(4,"Više od 50"),
     ];
   }
 }
