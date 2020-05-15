@@ -44,11 +44,16 @@ dependencies:
   flutter_mapbox_autocomplete: ^1.0.4
   carousel_slider: ^2.1.0
   carousel_pro: ^1.0.0
+  flutter_launcher_icons: ^0.7.5
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  image_path: "assets/logoProba.png"
+  android: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
