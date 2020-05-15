@@ -43,5 +43,14 @@ namespace Backend.Controllers
             return users;
 
         }
+
+        [Authorize]
+        [HttpGet("PostsByType")]
+        public IEnumerable<int> PostsByType()
+        {
+            var posts = _iStatisticsUI.postsByType();
+            return posts;
+
+        }
     }
 }

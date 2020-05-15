@@ -90,7 +90,11 @@ class MaterialAppWithTheme extends StatelessWidget {
                     ascii.decode(base64.decode(base64.normalize(jwt[1]))));
                 if (DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000)
                     .isAfter(DateTime.now())) {
-                  return SplashPage(str);
+                  int type = int.parse(payload["sub"]);
+                  if(type != null && type != 0)
+                    return SplashPage(str);
+                  else
+                    return SplashPage("");
                 } else {
                   return SplashPage("");
                 }

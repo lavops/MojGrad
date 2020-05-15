@@ -27,6 +27,11 @@ namespace Backend.UI
             return _iStatisticsBL.monthlyUsers();
         }
 
+        public List<int> postsByType()
+        {
+            return _iStatisticsBL.postsByType();
+        }
+
         public List<UserViewModel> top10Users()
         {
             return _iStatisticsBL.top10Users();

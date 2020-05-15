@@ -12,5 +12,6 @@ namespace Backend.DAL.Interfaces
         StatisticsViewModel basicStatistics();
         List<UserViewModel> top10Users();
         List<int> monthlyUsers();
+        List<int> postsByType();
     }
 }

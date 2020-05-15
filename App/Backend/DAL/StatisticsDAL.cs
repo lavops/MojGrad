@@ -57,5 +57,18 @@ namespace Backend.DAL
             statistics.numberOfActiveDonations = _context.donation.Where(x => x.collectedMoney < x.monetaryAmount).Count();
             return statistics;
         }
+
+        public List<int> postsByType()
+        {
+            List<int> posts = new List<int>();
+            int br;
+            int types = _context.postType.Count();
+            for (int i = 1; i <= types ; i++)
+            {
+                br = _context.post.Where(x => x.postTypeId == i).Count();
+                posts.Add(br);
+            }
+            return posts;
+        }
     }
 }
