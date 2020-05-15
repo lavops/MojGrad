@@ -829,7 +829,37 @@ static Future registerInstitution(Institution ins) async {
     return res;
   }
 
+  static Future getPostsByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
 
+    return await http.get(serverURL + 'Post/ByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 
+  static Future getPostsUnsolveddByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Post/UnsolvedPostsByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getPostsSolvedByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Post/SolvedPostsByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
 
