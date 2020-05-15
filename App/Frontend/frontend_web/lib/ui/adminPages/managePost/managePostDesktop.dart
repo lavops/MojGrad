@@ -303,6 +303,68 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
     }
   }
 
+  deleteFromList(int postId) {
+    for (int i = 0; i < listPosts.length; i++) {
+      if (listPosts[i].postId == postId) {
+        setState(() {
+          listPosts.removeAt(i);
+        });
+        break;
+      }
+    }
+
+    if(listPostsFilt != null){
+      for (int i = 0; i < listPostsFilt.length; i++) {
+        if (listPostsFilt[i].postId == postId) {
+          setState(() {
+            listPostsFilt.removeAt(i);
+          });
+          break;
+        }
+      }
+    }
+
+    for (int i = 0; i < listSolvedPosts.length; i++) {
+      if (listSolvedPosts[i].postId == postId) {
+        setState(() {
+          listSolvedPosts.removeAt(i);
+        });
+        break;
+      }
+    }
+
+    if(listSolvedPostsFilt != null){
+      for (int i = 0; i < listSolvedPostsFilt.length; i++) {
+        if (listSolvedPostsFilt[i].postId == postId) {
+          setState(() {
+            listSolvedPostsFilt.removeAt(i);
+          });
+          break;
+        }
+      }
+    }
+
+    for (int i = 0; i < listUnsolvedPosts.length; i++) {
+      if (listUnsolvedPosts[i].postId == postId) {
+        setState(() {
+          listUnsolvedPosts.removeAt(i);
+        });
+        break;
+      }
+    }
+
+    if(listUnsolvedPostsFilt != null){
+      for (int i = 0; i < listUnsolvedPostsFilt.length; i++) {
+        if (listUnsolvedPostsFilt[i].postId == postId) {
+          setState(() {
+            listUnsolvedPostsFilt.removeAt(i);
+          });
+          break;
+        }
+      }
+    }
+  }
+
   @override
   initState() {
     super.initState();
@@ -677,6 +739,46 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
     ),
   );
 
+  showAlertDialog(BuildContext context, int id) {
+      // set up the button
+    Widget okButton = FlatButton(
+      child: Text("Obriši", style: TextStyle(color: greenPastel),),
+      onPressed: () {
+        APIServices.deletePost(TokenSession.getToken,id);
+        deleteFromList(id);
+        Navigator.pop(context);
+        /*Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ManagePostPage()),
+        );*/
+        },
+    ).showCursorOnHover;
+     Widget notButton = FlatButton(
+      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+      onPressed: () {
+        Navigator.pop(context);
+        },
+    ).showCursorOnHover;
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Brisanje objave"),
+      content: Text("Da li ste sigurni da želite da obrišete objavu?"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  
   Widget userInfoRow(String userPhoto, int userId, String username, int statusId, int postId) => Row(
     children: <Widget>[
       InkWell(
@@ -708,6 +810,19 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
         },
       ),
       Expanded(child: SizedBox()),
+      FlatButton(
+        shape: RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(11.0),
+        side: BorderSide(color: Colors.redAccent)),
+        color: Colors.redAccent,
+        child: Text(
+          "Obriši",
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          showAlertDialog(context, postId);
+        },
+      ).showCursorOnHover,
       SizedBox(width: 10,),
     ],
   );
@@ -729,7 +844,7 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
         dotBgColor: Colors.transparent,
         dotPosition: DotPosition.bottomCenter,
         dotVerticalPadding: 10.0,
-        showIndicator: true,
+        showIndicator: image2 != "" && image2 != null ? true : false,
         indicatorBgPadding: 7.0,
         images: image2 != "" && image2 != null ? [
           NetworkImage(imgList[0]),
@@ -769,60 +884,53 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
   }
 
 
-  Widget actionsButtons(int likeNum, int dislikeNum, int postId, int commNum, FullPost post) =>
-      Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          // Actions buttons/icons
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel),
-                onPressed: () {
-                },
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Text(likeNum.toString()),
-              ),
-              IconButton(
-                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
-                onPressed: () {
-                },
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Text(dislikeNum.toString()),
-              ),
-              IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
-                onPressed: () {
-                  showCommentsDialog(context, postId);
-                },
-              ),
-              Text(commNum.toString()),
-              Expanded(child: SizedBox()),
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(11.0),
-                    side: BorderSide(color: greenPastel)),
-                color: greenPastel,
-                child: Text(
-                  "Više informacija",
-                  style: TextStyle(color: Colors.white),
-                ).showCursorOnHover,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ViewPostPage(post)),
-                  );
-                },
-              ),
-              SizedBox(width: 10.0), // For padding
-            ],
-          ),
-        ],
-      );
+  Widget actionsButtons(int likeNum, int dislikeNum, int postId, int commNum, FullPost post) => Row(
+    children: <Widget>[
+      IconButton(
+        icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel),
+        onPressed: () {
+        },
+      ),
+      GestureDetector(
+        onTap: () {},
+        child: Text(likeNum.toString()),
+      ),
+      IconButton(
+        icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+        onPressed: () {
+        },
+      ),
+      GestureDetector(
+        onTap: () {},
+        child: Text(dislikeNum.toString()),
+      ),
+      IconButton(
+        icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
+        onPressed: () {
+          showCommentsDialog(context, postId);
+        },
+      ),
+      Text(commNum.toString()),
+      Expanded(child: SizedBox()),
+      FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(11.0),
+            side: BorderSide(color: greenPastel)),
+        color: greenPastel,
+        child: Text(
+          "Više informacija",
+          style: TextStyle(color: Colors.white),
+        ).showCursorOnHover,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ViewPostPage(post)),
+          );
+        },
+      ),
+      SizedBox(width: 10.0), // For padding
+    ],
+  );
 
   Widget location(String address) => Container(
     child: Row(
