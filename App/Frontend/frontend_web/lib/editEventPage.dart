@@ -216,7 +216,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
 
     _getCities();
     nameEventController = new TextEditingController(text: event.title);
-    shortDescriptionController = new TextEditingController(text: event.shortDescription);
+    shortDescriptionController =
+        new TextEditingController(text: event.shortDescription);
     description = new TextEditingController(text: event.description);
     locationController = new TextEditingController(text: event.address);
 
@@ -599,17 +600,32 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     return RaisedButton(
       onPressed: () {
         var str = TokenSession.getToken;
-        var jwt = str.split(".");
-        var payload =
-            json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
 
-        if (nameEventController.text != '' && locationController.text != '' && city != null) {
-
+        if (nameEventController.text != '' &&
+            locationController.text != '' &&
+            city != null) {
           String _startDateString = DateFormat.yMd().format(_startDate);
           String _endDateString = DateFormat.yMd().format(_endDate);
 
           startDate = _startDateString + ' ' + _selectedTipStart.toString();
           endDate = _endDateString + ' ' + _selectedTipEnd.toString();
+
+          var newStartDate = startDate.split('/');
+          var startDateTemp = (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" +newStartDate[2];
+
+          var newEndDate = endDate.split('/');
+          var endDateTemp = (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" +(int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" +newEndDate[2];
+
+
+          if (event.startDate.compareTo(startDateTemp) == 0  && event.endDate.compareTo(endDateTemp) == 0) {
+            startDate = null;
+            endDate = null;
+          }
+
+          print(event.startDate);
+          print(event.endDate);
+          print(startDateTemp);
+          print(endDateTemp);
 
           APIServices.editEventData(
                   str,

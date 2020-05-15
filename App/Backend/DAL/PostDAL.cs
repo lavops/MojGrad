@@ -1,5 +1,6 @@
 ﻿using Backend.DAL.Interfaces;
 using Backend.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,10 +14,12 @@ namespace Backend.DAL
     public class PostDAL : IPostDAL
     {
         private readonly AppDbContext _context;
+        public static IWebHostEnvironment _environment;
 
-        public PostDAL(AppDbContext context)
+        public PostDAL(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public bool deletePost(long id)
@@ -28,7 +31,7 @@ namespace Backend.DAL
             }
             List<String> listStr;
             listStr = post.photoPath.Split('/').ToList();
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload\\Post\\", listStr[listStr.Count - 1]);
+            var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/Post/", listStr[listStr.Count - 1]);
 
             if (System.IO.File.Exists(path))
             {
@@ -37,7 +40,7 @@ namespace Backend.DAL
             if(post.solvedPhotoPath != null && post.solvedPhotoPath != "")
             { 
                 listStr = post.solvedPhotoPath.Split('/').ToList();
-                path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload\\Post\\", listStr[listStr.Count - 1]);
+                path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/Post/", listStr[listStr.Count - 1]);
 
                 if (System.IO.File.Exists(path))
                 {

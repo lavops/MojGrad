@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageAdmins.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
 import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
+import 'package:frontend_web/ui/adminPages/menageAdmin/manageAdminPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
@@ -73,7 +73,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         });
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ManageAdminsPage(id: globalAdminId)),
+                          MaterialPageRoute(builder: (context) => ManageAdminPage(globalAdminId)),
                         );
                       },           
                       isSelected: currentSelectedIndex == 1,

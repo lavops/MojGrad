@@ -6,6 +6,8 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/registrationPage.dart';
 import 'dart:convert';
 
+import '../main.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -53,18 +55,19 @@ class _LoginPageState extends State<LoginPage> {
     final logo = Hero(
       tag: 'hero',
       child: Center(
-          child: Image.asset(
-        'assets/mojGrad4.png',
+          child: Image.asset( 
+        'assets/mojGradPastelna.png',
         width: 300,
       )),
     );
 
     //text box for email
     final emailText = TextField(
+      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email, color: Colors.green[800]),
+        prefixIcon: Icon(Icons.email, color: Color(0xFF00BFA6)),
         hintText: 'E-mail',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
@@ -72,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2, color: Colors.green[800]),
+          borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
         ),
       ),
       controller: _emailController,
@@ -80,12 +83,13 @@ class _LoginPageState extends State<LoginPage> {
 
     //text box for password
     final passwordText = TextField(
+      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
         prefixIcon: Icon(
           Icons.lock,
-          color: Colors.green[800],
+          color: Color(0xFF00BFA6),
         ),
         hintText: 'Šifra',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -94,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2, color: Colors.green[800]),
+          borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
         ),
       ),
       controller: _passwordController,
@@ -117,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
             // Call login function
             _login(_emailController.text, _passwordController.text);
           },
-          color: Colors.green[800],
+          color: Color(0xFF00BFA6),
           child: Text(
             'Uloguj se',
             style: TextStyle(
@@ -140,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Text(
             'Registrujte se ovde.',
             style: TextStyle(
-                color: Colors.green[800], fontWeight: FontWeight.bold),
+                color: Color(0xFF00BFA6), fontWeight: FontWeight.bold),
           ),
           onTap: () {
             Navigator.pushReplacement(
@@ -184,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 5),
                     Text("Unesite email vašeg naloga i na njemu će Vam stići poruka u kojoj se nalazi Vaša nova šifra."),
                     TextField(
+                      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
@@ -193,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
                         focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ), 
                       ),
                     ),
@@ -253,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Text(
             'Zaboravili ste lozinku?',
             style: TextStyle(
-                color: Colors.green[800], fontWeight: FontWeight.bold),
+                color: Color(0xFF00BFA6), fontWeight: FontWeight.bold),
           ),
           onTap: () {
            emailAlert(context);

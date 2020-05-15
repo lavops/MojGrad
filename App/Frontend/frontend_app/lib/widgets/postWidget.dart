@@ -16,6 +16,7 @@ import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/models/constants.dart';
 import 'dart:convert';
+import '../main.dart';
 import '../services/api.services.dart';
 
 class PostWidget extends StatefulWidget {
@@ -280,6 +281,7 @@ class _PostWidgetState extends State<PostWidget> {
               child: Column(
                 children: <Widget>[
                   TextField(
+                   cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                     controller: opisController,
                   ),
                 ],
@@ -407,7 +409,7 @@ Widget imageGallery(String image, String image2) {
             children: <Widget>[
               IconButton(
                 icon: isLiked == 1
-                    ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800])
+                    ? Icon(MdiIcons.thumbUpOutline, color: Color(0xFF00BFA6))
                     : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -476,7 +478,7 @@ Widget imageGallery(String image, String image2) {
                 child: Text(dislikeNum.toString()),
               ),
               IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: Colors.green[800]),
+                icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),
                 onPressed: () {
                   _getCommentsFromPage(postId);
                 },
@@ -488,8 +490,8 @@ Widget imageGallery(String image, String image2) {
                   ? FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.green[800])),
-                      color: Colors.green[800],
+                          side: BorderSide(color: Color(0xFF00BFA6))),
+                      color: Color(0xFF00BFA6),
                       child: Text(
                         "Reši",
                         style: TextStyle(color: Colors.white),
@@ -499,7 +501,7 @@ Widget imageGallery(String image, String image2) {
                       },
                     )
                   : IconButton(
-                      icon: Icon(Icons.done_all, color: Colors.green[800]),
+                      icon: Icon(Icons.done_all, color: Color(0xFF00BFA6)),
                       onPressed: () {
                         _getSolvedStatus();
                       },
@@ -614,7 +616,7 @@ class MyDialogState extends State<MyDialog> {
                 fillColor: Colors.black,
                 contentPadding: const EdgeInsets.all(10.0),
                 focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green[800]),
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
                    ),  
               ),
           )
@@ -678,7 +680,7 @@ class PhotoCarouselIndicator extends StatelessWidget {
           height: isActive ? 7.5 : 6.0,
           width: isActive ? 7.5 : 6.0,
           decoration: BoxDecoration(
-            color: isActive ? Colors.green : Colors.grey,
+            color: isActive ? Color(0xFF00BFA6) : Colors.grey,
             borderRadius: BorderRadius.circular(4.0),
           ),
         ),

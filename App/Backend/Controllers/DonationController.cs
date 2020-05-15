@@ -46,6 +46,15 @@ namespace Backend.Controllers
         }
 
         [Authorize]
+        [HttpGet("GetLastDonation")]
+        public ActionResult<DonationViewModel> GetLastDonation()
+        {
+            Donation donat = _iDonationUI.getLastDonation();
+            DonationViewModel fullDonation = new DonationViewModel(donat);
+            return fullDonation;
+        }
+
+        [Authorize]
         [HttpGet("FinishedDonation")]
         public ActionResult<IEnumerable<DonationViewModel>> GetFinishedDonation()
         {

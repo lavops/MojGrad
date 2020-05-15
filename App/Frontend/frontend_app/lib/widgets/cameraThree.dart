@@ -16,7 +16,7 @@ import 'package:location/location.dart';
 import 'package:nominatim_location_picker/nominatim_location_picker.dart';
 import 'package:path/path.dart';
 
-class CameraThree extends StatefulWidget {
+class CameraThree extends StatefulWidget { 
   @override
   _CameraThreeState createState() => _CameraThreeState();
 }
@@ -158,7 +158,7 @@ class _CameraThreeState extends State<CameraThree>{
       onPressed: () {
         _openCamera();
       },
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -181,7 +181,7 @@ class _CameraThreeState extends State<CameraThree>{
       onPressed: () {
         _openGalery();
       },
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +227,7 @@ class _CameraThreeState extends State<CameraThree>{
         _getUserLocation();
       },
       icon: Icon(Icons.my_location, size: 20),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -271,7 +271,7 @@ class _CameraThreeState extends State<CameraThree>{
         await getLocationWithNominatim();
       },
       icon: Icon(Icons.location_on,),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -297,6 +297,7 @@ class _CameraThreeState extends State<CameraThree>{
 
     // Description of assigment or praise
     final opis = TextField(
+     cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
       controller: description,
       maxLength: 150,
       decoration: InputDecoration(
@@ -304,11 +305,11 @@ class _CameraThreeState extends State<CameraThree>{
         hintText: 'Opis pohvale',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 2, color: Colors.green[800]),
+          borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 1, color: Colors.green[800]),
+          borderSide: BorderSide(width: 1, color: Color(0xFF00BFA6)),
         ),
       ),
     );
@@ -362,7 +363,7 @@ class _CameraThreeState extends State<CameraThree>{
         });
       },
       icon: Icon(Icons.nature_people),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),

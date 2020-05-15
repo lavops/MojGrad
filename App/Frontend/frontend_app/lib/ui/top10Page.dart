@@ -61,7 +61,7 @@ class StateTop10 extends State<Top10Page> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,               
                     children: [                    
                    Row(children: <Widget>[
-                      Text((index+1).toString(), style: TextStyle(color:  MyApp.ind == 0 ? Colors.green[800]: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
+                      Text((index+1).toString(), style: TextStyle(color:  MyApp.ind == 0 ? Color(0xFF00BFA6): Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
                     CircleImage(
                       serverURLPhoto + listUsers[index].photo,
                       imageSize: 52.0,

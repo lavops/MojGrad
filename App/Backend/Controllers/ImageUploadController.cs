@@ -30,19 +30,21 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<string> Post([FromForm]FileUploadApi objFile)
         {
+            string path = "Upload/Post/";
             try
             {
                 if (objFile.files.Length > 0)
                 {
+                    /*
                     if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\Post\\"))
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\Post\\");
-                    }
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\Post\\" + objFile.files.FileName))
+                    }*/
+                    using (FileStream fileStream = System.IO.File.Create($"{_environment.ContentRootPath}/wwwroot/" + path + objFile.files.FileName))
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
-                        return "\\Upload\\" + objFile.files.FileName;
+                        return path + objFile.files.FileName;
 
                     }
                 }
@@ -62,19 +64,21 @@ namespace Backend.Controllers
         [HttpPost("ProfilePhoto")]
         public async Task<string> PostProfilePhoto([FromForm]FileUploadApi objFile)
         {
+            string path = "Upload/ProfilePhoto/";
             try
             {
                 if (objFile.files.Length > 0)
                 {
+                    /*
                     if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\ProfilePhoto\\"))
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\ProfilePhoto\\");
-                    }
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\ProfilePhoto\\" + objFile.files.FileName))
+                    }*/
+                    using (FileStream fileStream = System.IO.File.Create($"{_environment.ContentRootPath}/wwwroot/" + path + objFile.files.FileName))
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
-                        return "\\Upload\\ProfilePhoto\\" + objFile.files.FileName;
+                        return path + objFile.files.FileName;
 
                     }
                 }

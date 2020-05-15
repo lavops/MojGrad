@@ -4,9 +4,11 @@ import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:http/http.dart' as http;
 
+//String userPhotoURL = "http://147.91.204.116:2043/";
 String userPhotoURL = "http://127.0.0.1:60676//";
 
 class APIServices {
+  //static String serverURL = 'http://147.91.204.116:2043/api/';
   static String serverURL = 'http://127.0.0.1:60676/api/';
 
   static Map<String, String> header = {
@@ -762,8 +764,105 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
   }
+  
+    static Future deleteAdmin(String jwt, int id) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    String url = serverURL + 'Admin/Delete';
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+      }, body: convert.jsonEncode({
+          'id': id,
+        }));
+  }
 
-  //method for instituion to join events
+  static Future getStatistics(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Statistics', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+  static Future getLastDonation(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Donation/GetLastDonation', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getTop10(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Statistics/Top10', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+  static Future getMonthlyUsers(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Statistics/MonthlyUsers', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+  // filter
+  static Future getFiltered(String jwt, List<int> ids) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    var jbody = jsonEncode({'listFilter': ids});
+    var res =  await http.post(serverURL + 'Post/UnsolvedPostsByFilter',  headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jbody);
+    print(res.body);
+    return res;
+  }
+
+  static Future getPostsByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Post/ByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getPostsUnsolveddByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Post/UnsolvedPostsByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getPostsSolvedByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Post/SolvedPostsByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+   //method for instituion to join events
   static Future joinEvent(String jwt, int eventId, int institutionId) async{
     var datas  = jsonDecode(jwt);
     jwt = datas['token'].toString();
@@ -806,6 +905,5 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
   }
-
 }
 

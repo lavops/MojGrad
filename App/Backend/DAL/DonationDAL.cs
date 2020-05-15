@@ -130,6 +130,12 @@ namespace Backend.DAL
             return _context.donation.Where(x => x.collectedMoney == x.monetaryAmount).ToList();
         }
 
+        public Donation getLastDonation()
+        {
+            var donations = _context.donation.OrderByDescending(x=> x.id).ToList();
+            return donations.FirstOrDefault();
+        }
+
         public Donation insertDonation(Donation donation)
         {
             Donation exist = new Donation();

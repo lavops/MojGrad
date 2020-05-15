@@ -48,13 +48,27 @@ namespace Backend.DAL
             statistics.numberOfUnsolvedPosts = _context.post.Where(x=> x.statusId == 2).Count();
             statistics.numberOfUsers = _context.user.Count();
             statistics.numberOfInstitutions = _context.institution.Count();
+            statistics.numberOfEvents = _context.events.Count();
+            statistics.numberOfDonations = _context.donation.Count();
             statistics.numberOfNewInstitutionIn24h = _context.institution.Where(x=> x.createdAt >= DateTime.Now.AddHours(-24)).Count();
             statistics.numberOfNewPostsIn24h = _context.post.Where(x=> x.createdAt >= DateTime.Now.AddHours(-24)).Count();
             statistics.numberOfNewUsersIn24h = _context.user.Where(x=> x.createdAt >= DateTime.Now.AddHours(-24)).Count();
-
-            statistics.top10Users = this.top10Users();
-            statistics.monthlyUsers = this.monthlyUsers();
+            statistics.numberOfActiveEvents = _context.events.Where(x => x.endDate > DateTime.Now).Count();
+            statistics.numberOfActiveDonations = _context.donation.Where(x => x.collectedMoney < x.monetaryAmount).Count();
             return statistics;
+        }
+
+        public List<int> postsByType()
+        {
+            List<int> posts = new List<int>();
+            int br;
+            int types = _context.postType.Count();
+            for (int i = 1; i <= types ; i++)
+            {
+                br = _context.post.Where(x => x.postTypeId == i).Count();
+                posts.Add(br);
+            }
+            return posts;
         }
     }
 }

@@ -10,6 +10,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'dart:convert';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import '../../models/admin.dart';
+import '../../widgets/centeredView/centeredViewManageUser.dart';
 import '../../widgets/collapsingNavigationDrawer.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -32,17 +33,13 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
   Admin admin;
   Image imageFile;
 
-String name = '',
-      password = '',
-      oldPassword = '',
-      email = '',
-      lname = '';
+  String firstName = '', password = '', oldPassword = '', email = '', lastName = '';
   String spoljasnjeIme = '';
   String baseString;
 
   Admin admin1;
   _getAdmin(int idA) async {
-    var res = await APIServices.getAdmin(TokenSession.getToken,idA);
+    var res = await APIServices.getAdmin(TokenSession.getToken, idA);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     Admin admin = Admin.fromObject(jsonUser);
     setState(() {
@@ -63,7 +60,10 @@ String name = '',
     });
   }
 
-  @override initState() {
+
+
+  @override
+  initState() {
     super.initState();
     idA = widget.id;
     _getAdmin(idA);
@@ -105,13 +105,13 @@ String name = '',
     input.click();
   }
 
-  Future<String> firstName(BuildContext context, String firstName) {
+  Future<String> firstLastName(BuildContext context, String name) {
     TextEditingController customController;
-    if (name == '') {
-      customController = new TextEditingController(text: "$firstName");
+    if (firstName == '') {
+      customController = new TextEditingController(text: "$name");
     } else {
-      String _firstName = name;
-      customController = new TextEditingController(text: "$_firstName");
+      String _name = firstName + " " + lastName;
+      customController = new TextEditingController(text: "$_name");
     }
     return showDialog(
         context: context,
@@ -131,7 +131,7 @@ String name = '',
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
-                          "Ime administratora",
+                          "Ime i prezime",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                       ],
@@ -149,7 +149,7 @@ String name = '',
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
                           ),
-                          labelStyle: TextStyle(color: Colors.black)),          
+                          labelStyle: TextStyle(color: Colors.black)),
                     ).showCursorTextOnHover,
                     SizedBox(height: 20),
                     Row(
@@ -164,8 +164,11 @@ String name = '',
                           onPressed: () {
                             var check = customController.text;
                             print(check);
+                            var array = check.split(" ");
+                            print(array[0] + ", " + array[1]);
                             setState(() {
-                              name = check;
+                                firstName = array[0];
+                                lastName = array[1];
                             });
                             Navigator.pop(context);
                           },
@@ -187,87 +190,7 @@ String name = '',
         });
   }
 
-Future<String> lastName(BuildContext context, String lastName) {
-    TextEditingController customController;
-    if (lname == '') {
-      customController = new TextEditingController(text: "$lastName");
-    } else {
-      String _lastName = lname;
-      customController = new TextEditingController(text: "$_lastName");
-    }
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: Container(
-                width: 400,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          "Ime administratora",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      controller: customController,
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: greenPastel),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          labelStyle: TextStyle(color: Colors.black)),          
-                    ).showCursorTextOnHover,
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        MaterialButton(
-                          child: Text(
-                            "Izmeni",
-                            style: TextStyle(color: greenPastel),
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {
-                            var check = customController.text;
-                            print(check);
-                            setState(() {
-                              lname = check;
-                            });
-                            Navigator.pop(context);
-                          },
-                        ).showCursorOnHover,
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ).showCursorOnHover,
-                      ],
-                    )
-                  ],
-                )),
-          );
-        });
-  }
+ 
 
   Future<String> adminEmail(BuildContext context, String adminEmail) {
     TextEditingController customController;
@@ -492,27 +415,27 @@ Future<String> lastName(BuildContext context, String lastName) {
         });
   }
 
-
   showAlertDialog(BuildContext context, int id) {
-      // set up the button
+    // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
+      child: Text(
+        "Obriši",
+        style: TextStyle(color: greenPastel),
+      ),
       onPressed: () {
-        APIServices.deleteUser(TokenSession.getToken,id);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageAdminsPage()),
-        );
-        },
+       APIServices.deleteAdmin(TokenSession.getToken, id);
+        deleteFromList(id);
+        Navigator.pop(context);
+      },
     );
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Colors.redAccent),),
+    Widget notButton = FlatButton(
+      child: Text(
+        "Otkaži",
+        style: TextStyle(color: Colors.redAccent),
+      ),
       onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManageAdminsPage()),
-        );
-        },
+        Navigator.pop(context);
+      },
     );
 
     // set up the AlertDialog
@@ -543,42 +466,41 @@ Future<String> lastName(BuildContext context, String lastName) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              listAdmins[index].id != idA ?
-              Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(5),
-                  //margin: EdgeInsets.only(top: 5),
-                  child: Row(children: [            
-                    CircleImage(
-                      userPhotoURL + listAdmins[index].photoPath,
-                      imageSize: 56.0,
-                      whiteMargin: 2.0,
-                      imageMargin: 6.0,
-                    ),
-                    Container(
-                      width: 200,
-                      padding: EdgeInsets.all(10),
-                      child: 
-                          Text(
-                              listAdmins[index].firstName +
-                                  " " +
-                                  listAdmins[index].lastName,
-                              style: TextStyle(fontSize: 15))
-                    ),        
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.redAccent)),
-                      color: Colors.redAccent,
-                      child: Text(
-                        "Obriši administatora",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        showAlertDialog(context, listAdmins[index].id);
-                      },
-                    ),
-                  ])) : Container(width: 1, height: 1),
+              listAdmins[index].id != idA
+                  ? Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(5),
+                      //margin: EdgeInsets.only(top: 5),
+                      child: Row(children: [
+                        CircleImage(
+                          userPhotoURL + listAdmins[index].photoPath,
+                          imageSize: 56.0,
+                          whiteMargin: 2.0,
+                          imageMargin: 6.0,
+                        ),
+                        Container(
+                            width: 200,
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                                listAdmins[index].firstName +
+                                    " " +
+                                    listAdmins[index].lastName,
+                                style: TextStyle(fontSize: 15))),
+                        FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(11.0),
+                              side: BorderSide(color: Colors.redAccent)),
+                          color: Colors.redAccent,
+                          child: Text(
+                            "Obriši administatora",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            showAlertDialog(context, listAdmins[index].id);
+                          },
+                        ),
+                      ]))
+                  : Container(width: 1, height: 1),
             ],
           ),
         ));
@@ -586,46 +508,40 @@ Future<String> lastName(BuildContext context, String lastName) {
     );
   }
 
-
   Widget search() {
     return Container(
-      color:Colors.white,
-      margin: EdgeInsets.only(left: 50, right: 50, top:5, bottom: 5),
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-      autofocus: false,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search,color: greenPastel),
-        hintText: 'Pretraži ostale administratore...',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(width: 2,color: greenPastel),
-        ),
-      ),
-      controller: searchController,
-    )
-    );
+        color: Colors.white,
+        margin: EdgeInsets.only(left: 50, right: 50, top: 5, bottom: 5),
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          autofocus: false,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search, color: greenPastel),
+            hintText: 'Pretraži ostale administratore...',
+            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50.0),
+              borderSide: BorderSide(width: 2, color: greenPastel),
+            ),
+          ),
+          controller: searchController,
+        ).showCursorTextOnHover);
   }
 
-Widget loginAdmin(){
-  return Container(
-    color:Colors.white,
-      padding: EdgeInsets.all(10),
-     // margin: EdgeInsets.only(top: 5),
-          width:500,
-          height:600,
-         child:
-          ListView(
-          children: <Widget>[
-            SizedBox(height:10),
-            Center(
-            child:Text('Informacije o prijavljenom administratoru:',style: TextStyle(fontWeight: FontWeight.bold)),
-            ),
-            Container(
+  Widget loginAdmin() {
+    return Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(10),
+        // margin: EdgeInsets.only(top: 5),
+        width: 750,
+        height: 550,
+        child: ListView(children: <Widget>[
+          SizedBox(height: 50),
+       
+          Container(
               margin: EdgeInsets.all(10),
               child: Column(
                 children: <Widget>[
@@ -657,7 +573,8 @@ Widget loginAdmin(){
                     child: Text(
                       "Promeni profilnu sliku",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                           fontSize: 12,
                           decoration: TextDecoration.underline),
                     ),
@@ -667,67 +584,57 @@ Widget loginAdmin(){
                   )
                 ],
               )),
-            ListTile(
-              leading: Icon(Icons.person,  color: greenPastel),
-              title: Text('Ime'),
-              subtitle: name == '' ? Text(admin1.firstName) : Text(name),
-              trailing:  FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-               child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                    firstName(context, admin1.firstName);
-                },
-              ),
+          ListTile(
+            leading: Icon(Icons.person, color: greenPastel),
+            title: Text('Ime i prezime'),
+            subtitle: Text(
+                      firstName == ''
+                          ? admin1.firstName + ' ' + admin1.lastName
+                          : firstName + " " + lastName == ''
+                              ? admin1.lastName
+                              : firstName + ' ' + lastName),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+               firstLastName(context, admin1.firstName + " " + admin1.lastName);
+              },
             ),
-            ListTile(
-              leading: Icon(Icons.person_outline,  color: greenPastel),
-              title: Text('Prezime'),
-              subtitle: lname == '' ? Text(admin1.lastName) : Text(lname),
-              trailing:  FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  lastName(context, admin1.lastName);
-                },
-              ),
+          ).showCursorOnHover,
+          ListTile(
+            leading: Icon(Icons.email, color: greenPastel),
+            title: Text('E-mail'),
+            subtitle: email == '' ? Text(admin1.email) : Text(email),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                adminEmail(context, admin1.email);
+              },
             ),
-            ListTile(
-              leading: Icon(Icons.email,  color: greenPastel),
-              title: Text('E-mail'),
-              subtitle: email == '' ? Text(admin1.email) : Text(email),
-              trailing:  FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  adminEmail(context, admin1.email);
-                },
-              ),
+          ).showCursorOnHover,
+          ListTile(
+            leading: Icon(Icons.lock_outline, color: greenPastel),
+            title: Text('Šifra'),
+            subtitle: Text('******'),
+            trailing: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(11.0),
+                  side: BorderSide(color: Colors.grey)),
+              color: Colors.grey,
+              child: Icon(Icons.edit, color: Colors.white),
+              onPressed: () {
+                adminPassword(context);
+              },
             ),
-            ListTile(
-              leading: Icon(Icons.lock_outline,  color: greenPastel),
-              title: Text('Šifra'),
-              subtitle: Text('******'),
-              trailing:  FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(11.0),
-                    side: BorderSide(color: Colors.grey)),
-                color: Colors.grey,
-                child: Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                    adminPassword(context);
-                },
-              ),
-            ),
-           Center(
+          ).showCursorOnHover,
+          Center(
               child: Container(
                   width: 150,
                   child: FlatButton(
@@ -740,7 +647,8 @@ Widget loginAdmin(){
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-                        edit(name, lname, email, admin1, idA, oldPassword, password);
+                      edit(firstName, lastName, email, admin1, idA, oldPassword,
+                          password);
                     },
                   ).showCursorOnHover)),
           Center(
@@ -750,8 +658,8 @@ Widget loginAdmin(){
               color: Colors.red,
             ),
           )),
-
-             ]) );}
+        ]));
+  }
 
   Future<String> showDial(BuildContext context) {
     return showDialog(
@@ -770,7 +678,9 @@ Widget loginAdmin(){
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[Text("Uspešno ste promenili podatke!")],
+                      children: <Widget>[
+                        Text("Uspešno ste promenili podatke!")
+                      ],
                     ),
                     SizedBox(height: 20),
                     Row(
@@ -793,59 +703,79 @@ Widget loginAdmin(){
         });
   }
 
-
+  Widget tabs() {
+    return TabBar(
+      labelColor: greenPastel,
+      indicatorColor: greenPastel,
+      tabs: <Widget>[
+        Tab(
+          child: Text('PODACI O PRIJAVLJENOM ADMINISTRATORU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+        ),
+        Tab(
+          child: Text('OSTALI ADMINISTRATORI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+        ),
+      ]
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+ 
+    return Stack(
+      children: <Widget>[
+    DefaultTabController(
+        length: 2,
+        child: Scaffold(
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.black),
-              title: Text('Upravljanje administratorima',
-                  style: TextStyle(color: Colors.black)),
               backgroundColor: Colors.white,
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    
-                  }),
-              
+              flexibleSpace:tabs(),
             ),
-            body: Stack(
-          children: <Widget>[
+            body: TabBarView(children: <Widget>[
               Container(
                 margin: EdgeInsets.only(left:400, right: 400),
                   padding: EdgeInsets.only(top: 0),
                   color: Colors.grey[100],
-                    child: Flexible(child:Column(children: [
-                     RefreshIndicator(
-                      onRefresh: _handleRefresh,
-                    child:     (admin1 != null) ? loginAdmin() : Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                    ),
-                  ),),
-                    Container(
-                      color:Colors.white,
-                      child: Column(children:[
-                        Text('Informacije o ostalim administratorima:',style: TextStyle(fontWeight: FontWeight.bold)),
-                        search(),])),
+                  child: 
                     Flexible(child:RefreshIndicator(
-                      onRefresh: _handleRefresh,
-                    child: (listAdmins != null) ? buildAdminList() : Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                    ),
-                  ),))
-                  ]))),
-        CollapsingNavigationDrawer(),
-          ])
-            );
+                  onRefresh: _handleRefresh,
+                  child: (admin1 != null)
+                      ? loginAdmin()
+                      : Center(
+                          child: CircularProgressIndicator(
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                                Colors.green[800]),
+                          ),
+                        ),
+                ),),
+                  ),
+              Container(
+                  margin: EdgeInsets.only(left:400, right: 400),
+                  padding: EdgeInsets.only(top: 0),
+                  color: Colors.grey[100],
+                  child: Column(children: [
+                    search(),
+                    Flexible(child: RefreshIndicator(
+                  onRefresh: _handleRefresh,
+                  child: (listAdmins != null)
+                      ? buildAdminList()
+                      : Center(
+                          child: CircularProgressIndicator(
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                                Colors.green[800]),
+                          ),
+                        ),
+                ))
+              ])),
+                  ])),
+            ),
+             CollapsingNavigationDrawer(),
+      ],
+    );;
   }
 
 
-    Future<Null> _handleRefresh() async {
+
+  Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 3));
     setState(() {
       listAdmins = [];
@@ -854,12 +784,11 @@ Widget loginAdmin(){
     return null;
   }
 
-
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
   final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
 
-  edit(String nname, String nlastname, String nemail, Admin admin,
-      int nadminId, String pass1, String pass2) {
+  edit(String nname, String nlastname, String nemail, Admin admin, int nadminId,
+      String pass1, String pass2) {
     if (nadminId == 0) {
       nadminId = admin.id;
     }
@@ -871,7 +800,7 @@ Widget loginAdmin(){
     }
     if (nemail == "") {
       nemail = admin.email;
-    }  
+    }
     if (nname == admin.firstName &&
         nlastname == admin.lastName &&
         nemail == admin.email &&
@@ -902,8 +831,7 @@ Widget loginAdmin(){
         var shaPass1 = sha1.convert(tempPass1);
         var tempPass2 = utf8.encode(pass2);
         var shaPass2 = sha1.convert(tempPass2);
-        APIServices.editAdminData(
-            jwt, admin.id, nname, nlastname, nemail);
+        APIServices.editAdminData(jwt, admin.id, nname, nlastname, nemail);
         APIServices.editAdminPassword(
                 jwt, admin.id, shaPass1.toString(), shaPass2.toString())
             .then((res) {
@@ -918,5 +846,14 @@ Widget loginAdmin(){
       showDial(context);
     }
   }
-}
 
+   deleteFromList(int userId) {
+    for (int i = 0; i < listAdmins.length; i++) {
+      if (listAdmins[i].id == userId) {
+        setState(() {
+          listAdmins.removeAt(i);
+        });
+        break;
+      }
+    }
+}}

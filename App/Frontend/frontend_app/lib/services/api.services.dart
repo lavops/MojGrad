@@ -6,18 +6,19 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  String serverURLPhoto = 'http://147.91.204.116:2043/';
+  //String serverURLPhoto = 'http://10.0.2.2:60676//';
   //String serverURLPhoto = 'http://192.168.1.8:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
-  
+
+  String serverURL = 'http://147.91.204.116:2043/api/';
+  //String serverURL = 'http://10.0.2.2:60676/api/';
+  // String serverURL = 'http://192.168.1.8:45455/api/';
+  // String serverURL = 'http://192.168.1.4:45455/api/';
+
 class APIServices
 {
-
-  static String serverURL = 'http://10.0.2.2:60676/api/';
-  //static String serverURL = 'http://192.168.1.8:45455/api/';
-  //static String serverURL = 'http://192.168.1.4:45455/api/';
-
 
 
   static Map<String, String> header = { 
@@ -153,6 +154,7 @@ class APIServices
   static Future login(String mail, String password) async{
     String url = serverURL + 'User/Login';
     var body = jsonEncode({ 'email': mail, 'password': password });
+    print(url);
     var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
     if(res.statusCode == 200) return res.body;
     return null;

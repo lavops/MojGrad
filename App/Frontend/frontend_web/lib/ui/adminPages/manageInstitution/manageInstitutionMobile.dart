@@ -9,8 +9,6 @@ import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionDe
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 
-import 'package:frontend_web/extensions/hoverExtension.dart';
-
 class ManageInstitutionMobile extends StatefulWidget {
   @override
   _ManageInstitutionMobileState createState() => _ManageInstitutionMobileState();
@@ -145,7 +143,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
         });
         Navigator.pop(context);
       },
-    ).showCursorOnHover;
+    );
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
@@ -154,7 +152,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
       onPressed: () {
         Navigator.pop(context);
       },
-    ).showCursorOnHover;
+    );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -180,7 +178,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile> with 
           //crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Kontakt", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10)),
             Row(
               children: <Widget>[
                 Text("Broj telefona: ", style: TextStyle(fontSize: 10)),

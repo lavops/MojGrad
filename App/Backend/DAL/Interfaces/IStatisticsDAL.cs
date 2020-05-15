@@ -1,4 +1,5 @@
-﻿using Backend.Models.ViewsModel;
+﻿using Backend.Models;
+using Backend.Models.ViewsModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,8 @@ namespace Backend.DAL.Interfaces
     public interface IStatisticsDAL
     {
         StatisticsViewModel basicStatistics();
+        List<UserViewModel> top10Users();
+        List<int> monthlyUsers();
+        List<int> postsByType();
     }
 }

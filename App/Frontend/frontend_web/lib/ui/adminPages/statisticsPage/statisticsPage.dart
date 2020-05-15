@@ -15,25 +15,24 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
-
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
-          drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
+        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
             ? DrawerAdmin(2)
             : null,
-          appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
             ? null
             : AppBar(
-              backgroundColor: Colors.white,
-              iconTheme: IconThemeData(color: Colors.black),
-            ),
-          backgroundColor: Colors.white,
-          body: ScreenTypeLayout(
-            mobile: StatisticsMobile(),
-            tablet: StatisticsTablet(),
-            desktop: StatisticsDesktop(),
-          ),
+                backgroundColor: Colors.white,
+                iconTheme: IconThemeData(color: Colors.black),
+              ),
+        backgroundColor: Colors.white,
+        body: ScreenTypeLayout(
+          mobile: StatisticsMobile(),
+          tablet: StatisticsTablet(),
+          desktop: StatisticsDesktop(),
         ),
+      ),
     );
   }
 }

@@ -83,7 +83,7 @@ class _FeedPageState extends State<FeedPage> {
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
-              color: Colors.green[800],
+              color: Color(0xFF00BFA6),
               fontSize: 22.0,
               fontStyle: FontStyle.normal,
               fontFamily: 'pirulen rg',
@@ -120,7 +120,7 @@ class _FeedPageState extends State<FeedPage> {
                 : Center(
                     child: CircularProgressIndicator(
                       valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                          new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
                     ),
                   )));
   }

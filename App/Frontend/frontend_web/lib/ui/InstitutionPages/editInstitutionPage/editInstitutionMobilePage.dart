@@ -11,6 +11,10 @@ import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
 
+import '../loginPage/loginPage.dart';
+
+
+
 class EditInstitutionMobilePage extends StatefulWidget {
   final Institution institution;
 
@@ -24,6 +28,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
   String wrongRegText = "";
   Institution institution;
   Image imageFile;
+  Color greenPastel = Color(0xFF00BFA6);
 
   String name = '',password = '', oldPassword = '', email = '',description = '',phone = '',cityName = '';
   int cityId = 0;
@@ -54,7 +59,55 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
   String namePhoto = '';
   String error;
   Uint8List data;
- 
+
+
+  _removeToken() async {
+    TokenSession.setToken = "";
+  }
+
+
+  showDeactivateDialog(BuildContext context, int id) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("Potvrdi", style: TextStyle(color: greenPastel),),
+      onPressed: () {
+        APIServices.deleteInstitution(TokenSession.getToken, id);
+        _removeToken();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
+        );
+      },
+    );
+
+    Widget notButton = FlatButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.red),),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text('Deaktivacija naloga'),
+      content: Text("Potvrdite deaktivaciju naloga"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
+
+
   pickImage() {
     final html.InputElement input = html.document.createElement('input');
     input
@@ -677,6 +730,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
     );
   }
 
+  /*
   final deactLabelWidget = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
@@ -694,7 +748,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
       ),
     ],
   );
-
+*/
   @override
   Widget build(BuildContext context) {
     return 
@@ -838,7 +892,16 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
               fontSize: 25,
             ),
           )),
-          deactLabelWidget,
+          FlatButton(
+            child: Text('Da li želite da deaktivirate Vaš nalog?',
+                style: TextStyle(
+                    color: Colors.redAccent[800], fontWeight: FontWeight.bold
+                )
+            ),
+            onPressed: () {
+              showDeactivateDialog(context, institution.id);
+            },
+          )
         ],
       ),
     ));

@@ -12,6 +12,10 @@ import 'package:universal_html/prefer_universal/html.dart' as html;
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
+import '../../../services/api.services.dart';
+import '../../../services/token.session.dart';
+import '../loginPage/loginPage.dart';
+
 
 class EditInstitutionDesktopPage extends StatefulWidget {
   final Institution institution;
@@ -96,6 +100,57 @@ class _EditInstitutionDesktopPageState
 
     input.click();
   }
+
+  _removeToken() async {
+    TokenSession.setToken = "";
+  }
+
+
+  showDeactivateDialog(BuildContext context, int id) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("Potvrdi", style: TextStyle(color: greenPastel),),
+      onPressed: () {
+        APIServices.deleteInstitution(TokenSession.getToken, id);
+        _removeToken();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
+        );
+      },
+    );
+
+    Widget notButton = FlatButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.red),),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text('Deaktivacija naloga'),
+      content: Text("Potvrdite deaktivaciju naloga"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
+
+
+
+
+
 
   Future<String> institutionName(BuildContext context, String instName) {
     TextEditingController customController;
@@ -731,6 +786,7 @@ class _EditInstitutionDesktopPageState
     );
   }
 
+  /*
   final deactLabelWidget = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
@@ -744,10 +800,15 @@ class _EditInstitutionDesktopPageState
           style: TextStyle(
               color: Colors.redAccent[800], fontWeight: FontWeight.bold),
         ),
-        onTap: () {},
+        onTap: () {
+        },
       ).showCursorOnHover,
     ],
   );
+*/
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -940,7 +1001,16 @@ class _EditInstitutionDesktopPageState
               color: Colors.red,
             ),
           )),
-          deactLabelWidget,
+          FlatButton(
+            child: Text('Da li želite da deaktivirate Vaš nalog?',
+            style: TextStyle(
+                color: Colors.redAccent[800], fontWeight: FontWeight.bold
+            )
+            ),
+            onPressed: () {
+              showDeactivateDialog(context, institution.id);
+            },
+          ),
         ],
       ),
     ));

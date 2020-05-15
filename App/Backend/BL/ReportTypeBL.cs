@@ -18,7 +18,7 @@ namespace Backend.BL
         }
 
         public List<ReportType> getAllReportTypes()
-        {
+        { 
             return _iReportTypeDAL.getAllReportTypes();
         }
 

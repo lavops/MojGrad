@@ -28,7 +28,7 @@ class HeaderSection extends State<OthersProfilePage> {
     print("korisnik $otherUserId1");
   }
 
-  final Color green = Colors.green[800];
+  final Color green = Color(0xFF00BFA6);
   List<FullPost> posts;
 
   _getUser() async {

@@ -151,8 +151,8 @@ class StateLikes extends State<LikesPage> {
 
   Widget tabs() {
     return TabBar(
-        labelColor: Colors.green[800],
-        indicatorColor: Colors.green[800],
+        labelColor: Color(0xFF00BFA6),
+        indicatorColor: Color(0xFF00BFA6),
         unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
         tabs: <Widget>[
           Tab(

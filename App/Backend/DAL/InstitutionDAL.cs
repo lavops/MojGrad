@@ -1,6 +1,7 @@
 ﻿using Backend.DAL.Interfaces;
 using Backend.Helpers;
 using Backend.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,10 +20,13 @@ namespace Backend.DAL
     {
         private readonly AppDbContext _context;
         private readonly AppSettings _appSettings;
-        public InstitutionDAL(AppDbContext context, IOptions<AppSettings> appSettings)
+        public static IWebHostEnvironment _environment;
+
+        public InstitutionDAL(AppDbContext context, IOptions<AppSettings> appSettings, IWebHostEnvironment environment)
         {
             _context = context;
             _appSettings = appSettings.Value;
+            _environment = environment;
         }
 
         public Institution acceptInstitution(long id)
@@ -216,7 +220,7 @@ namespace Backend.DAL
                     {
                         List<String> listStr;
                         listStr = exist.photoPath.Split('/').ToList();
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload\\InstitutionProfilePhoto\\", listStr[listStr.Count - 1]);
+                        var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/InstitutionProfilePhoto/", listStr[listStr.Count - 1]);
 
                         if (System.IO.File.Exists(path))
                         {

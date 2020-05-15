@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
      var jwt = await APIServices.jwtOrEmpty();
     userId = int.parse(payload['sub']);
     var res = await APIServices.getUser(jwt, userId);
+    print(res.body);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     User user = User.fromObject(jsonUser);
     setState(() {
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         child: Icon(Icons.nature_people, color: Theme.of(context).copyWith().iconTheme.color),
-        backgroundColor: Colors.green[800],
+        backgroundColor: Color(0xFF00BFA6),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
@@ -99,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               _currentTabIndex = index;
             });
           },
-          selectedItemColor: Colors.green[800],
+          selectedItemColor: Color(0xFF00BFA6),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

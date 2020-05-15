@@ -38,7 +38,7 @@ class _UploadScreenState extends State<UploadScreen>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+              valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
             ),
             Text("Vaša obajva se šalje na server")
           ],

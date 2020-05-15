@@ -13,6 +13,7 @@ import '../main.dart';
 import 'EditProfilePage.dart';
 import 'package:provider/provider.dart';
 
+
 class UserProfilePage extends StatefulWidget {
   final User user;
 
@@ -32,7 +33,7 @@ class HeaderSection extends State<UserProfilePage> {
     print("korisnik ${user1.id}");
   }
 
-  final Color green = Colors.green[800];
+  final Color green = Color(0xFF00BFA6);
   List<FullPost> posts;
   bool darkThemeEnabled = MyApp.ind == 0 ? false : true;
 
@@ -120,8 +121,7 @@ class HeaderSection extends State<UserProfilePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Top10Page(user)),
+                  MaterialPageRoute(builder: (context) => Top10Page(user)),
                 );
               },
             ),
@@ -163,8 +163,8 @@ class HeaderSection extends State<UserProfilePage> {
                       title: Text("Daktivacija profila?"),
                       content: Container(
                         height: 100,
-                          child: Text(
-                              "Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vaša rešenja."),
+                        child: Text(
+                            "Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vaša rešenja."),
                       ),
                       actions: <Widget>[
                         FlatButton(
@@ -193,7 +193,11 @@ class HeaderSection extends State<UserProfilePage> {
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -215,7 +219,7 @@ class HeaderSection extends State<UserProfilePage> {
               ),
               onTap: () {
                 _removeToken();
-
+               
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
@@ -244,13 +248,13 @@ class HeaderSection extends State<UserProfilePage> {
                   : Center(
                       child: CircularProgressIndicator(
                         valueColor: new AlwaysStoppedAnimation<Color>(
-                            Colors.green[800]),
+                            Color(0xFF00BFA6)),
                       ),
                     ))
           : Center(
               child: CircularProgressIndicator(
                 valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
               ),
             ),
     );

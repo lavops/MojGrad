@@ -21,5 +21,20 @@ namespace Backend.BL
         {
             return _iStatisticsDAL.basicStatistics();
         }
+
+        public List<int> monthlyUsers()
+        {
+            return _iStatisticsDAL.monthlyUsers();
+        }
+
+        public List<int> postsByType()
+        {
+            return _iStatisticsDAL.postsByType();
+        }
+
+        public List<UserViewModel> top10Users()
+        {
+            return _iStatisticsDAL.top10Users();
+        }
     }
 }

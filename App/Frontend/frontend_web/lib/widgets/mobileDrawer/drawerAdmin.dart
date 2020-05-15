@@ -6,11 +6,10 @@ import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
 import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionPage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/managePostPage.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
+import 'package:frontend_web/ui/adminPages/menageAdmin/manageAdminPage.dart';
 import 'package:frontend_web/ui/adminPages/registerAdminPage/registerAdminPage.dart';
 import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:frontend_web/ui/homePage.dart';
-
-import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -37,9 +36,9 @@ class DrawerAdmin extends StatelessWidget{
               style: TextStyle(fontSize: 16, color: (selected == 1) ? greenPastel : Colors.black),
             ),
             onTap: (){
-              /*Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => null),
-              );*/
+             Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => ManageAdminPage(globalAdminId)),
+              );
             },
           ),
           ListTile(
@@ -142,6 +141,6 @@ class DrawerAdmin extends StatelessWidget{
           ),
         ],)
       )
-    ).showCursorOnHover;
+    );
   }
 }

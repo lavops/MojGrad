@@ -208,7 +208,7 @@ class _CameraOneState extends State<CameraOne>{
       onPressed: () {
         _openCamera();
       },
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -231,7 +231,7 @@ class _CameraOneState extends State<CameraOne>{
       onPressed: () {
         _openGalery();
       },
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -277,7 +277,7 @@ class _CameraOneState extends State<CameraOne>{
         _getUserLocation();
       },
       icon: Icon(Icons.my_location, size: 20),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -321,7 +321,7 @@ class _CameraOneState extends State<CameraOne>{
         await getLocationWithNominatim();
       },
       icon: Icon(Icons.location_on,),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -347,6 +347,7 @@ class _CameraOneState extends State<CameraOne>{
 
     // Description of assigment or praise
     final opis = TextField(
+     cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
       controller: description,
       maxLength: 150,
       decoration: InputDecoration(
@@ -354,11 +355,11 @@ class _CameraOneState extends State<CameraOne>{
         hintText: 'Opis pohvale',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 2, color: Colors.green[800]),
+          borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 1, color: Colors.green[800]),
+          borderSide: BorderSide(width: 1, color: Color(0xFF00BFA6)),
         ),
       ),
     );
@@ -412,7 +413,7 @@ class _CameraOneState extends State<CameraOne>{
         });
       },
       icon: Icon(Icons.nature_people),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -426,9 +427,7 @@ class _CameraOneState extends State<CameraOne>{
 
     return Scaffold(
       appBar: AppBar(
-         backgroundColor: MyApp.ind == 0
-            ? Colors.white
-            : Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0 ? Colors.white : Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(
             color: Theme.of(context).copyWith().iconTheme.color,
             size: Theme.of(context).copyWith().iconTheme.size),
