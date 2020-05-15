@@ -414,7 +414,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
       elevation: 6.0,
       child: TextField(
         cursorColor: Colors.black,
-        controller: firstName,
+        controller: lastName,
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,

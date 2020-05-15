@@ -4,9 +4,11 @@ import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:http/http.dart' as http;
 
+//String userPhotoURL = "http://147.91.204.116:2043/";
 String userPhotoURL = "http://127.0.0.1:60676//";
 
 class APIServices {
+  //static String serverURL = 'http://147.91.204.116:2043/api/';
   static String serverURL = 'http://127.0.0.1:60676/api/';
 
   static Map<String, String> header = {

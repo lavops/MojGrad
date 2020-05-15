@@ -20,6 +20,14 @@ class ConstantsReportedUsers {
   ];
 }
 
+class ConstantsDelAdmin {
+  static const String ObrisiKorisnika = 'Obriši administratora';
+
+  static const List<String> choices = <String> [
+    ObrisiKorisnika
+  ];
+}
+
 class ConstantsAllInstitutions {
   static const String OpisInstitucije = "Opis institucije";
   static const String ObrisiInstitutciju = 'Obriši instituciju';
