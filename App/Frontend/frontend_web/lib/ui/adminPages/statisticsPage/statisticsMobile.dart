@@ -10,8 +10,9 @@ import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
-import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
+import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsDesktop.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class StatisticsMobile extends StatefulWidget {
   @override
@@ -25,6 +26,8 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
   Statistics stat;
   List<double> monthlyUsers;
   Donation donation;
+  List<charts.Series<Task, String>> _seriesPieData;
+  List<charts.Series<Task, String>> _seriesPieData1;
 
   _getUsers() {
     APIServices.getTop10(TokenSession.getToken).then((res) {
@@ -58,6 +61,45 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
     Statistics statistics = Statistics.fromObject(jsonUser);
     setState(() {
       stat = statistics;
+
+   var piedata = [
+    
+      new Task('Sve donacije',statistics.numberOfActiveDonations.toDouble(), Color(0xFF99BFA6)),
+      new Task('Aktivne donacije',statistics.numberOfDonations.toDouble(), Color(0xFF6060A6)),
+      new Task('Svi događaji', statistics.numberOfEvents.toDouble(), Color(0xFF00BFA6)),
+      new Task('Nezavršeni događaji',statistics.numberOfActiveEvents.toDouble(), Color(0xfffdbe19)),
+    ];
+
+     var piedata1 = [
+      new Task('Rešene objave',statistics.numberOfSolvedPosts.toDouble(), Color(0xFF99BFA6)),
+      new Task('Nerešene objave',statistics.numberOfUnsolvedPosts.toDouble(), Color(0xFF00BFA6)),
+     ];
+
+        _seriesPieData = List<charts.Series<Task, String>>();
+    _seriesPieData1 = List<charts.Series<Task, String>>();
+
+    _seriesPieData.add(
+      charts.Series(
+        domainFn: (Task task, _) => task.task,
+        measureFn: (Task task, _) => task.taskvalue,
+        colorFn: (Task task, _) =>
+            charts.ColorUtil.fromDartColor(task.colorval),
+        id: 'Događaji i donacije',
+        data: piedata,
+         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
+      ),
+    );
+    _seriesPieData1.add(
+      charts.Series(
+        domainFn: (Task task, _) => task.task,
+        measureFn: (Task task, _) => task.taskvalue,
+        colorFn: (Task task, _) =>
+            charts.ColorUtil.fromDartColor(task.colorval),
+        id: 'Objave',
+        data: piedata1,
+         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
+      ),
+    );
     });
   }
 
@@ -82,7 +124,7 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _handleRefresh,
-      child: (stat != null && donation != null && monthlyUsers != null)
+      child: (stat != null && donation != null && monthlyUsers != null && _seriesPieData != null  && _seriesPieData1 != null)
           ? Container(
               padding: const EdgeInsets.only(left: 5, right: 5, top: 20),
               alignment: Alignment.topCenter,
@@ -125,10 +167,6 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
                     SizedBox(
                       height: 10,
                     ),
-                    buildUserList(listUsers),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Row(
                       children: <Widget>[
                         Expanded(child: SizedBox()),
@@ -143,6 +181,20 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
                       children: <Widget>[
                         Expanded(child: SizedBox()),
                         eventPost(),
+                        Expanded(child: SizedBox()),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox()),
+                        piePost1(),
+                        Expanded(child: SizedBox()),
+                      ],
+                    ),
+                     Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox()),
+                        buildUserList(listUsers),
                         Expanded(child: SizedBox()),
                       ],
                     ),
@@ -175,11 +227,11 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
       children: [
         Text(
           "Top 10 najboljih korisnika",
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w200),
         ),
         Container(
-            width: 350,
-            height: 265,
+            width: 280,
+            height: 420,
             child: ListView.builder(
               itemCount: listUsers == null ? 0 : listUsers.length,
               itemBuilder: (BuildContext context, int index) {
@@ -283,152 +335,126 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
       ),
     ));
   }
-
   Widget newDonation() {
-    return Card(
+    return  Card(
         child: Column(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            "POSLEDNJA DONACIJA",
-            style: TextStyle(fontSize: 15.0, color: Colors.grey),
-          ),
-        ),
-        new Card(
-          margin: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(width: 5),
-              new Column(children: <Widget>[
-                SizedBox(height: 5),
-                Text(
-                  donation.organizationName,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  donation.title,
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(
-                    width: 300,
-                    child: IconRoundedProgressBar(
-                      icon: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(Icons.monetization_on)),
-                      theme: RoundedProgressBarTheme.green,
-                      margin: EdgeInsets.symmetric(vertical: 16),
-                      borderRadius: BorderRadius.circular(6),
-                      percent:
-                          (donation.pointsAccumulated / donation.pointsNeeded) *
-                              22,
-                    )),
-                Row(children: <Widget>[
-                  new Column(children: <Widget>[
-                    Text(
-                      "Skupljeno:",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      donation.pointsAccumulated.toString(),
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                      ),
-                    )
-                  ]),
-                  SizedBox(width: 200),
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        "Potrebno:",
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.black,
+         Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Container(
+                  width: 280,
+                  height: 400,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                            'Događaji i donacije',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.w200),),
+                            SizedBox(height: 10.0,),
+                        Expanded(
+                          child: charts.PieChart(
+                            _seriesPieData,
+                             behaviors: [
+                            new charts.DatumLegend(
+                              outsideJustification: charts.OutsideJustification.endDrawArea,
+                              horizontalFirst: false,
+                              desiredMaxRows: 2,
+                              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                              entryTextStyle: charts.TextStyleSpec(
+                                  color: charts.MaterialPalette.gray.shadeDefault,
+                                  fontFamily: 'Georgia',
+                                  fontSize: 11),
+                            )
+                          ],
+                           defaultRenderer: new charts.ArcRendererConfig(
+                              arcWidth: 100,
+                             arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+              labelPosition: charts.ArcLabelPosition.inside)
+        ])),
                         ),
-                      ),
-                      Text(
-                        donation.pointsNeeded.toString(),
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  )
-                ]),
-                RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                    child: Text(
-                      "Više informacija",
-                      style: TextStyle(fontSize: 13.0),
+                      ],
                     ),
-                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    textColor: Colors.black,
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewDonationPage(donation)),
-                      );
-                    }),
-                SizedBox(height: 5),
-              ]),
-            ],
-          ),
-        ),
-      ],
-    ));
+                ),
+              )]));
   }
-
   Widget eventPost() {
     return Card(
       color: Colors.white,
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text(
-                      "Novi korisnici u prethodnih mesec dana",
-                      style: TextStyle(fontSize: 15.0),
+       child: Container(
+        height: 230,
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(             
+              children: <Widget>[
+                Column(                
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: 
+                      Text('Novi korisnici u prethodnih godinu dana',style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w200),),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Sparkline(
-                      fallbackWidth: 200,
-                      data: monthlyUsers,
-                      lineColor: Color(0xffff6101),
-                      pointsMode: PointsMode.all,
-                      pointSize: 8.0,
-                    ),
+                    Padding(
+                      padding: EdgeInsets.all(11.0),
+                      child: new Sparkline(
+                        fallbackWidth: 220,
+                        data: monthlyUsers,
+                        lineColor: Color(0xFF00BFA6),
+                        pointsMode: PointsMode.all,
+                        pointSize: 8.0,
+                      ),
                   ),
                 ],
               ),
             ],
           ),
         ),
+      ),
+     ),
+    );
+  }
+
+
+  Widget piePost1() {
+    return Card(
+      color: Colors.white,
+      child: Center(
+        child:  Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Container(
+                  width: 280,
+                  height: 250,
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text('Objave ',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.w200),),
+                            SizedBox(height: 10.0,),
+                        Expanded(
+                          child: charts.PieChart(
+                            _seriesPieData1,
+                             behaviors: [
+                            new charts.DatumLegend(
+                              outsideJustification: charts.OutsideJustification.endDrawArea,
+                              horizontalFirst: false,
+                              desiredMaxRows: 2,
+                              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                              entryTextStyle: charts.TextStyleSpec(
+                                  color: charts.MaterialPalette.gray.shadeDefault,
+                                  fontFamily: 'Georgia',
+                                  fontSize: 11),
+                            )
+                          ],
+                           defaultRenderer: new charts.ArcRendererConfig(
+                              arcWidth: 100,
+                             arcRendererDecorators: [
+                      new charts.ArcLabelDecorator(
+                          labelPosition: charts.ArcLabelPosition.inside)
+                    ])),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
       ),
     );
   }
