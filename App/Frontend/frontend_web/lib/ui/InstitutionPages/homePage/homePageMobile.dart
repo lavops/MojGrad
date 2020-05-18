@@ -46,7 +46,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
   }
 
   _getFiltered() async {
-    var res = await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes);
+    var res = await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, icityId);
     Iterable list = json.decode(res.body);
     List<FullPost> posts = new List<FullPost>();
     posts = list.map((model) => FullPost.fromObject(model)).toList();

@@ -107,22 +107,22 @@ namespace Backend.DAL
 
         public List<Post> getAllSolvedPosts()
         {
-            return _context.post.Where(x=> x.statusId==1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
+            return _context.post.Where(x=> x.statusId==1 && x.postTypeId!=1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
         }
 
         public List<Post> getAllSolvedPostsByCityId(long cityId)
         {
-            return _context.post.Where(x => x.statusId == 1 && x.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
+            return _context.post.Where(x => x.statusId == 1 && x.cityId == cityId && x.postTypeId!=1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
         }
 
         public List<Post> getAllUnsolvedPosts()
         {
-            return _context.post.Where(x => x.statusId == 2).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
+            return _context.post.Where(x => x.statusId == 2 && x.postTypeId != 1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
 
         public List<Post> getAllUnsolvedPostsByCityId(long cityId)
         {
-            return _context.post.Where(x => x.statusId == 2 && x.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
+            return _context.post.Where(x => x.statusId == 2 && x.cityId == cityId && x.postTypeId!=1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
 
         public Post getByID(long id)
@@ -170,16 +170,16 @@ namespace Backend.DAL
 
         }
 
-        public List<Post> getPostsByFilter(List<int> filterList, int statusId)
+        public List<Post> getPostsByFilter(List<int> filterList, long cityId, int statusId)
         {
             List<Post> posts = new List<Post>();
             if(filterList != null)
             { 
-                for (int i = 0; i < filterList.Count(); i++)
+                for (int i = 0; i < filterList.Count; i++)
                 {
                     if(statusId == 0)
                     { 
-                        var listPosts = _context.post.Where(x => x.postTypeId == filterList[i]).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
+                        var listPosts = _context.post.Where(x => x.postTypeId == filterList[i] && x.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
                         foreach (var item in listPosts)
                         {
                             posts.Add(item);
@@ -187,7 +187,7 @@ namespace Backend.DAL
                     }
                     else
                     {
-                        var listPosts = _context.post.Where(x => x.postTypeId == filterList[i] && x.statusId == statusId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
+                        var listPosts = _context.post.Where(x => x.postTypeId == filterList[i] && x.statusId == 2 && x.cityId == cityId).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).Include(c => c.city).ToList();
                         foreach (var item in listPosts)
                         {
                             posts.Add(item);
@@ -198,6 +198,11 @@ namespace Backend.DAL
                 return posts;
             }
             return null;
+        }
+
+        public List<Post> getAllNicePostsByCityId(long cityId)
+        {
+            return _context.post.Where(x => x.cityId == cityId && x.postTypeId == 1).Include(u => u.user).Include(c => c.postType).Include(s => s.status).Include(l => l.likes).Include(c => c.comments).Include(s => s.status).Include(c => c.city).Include(l => l.likes).Include(c => c.comments).OrderByDescending(x => x.id).ToList();
         }
     }
 }

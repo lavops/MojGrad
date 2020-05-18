@@ -11,6 +11,7 @@ import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostDesktop.dart';
 
 List<int> listSelectedTypes = new List();
+ 
 
 class HomeInstitutionDesktop extends StatefulWidget {
 
@@ -25,8 +26,8 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
   
   List<FullPost> listUnsolvedPosts;
   Institution institution;
-  List<FullPost> listFilteredPosts;
   List<PostType> listTypes;
+  List<FullPost> listFilteredPosts;
 
   _getUnsolvedPosts() async  {
     var res = await APIServices.getInstitutionById(TokenSession.getToken, insId);
@@ -62,8 +63,22 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
   }
 
   _getFiltered() async {
-    listFilteredPosts = null;
-    await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes).then((res) {
+    
+    if(listSelectedTypes!= null && listSelectedTypes.length != 0){
+    await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, icityId).then((res) {
+    Iterable list = json.decode(res.body);
+        List<FullPost> posts = new List<FullPost>();
+    posts = list.map((model) => FullPost.fromObject(model)).toList();
+    print("Vratilaa: "+res.body);
+    setState(() {
+      listFilteredPosts = posts;
+      listUnsolvedPosts = null;
+       });
+    });
+    }
+    else
+    {
+      await APIServices.getInstitutionUnsolvedFromCityId(TokenSession.getToken,icityId).then((res) {
     Iterable list = json.decode(res.body);
         List<FullPost> posts = new List<FullPost>();
     posts = list.map((model) => FullPost.fromObject(model)).toList();
@@ -72,6 +87,7 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
       listUnsolvedPosts = null;
        });
     });
+    }
 
   }
 
@@ -102,13 +118,17 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
   @override
   Widget build(BuildContext context) {
     print(listSelectedTypes.toString());
+    print("Filtered lista" + listFilteredPosts.toString());
+    if(listFilteredPosts!= null) print( listFilteredPosts[0].username);
     return Stack(children: <Widget>[
     CenteredViewPost(
       child:  ListView.builder(
           padding: EdgeInsets.only(bottom: 30.0),
-          itemCount: listFilteredPosts == null ? 0 : listFilteredPosts.length,
+          itemCount: listFilteredPosts == null ? 0 :  listFilteredPosts.length,
           itemBuilder: (BuildContext context, int index) {
-            return InsRowPostDesktopWidget(listFilteredPosts[index], 1);
+           
+             return Container(child:  Text(index.toString()+": "+listFilteredPosts[index].username),);
+           
           }
       ),
     ),
@@ -125,7 +145,10 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
         child: FlatButton(
           child: Text('Primeni'),
           onPressed: () {
-            _getFiltered();
+            setState(() {
+               _getFiltered();
+            });
+           
           },
         ),
       )

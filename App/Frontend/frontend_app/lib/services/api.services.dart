@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
-  String serverURLPhoto = 'http://147.91.204.116:2043/';
-  //String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //String serverURLPhoto = 'http://147.91.204.116:2043/';
+  String serverURLPhoto = 'http://10.0.2.2:60676//';
   //String serverURLPhoto = 'http://192.168.1.8:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
 
-  String serverURL = 'http://147.91.204.116:2043/api/';
-  //String serverURL = 'http://10.0.2.2:60676/api/';
+  //String serverURL = 'http://147.91.204.116:2043/api/';
+  String serverURL = 'http://10.0.2.2:60676/api/';
   // String serverURL = 'http://192.168.1.8:45455/api/';
   // String serverURL = 'http://192.168.1.4:45455/api/';
 
@@ -614,4 +614,56 @@ class APIServices
     print(jsonBody);
     return await http.post(url, headers: header, body: jsonBody);
   }
+
+    static Future getPostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/ByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+  
+    static Future getUnsolvedPostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/UnsolvedPostsByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+  
+    static Future getSolvedPostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/SolvedPostsByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+    static Future getNicePostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/NicePostsByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+  static Future getEventsByCityId(String jwt, int userId, int cityId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Event/byCityId='+cityId.toString()+'/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
 }

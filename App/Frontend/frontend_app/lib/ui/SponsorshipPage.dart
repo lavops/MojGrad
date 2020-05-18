@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/donation.dart';
 import 'package:frontend/models/event.dart';
 import 'package:frontend/services/api.services.dart';
-import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/donationWidget.dart';
 import 'package:frontend/widgets/eventWidget.dart';
 
@@ -18,7 +18,7 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
 
   _getEvents() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getEvents(jwt, publicUser.id).then((res) {
+    APIServices.getEventsByCityId(jwt, publicUser.id, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<Events> events1 = List<Events>();
       events1 = list.map((model) => Events.fromObject(model)).toList();

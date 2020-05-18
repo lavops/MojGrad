@@ -166,12 +166,12 @@ namespace Backend.DAL
 
         public List<Event> getAllEvents()
         {
-            return _context.events.Where(x => x.endDate > DateTime.Now).Include(x => x.institution).Include(l => l.admin).Include(c => c.city).ToList();
+            return _context.events.Where(x => x.endDate > DateTime.Now).Include(x => x.institution).Include(l => l.admin).Include(c => c.city).OrderByDescending(x => x.startDate).ToList();
         }
 
         public List<Event> getAllEventsByCityId(long id)
         {
-            return _context.events.Where(x => x.endDate > DateTime.Now && x.cityId == id).Include(x => x.institution).Include(l => l.admin).Include(c => c.city).ToList();
+            return _context.events.Where(x => x.endDate > DateTime.Now && x.cityId == id).Include(x => x.institution).Include(l => l.admin).Include(c => c.city).OrderByDescending(x=> x.startDate).ToList();
         }
 
         public Event getByID(long id)

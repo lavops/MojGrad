@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
-import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/ui/feedPage.dart';
+import 'package:frontend/ui/login.dart';
 import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/UserProfilePage.dart';
 import 'dart:convert';
 
 import 'package:frontend/ui/newCamera.dart';
+import 'package:frontend/ui/splash.page.dart';
 
-User publicUser;
+
 int userId;
 
 class HomePage extends StatefulWidget {
@@ -43,6 +44,13 @@ class _HomePageState extends State<HomePage> {
     print(res.body);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     User user = User.fromObject(jsonUser);
+    if(user == null )
+    {
+       Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LoginPage()));
+    }
     setState(() {
       user1 = user;
       publicUser = user;

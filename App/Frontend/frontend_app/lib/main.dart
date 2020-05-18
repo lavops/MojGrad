@@ -84,7 +84,7 @@ class MaterialAppWithTheme extends StatelessWidget {
               var str = snapshot.data;
               var jwt = str.split(".");
               if (jwt.length != 3) {
-                return SplashPage("");
+                return SplashPage("",0);
               } else {
                 var payload = json.decode(
                     ascii.decode(base64.decode(base64.normalize(jwt[1]))));
@@ -92,15 +92,15 @@ class MaterialAppWithTheme extends StatelessWidget {
                     .isAfter(DateTime.now())) {
                   int type = int.parse(payload["sub"]);
                   if(type != null && type != 0)
-                    return SplashPage(str);
+                    return SplashPage(str, type);
                   else
-                    return SplashPage("");
+                    return SplashPage("", 0);
                 } else {
-                  return SplashPage("");
+                  return SplashPage("", 0);
                 }
               }
             } else {
-              return SplashPage("");
+              return SplashPage("", 0);
             }
           }),
     );

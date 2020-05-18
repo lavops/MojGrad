@@ -17,9 +17,10 @@ namespace Backend.DAL.Interfaces
         Post insertPost(Post post);
         List<Post> getAllSolvedPosts();
         List<Post> getAllUnsolvedPosts();
-        List<Post> getPostsByFilter(List<int> filterList, int statusId);
+        List<Post> getPostsByFilter(List<int> filterList, long cityId, int statusId);
         List<Post> getAllSolvedPostsByCityId(long cityId);
         List<Post> getAllUnsolvedPostsByCityId(long cityId);
+        List<Post> getAllNicePostsByCityId(long cityId);
         bool deletePost(long id);
         Post editPost(long id, string description);
 

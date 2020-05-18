@@ -816,10 +816,10 @@ static Future registerInstitution(Institution ins) async {
     });
   }
   // filter
-  static Future getFiltered(String jwt, List<int> ids) async {
+  static Future getFiltered(String jwt, List<int> ids, int cityId) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    var jbody = jsonEncode({'listFilter': ids});
+    var jbody = jsonEncode({'listFilter': ids, 'cityId':cityId});
     var res =  await http.post(serverURL + 'Post/UnsolvedPostsByFilter',  headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',

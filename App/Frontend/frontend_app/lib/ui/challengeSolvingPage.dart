@@ -113,7 +113,7 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listChallengeSolving == null ? 0 : listChallengeSolving.length,
           itemBuilder: (BuildContext context, int index) {
-            return SolvingPostWidget(listChallengeSolving[index], ownerId, key: _key, function: _setIsSolved,);
+            return SolvingPostWidget(listChallengeSolving[index], ownerId, key: RIKeys.riKey1, function: _setIsSolved,);
           }
         )
     );
@@ -420,4 +420,9 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
           )
         ],
       ));
+}
+
+class RIKeys {
+  static final riKey1 = const Key('__RIKEY1__');
+  
 }

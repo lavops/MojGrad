@@ -191,6 +191,7 @@ class _EventsWidgetState extends State<EventsWidget> {
                         print('Uspesno ste se pridruzili dogadjaju.');
                         setState(() {
                           event.isGoing = 1;
+                          event.userNum++;
                         });
                       }
                     });
@@ -235,6 +236,7 @@ class _EventsWidgetState extends State<EventsWidget> {
                         print('Uspesno ste napustili dogadjaj.');
                         setState(() {
                           event.isGoing = 0;
+                          event.userNum--;
                         });
                       }
                     });
@@ -251,7 +253,7 @@ class _EventsWidgetState extends State<EventsWidget> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            )
+            ) 
           ],
         ));
   }

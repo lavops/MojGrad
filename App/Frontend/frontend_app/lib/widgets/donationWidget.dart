@@ -8,6 +8,7 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 
 import '../main.dart';
 

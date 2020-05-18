@@ -5,6 +5,7 @@ import 'package:frontend/models/filters.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/postWidget.dart';
 
 import '../main.dart';
@@ -26,7 +27,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _getPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getPost(jwt).then((res) {
+    APIServices.getPostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -40,7 +41,21 @@ class _FeedPageState extends State<FeedPage> {
 
   _getUnsolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getUnsolvedPosts(jwt).then((res) {
+    APIServices.getUnsolvedPostByCityId(jwt, publicUser.cityId).then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listPosts = listP;
+        });
+      }
+    });
+  }
+
+    _getNicePosts() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getNicePostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -54,7 +69,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _getSolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    var res = await APIServices.getSolvedPosts(jwt);
+    var res = await APIServices.getSolvedPostByCityId(jwt, publicUser.cityId);
     print(res.body);
     Iterable list = json.decode(res.body);
     List<FullPost> listP = List<FullPost>();
@@ -143,7 +158,9 @@ class _FeedPageState extends State<FeedPage> {
       _getSolvedPosts();
     } else if (choice == Filteri.nereseni) {
       _getUnsolvedPosts();
-    } else if (choice == Filteri.svi) {
+    }else if(choice == Filteri.pohvale){
+      _getNicePosts();
+    }else if (choice == Filteri.svi) {
       _getPosts();
     }
 
