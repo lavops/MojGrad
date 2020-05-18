@@ -16,6 +16,7 @@ class ManageEventsPageTablet extends StatefulWidget {
 
 class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
   List<Events> events;
+  List<Events> finishedEvents;
 
   _getEvents()
   {
@@ -32,10 +33,26 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
     });
   }
 
+  _getFinishedEvents()
+  {
+    APIServices.getFinishedEvents(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<Events> ev;
+      ev = list.map((model) => Events.fromObject(model)).toList();
+      if(mounted)
+      {
+        setState(() {
+          finishedEvents = ev;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getEvents();
+    _getFinishedEvents();
   }
 
   Widget buildEventsList(List<Events> listEvents){
@@ -72,13 +89,17 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
 
   Widget startEndDateRow(Events event) {
     return Row(children: <Widget>[
-      SizedBox(width: 10.0),
-      Text("Počinje: "),
-      Text(event.startDate),
+      SizedBox(width: 15.0),
+      Column(children: <Widget>[
+        Text("Počinje: "),
+        Text(event.startDate),
+      ],),
       Expanded(child: SizedBox(),),
-      Text("Završava se: "),
-      Text(event.endDate),
-      SizedBox(width: 10.0,),
+      Column(children: <Widget>[
+        Text("Završava se: "),
+        Text(event.endDate),
+      ],),
+      SizedBox(width: 15.0,),
     ],);
   }
 
@@ -156,7 +177,8 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(child: ConstrainedBox(child: Column(children: <Widget>[
+        Container(child: ConstrainedBox(child: TabBarView(children: <Widget>[
+          Column(children: <Widget>[
            Row(children: <Widget>[
            Expanded(child: SizedBox(),),
            RaisedButton(onPressed: () {
@@ -171,6 +193,8 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
           ],),
             Flexible(child: buildEventsList(events),),
           ]),
+          Flexible(child: buildEventsList(finishedEvents),),
+          ],),
           constraints: BoxConstraints(maxWidth: 500),
           ),
           padding: const EdgeInsets.only(left: 100, right: 100, top: 30),
