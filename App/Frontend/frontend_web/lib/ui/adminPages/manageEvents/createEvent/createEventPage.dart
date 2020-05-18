@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
@@ -489,14 +490,15 @@ class _CreateEventWidget extends State<CreateEventWidget> {
 
          APIServices.createEvent(
               str,
-              int.parse(payload["sub"]),
+              insId != null ? 0 : int.parse(payload["sub"]), //adminID
+              insId != null ? insId : 0, //institutionId
               nameController.text,
               shortDescriptionController.text,
               descriptionController.text,
               locationController.text,
               city.id,
-              startDateTemp,
-              endDateTemp, 44.007392, 20.925238).then((value){
+              startDate,
+              endDate, 44.007392, 20.925238).then((value){
                 print(value.statusCode);
                 print(value.body);
                 if(value.statusCode == 200)
