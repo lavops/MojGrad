@@ -193,7 +193,9 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
           ],),
             Flexible(child: buildEventsList(events),),
           ]),
+          Column(children: <Widget>[
           Flexible(child: buildEventsList(finishedEvents),),
+          ]),
           ],),
           constraints: BoxConstraints(maxWidth: 500),
           ),

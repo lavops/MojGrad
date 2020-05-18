@@ -103,7 +103,10 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
                   Flexible(child: buildDonationList(donations),)
                   ],
                 ),
+                 Column(
+                  children: <Widget>[
                 Flexible(child: buildDonationList(finishedDonations),)
+                  ]),
               ],
             )
         ),

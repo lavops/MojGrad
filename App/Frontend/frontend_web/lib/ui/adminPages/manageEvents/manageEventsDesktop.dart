@@ -57,7 +57,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
     _getFinishedEvents();
   }
 
-  Widget buildEventsList(List<Events> listEvents){
+  Widget buildEventsList(List<Events> listEvents, int ind){
     return ListView.builder(
       padding: EdgeInsets.only(bottom: 30.0),
       itemCount: listEvents == null ? 0 : listEvents.length,
@@ -71,7 +71,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
                   startEndDateRow(listEvents[index]),
                   locationRow(listEvents[index]),
-                  buttonsRow(listEvents[index], index, listEvents),
+                  buttonsRow(listEvents[index], index, listEvents, ind),
                  ],
                 ),
               ),
@@ -113,7 +113,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
     ],);
   }
 
-  Widget buttonsRow(Events event, index, List<Events> listEvents) {
+  Widget buttonsRow(Events event, index, List<Events> listEvents, int ind) {
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
       RaisedButton(
@@ -134,14 +134,14 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
         color: Colors.red,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         onPressed: () {
-          showAlertDialog(context, event.id, index);
+          showAlertDialog(context, event.id, index, ind);
         },
       ).showCursorOnHover,
       SizedBox(width: 15.0,),
     ],);
   }
 
-  showAlertDialog(BuildContext context, int eventId, int index) {
+  showAlertDialog(BuildContext context, int eventId, int index, int ind) {
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.red),),
       onPressed: () {
@@ -149,7 +149,10 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           if(res.statusCode == 200){
             print("Događaj je uspešno obrisan.");
             setState(() {
-              events.removeAt(index);
+              if(ind == 1)
+                 events.removeAt(index);
+              else
+                finishedEvents.removeAt(index);
             });
           }
         });
@@ -199,9 +202,11 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
             color: Color(0xFF00BFA6),
           ).showCursorOnHover,
           ],),
-            Flexible(child: buildEventsList(events),),
+            Flexible(child: buildEventsList(events, 1),),
           ]),
-          Flexible(child: buildEventsList(finishedEvents),)
+          Column(children: <Widget>[
+          Flexible(child: buildEventsList(finishedEvents, 2),)
+          ]),
           ],),
           constraints: BoxConstraints(maxWidth: 600),
           ),

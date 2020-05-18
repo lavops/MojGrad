@@ -101,9 +101,12 @@ class _ManageDonationMobileState extends State<ManageDonationMobile> {
             )
             ],
           ),
+          Column(
+          children: <Widget>[
         Flexible(
               child: buildDonationList(finishedDonations),
             )
+          ]),
       ],) 
     );
   }

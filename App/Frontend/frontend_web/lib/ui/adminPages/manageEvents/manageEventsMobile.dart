@@ -190,7 +190,9 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
           ],),
             Flexible(child: buildEventsList(events),),
           ]),
+          Row(children: <Widget>[
           Flexible(child: buildEventsList(finishedEvents),),
+          ]),
     ],),
     constraints: BoxConstraints(maxWidth: 500),
     ),

@@ -98,6 +98,7 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ).showCursorOnHover,
+                  SizedBox(width: 5,),
                   RaisedButton(
                     onPressed: () {
                       showAlertDialog(context, donation.id);
@@ -185,8 +186,8 @@ class _ViewDonationDesktopState extends State<ViewDonationDesktop> {
     return Align(
         alignment: Alignment.topLeft,
         child: Wrap(
-          spacing: 10.0,
-          runSpacing: 10.0,
+          spacing: 5.0,
+          runSpacing: 2.0,
           direction: Axis.horizontal,
           children: users
               .map((User user) => InputChip(

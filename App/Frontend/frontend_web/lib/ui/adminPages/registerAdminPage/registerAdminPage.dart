@@ -534,8 +534,8 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
                       height: 30.0,
                     ),
                     wrongReg,
-                    lastNameWidget,
                     firstNameWidget,
+                    lastNameWidget,
                     emailWidget,
                     passwordWidget,
                     SizedBox(

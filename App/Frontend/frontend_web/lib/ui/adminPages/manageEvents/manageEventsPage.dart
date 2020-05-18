@@ -52,7 +52,7 @@ class _ManageEventsPageState extends State<ManageEventsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.all_inclusive, color: Colors.black, size: 20),
-              Flexible(child: Text(' TRENUTNE DONACIJE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)),
+              Flexible(child: Text('TRENUTNI DOGAĐAJI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)),
             ],
           ),
         ),
@@ -61,7 +61,7 @@ class _ManageEventsPageState extends State<ManageEventsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.done_all, color: Colors.black, size: 20),
-              Flexible(child: Text(' ZAVRŠENE DONACIJE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)),
+              Flexible(child: Text('ZAVRŠENI DOGAĐAJI', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),)),
             ],
           ),
         ),

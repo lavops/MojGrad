@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:intl/intl.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -221,10 +222,10 @@ class _EditDonationPage extends State<EditDonationPage> {
               name.text,
               description.text,
               _doubleValue.toDouble()).then((value){
-                if(value.statusCode)
+                if(value.statusCode == 200)
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
+                    MaterialPageRoute(builder: (context) => ManageDonationPage()),
                   );
               });
 

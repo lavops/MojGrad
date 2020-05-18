@@ -5,6 +5,7 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
@@ -504,7 +505,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
                 if(value.statusCode == 200)
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => ManageEventsPageDesktop()),
+                    MaterialPageRoute(builder: (context) => ManageEventsPage()),
                   );
               });
 
