@@ -20,6 +20,7 @@ class ManageDonationMobile extends StatefulWidget {
 
 class _ManageDonationMobileState extends State<ManageDonationMobile> {
   List<Donation> donations;
+  List<Donation> finishedDonations;
 
   _getDonations() async {
     APIServices.getDonations(TokenSession.getToken).then((res) {
@@ -34,84 +35,105 @@ class _ManageDonationMobileState extends State<ManageDonationMobile> {
     });
   }
 
+  _getFinishedDonations() async {
+    APIServices.getFinishedDonations(TokenSession.getToken).then((res) {
+      print(res.body);
+      Iterable list = json.decode(res.body);
+      List<Donation> donations2 = List<Donation>();
+      donations2 = list.map((model) => Donation.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          finishedDonations = donations2;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getDonations();
+    _getFinishedDonations();
   }
 
   @override
   Widget build(BuildContext context) {
     return CenteredViewDonation(
-        child: Column(
-      children: <Widget>[
-        Row(
+      child: TabBarView(children: <Widget>[
+        Column(
           children: <Widget>[
-            Expanded(
-              child: SizedBox(),
-            ),
-            RaisedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateDonationPage()),
-                );
-              },
-              color: greenPastel,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(18.0),
-                  side: BorderSide(color: greenPastel)),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "Nova donacija",
-                    style: TextStyle(color: Colors.white),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateDonationPage()),
+                    );
+                  },
+                  color: greenPastel,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(18.0),
+                      side: BorderSide(color: greenPastel)),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Nova donacija",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  )
-                ],
-              ),
-            ).showCursorOnHover,
-            SizedBox(
-              width: 10.0,
+                ).showCursorOnHover,
+                SizedBox(
+                  width: 10.0,
+                ),
+              ],
             ),
-          ],
-        ),
+            Flexible(
+              child: buildDonationList(donations),
+            )
+            ],
+          ),
         Flexible(
-          child: buildDonationList(donations),
-        )
-      ],
-    ));
+              child: buildDonationList(finishedDonations),
+            )
+      ],) 
+    );
   }
 
   Widget buildDonationList(List<Donation> listDonations) {
     return ListView.builder(
         padding: EdgeInsets.only(bottom: 30.0),
-        itemCount: donations == null ? 0 : donations.length,
+        itemCount: listDonations == null ? 0 : listDonations.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
               child: Row(
             children: <Widget>[
               Expanded(
                 child: Column(children: <Widget>[
-                  eventInfoRow(donations[index].organizationName),
+                  eventInfoRow(listDonations[index].organizationName),
                   SizedBox(
                     height: 10.0,
                   ),
-                  titleRow(donations[index].title),
-                  descriptionRow(donations[index].description),
-                  eventProgressRow(donations[index].pointsAccumulated,
-                      donations[index].pointsNeeded),
-                  pointsRow(donations[index].pointsAccumulated,
-                      donations[index].pointsNeeded),
-                  actionButtonRow(donations[index], donations[index].id, index)
+                  titleRow(listDonations[index].title),
+                  descriptionRow(listDonations[index].description),
+                  eventProgressRow(listDonations[index].pointsAccumulated,
+                      listDonations[index].pointsNeeded),
+                  pointsRow(listDonations[index].pointsAccumulated,
+                      listDonations[index].pointsNeeded),
+                  actionButtonRow(listDonations[index], listDonations[index].id, index)
                 ]),
               ),
               Container(
-                color: (donations[index].pointsAccumulated >=
-                        donations[index].pointsNeeded)
+                color: (listDonations[index].pointsAccumulated >=
+                        listDonations[index].pointsNeeded)
                     ? greenPastel
                     : Colors.white,
                 child: SizedBox(
