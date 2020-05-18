@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/institution.dart';
@@ -8,8 +9,17 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostMobile.dart';
+import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import '../../../widgets/circleImageWidget.dart';
+import '../solvePage/solvePage.dart';
+import 'viewProfile/viewProfilePageIns.dart';
+import 'package:frontend_web/extensions/hoverExtension.dart';
+
 
 List<int> listSelectedTypes = new List();
+int indikator = 0;
+
 
 
 class HomeInstitutionMobile extends StatefulWidget {
@@ -22,6 +32,8 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
   Institution institution;
   List<FullPost> listFilteredPosts;
   List<PostType> listTypes;
+  int _currentImageIndex = 0;
+
 
   _getUnsolvedPosts() async  {
 
@@ -45,19 +57,20 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
     });
   }
 
-  _getFiltered() async {
-    var res = await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, icityId);
-    Iterable list = json.decode(res.body);
-    List<FullPost> posts = new List<FullPost>();
-    posts = list.map((model) => FullPost.fromObject(model)).toList();
-    if (mounted) {
-      setState(() {
-        listFilteredPosts = new List();
-        listFilteredPosts = posts;
-        listUnsolvedPosts = null;
-      });
-    }
+  _getFiltered(int cid) async {
+
+    await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, cid).then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> posts =  List<FullPost>();
+      posts = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listFilteredPosts = posts;
+        });
+      }
+    });
   }
+
 
   _getPostType() async {
     var res =  await APIServices.getPostType(TokenSession.getToken);
@@ -84,6 +97,276 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
   }
 
 
+  Widget rowPost(FullPost post, int ind){
+    return Card(
+      child: Row(
+        children: <Widget>[
+          //imageGallery(),
+          Expanded( child: imageGallery2(post.photoPath, post.solvedPhotoPath)),
+          Expanded( child: packedThings(post, ind)),
+          solvedColor(post),
+        ],
+      ),
+    );
+  }
+
+
+
+  Widget solvedColor(FullPost post) => Container(
+    constraints: BoxConstraints(
+      minHeight: 180,
+      minWidth: 20,
+    ),
+    decoration: BoxDecoration(
+        color: (post.statusId == 2) ? Colors.white : Colors.green
+    ),
+  );
+
+
+  void _updateImageIndex(int index) {
+    setState(() => _currentImageIndex = index);
+  }
+
+
+  Widget packedThings(FullPost post, int ind) => Container(
+    constraints: BoxConstraints(
+      maxHeight: 180,
+      minHeight: 100,
+    ),
+    child: Column(
+      children: <Widget>[
+        userInfoRow(post, ind),
+        category(post),
+        Expanded(child: SizedBox()),
+        description(post),
+        Expanded(child: SizedBox()),
+        location(post),
+        actionsButtons(post),
+      ],
+    ),
+  );
+
+  Widget userInfoRow(FullPost post, int ind) => Row(
+    children: <Widget>[
+      InkWell(
+        child: CircleImage(
+          userPhotoURL + post.userPhoto,
+          imageSize: 36.0,
+          whiteMargin: 2.0,
+          imageMargin: 6.0,
+        ),
+        onTap: (){
+          if(ind == 1)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewUserProfilePageIns(post.userId)),
+            );
+        },
+      ),
+      InkWell(
+        child: Text(
+          post.username,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onTap: (){
+          if(ind == 1)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewUserProfilePageIns(post.userId)),
+            );
+        },
+      ),
+      Expanded(child: SizedBox()),
+      (post.statusId == 2)
+          ? FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(11.0),
+            side: BorderSide(color: Colors.green)),
+        color: Colors.lightGreen,
+        child: Text(
+          "Reši",
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
+          );
+        },
+      ).showCursorOnHover
+          : SizedBox(),
+      SizedBox(width: 10,),
+    ],
+  );
+
+  Widget imageGallery(FullPost post) => Container(
+    constraints: BoxConstraints(
+      maxHeight: 180.0, // changed to 400
+      minHeight: 100.0, // changed to 200
+      maxWidth: 250,
+      minWidth: 250,
+    ),
+    child: Image(image: NetworkImage(userPhotoURL + post.photoPath)),
+  );
+
+
+  Widget location(FullPost post) => Container(
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 10,
+          ),
+          Flexible(
+            child: Text(post.address, style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
+          )
+        ],
+      )
+  );
+
+
+
+  Widget category(FullPost post) => Container(
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 10,
+          ),
+          Flexible(
+            child: Text(post.typeName, style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
+          )
+        ],
+      )
+  );
+
+  Widget imageGallery2(String image, String image2) {
+    List<String> imgList=[];
+    imgList.add(userPhotoURL + image);
+    image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
+    return Column(children: <Widget>[
+      GestureDetector(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            CarouselSlider(
+              options: CarouselOptions(
+                viewportFraction: 1.0,
+                onPageChanged: (index, reason) {
+                  _updateImageIndex(index);
+                },
+                enableInfiniteScroll: false,
+              ),
+              items: imgList.map((item) => Container(
+                constraints: BoxConstraints(
+                  maxHeight: 200.0, // changed to 400
+                  minHeight: 100.0, // changed to 200
+                  maxWidth: 250,
+                  minWidth: 250,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.grey[200],
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                child: Center(
+                    child: Image.network(item, fit: BoxFit.fitWidth, width: MediaQuery.of(context).size.width, )
+                ),
+              )).toList(),
+
+            ),
+          ],
+        ),
+      ),
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          (imgList.length > 1) ?
+          Container(
+              height: 30,
+              child: PhotoCarouselIndicator(
+                photoCount: imgList.length,
+                activePhotoIndex: _currentImageIndex,
+              )) : Container( width: 1, height: 1,),
+        ],)
+    ],
+    );
+  }
+
+
+
+  Widget actionsButtons(FullPost post) =>
+      Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          // Actions buttons/icons
+          Row(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(MdiIcons.thumbUpOutline, color: Colors.lightGreen),
+                onPressed: () {
+                },
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Text(post.likeNum.toString()),
+              ),
+              IconButton(
+                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+                onPressed: () {
+                },
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Text(post.dislikeNum.toString()),
+              ),
+              IconButton(
+                icon: Icon(Icons.chat_bubble_outline, color: Colors.green),
+                onPressed: () {
+                  //showCommentsDialog(context, post.postId);
+                },
+              ),
+              Text(post.commNum.toString()),
+              Expanded(child: SizedBox()),
+              SizedBox(width: 10.0), // For padding
+            ],
+          ),
+        ],
+      );
+
+
+
+  Widget description(FullPost post) => Container(
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 10,
+          ),
+          Flexible(
+            child: Text(post.description),
+          )
+        ],
+      )
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -98,18 +381,19 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
       CenteredViewPost(
-        child: listUnsolvedPosts != null ?
+        child:  indikator == 0 ?
         ListView.builder(
             padding: EdgeInsets.only(bottom: 30.0),
             itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
             itemBuilder: (BuildContext context, int index) {
-              return InsRowPostMobileWidget(listUnsolvedPosts[index], 1);
+              return rowPost(listUnsolvedPosts[index], 0);
             }
-        ) : ListView.builder(
+        )
+            : ListView.builder(
             padding: EdgeInsets.only(bottom: 30.0),
-            itemCount: listFilteredPosts == null ? 0 : listFilteredPosts.length,
+            itemCount: listFilteredPosts.length,
             itemBuilder: (BuildContext context, int index) {
-              return InsRowPostMobileWidget(listFilteredPosts[index], 1);
+              return rowPost(listFilteredPosts[index], 0);
             }
         ),
       ),
@@ -123,11 +407,18 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
       Container(
         padding: EdgeInsets.only(left: 250, top: 10),
         child: FlatButton(
-          child: Text('Primeni'),
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(11.0),
+              side: BorderSide(color: Colors.green)),
+          color: Colors.lightGreen,
+          child: Text(
+            "Primeni filter",
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () {
-            _getFiltered();
+            _getFiltered(institution.cityId);
           },
-        ),
+        )
       )
     ]);
   }
