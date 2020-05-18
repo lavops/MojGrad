@@ -861,5 +861,27 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
+
+  static Future getFinishedEvents(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Event/FinishedEvent', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getFinishedDonations(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Donation/FinishedDonation', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
 

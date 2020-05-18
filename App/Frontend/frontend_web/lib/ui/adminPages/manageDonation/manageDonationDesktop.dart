@@ -22,6 +22,7 @@ class ManageDonationDesktop extends StatefulWidget {
 
 class _ManageDonationDesktopState extends State<ManageDonationDesktop> {
   List<Donation> donations;
+  List<Donation> finishedDonations;
 
   _getDonations() async {
     APIServices.getDonations(TokenSession.getToken).then((res) {
@@ -36,10 +37,25 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop> {
     });
   }
 
+  _getFinishedDonations() async {
+    APIServices.getFinishedDonations(TokenSession.getToken).then((res) {
+      print(res.body);
+      Iterable list = json.decode(res.body);
+      List<Donation> donations2 = List<Donation>();
+      donations2 = list.map((model) => Donation.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          finishedDonations = donations2;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getDonations();
+    _getFinishedDonations();
   }
 
   @override
@@ -47,48 +63,49 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop> {
     return Stack(
       children: <Widget>[
         CenteredViewDonation(
-            child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: SizedBox(),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateDonationPage()),
-                    );
-                  },
-                  color: greenPastel,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(18.0),
-                      side: BorderSide(color: greenPastel)),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Nova donacija",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      )
-                    ],
+          child: TabBarView(children: <Widget>[
+            Column( children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: SizedBox(),
                   ),
-                ).showCursorOnHover,
-                SizedBox(
-                  width: 10.0,
-                ),
-              ],
-            ),
-            Flexible(
-              child: buildDonationList(donations),
-            )
-          ],
-        )),
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateDonationPage()),
+                      );
+                    },
+                    color: greenPastel,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(18.0),
+                        side: BorderSide(color: greenPastel)),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          "Nova donacija",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
+                  ).showCursorOnHover,
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                ],
+              ),
+              Flexible(child: buildDonationList(donations),)
+            ],),
+            Column( children: <Widget>[
+              Flexible(child: buildDonationList(finishedDonations),)
+            ],),
+          ],)),
         CollapsingNavigationDrawer()
       ],
     );
@@ -103,7 +120,7 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop> {
           mainAxisSpacing: 2,
           childAspectRatio: 1.7,
         ),
-        itemCount: donations == null ? 0 : donations.length,
+        itemCount: listDonations == null ? 0 : listDonations.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
               child: Container(
@@ -111,29 +128,29 @@ class _ManageDonationDesktopState extends State<ManageDonationDesktop> {
               children: <Widget>[
                 Expanded(
                   child: Column(children: <Widget>[
-                    eventInfoRow(donations[index].organizationName),
+                    eventInfoRow(listDonations[index].organizationName),
                     SizedBox(
                       height: 10.0,
                     ),
                     Expanded(
                       child: SizedBox(),
                     ),
-                    titleRow(donations[index].title),
-                    descriptionRow(donations[index].description),
+                    titleRow(listDonations[index].title),
+                    descriptionRow(listDonations[index].description),
                     Expanded(
                       child: SizedBox(),
                     ),
-                    eventProgressRow(donations[index].pointsAccumulated,
-                        donations[index].pointsNeeded),
-                    pointsRow(donations[index].pointsAccumulated,
-                        donations[index].pointsNeeded),
+                    eventProgressRow(listDonations[index].pointsAccumulated,
+                        listDonations[index].pointsNeeded),
+                    pointsRow(listDonations[index].pointsAccumulated,
+                        listDonations[index].pointsNeeded),
                     actionButtonRow(
-                        donations[index], donations[index].id, index)
+                        listDonations[index], listDonations[index].id, index)
                   ]),
                 ),
                 Container(
-                  color: (donations[index].pointsAccumulated >=
-                          donations[index].pointsNeeded)
+                  color: (listDonations[index].pointsAccumulated >=
+                          listDonations[index].pointsNeeded)
                       ? greenPastel
                       : Colors.white,
                   child: SizedBox(
