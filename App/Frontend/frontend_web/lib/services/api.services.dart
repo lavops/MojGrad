@@ -862,7 +862,6 @@ static Future registerInstitution(Institution ins) async {
     });
   }
 
-<<<<<<< HEAD
    //method for instituion to join events
   static Future joinEvent(String jwt, int eventId, int institutionId) async{
     var datas  = jsonDecode(jwt);
@@ -894,18 +893,19 @@ static Future registerInstitution(Institution ins) async {
   }
 
   //get method for institutions that are going for certain event
-  static Future getInstitutionsForEvent(String jwt, int institutionId) async{
+  static Future getInstitutionsForEvent(String jwt, int eventId) async{
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     var data = Map();
-    data["id"] = institutionId;
+    data["id"] = eventId;
     var jsonBody = convert.jsonEncode(data);
     return await http.post(serverURL + 'Event/InstitutionsForEvent', headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
-=======
+  }
+
   static Future getFinishedEvents(String jwt) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
@@ -926,7 +926,6 @@ static Future registerInstitution(Institution ins) async {
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     });
->>>>>>> 21c5023abb05c367930a61dc04e15462df86b389
   }
 }
 

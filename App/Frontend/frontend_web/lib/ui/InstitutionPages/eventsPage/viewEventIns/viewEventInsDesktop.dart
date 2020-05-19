@@ -9,7 +9,7 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 
 import '../../../../editEventPage.dart';
 
@@ -47,7 +47,7 @@ class _ViewEventInsDesktopState extends State<ViewEventInsDesktop> {
   }
 
   _listInstitutionsForEvent() async{
-    APIServices.getUsersForEvent(TokenSession.getToken, event.id).then((res) {
+    APIServices.getInstitutionsForEvent(TokenSession.getToken, event.id).then((res) {
       Iterable list = json.decode(res.body);
       List<Institution> institutions;
       institutions = list.map((model) => Institution.fromObject(model)).toList();
@@ -85,19 +85,15 @@ class _ViewEventInsDesktopState extends State<ViewEventInsDesktop> {
               SizedBox(height: 8.0,),
               locationRow(event),
               SizedBox(height: 12.0),
-              Row(children: <Widget>[
-                Column(children: <Widget>[
-                  usersForEvent==null ? Text("Nema prijavljenih korisnika za ovaj događaj", style: TextStyle(fontSize: 18.0),) : (usersForEvent.length==0 ? Text("Nema prijavljenih korisnika za ovaj događaj", style: TextStyle(fontSize: 18.0),) : Text("Broj prijavljenih korisnika: " + usersForEvent.length.toString(), style: TextStyle(fontSize: 18.0),)),
-                  usersForEvent!=null ? listUsers() : SizedBox(),
-                  institutionsForEvent==null ? Text("Nema prijavljenih institucija za ovaj događaj", style: TextStyle(fontSize: 18.0),) : (institutionsForEvent.length==0 ? Text("Nema prijavljenih institucija za ovaj događaj", style: TextStyle(fontSize: 18.0),) : Text("Broj prijavljenih institucija: " + institutionsForEvent.length.toString(), style: TextStyle(fontSize: 18.0),)),
-                  institutionsForEvent!=null ? listInstitutions() : SizedBox(),
-                ],),
-              ],),
+              (usersForEvent==null || usersForEvent.length==0) ? Text("Nema prijavljenih korisnika za ovaj događaj.", style: TextStyle(fontSize: 18.0),) : Text("Broj prijavljenih korisnika: " + usersForEvent.length.toString(), style: TextStyle(fontSize: 18.0),),
+              usersForEvent!=null ? listUsers() : SizedBox(),
+              (institutionsForEvent==null || institutionsForEvent.length==0) ? Text("Nema prijavljenih institucija za ovaj događaj.", style: TextStyle(fontSize: 18.0),) : Text("Broj prijavljenih institucija: " + institutionsForEvent.length.toString(), style: TextStyle(fontSize: 18.0),),
+              institutionsForEvent!=null ? listInstitutions() : SizedBox(),
             ],),
             constraints: BoxConstraints(maxWidth: 800),
             ),
           ),
-          CollapsingNavigationDrawer(),
+          CollapsingInsNavigationDrawer(),
         ],
       ),
       );
@@ -146,7 +142,7 @@ Widget titleColumn(String title, String description) {
           SizedBox(width: 10.0,),
           deleteButton(event),
         ],)
-        : joinButton(),
+        : isJoined() ? cancelButton() : joinButton(),
     ]);
   }
 
@@ -199,7 +195,7 @@ Widget titleColumn(String title, String description) {
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
       onPressed: () {},
       color: Colors.red,
-    );
+    ).showCursorOnHover;
   }
 
   showAlertDialog(int eventId) {
@@ -289,5 +285,13 @@ Widget titleColumn(String title, String description) {
         )
       );
   }
-  
+
+  bool isJoined() {
+    var l = institutionsForEvent==null ? 0 : institutionsForEvent.length;
+    for (var i = 0; i < l; i++) {
+      if(institutionsForEvent[i]!=null && institutionsForEvent[i].id==insId)
+        return true;
+    }
+    return false;
+  }
 }

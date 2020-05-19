@@ -87,26 +87,10 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
     ],);
   }
 
-<<<<<<< HEAD
   Widget startEndDateColumn(Events event) {
     return Column(children: <Widget>[
       Text("Počinje: "+ event.startDate),
       Text("Završava se: "+ event.endDate),
-=======
-  Widget startEndDateRow(Events event) {
-    return Row(children: <Widget>[
-      SizedBox(width: 15.0),
-      Column(children: <Widget>[
-        Text("Počinje: "),
-        Text(event.startDate),
-      ],),
-      Expanded(child: SizedBox(),),
-      Column(children: <Widget>[
-        Text("Završava se: "),
-        Text(event.endDate),
-      ],),
-      SizedBox(width: 15.0,),
->>>>>>> 21c5023abb05c367930a61dc04e15462df86b389
     ],);
   }
 

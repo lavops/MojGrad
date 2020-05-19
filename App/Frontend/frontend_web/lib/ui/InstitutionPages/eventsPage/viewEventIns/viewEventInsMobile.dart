@@ -4,30 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/models/user.dart';
-import 'package:frontend_web/extensions/hoverExtension.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 
 import '../../../../editEventPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class ViewEventDesktop extends StatefulWidget {
+class ViewEventInsTablet extends StatefulWidget {
   final Events event;
-  ViewEventDesktop(this.event);
+  ViewEventInsTablet(this.event);
 
   @override
-  _ViewEventDesktopState createState() => _ViewEventDesktopState(event);
+  _ViewEventInsTabletState createState() => _ViewEventInsTabletState(event);
 }
 
-class _ViewEventDesktopState extends State<ViewEventDesktop> {
+class _ViewEventInsTabletState extends State<ViewEventInsTablet> {
   List<User> usersForEvent;
   List<Institution> institutionsForEvent;
   Events event;
 
-  _ViewEventDesktopState(Events event){
+  _ViewEventInsTabletState(Events event){
     this.event = event;
   }
 
@@ -68,13 +69,12 @@ class _ViewEventDesktopState extends State<ViewEventDesktop> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
-      body: Stack(
-        children: <Widget>[
-          Container(
+    return Scaffold(
+      drawer: DrawerInstitution(4),
+      body: Container(
             height: double.infinity,
             width: double.infinity,
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 30.0),
+            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
             alignment: Alignment.topCenter,
             child: ConstrainedBox(child: Column(children: <Widget>[
               buttonsRow(event),
@@ -84,35 +84,29 @@ class _ViewEventDesktopState extends State<ViewEventDesktop> {
               SizedBox(height: 8.0,),
               locationRow(event),
               SizedBox(height: 12.0),
-              (usersForEvent==null || usersForEvent.length==0) ? Text("Nema prijavljenih korisnika za ovaj događaj.", style: TextStyle(fontSize: 18.0),) : Text("Broj prijavljenih korisnika: " + usersForEvent.length.toString(), style: TextStyle(fontSize: 18.0),),
+              (usersForEvent==null || usersForEvent.length==0) ? Text("Nema prijavljenih korisnika za ovaj događaj.", style: TextStyle(fontSize: 12.0),) : Text("Broj prijavljenih korisnika: " + usersForEvent.length.toString(), style: TextStyle(fontSize: 12.0),),
               usersForEvent!=null ? listUsers() : SizedBox(),
-              (institutionsForEvent==null || institutionsForEvent.length==0) ? Text("Nema prijavljenih institucija za ovaj događaj.", style: TextStyle(fontSize: 18.0),) : Text("Broj prijavljenih institucija: " + institutionsForEvent.length.toString(), style: TextStyle(fontSize: 18.0),),
+              (institutionsForEvent==null || institutionsForEvent.length==0) ? Text("Nema prijavljenih institucija za ovaj događaj.", style: TextStyle(fontSize: 12.0),) : Text("Broj prijavljenih institucija: " + institutionsForEvent.length.toString(), style: TextStyle(fontSize: 12.0),),
               institutionsForEvent!=null ? listInstitutions() : SizedBox(),
             ],),
             constraints: BoxConstraints(maxWidth: 800),
             ),
           ),
-          CollapsingNavigationDrawer(),
-        ],
-      ),
       );
   }
   
-  Widget titleColumn(String title, String description) {
+Widget titleColumn(String title, String description) {
     return Column(children: <Widget>[
       SizedBox(height: 20.0,),
-      Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),),
-      description==null ? Text("") : Text(description, style: TextStyle(fontSize: 22.0),),
+      Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
+      description==null ? Text("") : Text(description, style: TextStyle(fontSize: 13.0),),
     ],);
   }
 
   Widget startEndDateRow(Events event) {
-    return Row(children: <Widget>[
-      SizedBox(width: 15.0),
-      Text("Počinje: "+ event.startDate, style: TextStyle(fontSize: 18.0),),
-      Expanded(child: SizedBox(),),
-      Text("Završava se: " + event.endDate, style: TextStyle(fontSize: 18.0),),
-      SizedBox(width: 15.0,),
+    return Column(children: <Widget>[
+      Text("Počinje: "+ event.startDate, style: TextStyle(fontSize: 12.0),),
+      Text("Završava se: " + event.endDate, style: TextStyle(fontSize: 12.0),),
     ],);
   }
 
@@ -120,33 +114,83 @@ class _ViewEventDesktopState extends State<ViewEventDesktop> {
     return Row(children: <Widget>[
       SizedBox(width: 10.0,),
       Icon(Icons.location_on),
-      Text(event.address, style: TextStyle(fontSize: 18.0),),
+      Text(event.address, style: TextStyle(fontSize: 12.0),),
     ],);
   }
 
   Widget buttonsRow(Events event) {
     return Row(children: <Widget>[
-      SizedBox(width: 15.0,),
+      SizedBox(width: 12.0,),
       RaisedButton(
         child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
         color: greenPastel,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-        onPressed: (){
-        Navigator.pop(context);
-      }).showCursorOnHover,
+          onPressed: (){
+            Navigator.pop(context);
+          }),
       Expanded(child: SizedBox()),
-      RaisedButton(
+      event.id==insId 
+        ? Row(children: <Widget>[
+          editButton(event),
+          SizedBox(width: 10.0,),
+          deleteButton(event),
+        ],)
+        : isJoined() ? cancelButton() : joinButton(),
+    ]);
+  }
+
+  Widget editButton(event) {
+    return RaisedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventPage(event)),
+          );
+        },
+        color: Colors.blue,
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        child: Text("Izmeni", style: TextStyle(color: Colors.white,),),
+      );
+  }
+
+  Widget deleteButton(Events event) {
+    return RaisedButton(
         child: Text("Obriši", style: TextStyle(color: Colors.white),),
         color: Colors.red,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         onPressed: () {
           showAlertDialog(event.id);
         },
-      ).showCursorOnHover,
-      SizedBox(width: 15.0,),
-    ],);
+      );
   }
-  
+
+  Widget joinButton() {
+    return RaisedButton(
+      onPressed: () {
+        APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              
+            });
+          }
+        });
+      },
+      child: Text("Pridruži se", style: TextStyle(color: Colors.white),),
+      shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+      color: Colors.blue,
+    );
+  }
+
+  Widget cancelButton() {
+    return RaisedButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.white)),
+      shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+      onPressed: () {},
+      color: Colors.red,
+    );
+  }
+
   showAlertDialog(int eventId) {
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.red),),
@@ -155,7 +199,7 @@ class _ViewEventDesktopState extends State<ViewEventDesktop> {
           if(res.statusCode == 200){
             print("Događaj je uspešno obrisan.");
             Navigator.pushReplacement(context, 
-            MaterialPageRoute(builder: (context) => ManageEventsPage()),
+            MaterialPageRoute(builder: (context) => EventsPage()),
           );
           }
         });
@@ -174,8 +218,8 @@ class _ViewEventDesktopState extends State<ViewEventDesktop> {
       title: Text("Brisanje događaja"),
       content: Text("Da li ste sigurni da želite da obrišete događaj?"),
       actions: [
-        okButton.showCursorOnHover,
-        notButton.showCursorOnHover,
+        okButton,
+        notButton,
       ],
     );
 
@@ -234,5 +278,13 @@ class _ViewEventDesktopState extends State<ViewEventDesktop> {
         )
       );
   }
-  
+
+  bool isJoined() {
+    var l = institutionsForEvent==null ? 0 : institutionsForEvent.length;
+    for (var i = 0; i < l; i++) {
+      if(institutionsForEvent[i]!=null && institutionsForEvent[i].id==insId)
+        return true;
+    }
+    return false;
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
+import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEventInsDesktop.dart';
@@ -108,7 +109,7 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
         color: greenPastel,
       ).showCursorOnHover,
       Expanded(child: SizedBox()),
-      event.institutionId==insId ? deleteEditButtons(event, index) : (/*todo ?*/ joinButton(event)), //: cancelButton(event)),
+      event.institutionId==insId ? deleteEditButtons(event, index) : (/*isJoined(event) ?**/ cancelButton(event) /*: joinButton(event)*/),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -162,7 +163,7 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
       onPressed: () {},
       color: Colors.red,
-    );
+    ).showCursorOnHover;
   }
 
   showAlertDialog(BuildContext context, int eventId, int index) {
@@ -204,6 +205,25 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
       },
     );
   }
+
+  /*bool isJoined(Events event){
+    bool join = false;
+    APIServices.getInstitutionsForEvent(TokenSession.getToken, event.id).then((res) {
+      Iterable list = json.decode(res.body);
+      print(res.body);
+      List<Institution> institutions;
+      institutions = list.map((model) => Institution.fromObject(model)).toList();
+      var l = institutions==null ? 0 : institutions.length;
+      for (var i = 0; i < l; i++) {
+        if(institutions[i]!=null && institutions[i].id==insId)
+        {
+         join = true;
+         break;
+        }
+      }
+    });
+    return join;
+  }*/
 
   @override
   Widget build(BuildContext context) {

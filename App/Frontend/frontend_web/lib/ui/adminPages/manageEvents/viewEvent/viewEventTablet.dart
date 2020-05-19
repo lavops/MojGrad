@@ -45,7 +45,7 @@ class _ViewEventTabletState extends State<ViewEventTablet> {
   }
 
   _listInstitutionsForEvent() async{
-    APIServices.getUsersForEvent(TokenSession.getToken, event.id).then((res) {
+    APIServices.getInstitutionsForEvent(TokenSession.getToken, event.id).then((res) {
       Iterable list = json.decode(res.body);
       List<Institution> institutions;
       institutions = list.map((model) => Institution.fromObject(model)).toList();
@@ -83,16 +83,10 @@ class _ViewEventTabletState extends State<ViewEventTablet> {
               SizedBox(height: 8.0,),
               locationRow(event),
               SizedBox(height: 12.0),
-              Row(children: <Widget>[
-                Column(children: <Widget>[
-                  usersForEvent==null ? Text("Nema prijavljenih korisnika za ovaj događaj", style: TextStyle(fontSize: 15.0),) 
-                  : (usersForEvent.length==0 ? Text("Nema prijavljenih korisnika za ovaj događaj", style: TextStyle(fontSize: 15.0),) : Text("Broj prijavljenih korisnika: " + usersForEvent.length.toString(), style: TextStyle(fontSize: 15.0),)),
-                  usersForEvent!=null ? listUsers() : SizedBox(),
-                  institutionsForEvent==null ? Text("Nema prijavljenih institucija za ovaj događaj", style: TextStyle(fontSize: 15.0),)
-                   : (institutionsForEvent.length==0 ? Text("Nema prijavljenih institucija za ovaj događaj", style: TextStyle(fontSize: 15.0),) : Text("Broj prijavljenih institucija: " + institutionsForEvent.length.toString(), style: TextStyle(fontSize: 15.0),)),
-                  institutionsForEvent!=null ? listInstitutions() : SizedBox(),
-                ],),
-              ],),
+              (usersForEvent==null || usersForEvent.length==0) ? Text("Nema prijavljenih korisnika za ovaj događaj.", style: TextStyle(fontSize: 15.0),) : Text("Broj prijavljenih korisnika: " + usersForEvent.length.toString(), style: TextStyle(fontSize: 15.0),),
+              usersForEvent!=null ? listUsers() : SizedBox(),
+              (institutionsForEvent==null || institutionsForEvent.length==0) ? Text("Nema prijavljenih institucija za ovaj događaj.", style: TextStyle(fontSize: 15.0),) : Text("Broj prijavljenih institucija: " + institutionsForEvent.length.toString(), style: TextStyle(fontSize: 15.0),),
+              institutionsForEvent!=null ? listInstitutions() : SizedBox(),
             ],),
             constraints: BoxConstraints(maxWidth: 500),
             ),
