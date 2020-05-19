@@ -1,3 +1,4 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
@@ -84,7 +85,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
           children: <Widget>[
         userInfoRow(post.username,
             post.typeName, post.userPhoto, post.postId),
-        imageGallery(post.photoPath),
+        imageGalery3(post.photoPath, post.solvedPhotoPath),
         SizedBox(height: 2.0),
         actionsButtons(
             post.statusId,
@@ -131,6 +132,36 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
           SizedBox(width: 15,)
         ],
       );
+
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(userPhotoURL + image);
+    image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
+    return SizedBox(
+      height: 400.0,
+      width: double.infinity,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: greenPastel,
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
@@ -213,12 +244,8 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
           SizedBox(
             width: 10,
           ),
-          Text(username, style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(
-            width: 10,
-          ),
           Flexible(
-            child: Text(description),
+            child: Text(description, style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),)
           )
         ],
       ));

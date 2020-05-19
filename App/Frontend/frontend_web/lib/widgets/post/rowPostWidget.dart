@@ -1,3 +1,4 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
@@ -81,7 +82,7 @@ class _RowPostWidgetState extends State<RowPostWidget> {
     return Card(
       child: Row(
         children: <Widget>[
-          imageGallery(),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           Expanded( child: packedThings()),
           solvedColor(),
         ],
@@ -107,8 +108,8 @@ class _RowPostWidgetState extends State<RowPostWidget> {
     child: Column(
       children: <Widget>[
         userInfoRow(),
-        Expanded(child: SizedBox()),
         category(),
+        Expanded(child: SizedBox()),
         description(),
         Expanded(child: SizedBox()),
         location(),
@@ -162,15 +163,35 @@ class _RowPostWidgetState extends State<RowPostWidget> {
     }
   }
 
-  Widget imageGallery() => Container(
-    constraints: BoxConstraints(
-      maxHeight: 180.0, // changed to 400
-      minHeight: 100.0, // changed to 200
-      maxWidth: 250,
-      minWidth: 250,
-    ),
-    child: Image(image: NetworkImage(userPhotoURL + post.photoPath)),
-  );
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(userPhotoURL + image);
+    image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
+    return SizedBox(
+      height: 180.0,
+      width: 200.0,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: greenPastel,
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget actionsButtons() =>
       Stack(
@@ -232,12 +253,8 @@ class _RowPostWidgetState extends State<RowPostWidget> {
         SizedBox(
           width: 10,
         ),
-        Text("LOKACIJA: ", style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(
-          width: 10,
-        ),
         Flexible(
-          child: Text(post.address),
+          child: Text(post.address, style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
         )
       ],
     )
@@ -249,12 +266,8 @@ class _RowPostWidgetState extends State<RowPostWidget> {
         SizedBox(
           width: 10,
         ),
-        Text("KATEGORIJA: ", style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(
-          width: 10,
-        ),
         Flexible(
-          child: Text(post.typeName),
+          child: Text(post.typeName, style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
         )
       ],
     )
@@ -263,10 +276,6 @@ class _RowPostWidgetState extends State<RowPostWidget> {
   Widget description() => Container(
     child: Row(
       children: <Widget>[
-        SizedBox(
-          width: 10,
-        ),
-        Text("OPIS: ", style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(
           width: 10,
         ),

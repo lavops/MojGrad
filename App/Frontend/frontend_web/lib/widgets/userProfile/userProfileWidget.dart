@@ -148,12 +148,12 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                   children: <Widget>[
                     Text(text1,
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),
                     Text(points.toString(),
                         style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold))
                   ],
