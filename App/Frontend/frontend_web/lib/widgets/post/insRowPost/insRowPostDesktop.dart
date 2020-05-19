@@ -292,7 +292,7 @@ class PhotoCarouselIndicator extends StatelessWidget {
           height: isActive ? 7.5 : 6.0,
           width: isActive ? 7.5 : 6.0,
           decoration: BoxDecoration(
-            color: isActive ? Colors.green : Colors.grey,
+            color: isActive ? Color(0xFF00BFA6) : Colors.grey,
             borderRadius: BorderRadius.circular(4.0),
           ),
         ),

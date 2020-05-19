@@ -743,7 +743,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                       : Center(
                           child: CircularProgressIndicator(
                             valueColor: new AlwaysStoppedAnimation<Color>(
-                                Colors.green[800]),
+                                Color(0xFF00BFA6)),
                           ),
                         ),
                 ),),
@@ -761,7 +761,7 @@ class _ManageAdminsPageState extends State<ManageAdminsPage> {
                       : Center(
                           child: CircularProgressIndicator(
                             valueColor: new AlwaysStoppedAnimation<Color>(
-                                Colors.green[800]),
+                                Color(0xFF00BFA6)),
                           ),
                         ),
                 ))

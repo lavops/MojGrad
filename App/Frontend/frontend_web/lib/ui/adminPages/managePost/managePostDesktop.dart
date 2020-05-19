@@ -1,20 +1,15 @@
 import 'dart:convert';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
-import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
-import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
 import 'package:frontend_web/widgets/InstitutionCommentWidget.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-import 'package:frontend_web/widgets/post/rowPostWidget.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -97,6 +92,7 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
         setState(() {
           listCities = listC;
           City allusers = new City(9999, "Sve objave");
+          city = allusers;
           listCities.add(allusers);
         });
       }

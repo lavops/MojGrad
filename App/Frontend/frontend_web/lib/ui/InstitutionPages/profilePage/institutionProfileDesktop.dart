@@ -3,11 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/institution.dart';
-import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostDesktop.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -24,7 +22,6 @@ class InstitutionProfileDesktop extends StatefulWidget {
 class _InstitutionProfileDesktopState extends State<InstitutionProfileDesktop> {
   
   Institution institution;
-  ScrollController _scrollController;
   List<FullPost> posts;
   
   _InstitutionProfileDesktopState(Institution inst1){

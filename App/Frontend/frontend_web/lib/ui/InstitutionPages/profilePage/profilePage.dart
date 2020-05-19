@@ -162,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child:   institution != null ? currentInstitution() : Center(
                             child: CircularProgressIndicator(
                               valueColor:
-                              new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                              new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
                             ),
                           ),)
                     )
