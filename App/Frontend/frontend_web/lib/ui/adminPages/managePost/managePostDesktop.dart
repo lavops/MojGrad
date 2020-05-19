@@ -9,6 +9,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/ui/adminPages/managePost/viewPost/viewPostPage.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
 import 'package:frontend_web/widgets/InstitutionCommentWidget.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewRowPost.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
@@ -789,11 +790,6 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
           imageMargin: 6.0,
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewUserProfilePageIns(userId)),
-          );
         },
       ),
       InkWell(
@@ -802,11 +798,6 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewUserProfilePageIns(userId)),
-          );
         },
       ),
       Expanded(child: SizedBox()),

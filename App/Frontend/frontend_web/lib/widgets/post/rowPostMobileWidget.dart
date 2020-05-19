@@ -1,3 +1,4 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
@@ -80,7 +81,7 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
     return Card(
       child: Row(
         children: <Widget>[
-          imageGallery(),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           Expanded( child: packedThings()),
           solvedColor(),
         ],
@@ -90,7 +91,7 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
 
   Widget solvedColor() => Container(
     constraints: BoxConstraints(
-      maxHeight: 150,
+      maxHeight: 120,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -100,14 +101,14 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
 
   Widget packedThings() => Container(
     constraints: BoxConstraints(
-      maxHeight: 150,
+      maxHeight: 120,
       minHeight: 100,
     ),
     child: Column(
       children: <Widget>[
         userInfoRow(),
         Expanded(child: SizedBox()),
-        description(),
+        description(post.description),
         Expanded(child: SizedBox()),
         actionsButtons(),
       ],
@@ -116,12 +117,7 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
 
   Widget userInfoRow() => Row(
     children: <Widget>[
-      CircleImage(
-        userPhotoURL + post.userPhoto,
-        imageSize: 36.0,
-        whiteMargin: 2.0,
-        imageMargin: 6.0,
-      ),
+      SizedBox(width: 10,),
       Text(
         post.username,
         style: TextStyle(fontWeight: FontWeight.bold),
@@ -158,15 +154,35 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
     }
   }
 
-  Widget imageGallery() => Container(
-    constraints: BoxConstraints(
-      maxHeight: 150.0, // changed to 400
-      minHeight: 100.0, // changed to 200
-      maxWidth: 150,
-      minWidth: 100,
-    ),
-    child: Image(image: NetworkImage(userPhotoURL + post.photoPath)),
-  );
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(userPhotoURL + image);
+    image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
+    return SizedBox(
+      height: 120.0,
+      width: 120.0,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: greenPastel,
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget actionsButtons() =>Stack(
     alignment: Alignment.center,
@@ -204,14 +220,21 @@ class _RowPostMobileWidgetState extends State<RowPostMobileWidget> {
     ],
   );
 
-  Widget description() => Container(
-    child: Row(
-      children: <Widget>[
-        SizedBox(width: 10,),
-        Flexible(
-          child: Text(post.description),
-        )
-      ],
-    )
-  );
+  Widget description(String description){
+    if(description.length >= 25){
+      description = description.substring(0,25);
+      description = description.replaceRange(23, 25, "...");
+    }
+
+    return Container(
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 10,),
+          Flexible(
+            child: Text(description),
+          )
+        ],
+      )
+    );
+  } 
 }
