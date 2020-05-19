@@ -198,8 +198,11 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
     ).showCursorOnHover;
 
     AlertDialog alert = AlertDialog(
-      content: Text("Da li ste sigurni da želite da prihvatite zahtev?",
-          textAlign: TextAlign.center),
+      content: Text(
+        "Da li ste sigurni da želite da prihvatite zahtev?",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       actions: [
         okButton,
         notButton,
@@ -295,11 +298,42 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
             side: BorderSide(color: Colors.redAccent)),
         color: Colors.redAccent,
         child: Text(
-          "Obriši instituciju",
+          "Obriši",
           style: TextStyle(color: Colors.white),
         ),
         onPressed: () {
           showAlertDialog(context, id, index, 1);
+        },
+      ).showCursorOnHover);
+
+      Widget deleteAccept(BuildContext context, int id, int index) => Container(
+          child: FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(11.0),
+            side: BorderSide(color: Colors.redAccent)),
+        color: Colors.redAccent,
+        child: Text(
+          "Obriši",
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          showAlertDialog(context, id, index, 2);
+        },
+      ).showCursorOnHover);
+
+  Widget acceptRequest(BuildContext context, int id, String email, int index) =>
+      Container(
+          child: FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(11.0),
+            side: BorderSide(color: greenPastel)),
+        color: greenPastel,
+        child: Text(
+          "Prihvati",
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          showAlertDialogAccept(context, id, email, index, 2);
         },
       ).showCursorOnHover);
 
@@ -411,84 +445,31 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  margin: EdgeInsets.only(top: 5, left: 10, right: 20),
                   child: Center(
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Text(listInst[index].name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)),
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CircleImage(
-                              userPhotoURL + listInst[index].photoPath,
-                              imageSize: 56.0,
-                              whiteMargin: 2.0,
-                              imageMargin: 6.0,
-                            ),
-                            contactWidget(
-                                listInst[index].phone, listInst[index].email),
-                            FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(11.0),
-                                  side: BorderSide(color: greenPastel)),
-                              color: greenPastel,
-                              child: Text('Opis institucije',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                showAlertDialogDescription(
-                                    listInst[index].description, context);
-                              },
-                            ).showCursorOnHover,
-                            Column(
-                              children: <Widget>[
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(11.0),
-                                      side:
-                                          BorderSide(color: Colors.redAccent)),
-                                  color: Colors.redAccent,
-                                  child: Text(
-                                    "Obriši instituciju",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  onPressed: () {
-                                    showAlertDialog(
-                                        context, listInst[index].id, index, 2);
-                                  },
-                                ).showCursorOnHover,
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(11.0),
-                                      side: BorderSide(color: greenPastel)),
-                                  color: greenPastel,
-                                  child: Text(
-                                    "Prihvati zahtev",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  onPressed: () {
-                                    showAlertDialogAccept(
-                                        context,
-                                        listInst[index].id,
-                                        listInst[index].email,
-                                        index,
-                                        2);
-                                  },
-                                ).showCursorOnHover
-                              ],
-                            ),
-                          ])
-                    ],
-                  ))),
+                      child: Column(children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                              width: 190,
+                              child: nameInst(listInst[index].name)),
+                          instPhoto(
+                            listInst[index].photoPath,
+                          ),
+                          Container(
+                              width: 400,
+                              child: contactWidget(listInst[index].phone,
+                                  listInst[index].email)),
+                          descInst(listInst[index].description, context),
+                          deleteAccept(context, listInst[index].id, index),
+                          acceptRequest(
+                            context,
+                            listInst[index].id,
+                            listInst[index].email,
+                            index,
+                          )
+                        ]),
+                  ]))),
             ],
           ),
         ));
@@ -575,9 +556,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   search(),
                 ],
               ),
-              filteredInstitution == null
-                  ? dropdownFirstRow(listCities)
-                  : Text(''),
+              dropdownFirstRow(listCities),
               Flexible(
                   child: filteredInstitution == null
                       ? (buildInstList(listInstitutions))
@@ -590,6 +569,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   searchUnath(),
                 ],
               ),
+              dropdownFirstRow(listCities),
               Flexible(
                   child: filteredUnauthInstitution == null
                       ? buildUnauthInstList(listUnauthInstitutions)
