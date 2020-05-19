@@ -456,16 +456,19 @@ class _BoxState extends State<Box> {
               }
               else {
                 List<int> lista = new List();
-                for (int i = 0; i < listSelectedTypes.length; i++) {
-                  if (listSelectedTypes[i] != widget.id) {
-                    lista.add(listSelectedTypes[i]);
+                if (listSelectedTypes != null ) {
+                  for (int i = 0; i < listSelectedTypes.length; i++) {
+                    if (listSelectedTypes[i] != widget.id) {
+                      lista.add(listSelectedTypes[i]);
+                    }
+                  }
+                  listSelectedTypes = lista;
+                  if (listSelectedTypes.length == 0) {
+                    indikator = 0;
                   }
                 }
-                listSelectedTypes = lista;
-                if (listSelectedTypes.length == 0) {
-                  indikator = 0;
                 }
-              }
+
 
             });
           }),
