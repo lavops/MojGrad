@@ -139,7 +139,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                   if (res != null) {
                     APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
                       if(res.statusCode == 200){
-                        print('Uspesno ste izbrisali resenje.');
+                        print('Uspešno ste izbrisali rešenje.');
                         setState(() {
                           solvingPost = null;
                         });
@@ -166,7 +166,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Prihvati resenje?"),
+          title: Text("Prihvati rešenje?"),
           actions: <Widget>[
                 FlatButton(
               child: Text(
@@ -182,7 +182,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                   if (res != null) {
                     APIServices.challengeSolving(jwt, solvingPost.id, solvingPost.postId).then((res){
                       if(res.statusCode == 200){
-                        print('Uspesno ste izabrali resenje.');
+                        print('Uspešno ste izabrali rešenje.');
                         setState(() {
                           solvingPost.selected = 1;
                           solvingPost.postStatusId = 1;
@@ -198,7 +198,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkazi",
+                "Otkaži",
                 style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
@@ -227,7 +227,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                   if (res != null) {
                     APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
                       if(res.statusCode == 200){
-                        print('Uspesno ste izbrisali resenje.');
+                        print('Uspešno ste izbrisali rešenje.');
                         setState(() {
                           solvingPost = null;
                         });

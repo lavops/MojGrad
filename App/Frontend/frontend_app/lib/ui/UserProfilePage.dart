@@ -164,7 +164,7 @@ class HeaderSection extends State<UserProfilePage> {
                       content: Container(
                         height: 100,
                         child: Text(
-                            "Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vaša rešenja."),
+                            "Deaktivacijom profila brišete Vaš profil, sve Vaše objave i rešenja iz baze podataka."),
                       ),
                       actions: <Widget>[
                         FlatButton(

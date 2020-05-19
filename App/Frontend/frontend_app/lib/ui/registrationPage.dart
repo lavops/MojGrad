@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Uspešna registracija"),
-      content: Text("Prijavi se da bi nastavio."),
+      content: Text("Prijavite se da biste nastavili."),
       actions: [
         okButton,
       ],
@@ -96,43 +96,43 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   } else {
                     setState(() {
-                      wrongRegText = "Email ili username već zauseti".toUpperCase();
+                      wrongRegText = "E-mail adresa ili korisničko ime su zauzeti.".toUpperCase();
                     });
-                    throw Exception('Email ili username već zauseti');
+                    throw Exception('E-mail adresa ili korisničko ime su zauzeti.');
                   }
                 });
               } else {
                 setState(() {
                   wrongRegText =
-                      "Loša šifra. Šifra mora imati najmanje 6 karaktera."
+                      "Loša šifra. Šifra mora sadržati najmanje 6 karaktera."
                           .toUpperCase();
                 });
                 throw Exception(
-                    "Loša šifra. Šifra mora imati najmanje 6 karaktera.");
+                    "Loša šifra. Šifra mora sadržati najmanje 6 karaktera.");
               }
               }else{
                 setState(() {
-                wrongRegText = "Grad nije izabran".toUpperCase();
+                wrongRegText = "Grad nije izabran.".toUpperCase();
               });
-              throw Exception("Grad nije izabran");
+              throw Exception("Grad nije izabran.");
               }
             } else {
               setState(() {
-                wrongRegText = "Neispravan email.".toUpperCase();
+                wrongRegText = "Neispravna e-mail adresa.".toUpperCase();
               });
-              throw Exception("Neispravan email.");
+              throw Exception("Neispravna e-mail adresa.");
             }
           } else {
             setState(() {
-              wrongRegText = "Unesite ponovo broj telefona.".toUpperCase();
+              wrongRegText = "Ponovo unesite broj telefona.".toUpperCase();
             });
-            throw Exception("Unesite ponovo broj telefona.");
+            throw Exception("Ponovo unesite broj telefona.");
           }
         } else {
           setState(() {
-            wrongRegText = "Unesite ponovo korisnočko ime.".toUpperCase();
+            wrongRegText = "Ponovo unesite korisničko ime.".toUpperCase();
           });
-          throw Exception("Unesite ponovo korisnocko ime");
+          throw Exception("Ponovo unesite korisničko ime.");
         }
       } else {
         setState(() {
@@ -282,7 +282,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Icon(Icons.email, color: Color(0xFF00BFA6)),
           ),
           contentPadding: EdgeInsets.all(18),
-          hintText: "E-mail",
+          hintText: "E-mail adresa",
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
             borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),

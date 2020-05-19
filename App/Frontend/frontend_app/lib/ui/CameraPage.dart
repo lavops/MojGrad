@@ -482,13 +482,13 @@ class _CameraPageState extends State<CameraPage> {
           else if (postType != null)
             postTypeId = postType.id;
           else if(_vrstaObjave != 2)
-            pogresanText = "Popuni obavezna polja: tip objave, grad i lokaciju.";
+            pogresanText = "Popunite obavezna polja: tip objave, grad i lokaciju.";
 
           if (imageFile == null || addres == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Popunite obavezna polja: tip posta i lokaciju.";
             });
-            throw Exception('Greskaaaa');
+            throw Exception('Greška');
           }
           if (res != null && imageFile != null && addres != null && city!= null) {
             APIServices.addPost(

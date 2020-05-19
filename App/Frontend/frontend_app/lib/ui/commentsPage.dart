@@ -81,7 +81,7 @@ class StateComents extends State<CommentsPage> {
                   });
                   _getComms();
                   _getComms();
-                  print('Uspesno ste izbrisali objavu.');
+                  print('Uspešno ste izbrisali objavu.');
                   Navigator.of(context).pop();
                   _getComms();
                   _getComms();
@@ -108,7 +108,7 @@ class StateComents extends State<CommentsPage> {
           context: context,
           child: AlertDialog(
             title: Text(
-              "Želiš da prijaviš komentar?",
+              "Želite da prijavite komentar?",
               style:
                   TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
             ),
@@ -132,7 +132,7 @@ class StateComents extends State<CommentsPage> {
                       });
                     }
                   });
-                  print('Uspesno ste prijavili komentar.');
+                  print('Uspešno ste prijavili komentar.');
                   Navigator.of(context).pop();
                 },
               ),

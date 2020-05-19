@@ -152,7 +152,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Doniraj poene.", style: TextStyle(
+        title: Text("Donirajte poene.", style: TextStyle(
          color: Theme.of(context).textTheme.bodyText1.color),),
         content: Container(
           height: 150.0,
@@ -198,7 +198,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                         Map<String, dynamic> list = json.decode(res.body);
                         Donation donation1 = Donation();
                         donation1 = Donation.fromObject(list);
-                        print('Uspesno ste donirali');
+                        print('Uspešno ste izvršili donaciju.');
                         setState(() {
                           publicUser.donatedPoints = publicUser.donatedPoints + donationAmount;
                           publicUser.points = publicUser.points - donationAmount;
@@ -230,7 +230,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne možete donirati vise poena nego sto imate.\n ")),));
+                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne možete donirati više poena nego što ste sakupili.\n ")),));
                   
                   setState(() {
                     donateController.text = "";

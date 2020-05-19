@@ -441,9 +441,9 @@ class _CameraTwoState extends State<CameraTwo>{
 
           if (imageFile == null || addres == null || city == null || postType == null || imageFile2 == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Popunite obavezna polja: tip posta i lokaciju.";
             });
-            throw Exception('Greskaaaa');
+            throw Exception('Greška');
           }
           if (res != null && imageFile != null && imageFile2 != null && addres != null && city!= null && postType != null) {
             APIServices.addPost(
