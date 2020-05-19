@@ -309,7 +309,7 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
                                 TextStyle(color: Colors.grey, fontSize: 20.0)),
                         Text("+ " + "$number2",
                             style: TextStyle(
-                                color: Colors.lightGreen, fontSize: 20.0)),
+                                color: Color(0xFF00BFA6), fontSize: 20.0)),
                       ],
                     ),
                     SizedBox(width: 20),

@@ -61,6 +61,6 @@ class _ManageInstitutionPageState extends State<ManageInstitutionPage> {
           child: Text('ZAHTEVI ZA REGISTRACIJU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
         ),
       ]
-    );
+    ).showCursorOnHover;
   }
 }

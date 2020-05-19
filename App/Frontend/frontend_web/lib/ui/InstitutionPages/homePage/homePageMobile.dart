@@ -119,7 +119,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
       minWidth: 20,
     ),
     decoration: BoxDecoration(
-        color: (post.statusId == 2) ? Colors.white : Colors.green
+        color: (post.statusId == 2) ? Colors.white : Color(0xFF00BFA6)
     ),
   );
 
@@ -182,8 +182,8 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
           ? FlatButton(
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(11.0),
-            side: BorderSide(color: Colors.green)),
-        color: Colors.lightGreen,
+            side: BorderSide(color: Color(0xFF00BFA6))),
+        color: Color(0xFF00BFA6),
         child: Text(
           "Reši",
           style: TextStyle(color: Colors.white),
@@ -252,7 +252,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         animationCurve: Curves.fastOutSlowIn,
         animationDuration: Duration(milliseconds: 1000),
         dotSize: 6.0,
-        dotIncreasedColor: Colors.green,
+        dotIncreasedColor: Color(0xFF00BFA6),
         dotBgColor: Colors.transparent,
         dotPosition: DotPosition.bottomCenter,
         dotVerticalPadding: 10.0,
@@ -277,7 +277,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: Colors.lightGreen),
+                icon: Icon(MdiIcons.thumbUpOutline, color: Color(0xFF00BFA6)),
                 onPressed: () {
                 },
               ),
@@ -295,7 +295,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
                 child: Text(post.dislikeNum.toString()),
               ),
               IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: Colors.green),
+                icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),
                 onPressed: () {
                   //showCommentsDialog(context, post.postId);
                 },
@@ -384,8 +384,8 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         child: FlatButton(
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(11.0),
-              side: BorderSide(color: Colors.green)),
-          color: Colors.lightGreen,
+              side: BorderSide(color: Color(0xFF00BFA6))),
+          color: Color(0xFF00BFA6),
           child: Text(
             "Primeni filter",
             style: TextStyle(color: Colors.white),

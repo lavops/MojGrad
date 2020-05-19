@@ -329,7 +329,7 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
              :Center(
                           child: CircularProgressIndicator(
                             valueColor: new AlwaysStoppedAnimation<Color>(
-                                Colors.green[800]),
+                                Color(0xFF00BFA6)),
                           ),
               )),
             Column(children: [

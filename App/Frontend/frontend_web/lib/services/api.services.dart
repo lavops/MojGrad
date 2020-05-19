@@ -883,5 +883,16 @@ static Future registerInstitution(Institution ins) async {
       'Authorization': 'Bearer $jwt'
     });
   }
+
+  static Future getInstitutionByCityId(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Institution/ByCityId/userId=1/cityId=$cityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
 }
 

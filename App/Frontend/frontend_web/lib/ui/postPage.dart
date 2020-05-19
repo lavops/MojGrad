@@ -131,7 +131,7 @@ class _PostPageState extends State<PostPage> {
               iconTheme: IconThemeData(color: Colors.white),
               title: Text('Upravljanje objavama',
                   style: TextStyle(color: Colors.white)),
-              backgroundColor: Colors.lightGreen,
+              backgroundColor: Color(0xFF00BFA6),
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {

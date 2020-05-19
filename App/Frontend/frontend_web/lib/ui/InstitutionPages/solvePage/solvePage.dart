@@ -388,7 +388,7 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
                     child: Text(
                     successText,
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Color(0xFF00BFA6),
                       fontSize: 25,
                     ),
                   )),
