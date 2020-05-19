@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
-import 'adminPages/manageDonation/manageDonationDesktop.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -24,6 +26,164 @@ class _EditDonationPage extends State<EditDonationPage> {
   Donation donation;
 
   _EditDonationPage(Donation donation1) {
+    this.donation = donation1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBuilder(
+        builder: (context, sizingInformation) => Scaffold(
+              drawer:
+                  sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                      ? DrawerAdmin(7)
+                      : null,
+              appBar:
+                  sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+                      ? null
+                      : AppBar(
+                          backgroundColor: Colors.white,
+                          iconTheme: IconThemeData(color: Colors.black),
+                        ),
+              backgroundColor: Colors.white,
+              body: Row(
+                children: <Widget>[
+                  sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+                      ? CollapsingNavigationDrawer()
+                      : SizedBox(),
+                  Expanded(
+                    child: ScreenTypeLayout(
+                      mobile: EditDonationMobilePage(donation),
+                      desktop: EditDonationDesktopPage(donation),
+                      tablet: EditDonationDesktopPage(donation),
+                    ),
+                  )
+                ],
+              ),
+            ));
+  }
+}
+
+class EditDonationMobilePage extends StatefulWidget {
+ final Donation donation;
+  EditDonationMobilePage(this.donation);
+
+  @override
+  _EditDonationMobilePageState createState() =>
+      new _EditDonationMobilePageState(donation);
+}
+
+class _EditDonationMobilePageState extends State<EditDonationMobilePage> {
+  Donation donation;
+
+  _EditDonationMobilePageState(Donation don1) {
+    this.donation = don1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Align(
+              alignment: Alignment(-0.75, -0.50),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                color: greenPastel,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)),
+                child: Text(
+                  "Vrati se nazad",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ).showCursorOnHover,
+            Container(
+              width: 350,
+              child: EditDonationWidget(donation),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class EditDonationDesktopPage extends StatefulWidget {
+  final Donation don;
+  EditDonationDesktopPage(this.don);
+
+  @override
+  _EditDonationDesktopPageState createState() =>
+      new _EditDonationDesktopPageState(don);
+}
+
+class _EditDonationDesktopPageState extends State<EditDonationDesktopPage> {
+  Donation donation;
+
+  _EditDonationDesktopPageState(Donation donation1) {
+    this.donation = donation1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+              alignment: Alignment(-0.65, -0.65),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                color: greenPastel,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)),
+                child: Text(
+                  "Vrati se nazad",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ).showCursorOnHover,
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: 500,
+              child: EditDonationWidget(donation),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class EditDonationWidget extends StatefulWidget {
+  final Donation donation;
+  EditDonationWidget(this.donation);
+
+  @override
+  _EditDonationWidget createState() => _EditDonationWidget(donation);
+}
+
+class _EditDonationWidget extends State<EditDonationWidget> {
+  Donation donation;
+  _EditDonationWidget(Donation donation1) {
     this.donation = donation1;
   }
 
@@ -221,10 +381,10 @@ class _EditDonationPage extends State<EditDonationPage> {
               name.text,
               description.text,
               _doubleValue.toDouble()).then((value){
-                if(value.statusCode)
+                if(value.statusCode == 200)
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ManageDonationDesktop()),
+                    MaterialPageRoute(builder: (context) => ManageDonationPage()),
                   );
               });
 
@@ -249,56 +409,35 @@ class _EditDonationPage extends State<EditDonationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      Material(
-          elevation: 5,
-          child: Container(
-              margin: EdgeInsets.only(top: 25),
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment(-0.75, -0.75),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: greenPastel,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: greenPastel)),
-                      child: Text(
-                        "Vrati se nazad",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ).showCursorOnHover,
-                  nameOrganizationWidget(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  title(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  longDescription(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  money(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 50, right: 20, top: 10, bottom: 10),
-                  ),
-                  donationButton(),
-                  wrong()
-                ],
-              ))),
-      CollapsingNavigationDrawer()
-    ]);
+   return Container(
+        margin: EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            nameOrganizationWidget() ,
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            title(),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            longDescription(),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            money(),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+           
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            donationButton(),
+            wrong()
+          ],
+        ));
   }
 }
 
@@ -323,4 +462,5 @@ class CurrencyPtBrInputFormatter extends TextInputFormatter {
         text: newText,
         selection: new TextSelection.collapsed(offset: newText.length));
   }
+
 }

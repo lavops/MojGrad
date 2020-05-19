@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user.dart';
+import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
 
 import '../main.dart';
 
+ User publicUser;
+ 
 class SplashPage extends StatefulWidget {
   final String jwt;
-  SplashPage(this.jwt);
+  final int id;
+  SplashPage(this.jwt, this.id);
   @override
   _SplashPageState createState() => new _SplashPageState();
 }
@@ -16,6 +23,34 @@ class _SplashPageState extends State<SplashPage> {
   // It will check if we have logged user in our session/memory
   // If we have user in memory we will redirect to Homescreen
   // If not it will be reddirected to Login Page
+
+
+    _getUser() async {
+    var res = await APIServices.getUser(widget.jwt, widget.id);
+    print(res.body);
+    Map<String, dynamic> jsonUser = jsonDecode(res.body);
+    User user = User.fromObject(jsonUser);
+    if(user != null )
+    {
+      setState(() {
+       publicUser= user;
+      });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage.fromBase64(widget.jwt)),
+        );
+    }
+    else
+    {
+      Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LoginPage()));
+    }
+    
+  }
+
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2), () {
@@ -25,11 +60,7 @@ class _SplashPageState extends State<SplashPage> {
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomePage.fromBase64(widget.jwt)),
-        );
+        _getUser();
       }
     });
   }

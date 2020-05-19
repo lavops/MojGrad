@@ -6,7 +6,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
 import 'package:frontend/ui/UserProfilePage.dart';
-import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -1363,7 +1363,8 @@ class EditProfile extends State<EditProfilePage> {
                     color: Colors.white,
                   ),
                 ),
-              ))
+              )),
+               SizedBox(height: 20),
             ],
           ),
         ));

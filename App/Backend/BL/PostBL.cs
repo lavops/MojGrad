@@ -27,6 +27,11 @@ namespace Backend.BL
             return _iPostDAL.editPost(id, description);
         }
 
+        public List<Post> getAllNicePostsByCityId(long cityId)
+        {
+            return _iPostDAL.getAllNicePostsByCityId(cityId);
+        }
+
         public List<Post> getAllPosts()
         {
             return _iPostDAL.getAllPosts();
@@ -72,9 +77,9 @@ namespace Backend.BL
             return _iPostDAL.getByID(id);
         }
 
-        public List<Post> getPostsByFilter(List<int> filterList, int statusId)
+        public List<Post> getPostsByFilter(List<int> filterList, long cityId, int statusId)
         {
-            return _iPostDAL.getPostsByFilter(filterList, statusId);
+            return _iPostDAL.getPostsByFilter(filterList, cityId, statusId);
         }
 
         public Post insertPost(Post post)

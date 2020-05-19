@@ -141,7 +141,7 @@ namespace Backend.DAL
                 issuer: _appSettings.Secret,
                 audience: _appSettings.Secret,
                 claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(30),
                 signingCredentials: credentials);
 
             var encodeToken = new JwtSecurityTokenHandler().WriteToken(token);

@@ -1,12 +1,12 @@
 class Constants {
   static const String PrijaviKorisnika = 'Prijavi korisnika';
-  static const String PogledajResenja = 'Pogledaj rešenja';
+
 
   static const List<String> choices = <String> [
     PrijaviKorisnika,
-    PogledajResenja
   ];
 }
+
 
 class ConstantsComment {
   static const String PrijaviKomentar = 'Prijavi komentar';

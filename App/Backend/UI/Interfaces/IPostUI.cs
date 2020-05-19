@@ -14,12 +14,13 @@ namespace Backend.UI.Interfaces
         List<Post> getAllPostsSolvedByOneInstitution(long id);
         Post getByID(long id);
         Post insertPost(Post post);
-        List<Post> getPostsByFilter(List<int> filterList, int statusId);
+        List<Post> getPostsByFilter(List<int> filterList, long cityId, int statusId);
         List<Post> getAllSolvedPosts();
         List<Post> getAllUnsolvedPosts();
         bool deletePost(long id);
         Post editPost(long id, string description);
         List<Post> getAllSolvedPostsByCityId(long cityId);
         List<Post> getAllUnsolvedPostsByCityId(long cityId);
+        List<Post> getAllNicePostsByCityId(long cityId);
     }
 }

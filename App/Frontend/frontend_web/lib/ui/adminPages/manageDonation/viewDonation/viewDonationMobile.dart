@@ -6,10 +6,10 @@ import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageDonation/editDonation/editDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 
-import '../../../editDonationPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 

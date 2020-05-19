@@ -178,24 +178,14 @@ class StateLikes extends State<LikesPage> {
               backgroundColor: MyApp.ind == 0
                   ? Colors.white
                   : Theme.of(context).copyWith().backgroundColor,
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    String jwt; 
-                    APIServices.jwtOrEmpty().then((res) {
-                      setState(() {
-                        jwt = res;
-                      });
-                      if (res != null) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  HomePage.fromBase64(jwt.toString())),
-                        );
-                      }
-                    });
-                  }),
+             leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context, listLikes.length);
+              },
+              child: Icon(Icons.arrow_back,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
+            ),
               bottom: tabs(),
             ),
             body: TabBarView(children: <Widget>[

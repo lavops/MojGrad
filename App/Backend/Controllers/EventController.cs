@@ -51,7 +51,7 @@ namespace Backend.Controllers
         }
 
         [Authorize]
-        [HttpGet("byCityId={cityId}/userId={userID}")]
+        [HttpGet("byCityId={cityId}/userId={userId}")]
         public ActionResult<IEnumerable<EventViewModel>> GetFromCityId(int cityId,int userId)
         {
             var events = _iEventUI.getAllEventsByCityId(cityId);

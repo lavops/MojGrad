@@ -1,3 +1,4 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/constants.dart';
@@ -46,7 +47,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
       child: Row(
         children: <Widget>[
           //imageGallery(),
-          Expanded( child: imageGallery2(post.photoPath, post.solvedPhotoPath)),
+          Expanded( child: imageGalery3(post.photoPath, post.solvedPhotoPath)),
           Expanded( child: packedThings()),
           solvedColor(),
         ],
@@ -73,7 +74,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
       children: <Widget>[
         userInfoRow(),
         Expanded(child: SizedBox()),
-        description(),
+        description(post.description),
         Expanded(child: SizedBox()),
         actionsButtons(),
       ],
@@ -142,74 +143,33 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
     }
   }
 
-  Widget imageGallery() => Container(
-    constraints: BoxConstraints(
-      maxHeight: 180.0, // changed to 400
-      minHeight: 100.0, // changed to 200
-      maxWidth: 250,
-      minWidth: 250,
-    ),
-    child: Image(image: NetworkImage(userPhotoURL + post.photoPath)),
-  );
-
-  void _updateImageIndex(int index) {
-    setState(() => _currentImageIndex = index);
-  }
-
-  Widget imageGallery2(String image, String image2) { 
-   List<String> imgList=[]; 
-  imgList.add(userPhotoURL + image);
-  image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
-  return Column(children: <Widget>[ 
-    GestureDetector(
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          CarouselSlider(
-            options: CarouselOptions(
-              viewportFraction: 1.0,
-              onPageChanged: (index, reason) {
-                _updateImageIndex(index);
-              },
-              enableInfiniteScroll: false,
-            ),
-            items: imgList.map((item) => Container(
-                constraints: BoxConstraints(
-                maxHeight: 180.0, // changed to 400
-                minHeight: 100.0, // changed to 200
-                maxWidth: 250,
-                minWidth: 250,
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey[200],
-                    width: 1.0,
-                  ),
-                ),
-              ),
-              child: Center(
-                child: Image.network(item, fit: BoxFit.fitWidth, width: MediaQuery.of(context).size.width, )
-              ),
-            )).toList(),
-            
-          ),
-        ],
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(userPhotoURL + image);
+    image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
+    return SizedBox(
+      height: 120.0,
+      width: 120.0,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: greenPastel,
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
       ),
-    ),
-
-    Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-      (imgList.length > 1) ?
-      Container(
-        height: 30,
-          child: PhotoCarouselIndicator(
-            photoCount: imgList.length,
-            activePhotoIndex: _currentImageIndex,
-        )) : Container( width: 1, height: 1,),
-    ],)
-    ],
     );
   }
 
@@ -277,51 +237,21 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
     )
   );
 
-  Widget description() => Container(
-    child: Row(
-      children: <Widget>[
-        SizedBox(
-          width: 10,
-        ),
-        Flexible(
-          child: Text(post.description),
-        )
-      ],
-    )
-  );
-}
+  Widget description(String description){
+    if(description.length >= 25){
+      description = description.substring(0,25);
+      description = description.replaceRange(23, 25, "...");
+    }
 
-class PhotoCarouselIndicator extends StatelessWidget {
-  final int photoCount;
-  final int activePhotoIndex;
-
-  PhotoCarouselIndicator({
-    @required this.photoCount,
-    @required this.activePhotoIndex,
-  });
-
-  Widget _buildDot({bool isActive}) {
     return Container(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-        child: Container(
-          height: isActive ? 7.5 : 6.0,
-          width: isActive ? 7.5 : 6.0,
-          decoration: BoxDecoration(
-            color: isActive ? Colors.green : Colors.grey,
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(photoCount, (i) => i)
-          .map((i) => _buildDot(isActive: i == activePhotoIndex))
-          .toList(),
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 10,),
+          Flexible(
+            child: Text(description),
+          )
+        ],
+      )
     );
   }
 }

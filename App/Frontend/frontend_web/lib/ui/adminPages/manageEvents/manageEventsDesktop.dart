@@ -19,6 +19,7 @@ class ManageEventsPageDesktop extends StatefulWidget {
 
 class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
   List<Events> events;
+  List<Events> finishedEvents;
 
   _getEvents()
   {
@@ -35,13 +36,29 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
     });
   }
 
+  _getFinishedEvents()
+  {
+    APIServices.getFinishedEvents(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<Events> ev;
+      ev = list.map((model) => Events.fromObject(model)).toList();
+      if(mounted)
+      {
+        setState(() {
+          finishedEvents = ev;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getEvents();
+    _getFinishedEvents();
   }
 
-  Widget buildEventsList(List<Events> listEvents){
+  Widget buildEventsList(List<Events> listEvents, int ind){
     return ListView.builder(
       padding: EdgeInsets.only(bottom: 30.0),
       itemCount: listEvents == null ? 0 : listEvents.length,
@@ -55,7 +72,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
                   startEndDateRow(listEvents[index]),
                   locationRow(listEvents[index]),
-                  buttonsRow(listEvents[index], index, listEvents),
+                  buttonsRow(listEvents[index], index, listEvents, ind),
                  ],
                 ),
               ),
@@ -76,11 +93,15 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
   Widget startEndDateRow(Events event) {
     return Row(children: <Widget>[
       SizedBox(width: 15.0),
-      Text("Počinje: "),
-      Text(event.startDate),
+      Column(children: <Widget>[
+        Text("Počinje: "),
+        Text(event.startDate),
+      ],),
       Expanded(child: SizedBox(),),
-      Text("Završava se: "),
-      Text(event.endDate),
+      Column(children: <Widget>[
+        Text("Završava se: "),
+        Text(event.endDate),
+      ],),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -93,7 +114,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
     ],);
   }
 
-  Widget buttonsRow(Events event, index, List<Events> listEvents) {
+  Widget buttonsRow(Events event, index, List<Events> listEvents, int ind) {
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
       RaisedButton(
@@ -114,14 +135,14 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
         color: Colors.red,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         onPressed: () {
-          showAlertDialog(context, event.id, index);
+          showAlertDialog(context, event.id, index, ind);
         },
       ).showCursorOnHover,
       SizedBox(width: 15.0,),
     ],);
   }
 
-  showAlertDialog(BuildContext context, int eventId, int index) {
+  showAlertDialog(BuildContext context, int eventId, int index, int ind) {
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.red),),
       onPressed: () {
@@ -129,7 +150,10 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           if(res.statusCode == 200){
             print("Događaj je uspešno obrisan.");
             setState(() {
-              events.removeAt(index);
+              if(ind == 1)
+                 events.removeAt(index);
+              else
+                finishedEvents.removeAt(index);
             });
           }
         });
@@ -165,7 +189,8 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(child: ConstrainedBox(child: Column(children: <Widget>[
+        Container(child: ConstrainedBox(child: TabBarView(children: <Widget>[
+          Column(children: <Widget>[
            Row(children: <Widget>[
            Expanded(child: SizedBox(),),
            RaisedButton(onPressed: () {
@@ -178,8 +203,12 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
             color: Color(0xFF00BFA6),
           ).showCursorOnHover,
           ],),
-            Flexible(child: buildEventsList(events),),
+            Flexible(child: buildEventsList(events, 1),),
           ]),
+          Column(children: <Widget>[
+          Flexible(child: buildEventsList(finishedEvents, 2),)
+          ]),
+          ],),
           constraints: BoxConstraints(maxWidth: 600),
           ),
           padding: const EdgeInsets.only(left: 100, right: 100, top: 30),

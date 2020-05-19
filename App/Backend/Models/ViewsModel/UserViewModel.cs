@@ -38,7 +38,7 @@ namespace Backend.Models.ViewsModel
             this.createdAt = u.createdAt;
             this.id = u.id;
             this.points = u.points;
-            this.level = u.level;
+            this.level = (u.points + u.donatedPoints)/100 + 1;
             this.cityName = u.city.name;
             this.cityId = u.cityId;
             this.photo = u.photo;

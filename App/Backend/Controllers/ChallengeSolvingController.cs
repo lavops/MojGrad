@@ -72,7 +72,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("solvingChallenge")]
-        public ActionResult<IEnumerable<ChallengeSolvingViewModel>> solvingChallenge(ChallengeSolving solut)
+        public ActionResult<IEnumerable<ChallengeSolvingViewModel>> SolvingChallenge(ChallengeSolving solut)
         {
             var solvings = _iChallengeSolvingUI.solvingChallenge(solut.id, solut.postId);
             List<ChallengeSolvingViewModel> listSol = new List<ChallengeSolvingViewModel>();

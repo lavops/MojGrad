@@ -515,14 +515,14 @@ static Future registerInstitution(Institution ins) async {
   }
 
   
-   static Future createEvent(String jwt, int adminId, String nameEvent, String shortDesc, String longDesc, String location, int cityId, String startDate, String endDate, double latitude, double longitude) async  {
+   static Future createEvent(String jwt, int adminId, int institutionId, String nameEvent, String shortDesc, String longDesc, String location, int cityId, String startDate, String endDate, double latitude, double longitude) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Event';
 		var data = Map();
     data["cityId"] = cityId;
-    data["adminId"] = adminId;
-    data["institutionId"] = null;
+    data["adminId"] = adminId != 0 ? adminId : null;
+    data["institutionId"] = institutionId != 0 ? institutionId : null;
     data["latitude"] = latitude;
     data["longitude"] = longitude;
     data["shortDescription"] = shortDesc;
@@ -816,10 +816,10 @@ static Future registerInstitution(Institution ins) async {
     });
   }
   // filter
-  static Future getFiltered(String jwt, List<int> ids) async {
+  static Future getFiltered(String jwt, List<int> ids, int cityId) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    var jbody = jsonEncode({'listFilter': ids});
+    var jbody = jsonEncode({'listFilter': ids, 'cityId':cityId});
     var res =  await http.post(serverURL + 'Post/UnsolvedPostsByFilter',  headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
@@ -862,6 +862,7 @@ static Future registerInstitution(Institution ins) async {
     });
   }
 
+<<<<<<< HEAD
    //method for instituion to join events
   static Future joinEvent(String jwt, int eventId, int institutionId) async{
     var datas  = jsonDecode(jwt);
@@ -904,6 +905,28 @@ static Future registerInstitution(Institution ins) async {
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
+=======
+  static Future getFinishedEvents(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Event/FinishedEvent', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future getFinishedDonations(String jwt) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+
+    return await http.get(serverURL + 'Donation/FinishedDonation', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+>>>>>>> 21c5023abb05c367930a61dc04e15462df86b389
   }
 }
 

@@ -16,6 +16,7 @@ class ManageEventsPageMobile extends StatefulWidget {
 
 class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
   List<Events> events;
+  List<Events> finishedEvents;
 
   _getEvents()
   {
@@ -32,10 +33,26 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
     });
   }
 
+  _getFinishedEvents()
+  {
+    APIServices.getFinishedEvents(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<Events> ev;
+      ev = list.map((model) => Events.fromObject(model)).toList();
+      if(mounted)
+      {
+        setState(() {
+          finishedEvents = ev;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getEvents();
+    _getFinishedEvents();
   }
 
   Widget buildEventsList(List<Events> listEvents){
@@ -70,10 +87,26 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
     ],);
   }
 
+<<<<<<< HEAD
   Widget startEndDateColumn(Events event) {
     return Column(children: <Widget>[
       Text("Počinje: "+ event.startDate),
       Text("Završava se: "+ event.endDate),
+=======
+  Widget startEndDateRow(Events event) {
+    return Row(children: <Widget>[
+      SizedBox(width: 15.0),
+      Column(children: <Widget>[
+        Text("Počinje: "),
+        Text(event.startDate),
+      ],),
+      Expanded(child: SizedBox(),),
+      Column(children: <Widget>[
+        Text("Završava se: "),
+        Text(event.endDate),
+      ],),
+      SizedBox(width: 15.0,),
+>>>>>>> 21c5023abb05c367930a61dc04e15462df86b389
     ],);
   }
 
@@ -155,7 +188,8 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: ConstrainedBox(child: Column(children: <Widget>[
+    return Container(child: ConstrainedBox(child: TabBarView(children: <Widget>[
+      Column(children: <Widget>[
         Row(children: <Widget>[
           Expanded(child: SizedBox(),),
           RaisedButton(onPressed: () {
@@ -170,10 +204,14 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
           ],),
             Flexible(child: buildEventsList(events),),
           ]),
-          constraints: BoxConstraints(maxWidth: 500),
-          ),
-          padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-          alignment: Alignment.topCenter,
-        );
+          Row(children: <Widget>[
+          Flexible(child: buildEventsList(finishedEvents),),
+          ]),
+    ],),
+    constraints: BoxConstraints(maxWidth: 500),
+    ),
+    padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
+    alignment: Alignment.topCenter,
+  );
   }
 }

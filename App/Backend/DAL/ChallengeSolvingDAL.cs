@@ -1,5 +1,6 @@
 ﻿using Backend.DAL.Interfaces;
 using Backend.Models;
+using Backend.Models.ViewsModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

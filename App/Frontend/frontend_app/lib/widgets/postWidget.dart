@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/constantsDeleteEdit.dart';
@@ -100,7 +101,7 @@ class _PostWidgetState extends State<PostWidget> {
             children: <Widget>[
           userInfoRow(post.userId, post.username, post.typeName, post.userPhoto,
               post.statusId),
-          imageGallery(post.photoPath, post.solvedPhotoPath),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           SizedBox(height: 2.0),
           Align(
               alignment: Alignment.centerLeft,
@@ -212,12 +213,6 @@ class _PostWidgetState extends State<PostWidget> {
             otherUserId: _otherUserId,
           ));
     }
-    else if(choice == Constants.PogledajResenja){
-      Navigator.push(
-        context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-      );
-    }
 
   }
 
@@ -322,8 +317,6 @@ class _PostWidgetState extends State<PostWidget> {
               )
             ],
           ));
-    }else if(choice == ConstantsDeleteEdit.PogledajResenja){
-      _getSolvedStatus();
     }
   }
 
@@ -359,8 +352,8 @@ Widget imageGallery(String image, String image2) {
                ),
                 items: imgList.map((item) => Container(
                    constraints: BoxConstraints(
-                    maxHeight: 300.0, // changed to 400
-                    minHeight: 200.0, // changed to 200
+                    maxHeight: 350.0, // changed to 400
+                    minHeight: 250.0, // changed to 200
                     maxWidth: double.infinity,
                     minWidth: double.infinity,
                   ),
@@ -397,7 +390,35 @@ Widget imageGallery(String image, String image2) {
         );
 }
 
-
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(serverURLPhoto + image);
+    image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
+    return SizedBox(
+      height: 400.0,
+      width: double.infinity,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: Color(0xFF00BFA6),
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget actionsButtons(int statusId, int postId, int likeNum, int dislikeNum,
           int commNum, int isLiked) =>
@@ -435,12 +456,9 @@ Widget imageGallery(String image, String image2) {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LikesPage(postId)),
-                  );
+                   _getLikesFromPage(postId);
                 },
-                child: Text(likeNum.toString()),
+                child: Text(likeNum.toString(), style: TextStyle(fontSize: 15)),
               ),
               IconButton(
                 icon: isLiked == 2
@@ -470,12 +488,9 @@ Widget imageGallery(String image, String image2) {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LikesPage(postId)),
-                  );
+                 _getLikesFromPage(postId);
                 },
-                child: Text(dislikeNum.toString()),
+                child: Text(dislikeNum.toString(), style: TextStyle(fontSize: 15)),
               ),
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),
@@ -483,11 +498,28 @@ Widget imageGallery(String image, String image2) {
                   _getCommentsFromPage(postId);
                 },
               ),
-              Text(commNum.toString()),
+              Text(commNum.toString(),  style: TextStyle(fontSize: 15)),
               Expanded(child: SizedBox()),
               post.postTypeId == 1 ? SizedBox() :
               statusId == 2 && post.postTypeId != 1
-                  ? FlatButton(
+                  ?
+                  Container( 
+                    width: 95,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF00BFA6),
+                      borderRadius: BorderRadius.circular(11.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      ),
+                    child:
+                   FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
                           side: BorderSide(color: Color(0xFF00BFA6))),
@@ -499,13 +531,33 @@ Widget imageGallery(String image, String image2) {
                       onPressed: () {
                         _getSolvedStatus();
                       },
-                    )
-                  : IconButton(
+                    ))
+                  : Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                      width: 0.3,
+                      color:  Color(0xFF00BFA6)
+                    ),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(50.0) 
+                      ),
+                       boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                        offset: Offset(0, 2), // changes position of shadow
+                      ),
+                      ],
+                    ),
+                    child:IconButton(
                       icon: Icon(Icons.done_all, color: Color(0xFF00BFA6)),
                       onPressed: () {
                         _getSolvedStatus();
                       },
                     ),
+                  ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
@@ -524,6 +576,17 @@ Widget imageGallery(String image, String image2) {
     _getPostById();
   }
 
+  _getLikesFromPage(int postId) async {
+    int result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LikesPage(postId)),
+    );
+    
+    setState(() {
+      if (result != null) post.likeNum = result;
+    });
+  }
+
   Widget description(
     int otherUserId,
     String username,
@@ -532,23 +595,7 @@ Widget imageGallery(String image, String image2) {
       Container(
           child: Row(
         children: <Widget>[
-          SizedBox(
-            width: 10,
-          ),
-          InkWell(
-              onTap: () {
-                if (userId != otherUserId)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OthersProfilePage(otherUserId)),
-                  );
-              },
-              child: Text(username,
-                  style: TextStyle(fontWeight: FontWeight.bold))),
-          SizedBox(
-            width: 10,
-          ),
+         SizedBox(width: 10,),
           Flexible(
             child: Text(description),
           )
