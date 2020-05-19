@@ -21,6 +21,7 @@ using Backend.BL;
 using Backend.BL.Interfaces;
 using Backend.DAL;
 using Backend.DAL.Interfaces;
+using Backend.Models;
 
 namespace Backend
 {
@@ -80,10 +81,24 @@ namespace Backend
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
                 };
+
+                x.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        if (string.IsNullOrEmpty(accessToken) == false)
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddDbContext<AppDbContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddSignalR();
 
             services.AddTransient<IUserUI, UserUI>();
             services.AddTransient<IUserBL, UserBL>();
@@ -141,7 +156,6 @@ namespace Backend
             services.AddTransient<IDonationBL, DonationBL>();
             services.AddTransient<IDonationDAL, DonationDAL>();
 
-
             services.AddTransient<IChallengeSolvingUI, ChallengeSolvingUI>();
             services.AddTransient<IChallengeSolvingBL, ChallengeSolvingBL>();
             services.AddTransient<IChallengeSolvingDAL, ChallengeSolvingDAL>();
@@ -149,6 +163,10 @@ namespace Backend
             services.AddTransient<IStatisticsUI, StatisticsUI>();
             services.AddTransient<IStatisticsBL, StatisticsBL>();
             services.AddTransient<IStatisticsDAL, StatisticsDAL>();
+
+            services.AddTransient<IDisplayNotificationsUI, DisplayNotificationsUI>();
+            services.AddTransient<IDisplayNotificationsBL, DisplayNotificationsBL>();
+            services.AddTransient<IDisplayNotificationsDAL, DisplayNotificationsDAL>();
 
 
         }
@@ -176,6 +194,11 @@ namespace Backend
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            //ChatHub
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/notification");
             });
         }
     }

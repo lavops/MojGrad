@@ -47,7 +47,7 @@ namespace Backend.Models.ViewsModel
                 this.isOwnerOfPost = false;
                 this.isOwnerOfSolution = false;
             }
-            this.createdAt = challenge.createdAt.ToString("dd/mm/yyyy hh:mm");
+            this.createdAt = challenge.createdAt.ToString("dd/MM/yyyy hh:mm");
             this.description = challenge.description;
             this.postStatusId = challenge.post.statusId; 
             this.selected = challenge.selected;
