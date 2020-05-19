@@ -103,7 +103,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
       child: Row(
         children: <Widget>[
           //imageGallery(),
-          Expanded( child: imageGalery3(post.photoPath, post.solvedPhotoPath)),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           Expanded( child: packedThings(post, ind)),
           solvedColor(post),
         ],
@@ -115,7 +115,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
   Widget solvedColor(FullPost post) => Container(
     constraints: BoxConstraints(
-      minHeight: 180,
+      minHeight: 120,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -131,17 +131,15 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
   Widget packedThings(FullPost post, int ind) => Container(
     constraints: BoxConstraints(
-      maxHeight: 180,
+      maxHeight: 120,
       minHeight: 100,
     ),
     child: Column(
       children: <Widget>[
         userInfoRow(post, ind),
-        category(post),
         Expanded(child: SizedBox()),
         description(post),
         Expanded(child: SizedBox()),
-        location(post),
         actionsButtons(post),
       ],
     ),
@@ -312,18 +310,23 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
 
 
-  Widget description(FullPost post) => Container(
+  Widget description(FullPost post){
+    if(post.description.length >= 25){
+      post.description = post.description.substring(0,25);
+      post.description = post.description.replaceRange(23, 25, "...");
+    }
+
+    return Container(
       child: Row(
         children: <Widget>[
-          SizedBox(
-            width: 10,
-          ),
+          SizedBox(width: 10,),
           Flexible(
             child: Text(post.description),
           )
         ],
       )
-  );
+    );
+  } 
 
 
 

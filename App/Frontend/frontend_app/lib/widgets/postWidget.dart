@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/constantsDeleteEdit.dart';
@@ -100,7 +101,7 @@ class _PostWidgetState extends State<PostWidget> {
             children: <Widget>[
           userInfoRow(post.userId, post.username, post.typeName, post.userPhoto,
               post.statusId),
-          imageGallery(post.photoPath, post.solvedPhotoPath),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           SizedBox(height: 2.0),
           Align(
               alignment: Alignment.centerLeft,
@@ -389,7 +390,35 @@ Widget imageGallery(String image, String image2) {
         );
 }
 
-
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(serverURLPhoto + image);
+    image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
+    return SizedBox(
+      height: 400.0,
+      width: double.infinity,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: Color(0xFF00BFA6),
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget actionsButtons(int statusId, int postId, int likeNum, int dislikeNum,
           int commNum, int isLiked) =>
