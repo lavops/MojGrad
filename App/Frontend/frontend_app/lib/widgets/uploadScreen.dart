@@ -40,7 +40,7 @@ class _UploadScreenState extends State<UploadScreen>{
             CircularProgressIndicator(
               valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
             ),
-            Text("Vaša obajva se šalje na server")
+            Text("Vaša obajva se šalje na server.")
           ],
         ),
       )

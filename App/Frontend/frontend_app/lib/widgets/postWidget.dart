@@ -249,7 +249,7 @@ class _PostWidgetState extends State<PostWidget> {
                       });
                     }
                   });
-                  print('Uspesno ste izbrisali objavu.');
+                  print('Uspešno ste izbrisali objavu.');
                   Navigator.of(context).pop();
                 },
               ),
@@ -302,7 +302,7 @@ class _PostWidgetState extends State<PostWidget> {
                       });
                     }
                   });
-                  print('Uspesno ste izmenili opis');
+                  print('Uspešno ste izmenili opis.');
                   Navigator.of(context).pop();
                 },
               ),
@@ -321,7 +321,7 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   _getSolvedStatus() async {
-    print("HEJ USAO SAM U STRANICU");
+    print("");
     int result = await Navigator.push(
       context,
       MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),

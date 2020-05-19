@@ -188,7 +188,7 @@ class _EventsWidgetState extends State<EventsWidget> {
                   if (res != null) {
                     APIServices.joinEvent(jwt, event.id, userId).then((res) {
                       if (res.statusCode == 200) {
-                        print('Uspesno ste se pridruzili dogadjaju.');
+                        print('Uspešno ste se pridružili događaju.');
                         setState(() {
                           event.isGoing = 1;
                           event.userNum++;
@@ -233,7 +233,7 @@ class _EventsWidgetState extends State<EventsWidget> {
                   if (res != null) {
                     APIServices.leaveEvent(jwt, event.id, userId).then((res) {
                       if (res.statusCode == 200) {
-                        print('Uspesno ste napustili dogadjaj.');
+                        print('Uspešno ste napustili događaj.');
                         setState(() {
                           event.isGoing = 0;
                           event.userNum--;

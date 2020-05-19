@@ -25,9 +25,9 @@ class _LoginPageState extends State<LoginPage> {
       _emailController.text = "";
       _passwordController.text = "";
       setState(() {
-        pogresanLoginText = "Podaci nisu ispravni";
+        pogresanLoginText = "Podaci nisu ispravni.";
       });
-      throw Exception('Los email/sifra');
+      throw Exception('Loša e-mail adresa ili šifra.');
     } else {
       var pom = utf8.encode(_password);
       var pass = sha1.convert(pom);
@@ -41,9 +41,9 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           _passwordController.text = "";
           setState(() {
-            pogresanLoginText = "PODACI NISU ISPRAVNI";
+            pogresanLoginText = "Podaci nisu ispravni.";
           });
-          throw Exception('Bad username/password');
+          throw Exception('Loša e-mail adresa ili šifra.');
         }
       });
     }
@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(height: 5),
-                    Text("Unesite email vašeg naloga i na njemu će Vam stići poruka u kojoj se nalazi Vaša nova šifra."),
+                    Text("Unesite e-mail adresu koju ste koristili prilikom registracije. Na unetu adresu će Vam stići poruka u kojoj se nalazi Vaša nova šifra."),
                     TextField(
                       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
@@ -223,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pop(context);
                             } else {
                               setState(() {
-                                errorMessage = "Email nije ispravan";
+                                errorMessage = "E-mail adresa nije ispravna.";
                                 customController.text="";
                               });
                             }

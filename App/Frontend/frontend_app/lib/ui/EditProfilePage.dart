@@ -390,7 +390,7 @@ class EditProfile extends State<EditProfilePage> {
                               });
                               Navigator.of(context).pop();
                             } else {
-                              check = "Greska";
+                              check = "Greška";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -497,7 +497,7 @@ class EditProfile extends State<EditProfilePage> {
                               });
                               Navigator.of(context).pop();
                             } else {
-                              check = "Greska";
+                              check = "Greška";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -608,7 +608,7 @@ class EditProfile extends State<EditProfilePage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
-                        hintText: "Ponovi šifru",
+                        hintText: "Ponovite šifru",
                         labelStyle: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                             fontStyle: FontStyle.italic),
@@ -652,7 +652,7 @@ class EditProfile extends State<EditProfilePage> {
                                 Navigator.of(context).pop(check.toString());
                               }
                             } else {
-                              print("Nova i ponovljena nisu iste");
+                              print("Nova i ponovljena šifra se ne poklapaju.");
                             }
                           },
                         ),
@@ -708,7 +708,7 @@ class EditProfile extends State<EditProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("Email adresa",
+                        Text("E-mail adresa",
                             style: TextStyle(
                                 fontSize: 24,
                                 color: Theme.of(context)
@@ -756,7 +756,7 @@ class EditProfile extends State<EditProfilePage> {
                               });
                               Navigator.of(context).pop();
                             } else {
-                              check = "Greska";
+                              check = "Greška";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -969,7 +969,7 @@ class EditProfile extends State<EditProfilePage> {
                               });
                               Navigator.of(context).pop();
                             } else {
-                              check = "Greska";
+                              check = "Greška";
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -1043,7 +1043,7 @@ class EditProfile extends State<EditProfilePage> {
                       editProfilePhotoo(context);
                     },
                     child: Text(
-                      "Promeni profilnu sliku",
+                      "Promenite profilnu sliku",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).textTheme.bodyText1.color),
@@ -1165,7 +1165,7 @@ class EditProfile extends State<EditProfilePage> {
                 child: ListTile(
                   leading: Icon(Icons.email,
                       color: Theme.of(context).copyWith().iconTheme.color),
-                  title: Text('Email',
+                  title: Text('E-mail adresa',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: _selectedOption == index - 4

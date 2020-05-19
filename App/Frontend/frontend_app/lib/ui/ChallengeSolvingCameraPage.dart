@@ -165,16 +165,16 @@ class _ChallengeSolvingCameraPageState
 
           if (imageFile == null) {
             setState(() {
-              pogresanText = "Izaberi fotografiju.";
+              pogresanText = "Izaberite fotografiju.";
             });
-            throw Exception('Greskaaaa');
+            throw Exception('Greška');
           }
           if (res != null && imageFile != null) {
             APIServices.insertSolution(jwt, userId, postId, description.text,
                     "Upload//Post//" + basename(imageFile.path), 0)
                 .then((res) {
               if (res.statusCode == 200) {
-                print("Uspesno ste objavili resenje");
+                print("Uspešno ste objavili rešenje.");
                 print(res.body);
                 Navigator.pop(context);
               }

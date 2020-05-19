@@ -380,9 +380,9 @@ class _CameraOneState extends State<CameraOne>{
 
           if (imageFile == null || addres == null || city == null || postType == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Popunite obavezna polja: tip posta i lokaciju.";
             });
-            throw Exception('Greskaaaa');
+            throw Exception('Greška');
           }
           if (res != null && imageFile != null && addres != null && city!= null && postType != null) {
             APIServices.addPost(
