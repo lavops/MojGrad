@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/fullPost.dart';
@@ -112,7 +113,7 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
       child: Row(
         children: <Widget>[
           //imageGallery(),
-          Expanded( child: imageGallery2(post.photoPath, post.solvedPhotoPath)),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           Expanded( child: packedThings(post, ind)),
           solvedColor(post),
         ],
@@ -280,7 +281,35 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
     );
   }
 
-
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(userPhotoURL + image);
+    image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
+    return SizedBox(
+      height: 180.0,
+      width: 200.0,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: Colors.green,
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget actionsButtons(FullPost post) =>
       Stack(
