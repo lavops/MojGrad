@@ -19,6 +19,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 
 List<int> listSelectedTypes = new List();
+List<int> listSelectedBoxes = new List();
 int indikator = 0;
 
 class HomeInstitutionDesktop extends StatefulWidget {
@@ -72,6 +73,11 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
   }
 
   _getFiltered(int cid) async {
+    if (listSelectedBoxes != null) {
+      if (listSelectedBoxes.length > listSelectedTypes.length) {
+        listSelectedTypes = listSelectedBoxes;
+      }
+    }
 
     await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, cid).then((res) {
       Iterable list = json.decode(res.body);
@@ -93,6 +99,14 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
     super.initState();
     _getUnsolvedPosts();
     _getPostType();
+    if (listSelectedTypes != null) {
+      if (listSelectedTypes.length > 0) {
+
+        _getFiltered(icityId);
+        listSelectedTypes.clear();
+
+      }
+    }
   }
 
   Widget buildList() {
@@ -289,24 +303,24 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
       height: 180.0,
       width: 200.0,
       child: Carousel(
-        boxFit: BoxFit.cover,
-        autoplay: false,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 1000),
-        dotSize: 6.0,
-        dotIncreasedColor: Colors.green,
-        dotBgColor: Colors.transparent,
-        dotPosition: DotPosition.bottomCenter,
-        dotVerticalPadding: 10.0,
-        showIndicator: image2 != "" && image2 != null ? true : false,
-        indicatorBgPadding: 7.0,
-        images: image2 != "" && image2 != null ? [
-          NetworkImage(imgList[0]),
-          NetworkImage(imgList[1])
-        ]
-        : [
-          NetworkImage(imgList[0])
-        ]
+          boxFit: BoxFit.cover,
+          autoplay: false,
+          animationCurve: Curves.fastOutSlowIn,
+          animationDuration: Duration(milliseconds: 1000),
+          dotSize: 6.0,
+          dotIncreasedColor: Colors.green,
+          dotBgColor: Colors.transparent,
+          dotPosition: DotPosition.bottomCenter,
+          dotVerticalPadding: 10.0,
+          showIndicator: image2 != "" && image2 != null ? true : false,
+          indicatorBgPadding: 7.0,
+          images: image2 != "" && image2 != null ? [
+            NetworkImage(imgList[0]),
+            NetworkImage(imgList[1])
+          ]
+              : [
+            NetworkImage(imgList[0])
+          ]
       ),
     );
   }
@@ -381,7 +395,7 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
         )
             : ListView.builder(
             padding: EdgeInsets.only(bottom: 30.0),
-            itemCount: listFilteredPosts.length,
+            itemCount:  listFilteredPosts == null ? 0 : listFilteredPosts.length,
             itemBuilder: (BuildContext context, int index) {
               return rowPost(listFilteredPosts[index], 0);
             }
@@ -396,20 +410,20 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
             : Text('Neki tekst'),
       ),
       Container(
-        padding: EdgeInsets.only(left: 250, top: 10),
-        child: FlatButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(11.0),
-              side: BorderSide(color: Colors.green)),
-          color: Colors.lightGreen,
-          child: Text(
-            "Primeni filter",
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {
-            _getFiltered(institution.cityId);
-          },
-        )
+          padding: EdgeInsets.only(left: 250, top: 10),
+          child: FlatButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(11.0),
+                side: BorderSide(color: Colors.green)),
+            color: Colors.lightGreen,
+            child: Text(
+              "Primeni filter",
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              _getFiltered(institution.cityId);
+            },
+          )
       )
     ]);
   }
@@ -453,7 +467,6 @@ Widget category(FullPost post) => Container(
 
 
 
-
 class Box extends StatefulWidget {
   final String title;
   final int id;
@@ -472,20 +485,23 @@ class _BoxState extends State<Box> {
     return ListTile(
       title: Text(widget.title),
       trailing: Checkbox(
-          value: selected,
+          value: listSelectedBoxes.contains(widget.id) ? true :selected,
           onChanged: (bool val) {
             setState(() {
               selected = val;
               if (selected == true) {
                 listSelectedTypes.add(widget.id);
-
-                if (listSelectedTypes.length > 0) {
-                  indikator = 1;
+                if (listSelectedTypes != null) {
+                  if (listSelectedTypes.length > 0) {
+                    indikator = 1;
+                  }
+                  listSelectedBoxes.add(widget.id);
                 }
+
               }
               else {
                 List<int> lista = new List();
-                if (listSelectedTypes != null ) {
+                if (listSelectedTypes != null) {
                   for (int i = 0; i < listSelectedTypes.length; i++) {
                     if (listSelectedTypes[i] != widget.id) {
                       lista.add(listSelectedTypes[i]);
@@ -495,12 +511,21 @@ class _BoxState extends State<Box> {
                   if (listSelectedTypes.length == 0) {
                     indikator = 0;
                   }
+                  List<int> listBox = new List();
+                  if (listSelectedBoxes != null) {
+                    for (int i = 0; i < listSelectedBoxes.length; i++) {
+                      if (listSelectedBoxes[i] != widget.id) {
+                        listBox.add(listSelectedBoxes[i]);
+                      }
+                    }
+                    listSelectedBoxes = listBox;
+                  }
                 }
-                }
-
+              }
 
             });
           }),
     );
   }
 }
+
