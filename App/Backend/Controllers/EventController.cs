@@ -30,7 +30,21 @@ namespace Backend.Controllers
             List<EventViewModel> listEvents = new List<EventViewModel>();
             foreach (var eve in events)
             {
-                listEvents.Add(new EventViewModel(eve, userId));
+                listEvents.Add(new EventViewModel(eve, userId, null));
+            }
+
+            return listEvents;
+        }
+
+        [Authorize]
+        [HttpGet("ForWeb/instId={instId}")]
+        public ActionResult<IEnumerable<EventViewModel>> GetAllEventsForWeb(int instId)
+        {
+            var events = _iEventUI.getAllEvents();
+            List<EventViewModel> listEvents = new List<EventViewModel>();
+            foreach (var eve in events)
+            {
+                listEvents.Add(new EventViewModel(eve, null, instId));
             }
 
             return listEvents;
@@ -44,7 +58,7 @@ namespace Backend.Controllers
             List<EventViewModel> listEvents = new List<EventViewModel>();
             foreach (var eve in events)
             {
-                listEvents.Add(new EventViewModel(eve, 0));
+                listEvents.Add(new EventViewModel(eve, 0, null));
             }
 
             return listEvents;
@@ -58,7 +72,21 @@ namespace Backend.Controllers
             List<EventViewModel> listEvents = new List<EventViewModel>();
             foreach (var eve in events)
             {
-                listEvents.Add(new EventViewModel(eve, userId));
+                listEvents.Add(new EventViewModel(eve, userId, null));
+            }
+
+            return listEvents;
+        }
+
+        [Authorize]
+        [HttpGet("ByCityForWeb/cityId={cityId}/instId={instId}")]
+        public ActionResult<IEnumerable<EventViewModel>> GetFromCityIdForWeb(int cityId, int instId)
+        {
+            var events = _iEventUI.getAllEventsByCityId(cityId);
+            List<EventViewModel> listEvents = new List<EventViewModel>();
+            foreach (var eve in events)
+            {
+                listEvents.Add(new EventViewModel(eve, null, instId));
             }
 
             return listEvents;
@@ -69,10 +97,19 @@ namespace Backend.Controllers
         public ActionResult<EventViewModel> GetById(int id, int userId)
         {
             Event events = _iEventUI.getByID(id);
-            EventViewModel fullEvent = new EventViewModel(events, userId);
+            EventViewModel fullEvent = new EventViewModel(events, userId, null);
             return fullEvent;
         }
-      
+
+        [Authorize]
+        [HttpGet("ByIdForWeb/id={id}/instId={instId}")]
+        public ActionResult<EventViewModel> GetByIdForWeb(int id, int instId)
+        {
+            Event events = _iEventUI.getByID(id);
+            EventViewModel fullEvent = new EventViewModel(events, null, instId);
+            return fullEvent;
+        }
+
         [Authorize]
         [HttpPost]
         public IActionResult InsertEvent(EventViewModel events)
@@ -93,7 +130,7 @@ namespace Backend.Controllers
             Event e = _iEventUI.editEvent(eve);
             if (e != null)
             {
-                EventViewModel event1 = new EventViewModel(e, null);
+                EventViewModel event1 = new EventViewModel(e, null, null);
                 return Ok(event1);
             }
             else

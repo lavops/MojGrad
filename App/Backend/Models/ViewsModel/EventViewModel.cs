@@ -26,7 +26,7 @@ namespace Backend.Models.ViewsModel
         public int isGoing { get; set; }
         private AppDbContext _context = new AppDbContext();
         public EventViewModel() { }
-        public EventViewModel(Event e, long? userId)
+        public EventViewModel(Event e, long? userId, long? instId)
         {
             this.id = e.id;
             this.cityId = e.cityId;
@@ -54,6 +54,12 @@ namespace Backend.Models.ViewsModel
             {
                 var user = _context.userEvent.Where(x => x.eventId == e.id && x.userId == userId).FirstOrDefault();
                 if (user != null)
+                    this.isGoing = 1;
+            }
+            else if (instId != null)
+            {
+                var instit = _context.userEvent.Where(x => x.eventId == e.id && x.institutionId == instId).FirstOrDefault();
+                if (instit != null)
                     this.isGoing = 1;
             }
             else
