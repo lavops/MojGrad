@@ -9,12 +9,13 @@ import 'package:frontend/models/postType.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/services/images.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/widgets/novaMapaProba.dart';
 import 'package:frontend/widgets/uploadScreen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
-import 'package:nominatim_location_picker/nominatim_location_picker.dart';
+//import 'package:nominatim_location_picker/nominatim_location_picker.dart';
 import 'package:path/path.dart';
 
 class CameraTwo extends StatefulWidget {
@@ -143,6 +144,7 @@ class _CameraTwoState extends State<CameraTwo>{
     super.initState();
     _getPostType();
     _getCity();
+    currentLocationFunction();
   }
 
   @override
@@ -347,7 +349,7 @@ class _CameraTwoState extends State<CameraTwo>{
       Map result = await showDialog(
           context: context,
           builder: (BuildContext ctx) {
-            return NominatimLocationPicker(
+            /*return NominatimLocationPicker(
               searchHint: 'Pretraži',
               awaitingForLocation: "Čeka se lokacija.",
               customMapLayer: new TileLayerOptions(
@@ -358,7 +360,7 @@ class _CameraTwoState extends State<CameraTwo>{
                       'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
                   'id': 'mapbox.mapbox-streets-v7'
                 }),
-            );
+            );*/
           });
       if (result != null) {
         setState(() => location = result['latlng']);
@@ -378,7 +380,23 @@ class _CameraTwoState extends State<CameraTwo>{
         child: Text('Izaberi lokaciju', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () async{
-        await getLocationWithNominatim();
+        Mapa mapa;
+        if(mapa == null){
+          mapa = (latitude1 != null && longitude2 != null) ? Mapa(latitude1, longitude2) : Mapa(0, 0);
+          latitude1 = mapa.izabranaX;
+          longitude2 = mapa.izabranaY;
+        }
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => mapa)).then((value){
+              setState(() {
+                latitude1 = mapa.izabranaX;
+                longitude2 = mapa.izabranaY;
+                _getUserLocation();
+              });
+            });
       },
       icon: Icon(Icons.location_on,),
       color: Color(0xFF00BFA6),
@@ -391,16 +409,16 @@ class _CameraTwoState extends State<CameraTwo>{
     final locationRow = Row(
       children: <Widget>[
         Expanded(
-          child: currentLocation,
-          flex: 10,
-        ),
-        Expanded(
           child: Container(color: Colors.white),
           flex: 1,
         ),
         Expanded(
           child: chooseLocation,
-          flex: 10,
+          flex: 5,
+        ),
+        Expanded(
+          child: Container(color: Colors.white),
+          flex: 1,
         ),
       ],
     );
@@ -441,9 +459,9 @@ class _CameraTwoState extends State<CameraTwo>{
 
           if (imageFile == null || addres == null || city == null || postType == null || imageFile2 == null) {
             setState(() {
-              pogresanText = "Popunite obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
             });
-            throw Exception('Greška');
+            throw Exception('Greskaaaa');
           }
           if (res != null && imageFile != null && imageFile2 != null && addres != null && city!= null && postType != null) {
             APIServices.addPost(

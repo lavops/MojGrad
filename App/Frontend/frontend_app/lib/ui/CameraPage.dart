@@ -12,7 +12,7 @@ import 'dart:io';
 import 'package:frontend/services/api.services.dart';
 import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
-import 'package:nominatim_location_picker/nominatim_location_picker.dart';
+// import 'package:nominatim_location_picker/nominatim_location_picker.dart';
 import 'package:path/path.dart';
 
 import '../main.dart';
@@ -162,7 +162,7 @@ class _CameraPageState extends State<CameraPage> {
       Map result = await showDialog(
           context: context,
           builder: (BuildContext ctx) {
-            return NominatimLocationPicker(
+            /*return NominatimLocationPicker(
               searchHint: 'Pretraži',
               awaitingForLocation: "Čeka se lokacija.",
               customMapLayer: new TileLayerOptions(
@@ -173,7 +173,7 @@ class _CameraPageState extends State<CameraPage> {
                       'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
                   'id': 'mapbox.mapbox-streets-v7'
                 }),
-            );
+            );*/
           });
       if (result != null) {
         setState(() => location = result['latlng']);
