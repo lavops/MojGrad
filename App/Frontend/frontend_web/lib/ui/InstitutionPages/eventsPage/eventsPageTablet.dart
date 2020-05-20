@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/addNewEvent.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEventIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventTablet.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
+
+import '../homePage/homePage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -21,7 +25,7 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
 
   _getEvents()
   {
-    APIServices.getEvents(TokenSession.getToken, 0).then((res) {
+    APIServices.getEventsByCity(TokenSession.getToken, insId, 1).then((res) {
       Iterable list = json.decode(res.body);
       List<Events> ev;
       ev = list.map((model) => Events.fromObject(model)).toList();
@@ -97,7 +101,7 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ViewEventTablet(event)),
+                builder: (context) => ViewEventIns(event)),
           );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
@@ -105,7 +109,7 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
         color: greenPastel,
       ),
       Expanded(child: SizedBox()),
-      event.institutionId==insId ? deleteEditButtons(event, index) : joinButton(),
+      event.institutionId==insId ? deleteEditButtons(event, index) : (event.isGoing == 1 ? cancelButton(event, index) : joinButton(event, index)),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -130,14 +134,37 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
     ],);
   }
 
-  Widget joinButton() {
+  Widget joinButton(Events event, int index) {
     return RaisedButton(
       onPressed: () {
-        //to do
+        APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              events[index].isGoing = 1;
+            });
+          }
+        });
       },
       child: Text("Pridruži se", style: TextStyle(color: Colors.white),),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
       color: Colors.blue,
+    );
+  }
+
+  Widget cancelButton(Events event, int index) {
+    return RaisedButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.white)),
+      shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+      onPressed: () {
+        APIServices.leaveEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              events[index].isGoing = 0;
+            });
+          }
+        });
+      },
+      color: Colors.red,
     );
   }
 
@@ -191,9 +218,9 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
               Expanded(child: SizedBox(),),
               RaisedButton(
                 onPressed: () {
-                  /*Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => ()), 
-                  );*/
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CreateEventPageIns()), 
+                  );
                 },
                 child: Row(children: <Widget>[ 
                   Text("Dodaj događaj", style: TextStyle(color: Colors.white,),),

@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/addNewEvent.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEventIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventMobile.dart';
+
+import '../homePage/homePage.dart';
+import 'viewEventIns/viewEventInsMobile.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -20,7 +25,7 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
 
   _getEvents()
   {
-    APIServices.getEvents(TokenSession.getToken, 0).then((res) {
+    APIServices.getEventsByCity(TokenSession.getToken, insId, 1).then((res) {
       Iterable list = json.decode(res.body);
       List<Events> ev;
       ev = list.map((model) => Events.fromObject(model)).toList();
@@ -69,9 +74,16 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
   }
 
   Widget startEndDateColumn(Events event) {
-    return Column(children: <Widget>[
-      Text("Počinje: " + event.startDate),
-      Text("Završava se: " + event.endDate),
+    return Row(children: <Widget>[
+      Column(children: [
+        Text("Počinje:"),
+        Text(event.startDate)
+      ],),
+      Expanded(child: SizedBox()),
+      Column(children: [
+        Text("Završava se:"),
+        Text(event.endDate)
+      ],)
     ],);
   }
 
@@ -91,15 +103,15 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ViewEventMobile(event)),
+                builder: (context) => ViewEventIns(event)),
           );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
-        child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
+        child: Text("Informacije", style: TextStyle(color: Colors.white,),),
         color: greenPastel,
       ),
       Expanded(child: SizedBox()),
-      event.institutionId==insId ? deleteEditButtons(event, index) : joinButton(),
+      event.institutionId==insId ? deleteEditButtons(event, index) : (event.isGoing == 1 ? cancelButton(event, index) : joinButton(event, index)),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -124,14 +136,37 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
     ],);
   }
 
-  Widget joinButton() {
+  Widget joinButton(Events event, int index) {
     return RaisedButton(
       onPressed: () {
-        //to do
+        APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              events[index].isGoing = 1;
+            });
+          }
+        });
       },
       child: Text("Pridruži se", style: TextStyle(color: Colors.white),),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
       color: Colors.blue,
+    );
+  }
+
+  Widget cancelButton(Events event, int index) {
+    return RaisedButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.white)),
+      shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+      onPressed: () {
+        APIServices.leaveEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              events[index].isGoing = 0;
+            });
+          }
+        });
+      },
+      color: Colors.red,
     );
   }
 
@@ -141,7 +176,6 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
       onPressed: () {
         APIServices.deleteDonation(TokenSession.getToken, eventId).then((res) {
           if(res.statusCode == 200){
-            print("Događaj je uspešno obrisan.");
             setState(() {
               events.removeAt(index);
             });
@@ -181,9 +215,9 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
         Row(children: <Widget>[
           Expanded(child: SizedBox(),),
           RaisedButton(onPressed: () {
-            /*Navigator.pushReplacement(context, 
-              MaterialPageRoute(builder: (context) => ),
-            );*/
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CreateEventPageIns()), 
+              );
             },
             shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
             child: Row(children: <Widget>[
