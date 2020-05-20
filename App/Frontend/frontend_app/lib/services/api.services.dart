@@ -666,4 +666,14 @@ class APIServices
     });
   }
 
+    static Future getNotificationForUser(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Notification/userId='+userId.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
 }

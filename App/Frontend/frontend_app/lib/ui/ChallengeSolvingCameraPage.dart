@@ -176,6 +176,7 @@ class _ChallengeSolvingCameraPageState
               if (res.statusCode == 200) {
                 print("Uspešno ste objavili rešenje.");
                 print(res.body);
+                sendNotification("Rešenje", "Predloženo je rešenje za Vaš problem",1, ownerId);
                 Navigator.pop(context);
               }
             });

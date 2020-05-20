@@ -5,6 +5,7 @@ import 'package:frontend/models/filters.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/ui/notificationPage.dart';
 import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/postWidget.dart';
 
@@ -26,6 +27,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   _getPosts() async {
+    if(publicUser != null){
     var jwt = await APIServices.jwtOrEmpty();
     APIServices.getPostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
@@ -37,11 +39,12 @@ class _FeedPageState extends State<FeedPage> {
         });
       }
     });
+    }
   }
 
   _getUnsolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getUnsolvedPostByCityId(jwt, publicUser.cityId).then((res) {
+    APIServices.getUnsolvedPostByCityId(jwt, user.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -55,7 +58,7 @@ class _FeedPageState extends State<FeedPage> {
 
     _getNicePosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getNicePostByCityId(jwt, publicUser.cityId).then((res) {
+    APIServices.getNicePostByCityId(jwt, user.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -69,7 +72,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _getSolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    var res = await APIServices.getSolvedPostByCityId(jwt, publicUser.cityId);
+    var res = await APIServices.getSolvedPostByCityId(jwt, user.cityId);
     print(res.body);
     Iterable list = json.decode(res.body);
     List<FullPost> listP = List<FullPost>();
@@ -117,9 +120,15 @@ class _FeedPageState extends State<FeedPage> {
                     );
                   }).toList();
                 }),
-            Icon(
-              Icons.notifications,
+            IconButton(
+              icon: Icon(Icons.notifications), 
               color:Theme.of(context).copyWith().iconTheme.color,
+              onPressed: () {
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()));
+              },
             ),
           ],
         ),

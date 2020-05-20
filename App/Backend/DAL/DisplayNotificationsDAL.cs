@@ -36,22 +36,28 @@ namespace Backend.DAL
             var solutions1 = _context.challengeSolving.Include(x => x.user).Include(x => x.post).Where(x => x.userId == userId && x.selected == 1 && x.post.userId != userId).OrderBy(x => x.createdAt).ToList();
             foreach (var item in solutions1)
             {
-                listNot.Add(new NotificationViewModel(item.post.userId, null, item.post.user.username, item.post.user.photo, item.solvingPhoto, item.postId, 2, item.createdAt));
+                if (item.userId != null )
+                {
+                    listNot.Add(new NotificationViewModel(item.post.userId, null, "ime", "slika", item.solvingPhoto, item.postId, 2, item.createdAt));
+
+                }
             }
 
             var likes = _context.like.Include(x => x.post).Include(x => x.user).Where(x => x.post.userId == userId).ToList();
 
             foreach (var item in likes)
             {
-                if(item.userId != userId)
+                if(item.userId != userId && item.likeTypeId == 1)
                     listNot.Add(new NotificationViewModel(item.userId, null, item.user.username, item.user.photo, item.post.photoPath, item.postId, 3, item.time));
+                if (item.userId != userId && item.likeTypeId == 2)
+                    listNot.Add(new NotificationViewModel(item.userId, null, item.user.username, item.user.photo, item.post.photoPath, item.postId, 4, item.time));
             }
 
             var comments = _context.comment.Include(x => x.post).Include(x => x.user).Where(x => x.post.userId == userId).ToList();
             foreach (var item in comments)
             {
                 if (item.userId != userId)
-                    listNot.Add(new NotificationViewModel(item.userId, null, item.user.username, item.user.photo, item.post.photoPath, item.postId, 4, item.createdAt));
+                    listNot.Add(new NotificationViewModel(item.userId, null, item.user.username, item.user.photo, item.post.photoPath, item.postId, 5, item.createdAt));
             }
 
             var newList = listNot.OrderByDescending(x => x.createdAt).ToList();

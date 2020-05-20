@@ -312,6 +312,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                           solvingPost.postStatusId = 1;
                           isSolved = 1;
                         });
+                        sendNotification("Rešenje", "Vaše rešenje je odabrano kao pobedničko",1, solvingPost.userId);
                       }
                     });
                     

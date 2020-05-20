@@ -44,17 +44,11 @@ class _HomePageState extends State<HomePage> {
     print(res.body);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     User user = User.fromObject(jsonUser);
-    if(user == null )
-    {
-       Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LoginPage()));
-    }
     setState(() {
       user1 = user;
       publicUser = user;
     });
+  
   }
 
   @override
@@ -85,7 +79,16 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      body: _kTabPages[_currentTabIndex],
+      body:
+      RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: (user1 != null) ?
+             _kTabPages[_currentTabIndex] : Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
+                    ),
+                  )) ,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
@@ -113,5 +116,14 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+    Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 3));
+    setState(() {
+      user1 = new User();
+    });
+    _getUser();
+    return null;
   }
 }
