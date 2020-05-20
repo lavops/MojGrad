@@ -395,7 +395,7 @@ Widget imageGallery(String image, String image2) {
     imgList.add(serverURLPhoto + image);
     image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
     return SizedBox(
-      height: 400.0,
+      height: 300.0,
       width: double.infinity,
       child: Carousel(
         boxFit: BoxFit.cover,
