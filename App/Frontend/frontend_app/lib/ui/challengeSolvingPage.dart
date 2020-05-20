@@ -5,6 +5,7 @@ import 'package:frontend/models/challengeSolving.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/ChallengeSolvingCameraPage.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/institutionProfile.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:frontend/models/constants.dart';
@@ -179,11 +180,17 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
         children: <Widget>[
           InkWell(
               onTap: () {
-                if (userId != solvingPost.userId)
+                if (solvingPost.userId != null && userId != solvingPost.userId)
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => OthersProfilePage(solvingPost.userId)),
+                  );
+                else if (solvingPost.institutionId != null)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InstitutionProfile(solvingPost.institutionId)),
                   );
               },
               child: CircleImage(
@@ -194,11 +201,17 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
               )),
           InkWell(
               onTap: () {
-                if (userId != solvingPost.userId)
+                if (solvingPost.userId != null && userId != solvingPost.userId)
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => OthersProfilePage(solvingPost.userId)),
+                  );
+                else if (solvingPost.institutionId != null)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InstitutionProfile(solvingPost.institutionId)),
                   );
               },
               child: Text(
@@ -407,10 +420,15 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
           ),
           InkWell(
               onTap: () {
-                if (userId != solvingPost.userId)
+                if (solvingPost.userId != null && userId != solvingPost.userId)
                   Navigator.push(
                     context,
                     MaterialPageRoute( builder: (context) => OthersProfilePage(solvingPost.userId)),
+                  );
+                  else if (solvingPost.institutionId != null)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute( builder: (context) => InstitutionProfile(solvingPost.institutionId)),
                   );
               },
               child: Text(solvingPost.username, style: TextStyle(fontWeight: FontWeight.bold))),

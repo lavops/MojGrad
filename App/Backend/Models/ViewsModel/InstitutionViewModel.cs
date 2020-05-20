@@ -34,7 +34,7 @@ namespace Backend.Models.ViewsModel
             this.authentication = inst.authentication;
             this.cityName = inst.city.name;
             this.photoPath = inst.photoPath;
-            this.postsNum = _context.challengeSolving.Where(x => x.institutionId == inst.id).Count();
+            this.postsNum = _context.challengeSolving.Where(x => x.institutionId == inst.id && x.selected == 1).Count();
         }
     }
 }

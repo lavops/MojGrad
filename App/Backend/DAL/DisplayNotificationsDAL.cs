@@ -29,7 +29,7 @@ namespace Backend.DAL
                 }
                 else if (item.userId == null)
                 {
-                    listNot.Add(new NotificationViewModel(null, item.institutionId, item.institution.name, item.user.photo, item.solvingPhoto, item.postId, 1, item.createdAt));
+                    listNot.Add(new NotificationViewModel(null, item.institutionId, item.institution.name, item.institution.photoPath, item.solvingPhoto, item.postId, 1, item.createdAt));
                 }
             }
             //izabrali njegovo resenje -- ne prikazuje se kada izabere sam sebe
