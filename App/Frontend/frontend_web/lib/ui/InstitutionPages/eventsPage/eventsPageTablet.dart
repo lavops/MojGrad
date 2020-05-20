@@ -5,6 +5,7 @@ import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventTablet.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -93,7 +94,11 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
       SizedBox(width: 15.0,),
       RaisedButton(
         onPressed: () {
-          //to do
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewEventTablet(event)),
+          );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),

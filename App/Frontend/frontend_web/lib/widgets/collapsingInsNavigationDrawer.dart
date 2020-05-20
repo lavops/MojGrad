@@ -124,6 +124,9 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
                     icon: Icons.exit_to_app,
                     animationController: _animationController,
                     onTap: () => {
+                      setState(() {
+                        currentSelectedIndex = 2;
+                      }),
                       _removeToken(),
                       Navigator.push(
                         context,

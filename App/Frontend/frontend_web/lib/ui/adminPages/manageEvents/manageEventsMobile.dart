@@ -5,6 +5,7 @@ import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/createEvent/createEventPage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventMobile.dart';
 import 'package:universal_html/html.dart';
 
 
@@ -66,7 +67,7 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
               Expanded(child: Column(
                 children: <Widget>[
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
-                  startEndDateRow(listEvents[index]),
+                  startEndDateColumn(listEvents[index]),
                   locationRow(listEvents[index]),
                   buttonsRow(listEvents[index], index),
                  ],
@@ -86,19 +87,10 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
     ],);
   }
 
-  Widget startEndDateRow(Events event) {
-    return Row(children: <Widget>[
-      SizedBox(width: 15.0),
-      Column(children: <Widget>[
-        Text("Počinje: "),
-        Text(event.startDate),
-      ],),
-      Expanded(child: SizedBox(),),
-      Column(children: <Widget>[
-        Text("Završava se: "),
-        Text(event.endDate),
-      ],),
-      SizedBox(width: 15.0,),
+  Widget startEndDateColumn(Events event) {
+    return Column(children: <Widget>[
+      Text("Počinje: "+ event.startDate),
+      Text("Završava se: "+ event.endDate),
     ],);
   }
 
@@ -106,7 +98,7 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
     return Row(children: <Widget>[
       SizedBox(width: 8.0,),
       Icon(Icons.location_on),
-      Text(event.address),
+      Flexible(child: Text(event.address),),
     ],);
   }
 
@@ -114,7 +106,13 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
     return Row(children: <Widget>[
       SizedBox(width: 10.0,),
       RaisedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewEventMobile(event)),
+          );
+        },
         color: Color(0xFF00BFA6),
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),

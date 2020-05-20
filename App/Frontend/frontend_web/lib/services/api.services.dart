@@ -862,6 +862,50 @@ static Future registerInstitution(Institution ins) async {
     });
   }
 
+   //method for instituion to join events
+  static Future joinEvent(String jwt, int eventId, int institutionId) async{
+    var datas  = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'Event/addGoingToEvent';
+    var data = Map();
+    data["eventId"] = eventId;
+    data["institutionId"] = institutionId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
+  //get method for users who are going for certain event
+  static Future getUsersForEvent(String jwt, int eventId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var data = Map();
+    data["id"] = eventId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(serverURL + 'Event/UserForEvent' , headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
+  //get method for institutions that are going for certain event
+  static Future getInstitutionsForEvent(String jwt, int eventId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var data = Map();
+    data["id"] = eventId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(serverURL + 'Event/InstitutionsForEvent', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
   static Future getFinishedEvents(String jwt) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();

@@ -2,11 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
+import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEventInsDesktop.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
+
+import '../../../editEventPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -94,14 +98,18 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
       SizedBox(width: 15.0,),
       RaisedButton(
         onPressed: () {
-          //to do
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewEventInsDesktop(event)),
+          );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
         color: greenPastel,
       ).showCursorOnHover,
       Expanded(child: SizedBox()),
-      event.institutionId==insId ? deleteEditButtons(event, index) : joinButton(),
+      event.institutionId==insId ? deleteEditButtons(event, index) : (/*isJoined(event) ?**/ cancelButton(event) /*: joinButton(event)*/),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -110,7 +118,11 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
     return Row(children: <Widget>[
       RaisedButton(
         onPressed: () {
-          //to do
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventPage(event)),
+          );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
         child: Text("Izmeni", style: TextStyle(color: Colors.white),),
@@ -128,12 +140,29 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
     ],);
   }
 
-  Widget joinButton() {
+  Widget joinButton(Events event) {
     return RaisedButton(
-      onPressed: () {},
+      onPressed: () {
+        APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              
+            });
+          }
+        });
+      },
       child: Text("Pridruži se", style: TextStyle(color: Colors.white),),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
       color: Colors.blue,
+    ).showCursorOnHover;
+  }
+
+  Widget cancelButton(Events event) {
+    return RaisedButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.white)),
+      shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+      onPressed: () {},
+      color: Colors.red,
     ).showCursorOnHover;
   }
 
@@ -176,6 +205,25 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
       },
     );
   }
+
+  /*bool isJoined(Events event){
+    bool join = false;
+    APIServices.getInstitutionsForEvent(TokenSession.getToken, event.id).then((res) {
+      Iterable list = json.decode(res.body);
+      print(res.body);
+      List<Institution> institutions;
+      institutions = list.map((model) => Institution.fromObject(model)).toList();
+      var l = institutions==null ? 0 : institutions.length;
+      for (var i = 0; i < l; i++) {
+        if(institutions[i]!=null && institutions[i].id==insId)
+        {
+         join = true;
+         break;
+        }
+      }
+    });
+    return join;
+  }*/
 
   @override
   Widget build(BuildContext context) {

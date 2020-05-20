@@ -5,6 +5,7 @@ import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventMobile.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -48,7 +49,7 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
           child: Row( children: <Widget>[
             Expanded(child: Column(children: <Widget>[
               titleColumn(listEvents[index].title, listEvents[index].shortDescription),
-              startEndDateRow(listEvents[index]),
+              startEndDateColumn(listEvents[index]),
               locationRow(listEvents[index]),
               buttonsRow(listEvents[index], index),
             ],)),
@@ -67,15 +68,10 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
     ],);
   }
 
-  Widget startEndDateRow(Events event) {
-    return Row(children: <Widget>[
-      SizedBox(width: 8.0,),
-      Text("Počinje: "),
-      Text(event.startDate),
-      Expanded(child: SizedBox(),),
-      Text("Završava se: "),
-      Text(event.endDate),
-      SizedBox(width: 8.0,),
+  Widget startEndDateColumn(Events event) {
+    return Column(children: <Widget>[
+      Text("Počinje: " + event.startDate),
+      Text("Završava se: " + event.endDate),
     ],);
   }
 
@@ -92,7 +88,11 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
       SizedBox(width: 15.0,),
       RaisedButton(
         onPressed: () {
-          //to do
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewEventMobile(event)),
+          );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
