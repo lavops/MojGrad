@@ -5,15 +5,25 @@ import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPageTablet.dar
 import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'eventsPageTablet.dart';
+import '../../../../models/event.dart';
+import 'viewEventInsDesktop.dart';
+import 'viewEventInsMobile.dart';
+import 'viewEventInsTablet.dart';
 
 
-class EventsPage extends StatefulWidget {
+class ViewEventIns extends StatefulWidget {
+  Events event;
+  ViewEventIns(this.event);
   @override
-  _EventsPageState createState() => _EventsPageState();
+  _ViewEventInsState createState() => _ViewEventInsState(event);
 }
 
-class _EventsPageState extends State<EventsPage> {
+class _ViewEventInsState extends State<ViewEventIns> {
+  Events event;
+  _ViewEventInsState(Events event1){
+    this.event = event1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
@@ -26,9 +36,9 @@ class _EventsPageState extends State<EventsPage> {
         ),
         backgroundColor: Colors.white,
         body: ScreenTypeLayout(
-          mobile: EventsPageMobile(),
-          tablet: EventsPageTablet(),
-          desktop: EventsPageDesktop(),
+          mobile: ViewEventInsMobile(event),
+          tablet: ViewEventInsTablet(event),
+          desktop: ViewEventInsDesktop(event),
         ),
       ),
     );

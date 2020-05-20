@@ -69,6 +69,10 @@ class _ViewEventMobileState extends State<ViewEventMobile> {
   Widget build(BuildContext context) {
     return Scaffold( 
       drawer: DrawerAdmin(6),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: Container(
           height: double.infinity,
           width: double.infinity,

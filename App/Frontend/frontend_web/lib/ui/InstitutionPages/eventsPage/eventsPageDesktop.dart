@@ -5,12 +5,15 @@ import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/addNewEvent.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEventIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEventInsDesktop.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import '../../../editEventPage.dart';
+import '../homePage/homePage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -25,7 +28,7 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
 
   _getEvents()
   {
-    APIServices.getEvents(TokenSession.getToken, 0).then((res) {
+    APIServices.getEventsByCity(TokenSession.getToken, insId, 1).then((res) {
       Iterable list = json.decode(res.body);
       List<Events> ev;
       ev = list.map((model) => Events.fromObject(model)).toList();
@@ -76,11 +79,15 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
   Widget startEndDateRow(Events event) {
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
-      Text("Počinje: "),
-      Text(event.startDate),
-      Expanded(child: SizedBox(),),
-      Text("Završava se: "),
-      Text(event.endDate),
+      Column(children: [
+        Text("Počinje:"),
+        Text(event.startDate)
+      ],),
+      Expanded(child: SizedBox()),
+      Column(children: [
+        Text("Završava se:"),
+        Text(event.endDate)
+      ],),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -101,7 +108,7 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ViewEventInsDesktop(event)),
+                builder: (context) => ViewEventIns(event)),
           );
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
@@ -109,7 +116,7 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
         color: greenPastel,
       ).showCursorOnHover,
       Expanded(child: SizedBox()),
-      event.institutionId==insId ? deleteEditButtons(event, index) : (/*isJoined(event) ?**/ cancelButton(event) /*: joinButton(event)*/),
+      event.institutionId==insId ? deleteEditButtons(event, index) : (event.isGoing == 1 ? cancelButton(event, index) : joinButton(event, index)),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -140,13 +147,13 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
     ],);
   }
 
-  Widget joinButton(Events event) {
+  Widget joinButton(Events event, int index) {
     return RaisedButton(
       onPressed: () {
         APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
           if(res.statusCode == 200) {
             setState(() {
-              
+              events[index].isGoing = 1;
             });
           }
         });
@@ -157,11 +164,19 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
     ).showCursorOnHover;
   }
 
-  Widget cancelButton(Events event) {
+  Widget cancelButton(Events event, int index) {
     return RaisedButton(
       child: Text("Otkaži", style: TextStyle(color: Colors.white)),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-      onPressed: () {},
+      onPressed: () {
+        APIServices.leaveEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              events[index].isGoing = 0;
+            });
+          }
+        });
+      },
       color: Colors.red,
     ).showCursorOnHover;
   }
@@ -235,9 +250,9 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
               Expanded(child: SizedBox(),),
               RaisedButton(
                 onPressed: () {
-                  /*Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => null()), 
-                  );*/
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CreateEventPageIns()), 
+                  );
                 },
                 child: Row(children: <Widget>[ 
                   Text("Dodaj događaj", style: TextStyle(color: Colors.white,),),

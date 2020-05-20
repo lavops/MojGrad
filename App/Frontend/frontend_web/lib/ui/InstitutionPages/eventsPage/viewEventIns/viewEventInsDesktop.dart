@@ -110,9 +110,15 @@ Widget titleColumn(String title, String description) {
   Widget startEndDateRow(Events event) {
     return Row(children: <Widget>[
       SizedBox(width: 15.0),
-      Text("Počinje: "+ event.startDate, style: TextStyle(fontSize: 18.0),),
-      Expanded(child: SizedBox(),),
-      Text("Završava se: " + event.endDate, style: TextStyle(fontSize: 18.0),),
+      Column(children: [
+        Text("Počinje:", style: TextStyle(fontSize: 18.0),),
+        Text(event.startDate, style: TextStyle(fontSize: 18.0),)
+      ],),
+      Expanded(child: SizedBox()),
+      Column(children: [
+        Text("Završava se:", style: TextStyle(fontSize: 18.0),),
+        Text(event.endDate, style: TextStyle(fontSize: 18.0),)
+      ],),
       SizedBox(width: 15.0,),
     ],);
   }
@@ -142,7 +148,7 @@ Widget titleColumn(String title, String description) {
           SizedBox(width: 10.0,),
           deleteButton(event),
         ],)
-        : isJoined() ? cancelButton() : joinButton(),
+        : event.isGoing == 1 ? cancelButton() : joinButton(),
     ]);
   }
 
@@ -178,7 +184,8 @@ Widget titleColumn(String title, String description) {
         APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
           if(res.statusCode == 200) {
             setState(() {
-              
+              event.isGoing = 1;
+              _listInstitutionsForEvent();
             });
           }
         });
@@ -193,7 +200,16 @@ Widget titleColumn(String title, String description) {
     return RaisedButton(
       child: Text("Otkaži", style: TextStyle(color: Colors.white)),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-      onPressed: () {},
+      onPressed: () {
+        APIServices.leaveEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              event.isGoing = 0;
+              _listInstitutionsForEvent();
+            });
+          }
+        });
+      },
       color: Colors.red,
     ).showCursorOnHover;
   }

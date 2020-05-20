@@ -71,9 +71,10 @@ class _ViewEventInsTabletState extends State<ViewEventInsTablet> {
     return Scaffold( 
       body: Stack(
         children: <Widget>[
-          Container(
+          Center(
+            child: Container(
             height: double.infinity,
-            width: double.infinity,
+            width: 500,
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 30.0),
             alignment: Alignment.topCenter,
             child: ConstrainedBox(child: Column(children: <Widget>[
@@ -91,6 +92,7 @@ class _ViewEventInsTabletState extends State<ViewEventInsTablet> {
             ],),
             constraints: BoxConstraints(maxWidth: 800),
             ),
+          ),
           ),
           CollapsingInsNavigationDrawer(),
         ],
@@ -141,7 +143,7 @@ Widget titleColumn(String title, String description) {
           SizedBox(width: 10.0,),
           deleteButton(event),
         ],)
-        : isJoined() ? cancelButton() : joinButton(),
+        : event.isGoing == 1 ? cancelButton() : joinButton(),
     ]);
   }
 
@@ -177,7 +179,8 @@ Widget titleColumn(String title, String description) {
         APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
           if(res.statusCode == 200) {
             setState(() {
-              
+              event.isGoing = 1;
+              _listInstitutionsForEvent();
             });
           }
         });
@@ -192,7 +195,16 @@ Widget titleColumn(String title, String description) {
     return RaisedButton(
       child: Text("Otkaži", style: TextStyle(color: Colors.white)),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-      onPressed: () {},
+      onPressed: () {
+        APIServices.leaveEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              event.isGoing = 0;
+              _listInstitutionsForEvent();
+            });
+          }
+        });
+      },
       color: Colors.red,
     );
   }

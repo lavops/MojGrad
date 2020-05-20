@@ -15,15 +15,15 @@ import '../../../../editEventPage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class ViewEventInsTablet extends StatefulWidget {
+class ViewEventInsMobile extends StatefulWidget {
   final Events event;
-  ViewEventInsTablet(this.event);
+  ViewEventInsMobile(this.event);
 
   @override
   _ViewEventInsTabletState createState() => _ViewEventInsTabletState(event);
 }
 
-class _ViewEventInsTabletState extends State<ViewEventInsTablet> {
+class _ViewEventInsTabletState extends State<ViewEventInsMobile> {
   List<User> usersForEvent;
   List<Institution> institutionsForEvent;
   Events event;
@@ -70,7 +70,6 @@ class _ViewEventInsTabletState extends State<ViewEventInsTablet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerInstitution(4),
       body: Container(
             height: double.infinity,
             width: double.infinity,
@@ -104,9 +103,16 @@ Widget titleColumn(String title, String description) {
   }
 
   Widget startEndDateRow(Events event) {
-    return Column(children: <Widget>[
-      Text("Počinje: "+ event.startDate, style: TextStyle(fontSize: 12.0),),
-      Text("Završava se: " + event.endDate, style: TextStyle(fontSize: 12.0),),
+    return Row(children: <Widget>[
+      Column(children: [
+        Text("Počinje:", style: TextStyle(fontSize: 12.0),),
+        Text(event.startDate, style: TextStyle(fontSize: 12.0),)
+      ],),
+      Expanded(child: SizedBox()),
+      Column(children: [
+        Text("Završava se:", style: TextStyle(fontSize: 12.0),),
+        Text(event.endDate, style: TextStyle(fontSize: 12.0),)
+      ],)
     ],);
   }
 
@@ -135,7 +141,7 @@ Widget titleColumn(String title, String description) {
           SizedBox(width: 10.0,),
           deleteButton(event),
         ],)
-        : isJoined() ? cancelButton() : joinButton(),
+        : event.isGoing == 1 ? cancelButton() : joinButton(),
     ]);
   }
 
@@ -171,7 +177,8 @@ Widget titleColumn(String title, String description) {
         APIServices.joinEvent(TokenSession.getToken, event.id, insId).then((res) {
           if(res.statusCode == 200) {
             setState(() {
-              
+              event.isGoing = 1;
+              _listInstitutionsForEvent();
             });
           }
         });
@@ -186,7 +193,16 @@ Widget titleColumn(String title, String description) {
     return RaisedButton(
       child: Text("Otkaži", style: TextStyle(color: Colors.white)),
       shape:RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-      onPressed: () {},
+      onPressed: () {
+        APIServices.leaveEvent(TokenSession.getToken, event.id, insId).then((res) {
+          if(res.statusCode == 200) {
+            setState(() {
+              event.isGoing = 0;
+              _listInstitutionsForEvent();
+            });
+          }
+        });
+      },
       color: Colors.red,
     );
   }

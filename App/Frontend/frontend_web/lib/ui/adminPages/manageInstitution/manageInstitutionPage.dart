@@ -36,7 +36,7 @@ class _ManageInstitutionPageState extends State<ManageInstitutionPage> {
             : AppBar(
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Colors.black),
-              bottom: tabs(),
+              bottom: tabsMobile(),
             ),
           backgroundColor: Colors.white,
           body: ScreenTypeLayout(
@@ -62,5 +62,20 @@ class _ManageInstitutionPageState extends State<ManageInstitutionPage> {
         ),
       ]
     ).showCursorOnHover;
+  }
+
+  Widget tabsMobile() {
+    return TabBar(
+      labelColor: greenPastel,
+      indicatorColor: greenPastel,
+      tabs: <Widget>[
+        Tab(
+          child: Text('SVE INSTITUCIJE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+        ),
+        Tab(
+          child: Text('ZAHTEVI ZA REGISTRACIJU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        ),
+      ]
+    );
   }
 }
