@@ -214,14 +214,9 @@ class _ViewPostMobileState extends State<ViewPostMobile> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      CircleImage(
-                        userPhotoURL + listSolutions[index].userPhoto,
-                        imageSize: 36.0,
-                        whiteMargin: 2.0,
-                        imageMargin: 6.0,
-                      ),
+                      SizedBox(width: 10,),
                       Text(
-                        listSolutions[index].username,
+                        listSolutions[index].username.substring(0,10).replaceRange(9,10, "..."),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: SizedBox()),

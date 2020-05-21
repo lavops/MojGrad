@@ -7,23 +7,25 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/post/singlePostInsWidget.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class ViewPostDesktop extends StatefulWidget {
+class ViewPostInsDesktop extends StatefulWidget {
 
   final FullPost post;
-  ViewPostDesktop(this.post);
+  ViewPostInsDesktop(this.post);
 
   @override
   _ViewPostDesktopState createState() => _ViewPostDesktopState(post);
 }
 
-class _ViewPostDesktopState extends State<ViewPostDesktop> {
+class _ViewPostDesktopState extends State<ViewPostInsDesktop> {
   FullPost post;
   List<Comment> listComents;
   List<ChallengeSolving> listSolutions;
@@ -70,7 +72,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
             children: <Widget>[
             Column(children: <Widget>[
               backButton(),
-              SinglePostWidget(post),
+              SinglePostInsWidget(post),
             ],),
             Column(children: <Widget>[
               backButton(),
@@ -83,7 +85,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
           ]
           ),
       ),
-      CollapsingNavigationDrawer(),
+      CollapsingInsNavigationDrawer(),
       ]
     );
   }
@@ -131,59 +133,10 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                 
               ],
             )),
-            Expanded(child: SizedBox()),
-            IconButton(
-              icon: Icon(Icons.restore_from_trash, color: Colors.red,),
-              onPressed: (){
-                showAlertDialogDeleteComment(context, listComents[index].id, index);
-              },
-            ).showCursorOnHover,
             SizedBox(width: 10,)
           ],),
         );
       }
-    );
-  }
-
-  showAlertDialogDeleteComment(BuildContext context, int id, int index) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.deleteComment(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
-            print("Uspesno brisanje komentara.");
-            setState(() {
-              listComents.removeAt(index);
-            });
-          }
-        });
-        Navigator.pop(context);
-        },
-    ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ).showCursorOnHover;
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Brisanje komentara"),
-      content: Text("Da li ste sigurni da želite da obrišete komentar?"),
-      actions: [
-        okButton,
-        notButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 
@@ -227,7 +180,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                         imageMargin: 6.0,
                       ),
                       Text(
-                        listSolutions[index].username.substring(0,15).replaceRange(13,15, "..."),
+                        listSolutions[index].username.substring(0,10).replaceRange(9,10, "..."),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: SizedBox()),
@@ -238,14 +191,6 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                         style: TextStyle(color: greenPastel, fontWeight: FontWeight.bold),
                       ):
                       SizedBox(),
-                      (listSolutions[index].selected == 1)
-                      ? SizedBox()
-                      : IconButton(
-                          icon: Icon(Icons.restore_from_trash, color: Colors.red,),
-                          onPressed: (){
-                            showAlertDialogDeleteSolution(context, listSolutions[index].id, index);
-                          },
-                        ).showCursorOnHover,
                       SizedBox(width: 10,)
                     ],
                   ),
@@ -263,48 +208,6 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
           ],)
         );
       }
-    );
-  }
-
-  showAlertDialogDeleteSolution(BuildContext context, int id, int index) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.challengeSolvingDelete(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
-            print("Uspesno brisanje ponudjenog rešenja.");
-            setState(() {
-              listSolutions.removeAt(index);
-            });
-          }
-        });
-        Navigator.pop(context);
-        },
-    ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ).showCursorOnHover;
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Brisanje ponuđenog rešenja"),
-      content: Text("Da li ste sigurni da želite da obrišete ponudjeno rešenje?"),
-      actions: [
-        okButton,
-        notButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }

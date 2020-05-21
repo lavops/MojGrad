@@ -3,12 +3,14 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/editEventPage.dart';
+import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/models/postType.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewPost/viewPostPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostMobile.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
@@ -153,21 +155,33 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         },
       ),
       Expanded(child: SizedBox()),
-      (post.statusId == 2)
-          ? InkWell(
-          child: Text(
-            "REŠI",
-            style: TextStyle(color: Color(0xFF00BFA6) ,fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
+      (post.statusId != 1)
+      ? PopupMenuButton<String>(
+        onSelected: (String choice) {
+          choicePostIns(choice, post);
+        },
+        itemBuilder: (BuildContext context) {
+          return ConstantsPostIns.choices.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
             );
-          },
-        )
-        : SizedBox(),
-      SizedBox(width: 10,),
+          }).toList();
+        },
+      )
+      : PopupMenuButton<String>(
+        onSelected: (String choice) {
+          choicePostIns(choice, post);
+        },
+        itemBuilder: (BuildContext context) {
+          return ConstantsPostSolvedIns.choices.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
+            );
+          }).toList();
+        },
+      )
     ],
   );
 
@@ -303,12 +317,28 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
    PostType ptSelect;
 
+  void choicePostIns(String choice, FullPost post) {
+    if (choice == ConstantsPostIns.PogledajObjavu) {
+      print("Pogledaj objavu.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewPostInsPage(post)),
+      );
+    } else if (choice == ConstantsPostIns.Resi) {
+      print("Resi.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
+      );
+    }
+  }
+
   Widget dropdownFU(List<PostType> types) {
     return new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          new Text("Vrsta problema: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           types != null
           ? new DropdownButton<PostType>(
               hint: Text("Izaberi"),
