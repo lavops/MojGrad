@@ -923,6 +923,30 @@ static Future registerInstitution(Institution ins) async {
     });
   }
 
+  static Future getInstitutionByCityIdAuth(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    data["cityId"] = cityId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(serverURL + 'Institution/AuthorizedByCityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
+  static Future getInstitutionByCityIdUnauth(String jwt, int cityId) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    data["cityId"] = cityId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(serverURL + 'Institution/UnauthorizedByCityId', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
+
   static Future getEventsByCity(String jwt, int instId,int cityId) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();

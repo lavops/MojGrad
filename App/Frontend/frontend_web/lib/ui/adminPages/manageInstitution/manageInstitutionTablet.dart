@@ -9,11 +9,14 @@ import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
+import '../../../models/city.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionTablet extends StatefulWidget {
   @override
-  _ManageInstitutionTabletState createState() => _ManageInstitutionTabletState();
+  _ManageInstitutionTabletState createState() =>
+      _ManageInstitutionTabletState();
 }
 
 class Debouncer {
@@ -31,7 +34,8 @@ class Debouncer {
   }
 }
 
-class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with SingleTickerProviderStateMixin{
+class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
+    with SingleTickerProviderStateMixin {
   List<Institution> listInstitutions;
   List<Institution> listUnauthInstitutions;
   TextEditingController searchController = new TextEditingController();
@@ -39,6 +43,12 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
   final _debouncer = Debouncer(milliseconds: 500);
   List<Institution> filteredInstitution;
   List<Institution> filteredUnauthInstitution;
+
+  List<City> listCities;
+  City city;
+  City cityU;
+  List<MaxMinDropDown> maxMinFilter = MaxMinDropDown.getMaxMinDropDown();
+  MaxMinDropDown maxMinF;
 
   _getInstitutions() {
     APIServices.getAllAuthInstitutions(TokenSession.getToken).then((res) {
@@ -66,10 +76,69 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     });
   }
 
+  _getCities() {
+    APIServices.getCity(TokenSession.getToken).then((res) {
+      Iterable list = json.decode(res.body);
+      List<City> listC = List<City>();
+      listC = list.map((model) => City.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listCities = listC;
+          City allinst = new City(9999, "Sve institucije");
+          city = allinst;
+          listCities.add(allinst);
+        });
+      }
+    });
+  }
+
+  _getInstitutionFromCity(int cityId) {
+    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
+        .then((res) {
+      Iterable list = json.decode(res.body);
+      List<Institution> listFU = List<Institution>();
+      listFU = list.map((model) => Institution.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          filteredInstitution = listFU;
+        });
+      }
+    });
+  }
+
+  _getInstitutionFromCityUnauth(int cityId) {
+    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
+        .then((res) {
+      Iterable list = json.decode(res.body);
+      List<Institution> listFU = List<Institution>();
+      listFU = list.map((model) => Institution.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          filteredUnauthInstitution = listFU;
+        });
+      }
+    });
+  }
+
+  _sortListBy() {
+    if (filteredInstitution == null) {
+      if (maxMinF == null || maxMinF.name == "Rastući")
+        listInstitutions.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+      else if (maxMinF.name == "Opadajući")
+        listInstitutions.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+    } else {
+      if (maxMinF == null || maxMinF.name == "Rastući")
+        filteredInstitution.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+      else if (maxMinF.name == "Opadajući")
+        filteredInstitution.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+    }
+  }
+
   void initState() {
     super.initState();
     _getInstitutions();
     _getUnauthInstitutions();
+    _getCities();
   }
 
   @override
@@ -77,7 +146,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     searchController.dispose();
     super.dispose();
   }
-  
+
   showAlertDialog(BuildContext context, int id, int index, int page) {
     // set up the button
     Widget okButton = FlatButton(
@@ -88,10 +157,9 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
         setState(() {
-          if(page == 1){
+          if (page == 1) {
             listInstitutions.removeAt(index);
-          }
-          else if(page == 2){
+          } else if (page == 2) {
             listUnauthInstitutions.removeAt(index);
           }
         });
@@ -108,10 +176,10 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
       },
     );
 
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Brisanje institucije"),
-      content: Text("Da li ste sigurni da želite da obrišete instituciju?"),
+      content: Text("Da li ste sigurni da želite da obrišete instituciju?",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold)),
       actions: [
         okButton,
         notButton,
@@ -127,7 +195,8 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     );
   }
 
-  showAlertDialogAccept(BuildContext context, int id, String email, int index, int page) {
+  showAlertDialogAccept(
+      BuildContext context, int id, String email, int index, int page) {
     // set up the button
     Widget okButton = FlatButton(
       child: Text(
@@ -135,8 +204,9 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
         style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
-        APIServices.acceptInstitution(TokenSession.getToken, id, email).then((res){
-          if(res.statusCode == 200){
+        APIServices.acceptInstitution(TokenSession.getToken, id, email)
+            .then((res) {
+          if (res.statusCode == 200) {
             setState(() {
               listInstitutions.insert(0, listUnauthInstitutions[index]);
               listUnauthInstitutions.removeAt(index);
@@ -156,10 +226,12 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
       },
     );
 
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Prihvati zahtev"),
-      content: Text("Da li ste sigurni da želite da prihvatite zahtev?"),
+      content: Text(
+        "Da li ste sigurni da želite da prihvatite zahtev?",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       actions: [
         okButton,
         notButton,
@@ -177,45 +249,74 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
 
   Widget contactWidget(String phone, String email) => Container(
         child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Kontakt", style: TextStyle(fontWeight: FontWeight.bold)),
-            Row(
-              children: <Widget>[
-                Text("Broj telefona: ", style: TextStyle(fontSize: 15)),
-                Text(phone,
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      decoration: TextDecoration.underline,
-                    )),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Text("E-mail: ", style: TextStyle(fontSize: 15)),
-                Text(email,
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      decoration: TextDecoration.underline,
-                    )),
-              ],
-            ),
-          ],
-        ),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                      child: Text("Broj telefona: ",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Container(
+                      child: Text(phone,
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            decoration: TextDecoration.underline,
+                          ))),
+                ],
+              ),
+              SizedBox(height: 5.0),
+              Row(
+                children: <Widget>[
+                  Container(
+                      child: Text("E-mail: ",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Container(
+                          child: Text(email,
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.underline,
+                              )))),
+                ],
+              )
+            ]),
       );
 
   Widget descriptionWidget(String description) => Container(
         width: 400,
         padding: EdgeInsets.all(10),
         child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Opis", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(description, style: TextStyle(fontSize: 14)),
+            Text(description),
           ],
         ),
+      );
+
+  Widget instPhoto(String photoPath) => Container(
+        child: CircleImage(
+          userPhotoURL + photoPath,
+          imageSize: 56.0,
+          whiteMargin: 2.0,
+          imageMargin: 6.0,
+        ),
+      );
+
+  Widget institutionSolvedPosts(int index) => Container(
+          child: Column(
+        children: [
+          Text("Rešene objave",
+              style: TextStyle(
+                color: Colors.black,
+              )),
+          Text("${listInstitutions[index].postsNum}",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
+        ],
+      ));
+
+  Widget nameInst(String name) => Container(
+        child: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
       );
 
   Widget buildInstList(List<Institution> listInst) {
@@ -234,37 +335,38 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
                   child: Center(
                       child: Column(
                     children: <Widget>[
-                      Container(
-                        child: Text(listInst[index].name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)),
-                      ),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CircleImage(
-                              userPhotoURL + listInst[index].photoPath,
-                              imageSize: 56.0,
-                              whiteMargin: 2.0,
-                              imageMargin: 6.0,
-                            ),
-                            Expanded(child: SizedBox()),
-                            contactWidget(listInst[index].phone, listInst[index].email),
-                            Expanded(child: SizedBox()),
-                            PopupMenuButton<String>(
-                              onSelected: (String choice) {
-                                choiceActionAllInstitutions(choice,listInst[index].id, listInst[index].description, index);
-                              },
-                              itemBuilder: (BuildContext context) {
-                                return ConstantsAllInstitutions.choices.map((String choice) {
-                                  return PopupMenuItem<String>(
-                                    value: choice,
-                                    child: Text(choice),
-                                  );
-                                }).toList();
-                              },
-                            ),
-                          ])
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                              width: 190,
+                              child: nameInst(listInst[index].name)),
+                          Container(
+                              width: 200,
+                              child: contactWidget(listInst[index].phone,
+                                  listInst[index].email)),
+                          Container(
+                              width: 100, child: institutionSolvedPosts(index)),
+                          PopupMenuButton<String>(
+                            onSelected: (String choice) {
+                              choiceActionAllInstitutions(
+                                  choice,
+                                  listInst[index].id,
+                                  listInst[index].description,
+                                  index);
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return ConstantsAllInstitutions.choices
+                                  .map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ))),
             ],
@@ -274,13 +376,18 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     );
   }
 
-  void choiceActionAllInstitutions(String choice, int institutionId, String description, int index) {
+  void choiceActionAllInstitutions(
+      String choice, int institutionId, String description, int index) {
     if (choice == ConstantsAllInstitutions.OpisInstitucije) {
       print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Opis institucije", style: TextStyle(color: Colors.black),),
+            title: Text(
+              "Opis institucije",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             content: Container(
               height: 300,
               child: descriptionWidget(description),
@@ -288,7 +395,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  "Izadji",
+                  "Izađi",
                   style: TextStyle(color: greenPastel),
                 ),
                 onPressed: () {
@@ -314,42 +421,40 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
             children: <Widget>[
               Container(
                   color: Colors.white,
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  margin: EdgeInsets.only(top: 5, left: 20, right: 20),
                   child: Center(
                       child: Column(
                     children: <Widget>[
-                      Container(
-                        child: Text(listInst[index].name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)),
-                      ),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CircleImage(
-                              userPhotoURL + listInst[index].photoPath,
-                              imageSize: 56.0,
-                              whiteMargin: 2.0,
-                              imageMargin: 6.0,
-                            ),
-                            Expanded(child: SizedBox()),
-                            contactWidget(listInst[index].phone, listInst[index].email),
-                            Expanded(child: SizedBox()),
-                            PopupMenuButton<String>(
-                              onSelected: (String choice) {
-                                choiceActionRequestsInstitutions(choice,listInst[index].id, listInst[index].description, listInst[index].email, index);
-                              },
-                              itemBuilder: (BuildContext context) {
-                                return ConstantsRequestsInstitutions.choices.map((String choice) {
-                                  return PopupMenuItem<String>(
-                                    value: choice,
-                                    child: Text(choice),
-                                  );
-                                }).toList();
-                              },
-                            ),
-                          ])
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                              width: 190,
+                              child: nameInst(listInst[index].name)),
+                          Container(
+                              width: 200,
+                              child: contactWidget(listInst[index].phone,
+                                  listInst[index].email)),
+                          PopupMenuButton<String>(
+                            onSelected: (String choice) {
+                              choiceActionRequestsInstitutions(
+                                  choice,
+                                  listInst[index].id,
+                                  listInst[index].description,
+                                  listInst[index].email,
+                                  index);
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return ConstantsRequestsInstitutions.choices
+                                  .map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ))),
             ],
@@ -359,13 +464,18 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
     );
   }
 
-  void choiceActionRequestsInstitutions(String choice, int institutionId, String description, String email, int index) {
+  void choiceActionRequestsInstitutions(String choice, int institutionId,
+      String description, String email, int index) {
     if (choice == ConstantsRequestsInstitutions.OpisInstitucije) {
       print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Opis institucije", style: TextStyle(color: Colors.black),),
+            title: Text(
+              "Opis institucije",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             content: Container(
               height: 300,
               child: descriptionWidget(description),
@@ -373,7 +483,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  "Izadji",
+                  "Izađi",
                   style: TextStyle(color: greenPastel),
                 ),
                 onPressed: () {
@@ -387,7 +497,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
       showAlertDialog(context, institutionId, index, 2);
     } else if (choice == ConstantsRequestsInstitutions.PrihvatiInstitutciju) {
       print("Prihvati instituciju.");
-      showAlertDialogAccept(context, institutionId,email, index, 2);
+      showAlertDialogAccept(context, institutionId, email, index, 2);
     }
   }
 
@@ -426,10 +536,10 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
 
   Widget searchUnath() {
     return Container(
-        margin: EdgeInsets.only( top: 5, bottom: 5),
+        margin: EdgeInsets.only(top: 5, bottom: 5),
         width: 450,
         padding: const EdgeInsets.only(left: 10, right: 10),
-        child:TextField(
+        child: TextField(
           cursorColor: Colors.black,
           onChanged: (string) {
             _debouncer.run(() {
@@ -457,40 +567,156 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet> with 
         ));
   }
 
+  Widget dropdownFirstRow(List<City> listCities) {
+    return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Grad: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          listCities != null
+              ? new DropdownButton<City>(
+                  hint: Text("Izaberi"),
+                  value: city,
+                  onChanged: (City newValue) {
+                    setState(() {
+                      city = newValue;
+                    });
+                    if (newValue.name == "Sve institucije") {
+                      filteredInstitution = null;
+                      _getInstitutions();
+                      _sortListBy();
+                    } else {
+                      _getInstitutionFromCity(newValue.id);
+                      _sortListBy();
+                    }
+                  },
+                  items: listCities.map((City option) {
+                    return DropdownMenuItem(
+                      child: new Text(option.name),
+                      value: option,
+                    );
+                  }).toList(),
+                )
+              : new DropdownButton<String>(
+                  hint: Text("Izaberi"),
+                  onChanged: null,
+                  items: null,
+                ),
+          new Text("Rešene objave: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          DropdownButton<MaxMinDropDown>(
+            hint: Text("Izaberi"),
+            value: maxMinF,
+            onChanged: (MaxMinDropDown newValue) {
+              setState(() {
+                maxMinF = newValue;
+              });
+              if (newValue.name == "Rastući") {
+                print("Rastući");
+                _sortListBy();
+              } else if (newValue.name == "Opadajući") {
+                print("Opadajući");
+                _sortListBy();
+              }
+            },
+            items: maxMinFilter.map((MaxMinDropDown option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          ),
+        ]);
+  }
+
+  Widget dropdownSecondRow(List<City> listCities) {
+    return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Grad: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          listCities != null
+              ? new DropdownButton<City>(
+                  hint: Text("Izaberi"),
+                  value: cityU,
+                  onChanged: (City newValue) {
+                    setState(() {
+                      city = newValue;
+                    });
+                    if (newValue.name == "Sve institucije") {
+                      filteredUnauthInstitution = null;
+                      _getUnauthInstitutions();
+                    } else {
+                      _getInstitutionFromCityUnauth(newValue.id);
+                    }
+                  },
+                  items: listCities.map((City option) {
+                    return DropdownMenuItem(
+                      child: new Text(option.name),
+                      value: option,
+                    );
+                  }).toList(),
+                )
+              : new DropdownButton<String>(
+                  hint: Text("Izaberi"),
+                  onChanged: null,
+                  items: null,
+                ),
+        ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         CenteredViewManageUser(
           child: TabBarView(children: <Widget>[
-          Column(children: [
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    search(),
-                  ],
-                ),
-                Flexible(
-                    child: filteredInstitution == null
-                        ? buildInstList(listInstitutions)
-                        : buildInstList(filteredInstitution)),
-              ]),
-          Column(children: [
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    searchUnath(),
-                  ],
-                ),
-                Flexible(
-                    child: filteredUnauthInstitution == null
-                        ? buildUnauthInstList(listUnauthInstitutions)
-                        : buildUnauthInstList(filteredUnauthInstitution)),
-              ]),
-        ]),
+            Column(children: [
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  search(),
+                ],
+              ),
+              dropdownFirstRow(listCities),
+              Flexible(
+                  child: filteredInstitution == null
+                      ? buildInstList(listInstitutions)
+                      : buildInstList(filteredInstitution)),
+            ]),
+            Column(children: [
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  searchUnath(),
+                ],
+              ),
+              dropdownSecondRow(listCities),
+              Flexible(
+                  child: filteredUnauthInstitution == null
+                      ? buildUnauthInstList(listUnauthInstitutions)
+                      : buildUnauthInstList(filteredUnauthInstitution)),
+            ]),
+          ]),
         ),
         CollapsingNavigationDrawer(),
       ],
     );
+  }
+}
+
+class MaxMinDropDown {
+  int id;
+  String name;
+
+  MaxMinDropDown(this.id, this.name);
+
+  static List<MaxMinDropDown> getMaxMinDropDown() {
+    return <MaxMinDropDown>[
+      MaxMinDropDown(1, "Rastući"),
+      MaxMinDropDown(2, "Opadajući"),
+    ];
   }
 }
