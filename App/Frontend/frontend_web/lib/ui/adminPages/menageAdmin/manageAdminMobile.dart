@@ -576,7 +576,7 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                       pickImage();
                     },
                     child: Text(
-                      "Promeni profilnu sliku",
+                      "Color(0xFF00BFA6)",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,

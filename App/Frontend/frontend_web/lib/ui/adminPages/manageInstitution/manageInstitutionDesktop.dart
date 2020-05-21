@@ -12,6 +12,8 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
+import 'manageInstitutionMobile.dart';
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ManageInstitutionDesktop extends StatefulWidget {
@@ -46,10 +48,11 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
   List<Institution> filteredUnauthInstitution;
   List<Institution> listInstitutionsFilt;
 
-  Institution institution;
-  List<FullPost> posts;
   List<City> listCities;
   City city;
+  City cityU;
+  List<MaxMinDropDown> maxMinFilter = MaxMinDropDown.getMaxMinDropDown();
+  MaxMinDropDown maxMinF;
 
   _getInstitutions() {
     APIServices.getAllAuthInstitutions(TokenSession.getToken).then((res) {
@@ -94,17 +97,45 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
   }
 
   _getInstitutionFromCity(int cityId) {
-    APIServices.getInstitutionByCityId(TokenSession.getToken, cityId)
+    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
         .then((res) {
       Iterable list = json.decode(res.body);
       List<Institution> listFU = List<Institution>();
       listFU = list.map((model) => Institution.fromObject(model)).toList();
       if (mounted) {
         setState(() {
-          listInstitutionsFilt = listFU;
+          filteredInstitution = listFU;
         });
       }
     });
+  }
+
+  _getInstitutionFromCityUnauth(int cityId) {
+    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
+        .then((res) {
+      Iterable list = json.decode(res.body);
+      List<Institution> listFU = List<Institution>();
+      listFU = list.map((model) => Institution.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          filteredUnauthInstitution = listFU;
+        });
+      }
+    });
+  }
+
+  _sortListBy() {
+    if (filteredInstitution == null) {
+      if (maxMinF == null || maxMinF.name == "Rastući")
+        listInstitutions.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+      else if (maxMinF.name == "Opadajući")
+        listInstitutions.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+    } else {
+      if (maxMinF == null || maxMinF.name == "Rastući")
+        filteredInstitution.sort((x, y) => x.postsNum.compareTo(y.postsNum));
+      else if (maxMinF.name == "Opadajući")
+        filteredInstitution.sort((x, y) => y.postsNum.compareTo(x.postsNum));
+    }
   }
 
   void initState() {
@@ -219,29 +250,37 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
 
   Widget contactWidget(String phone, String email) => Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: <Widget>[
-                Text("Broj telefona: ",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(phone,
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      decoration: TextDecoration.underline,
-                    )),
-                SizedBox(width: 10),
-                Text("E-mail: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                Expanded(
-                    child: Text(email,
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          decoration: TextDecoration.underline,
-                        ))),
-              ],
-            ),
-          ],
-        ),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                      child: Text("Broj telefona: ",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Container(
+                      child: Text(phone,
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            decoration: TextDecoration.underline,
+                          ))),
+                ],
+              ),
+              SizedBox(height: 5.0),
+              Row(
+                children: <Widget>[
+                  Container(
+                      child: Text("E-mail: ",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Container(
+                          child: Text(email,
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.underline,
+                              )))),
+                ],
+              )
+            ]),
       );
 
   showAlertDialogDescription(String description, BuildContext contex) {
@@ -251,9 +290,6 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
             title: Text('Opis institucije',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(11.0),
-            ),
             content: Container(
               width: MediaQuery.of(context).size.width * 0.5,
               child: SingleChildScrollView(
@@ -281,10 +317,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
 
   Widget descInst(String description, BuildContext context) => Container(
           child: FlatButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(11.0),
-            side: BorderSide(color: greenPastel)),
         color: greenPastel,
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(11.0)),
         child: Text('Opis institucije', style: TextStyle(color: Colors.white)),
         onPressed: () {
           showAlertDialogDescription(description, context);
@@ -306,7 +341,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
         },
       ).showCursorOnHover);
 
-      Widget deleteAccept(BuildContext context, int id, int index) => Container(
+  Widget deleteAccept(BuildContext context, int id, int index) => Container(
           child: FlatButton(
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(11.0),
@@ -349,17 +384,17 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   hint: Text("Izaberi"),
                   value: city,
                   onChanged: (City newValue) {
-                    if (newValue.name == "Sve institucije") {
-                      listInstitutionsFilt = null;
-                      _getInstitutions();
-                    } else {
-                      listInstitutions = null;
-                      listInstitutionsFilt = null;
-                      _getInstitutionFromCity(newValue.id);
-                    }
                     setState(() {
                       city = newValue;
                     });
+                    if (newValue.name == "Sve institucije") {
+                      filteredInstitution = null;
+                      _getInstitutions();
+                      _sortListBy();
+                    } else {
+                      _getInstitutionFromCity(newValue.id);
+                      _sortListBy();
+                    }
                   },
                   items: listCities.map((City option) {
                     return DropdownMenuItem(
@@ -367,31 +402,86 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                       value: option,
                     );
                   }).toList(),
-                ).showCursorOnHover
+                )
               : new DropdownButton<String>(
                   hint: Text("Izaberi"),
                   onChanged: null,
                   items: null,
-                ).showCursorOnHover,
+                ),
+          new Text("Rešene objave: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          DropdownButton<MaxMinDropDown>(
+            hint: Text("Izaberi"),
+            value: maxMinF,
+            onChanged: (MaxMinDropDown newValue) {
+              setState(() {
+                maxMinF = newValue;
+              });
+              if (newValue.name == "Rastući") {
+                print("Rastući");
+                _sortListBy();
+              } else if (newValue.name == "Opadajući") {
+                print("Opadajući");
+                _sortListBy();
+              }
+            },
+            items: maxMinFilter.map((MaxMinDropDown option) {
+              return DropdownMenuItem(
+                child: new Text(option.name),
+                value: option,
+              );
+            }).toList(),
+          ),
         ]);
   }
 
-  Widget institutionSolvedPosts() => Container(
+  Widget dropdownSecondRow(List<City> listCities) {
+    return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Grad: ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          listCities != null
+              ? new DropdownButton<City>(
+                  hint: Text("Izaberi"),
+                  value: cityU,
+                  onChanged: (City newValue) {
+                    setState(() {
+                      city = newValue;
+                    });
+                    if (newValue.name == "Sve institucije") {
+                      filteredUnauthInstitution = null;
+                      _getUnauthInstitutions();
+                    } else {
+                      _getInstitutionFromCityUnauth(newValue.id);
+                    }
+                  },
+                  items: listCities.map((City option) {
+                    return DropdownMenuItem(
+                      child: new Text(option.name),
+                      value: option,
+                    );
+                  }).toList(),
+                )
+              : new DropdownButton<String>(
+                  hint: Text("Izaberi"),
+                  onChanged: null,
+                  items: null,
+                ),
+        ]);
+  }
+
+  Widget institutionSolvedPosts(int index) => Container(
           child: Column(
         children: [
-          Text("Broj rešenih",
+          Text("Rešene objave",
               style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold)),
-          Text(
-              "${institution.postsNum}" == '0'
-                  ? '0'
-                  : "${institution.postsNum}",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold))
+                color: Colors.black,
+              )),
+          Text("${listInstitutions[index].postsNum}",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
         ],
       ));
 
@@ -415,13 +505,16 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                             Container(
                                 width: 190,
                                 child: nameInst(listInst[index].name)),
-                            instPhoto(
+                            /*instPhoto(
                               listInst[index].photoPath,
-                            ),
+                            ),*/
                             Container(
-                                width: 400,
+                                width: 200,
                                 child: contactWidget(listInst[index].phone,
                                     listInst[index].email)),
+                            Container(
+                                width: 100,
+                                child: institutionSolvedPosts(index)),
                             descInst(listInst[index].description, context),
                             deleteInst(context, listInst[index].id, index),
                           ])
@@ -453,11 +546,11 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                           Container(
                               width: 190,
                               child: nameInst(listInst[index].name)),
-                          instPhoto(
+                          /*instPhoto(
                             listInst[index].photoPath,
-                          ),
+                          ),*/
                           Container(
-                              width: 400,
+                              width: 200,
                               child: contactWidget(listInst[index].phone,
                                   listInst[index].email)),
                           descInst(listInst[index].description, context),
@@ -569,7 +662,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   searchUnath(),
                 ],
               ),
-              dropdownFirstRow(listCities),
+              dropdownSecondRow(listCities),
               Flexible(
                   child: filteredUnauthInstitution == null
                       ? buildUnauthInstList(listUnauthInstitutions)

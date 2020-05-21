@@ -312,7 +312,7 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
   Widget build(BuildContext context) {
     
     return Stack(
-      children: <Widget>[
+      children: <Widget>[ 
         CenteredViewManageUser(
           child: TabBarView(children: <Widget>[
             RefreshIndicator(
