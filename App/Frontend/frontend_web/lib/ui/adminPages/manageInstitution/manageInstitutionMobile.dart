@@ -103,7 +103,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   }
 
   _getInstitutionFromCityUnauth(int cityId) {
-    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
+    APIServices.getInstitutionByCityIdUnauth(TokenSession.getToken, cityId)
         .then((res) {
       Iterable list = json.decode(res.body);
       List<Institution> listFU = List<Institution>();
@@ -468,7 +468,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ),
             content: Container(
               height: 300,
-              child: descriptionWidget(description),
+              child: ListView(shrinkWrap:true, children: [descriptionWidget(description)],),
             ),
             actions: <Widget>[
               FlatButton(
@@ -502,7 +502,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             _debouncer.run(() {
               setState(() {
                 filteredInstitution = listInstitutions
-                    .where((u) => (u.name.contains(string)))
+                    .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
               });
             });
@@ -535,7 +535,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             _debouncer.run(() {
               setState(() {
                 filteredUnauthInstitution = listUnauthInstitutions
-                    .where((u) => (u.name.contains(string)))
+                    .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
               });
             });
@@ -563,6 +563,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               new Text("Grad: ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -598,6 +600,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ],
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               new Text("Rešene objave: ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -641,7 +645,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                   value: cityU,
                   onChanged: (City newValue) {
                     setState(() {
-                      city = newValue;
+                      cityU = newValue;
                     });
                     if (newValue.name == "Sve institucije") {
                       filteredUnauthInstitution = null;

@@ -8,6 +8,7 @@ import 'package:frontend_web/models/postType.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewPost/viewPostPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
@@ -339,6 +340,22 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
               ),
               Text(post.commNum.toString()),
               Expanded(child: SizedBox()),
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(11.0),
+                    side: BorderSide(color: Color(0xFF00BFA6))),
+                color: Color(0xFF00BFA6),
+                child: Text(
+                  "Više informacija",
+                  style: TextStyle(color: Colors.white),
+                ).showCursorOnHover,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewPostInsPage(post)),
+                  );
+                },
+              ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
