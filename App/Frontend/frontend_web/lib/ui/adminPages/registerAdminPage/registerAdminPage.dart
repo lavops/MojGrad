@@ -172,8 +172,8 @@ class _AddCityWidgetState extends State<AddCityWidget>{
                 // TODO : Process the result gotten
                 place.placeName.split(',');
                 String cityNamae = place.placeName.split(',')[0];
-                lat = place.geometry.coordinates[0];
-                long = place.geometry.coordinates[1];
+                long = place.geometry.coordinates[0];
+                lat = place.geometry.coordinates[1];
                 newCity.text = cityNamae;
               },
               limit: 10,

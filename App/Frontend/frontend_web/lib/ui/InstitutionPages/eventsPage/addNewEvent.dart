@@ -514,7 +514,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               locationController.text,
               city.id,
               startDate,
-              endDate, lat, long).then((value){
+              endDate, long, lat).then((value){
                 print(value.statusCode);
                 print(value.body);
                 if(value.statusCode == 200)
