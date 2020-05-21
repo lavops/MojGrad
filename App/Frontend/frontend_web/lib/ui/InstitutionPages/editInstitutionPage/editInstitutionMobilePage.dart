@@ -69,11 +69,11 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
   showDeactivateDialog(BuildContext context, int id) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Potvrdi", style: TextStyle(color: greenPastel),),
+      child: Text("Potvrdi",),
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
         _removeToken();
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
         );
@@ -172,7 +172,6 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -181,22 +180,10 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+                      children: <Widget>[             
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -205,6 +192,14 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                             setState(() {
                               name = check;
                             });
+                            Navigator.pop(context);
+                          },
+                        ),
+                           FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
@@ -244,7 +239,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Cilj institucije",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                                ))
                       ],
                     ),
                     SizedBox(
@@ -259,7 +254,6 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         labelStyle: TextStyle(
-                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -270,21 +264,9 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         SizedBox(width: 50),
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -293,6 +275,14 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                             setState(() {
                               description = check;
                             });
+                            Navigator.pop(context);
+                          },
+                        ),
+                         FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
@@ -332,7 +322,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Broj telefona",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                               ))
                       ],
                     ),
                     SizedBox(
@@ -353,21 +343,9 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -387,6 +365,14 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
+                          },
+                        ),
+                         FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
                         ),
                       ],
@@ -425,7 +411,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Email",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                             ))
                       ],
                     ),
                     SizedBox(
@@ -446,21 +432,9 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -479,6 +453,14 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                               });
                               Navigator.of(context).pop(check.toString());
                             }
+                          },
+                        ),
+                          FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
                         ),
                       ],
@@ -514,7 +496,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         Text("Šifra",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                                ))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -527,7 +509,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Trenutna šifra",
                         hintStyle: TextStyle(
-                            color: greenPastel),
+                            ),
                         labelStyle: TextStyle(
                             color: greenPastel,
                             fontStyle: FontStyle.italic),
@@ -545,7 +527,6 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Nova šifra",
                         labelStyle: TextStyle(
-                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -561,7 +542,6 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                         hoverColor: Colors.grey,
                         hintText: "Ponovi šifru",
                         labelStyle: TextStyle(
-                            color: greenPastel,
                             fontStyle: FontStyle.italic),
                         fillColor: Colors.black,
                         contentPadding: const EdgeInsets.all(10.0),
@@ -571,21 +551,9 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -616,6 +584,14 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                             }
                           },
                         ),
+                         FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ],
                     )
                   ],
@@ -630,6 +606,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
  Future<String> editCity(BuildContext context, String cityName) async {
     // show the dialog
    return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         City pomCity;
@@ -650,8 +627,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                 children: <Widget>[
                   Text("Grad",
                       style: TextStyle(
-                          fontSize: 24,
-                          color: greenPastel))
+                          fontSize: 24, ))
                 ],
               ),
               SizedBox(height: 5),
@@ -661,10 +637,10 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: greenPastel))),
+               )),
         _city != null
             ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: greenPastel)),
+                hint: Text("Izaberi"),
                 value: pomCity,
                 onChanged: (City value) {
                   setState(() {
@@ -691,11 +667,21 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
               Row(
                  mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(
+                   MaterialButton(
+                    child: Text(
+                      "Izmeni",
+                      textAlign: TextAlign.center,
+                    ),
+                    onPressed: () {
+                      if(pomCity != null){
+                        Navigator.pop(context,pomCity.name);
+                      }
+                      
+                    },
+                  ),
+                   FlatButton(
                     child: Text(
                       "Otkaži",
-                      style: TextStyle(
-                          color: greenPastel),
                     ),
                     onPressed: () {
                       setState(() {
@@ -704,20 +690,6 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
                       });
                      
                       Navigator.pop(context,'');
-                    },
-                  ),
-                   MaterialButton(
-                    child: Text(
-                      "Izmeni",
-                      style: TextStyle(
-                          color: greenPastel),
-                      textAlign: TextAlign.center,
-                    ),
-                    onPressed: () {
-                      if(pomCity != null){
-                        Navigator.pop(context,pomCity.name);
-                      }
-                      
                     },
                   ),
                 ],
@@ -850,7 +822,7 @@ class _EditInstitutionMobilePageState extends State<EditInstitutionMobilePage> {
             selected: false,
           ),
            ListTile(
-            leading: Icon(Icons.phonelink_lock,
+            leading: Icon(Icons.location_city,
                 color: Color.fromRGBO(15, 32, 67,100)),
             title: Text('Grad'),
             subtitle: Text(city1 == '' ? institution.cityName : city1),

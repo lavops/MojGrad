@@ -93,10 +93,14 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
   }
 
   Widget locationRow(Events event) {
-    return Row(children: <Widget>[
+    return Row(
+      mainAxisAlignment:  MainAxisAlignment.start,
+      children: <Widget>[
       SizedBox(width: 10.0,),
       Icon(Icons.location_on),
-      Text(event.address),
+      Flexible(
+            child:Text(event.address),
+          ),
     ],);
   }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/ui/login.dart';
 import '../main.dart';
 import '../models/city.dart';
@@ -186,7 +187,9 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextField(
         cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: firstName,
-        maxLength: 15,
+        inputFormatters:[
+      LengthLimitingTextInputFormatter(15),
+      ],
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
@@ -214,7 +217,9 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextField(
         cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: lastName,
-        maxLength: 15,
+        inputFormatters:[
+      LengthLimitingTextInputFormatter(15),
+      ],
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
@@ -242,7 +247,9 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextField(
         cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
         controller: username,
-        maxLength: 15,
+        inputFormatters:[
+      LengthLimitingTextInputFormatter(15),
+      ],
         style: TextStyle(
           //color: Colors.grey,
           fontSize: 16,
@@ -409,7 +416,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final loginLabelWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('Već imate nalog? '),
+        Text('Već imate nalog? ', style: TextStyle(color: MyApp.ind == 0 ? Colors.black : Colors.white,),),
         SizedBox(
           width: 5.0,
         ),
@@ -436,7 +443,7 @@ class _RegisterPageState extends State<RegisterPage> {
     ));
 
     return Scaffold(
-      backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
+      backgroundColor: MyApp.ind == 0 ? Colors.white :  Colors.black26,
       body: Center(
         child: ListView(
           shrinkWrap: true,
@@ -445,7 +452,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Center(
               child: Container(
                 padding: const EdgeInsets.all(8.0),
-                color: Colors.white,
+                color: MyApp.ind == 0 ? Colors.white :  Colors.black26,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

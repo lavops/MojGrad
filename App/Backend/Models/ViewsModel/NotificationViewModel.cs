@@ -28,7 +28,7 @@ namespace Backend.Models.ViewsModel
             this.postId = postId;
             this.typeNotification = typeNot;
             this.createdAt = createdAt;
-            this.createdAtString = createdAt.ToString("dd/MM/yyyy hh:mm");
+            this.createdAtString = createdAt.ToString("dd/MM/yyyy HH:mm");
         }
     }
 }
