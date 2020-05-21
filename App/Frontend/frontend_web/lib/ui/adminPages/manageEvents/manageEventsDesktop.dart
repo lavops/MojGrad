@@ -66,7 +66,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           crossAxisCount: 2,
           crossAxisSpacing: 2,
           mainAxisSpacing: 2,
-          childAspectRatio: 2.5,
+          childAspectRatio: 2,
         ),
       itemCount: listEvents == null ? 0 : listEvents.length,
       itemBuilder: (BuildContext context, int index) {
@@ -120,7 +120,9 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
     return Row(children: <Widget>[
       SizedBox(width: 10.0,),
       Icon(Icons.location_on),
-      Text(event.address),
+       Flexible(
+            child:Text(event.address),
+          ),
     ],);
   }
 

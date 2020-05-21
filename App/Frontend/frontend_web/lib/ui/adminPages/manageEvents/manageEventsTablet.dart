@@ -108,7 +108,9 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
     return Row(children: <Widget>[
       SizedBox(width: 20.0,),
       Icon(Icons.location_on),
-      Text(event.address),
+      Flexible(
+            child:Text(event.address),
+          ),
     ],);
   }
  
