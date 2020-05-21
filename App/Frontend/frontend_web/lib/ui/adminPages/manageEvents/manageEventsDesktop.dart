@@ -6,6 +6,7 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/createEvent/createEventPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventDesktop.dart';
+import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -59,8 +60,14 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
   }
 
   Widget buildEventsList(List<Events> listEvents, int ind){
-    return ListView.builder(
+    return GridView.builder(
       padding: EdgeInsets.only(bottom: 30.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 2,
+          childAspectRatio: 2.5,
+        ),
       itemCount: listEvents == null ? 0 : listEvents.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
@@ -70,8 +77,11 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
               Expanded(child: Column(
                 children: <Widget>[
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
+                  Expanded(child: SizedBox()),
                   startEndDateRow(listEvents[index]),
+                  Expanded(child: SizedBox()),
                   locationRow(listEvents[index]),
+                  Expanded(child: SizedBox()),
                   buttonsRow(listEvents[index], index, listEvents, ind),
                  ],
                 ),
@@ -189,7 +199,8 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(child: ConstrainedBox(child: TabBarView(children: <Widget>[
+        CenteredViewDonation(
+          child: TabBarView(children: <Widget>[
           Column(children: <Widget>[
            Row(children: <Widget>[
            Expanded(child: SizedBox(),),
@@ -209,10 +220,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           Flexible(child: buildEventsList(finishedEvents, 2),)
           ]),
           ],),
-          constraints: BoxConstraints(maxWidth: 600),
-          ),
-          padding: const EdgeInsets.only(left: 100, right: 100, top: 30),
-          alignment: Alignment.topCenter,
+          
         ),
 
         CollapsingNavigationDrawer(),

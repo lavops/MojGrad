@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
@@ -170,6 +171,9 @@ class _CreateEventWidget extends State<CreateEventWidget> {
   String startDate = "";
   String endDate = "";
 
+  double lat;
+  double long;
+
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
         context: context,
@@ -232,29 +236,38 @@ class _CreateEventWidget extends State<CreateEventWidget> {
 
   Widget locationWidget() {
     return Container(
-      width: 500,
-      child: TextField(
-        cursorColor: Colors.black,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        controller: locationController,
-        decoration: InputDecoration(
-          hintText: "Lokacija",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
-          prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.location_on, color: greenPastel),
+      width: 600,
+      child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
+      elevation: 6.0,
+      child: CustomTextField(
+      prefixIcon: Icon(Icons.business, color: greenPastel),
+      hintText: "Lokacija",
+      textController: locationController,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapBoxAutoCompleteWidget(
+              apiKey: "pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+              hint: "Unesi lokaciju",
+              onSelect: (place) {
+                // TODO : Process the result gotten
+                place.placeName.split(',');
+                String cityNamae = place.placeName;
+                lat = place.geometry.coordinates[0];
+                long = place.geometry.coordinates[1];
+                locationController.text = cityNamae;
+              },
+              limit: 10,
+              country: "RS",
+            ),
           ),
-          contentPadding: EdgeInsets.all(18),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            borderSide: BorderSide(width: 2, color: greenPastel),
-          ),
-        ),
-      ),
-    ).showCursorTextOnHover;
+        );
+      },
+      enabled: true,
+    ),
+    ),);
   }
 
   Widget nameEvent() {
@@ -501,7 +514,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               locationController.text,
               city.id,
               startDate,
-              endDate, 44.007392, 20.925238).then((value){
+              endDate, lat, long).then((value){
                 print(value.statusCode);
                 print(value.body);
                 if(value.statusCode == 200)

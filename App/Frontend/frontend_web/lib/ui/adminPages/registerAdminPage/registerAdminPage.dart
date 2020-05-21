@@ -177,7 +177,7 @@ class _AddCityWidgetState extends State<AddCityWidget>{
                 newCity.text = cityNamae;
               },
               limit: 10,
-              country: "rs",
+              country: "RS",
             ),
           ),
         );
