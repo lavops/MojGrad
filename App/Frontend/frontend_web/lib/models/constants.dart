@@ -73,3 +73,11 @@ class ConstantsPostIns {
     Resi
   ];
 }
+
+class ConstantsPostSolvedIns {
+  static const String PogledajObjavu = "Pogledaj objavu";
+
+  static const List<String> choices = <String> [
+    PogledajObjavu,
+  ];
+}

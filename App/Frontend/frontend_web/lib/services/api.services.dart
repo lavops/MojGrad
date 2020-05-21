@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:frontend_web/models/admin.dart';
 import 'package:frontend_web/models/institution.dart';
+import 'package:frontend_web/models/postType.dart';
 import 'package:http/http.dart' as http;
 
 //String userPhotoURL = "http://147.91.204.116:2043/";
@@ -816,16 +817,17 @@ static Future registerInstitution(Institution ins) async {
     });
   }
   // filter
-  static Future getFiltered(String jwt, List<int> ids, int cityId) async {
+  static Future getFiltered(String jwt, List<int> list, int cityId) async {
     var data = jsonDecode(jwt);
     jwt = data['token'].toString();
-    var jbody = jsonEncode({'listFilter': ids, 'cityId':cityId});
+    var jbody = jsonEncode({'listFilter': list, 'cityId':cityId});
+
+    print(jbody);
     var res =  await http.post(serverURL + 'Post/UnsolvedPostsByFilter',  headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }, body: jbody);
-    print(res.body);
     return res;
   }
 

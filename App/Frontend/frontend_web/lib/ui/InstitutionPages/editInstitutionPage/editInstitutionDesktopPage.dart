@@ -109,11 +109,11 @@ class _EditInstitutionDesktopPageState
   showDeactivateDialog(BuildContext context, int id) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Potvrdi", style: TextStyle(color: greenPastel),),
+      child: Text("Potvrdi",),
       onPressed: () {
         APIServices.deleteInstitution(TokenSession.getToken, id);
         _removeToken();
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
         );
@@ -212,7 +212,6 @@ class _EditInstitutionDesktopPageState
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -227,7 +226,6 @@ class _EditInstitutionDesktopPageState
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -306,7 +304,6 @@ class _EditInstitutionDesktopPageState
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -321,7 +318,6 @@ class _EditInstitutionDesktopPageState
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -395,7 +391,6 @@ class _EditInstitutionDesktopPageState
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -420,7 +415,6 @@ class _EditInstitutionDesktopPageState
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -494,7 +488,6 @@ class _EditInstitutionDesktopPageState
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -518,7 +511,6 @@ class _EditInstitutionDesktopPageState
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -639,7 +631,6 @@ class _EditInstitutionDesktopPageState
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -674,7 +665,6 @@ class _EditInstitutionDesktopPageState
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -694,6 +684,7 @@ class _EditInstitutionDesktopPageState
   Future<String> editCity(BuildContext context, String cityName) async {
     // show the dialog
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         City pomCity;
@@ -753,7 +744,6 @@ class _EditInstitutionDesktopPageState
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -765,7 +755,6 @@ class _EditInstitutionDesktopPageState
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             setState(() {
@@ -951,7 +940,7 @@ class _EditInstitutionDesktopPageState
             ),
           ).showCursorOnHover,
           ListTile(
-            leading: Icon(Icons.phonelink_lock,
+            leading: Icon(Icons.location_city,
                 color: Color.fromRGBO(15, 32, 67, 100)),
             title: Text(
               'Grad',

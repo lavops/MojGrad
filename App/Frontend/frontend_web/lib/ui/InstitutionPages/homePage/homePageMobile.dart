@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/editEventPage.dart';
+import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/models/postType.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewPost/viewPostPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/post/insRowPost/insRowPostMobile.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
@@ -58,9 +61,13 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
     });
   }
 
-  _getFiltered(int cid) async {
+  _getFilteredNew(int cid, int selectedType) async {
 
-    await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, cid).then((res) {
+    List<int> newList = [];
+    newList.add(selectedType);
+
+    await APIServices.getFiltered(TokenSession.getToken, newList, cid).then((res) {
+      print(res.body);
       Iterable list = json.decode(res.body);
       List<FullPost> posts =  List<FullPost>();
       posts = list.map((model) => FullPost.fromObject(model)).toList();
@@ -76,25 +83,15 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
   _getPostType() async {
     var res =  await APIServices.getPostType(TokenSession.getToken);
     Iterable list = json.decode(res.body);
-    List<PostType> postTypes = new List<PostType>();
+    List<PostType> postTypes = List<PostType>();
     postTypes = list.map((model) => PostType.fromObject(model)).toList();
     if (mounted) {
       setState(() {
         listTypes = postTypes;
+        PostType alltypes = new PostType(9999, "Sve");
+        listTypes.add(alltypes);
       });
     }
-  }
-
-  Widget buildList() {
-    return ListView.builder(
-        itemCount: listTypes == null ? 0 : listTypes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Box(
-            title: listTypes[index].typeName,
-            id: listTypes[index].id,
-          );
-        }
-    );
   }
 
 
@@ -124,11 +121,6 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
   );
 
 
-  void _updateImageIndex(int index) {
-    setState(() => _currentImageIndex = index);
-  }
-
-
   Widget packedThings(FullPost post, int ind) => Container(
     constraints: BoxConstraints(
       maxHeight: 120,
@@ -147,22 +139,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
   Widget userInfoRow(FullPost post, int ind) => Row(
     children: <Widget>[
-      InkWell(
-        child: CircleImage(
-          userPhotoURL + post.userPhoto,
-          imageSize: 36.0,
-          whiteMargin: 2.0,
-          imageMargin: 6.0,
-        ),
-        onTap: (){
-          if(ind == 1)
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ViewUserProfilePageIns(post.userId)),
-            );
-        },
-      ),
+      SizedBox(width: 10,),
       InkWell(
         child: Text(
           post.username,
@@ -178,25 +155,33 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         },
       ),
       Expanded(child: SizedBox()),
-      (post.statusId == 2)
-          ? FlatButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(11.0),
-            side: BorderSide(color: Color(0xFF00BFA6))),
-        color: Color(0xFF00BFA6),
-        child: Text(
-          "Reši",
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
-          );
+      (post.statusId != 1)
+      ? PopupMenuButton<String>(
+        onSelected: (String choice) {
+          choicePostIns(choice, post);
         },
-      ).showCursorOnHover
-          : SizedBox(),
-      SizedBox(width: 10,),
+        itemBuilder: (BuildContext context) {
+          return ConstantsPostIns.choices.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
+            );
+          }).toList();
+        },
+      )
+      : PopupMenuButton<String>(
+        onSelected: (String choice) {
+          choicePostIns(choice, post);
+        },
+        itemBuilder: (BuildContext context) {
+          return ConstantsPostSolvedIns.choices.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
+            );
+          }).toList();
+        },
+      )
     ],
   );
 
@@ -326,24 +311,62 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         ],
       )
     );
+
+    
   } 
 
+   PostType ptSelect;
 
+  void choicePostIns(String choice, FullPost post) {
+    if (choice == ConstantsPostIns.PogledajObjavu) {
+      print("Pogledaj objavu.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewPostInsPage(post)),
+      );
+    } else if (choice == ConstantsPostIns.Resi) {
+      print("Resi.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => InstitutionSolvePage(postId: post.postId, id: insId)),
+      );
+    }
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  Widget dropdownFU(List<PostType> types) {
+    return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Vrsta problema: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          types != null
+          ? new DropdownButton<PostType>(
+              hint: Text("Izaberi"),
+              value: ptSelect,
+              onChanged: (PostType newValue) {
+                if (newValue.typeName == "Sve") {
+                  listFilteredPosts = null;
+                } else {
+                  _getFilteredNew(icityId, newValue.id);
+                }
+                setState(() {
+                  ptSelect = newValue;
+                });
+              },
+              items: types.map((PostType option) {
+                return DropdownMenuItem(
+                  child: new Text(option.typeName),
+                  value: option,
+                );
+              }).toList(),
+            ).showCursorOnHover
+          : new DropdownButton<String>(
+              hint: Text("Izaberi"),
+              onChanged: null,
+              items: null,
+            ).showCursorOnHover,
+        ]);
+  }
 
   @override
   void initState() {
@@ -354,97 +377,25 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      CenteredViewPost(
-        child:  indikator == 0 ?
-        ListView.builder(
-            padding: EdgeInsets.only(bottom: 30.0),
-            itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
-            itemBuilder: (BuildContext context, int index) {
-              return rowPost(listUnsolvedPosts[index], 0);
-            }
-        )
-            : ListView.builder(
-            padding: EdgeInsets.only(bottom: 30.0),
-            itemCount: listFilteredPosts.length,
-            itemBuilder: (BuildContext context, int index) {
-              return rowPost(listFilteredPosts[index], 0);
-            }
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 300, top: 50),
-        width: 500,
-        child: listTypes != null ?
-        buildList()
-            : Text('Neki tekst'),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 250, top: 10),
-        child: FlatButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(11.0),
-              side: BorderSide(color: Color(0xFF00BFA6))),
-          color: Color(0xFF00BFA6),
-          child: Text(
-            "Primeni filter",
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {
-            _getFiltered(institution.cityId);
-          },
-        )
-      )
-    ]);
-  }
-}
-
-
-
-
-
-
-
-
-class Box extends StatefulWidget {
-  final String title;
-  final int id;
-
-  Box({this.title, this.id});
-
-  @override
-  _BoxState createState() => _BoxState();
-}
-
-class _BoxState extends State<Box> {
-  bool selected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(widget.title),
-      trailing: Checkbox(
-          value: selected,
-          onChanged: (bool val) {
-            setState(() {
-              selected = val;
-              if (selected == true) {
-                listSelectedTypes.add(widget.id);
-                print(listSelectedTypes);
-              }
-              else {
-                List<int> lista = new List();
-                for (int i = 0; i < listSelectedTypes.length; i++) {
-                  if (listSelectedTypes[i] != widget.id) {
-                    lista.add(listSelectedTypes[i]);
-                  }
+    return CenteredViewPost(
+        child:  Column(children: [
+          dropdownFU(listTypes),
+          Flexible(child: listFilteredPosts == null ?
+            ListView.builder(
+                padding: EdgeInsets.only(bottom: 30.0),
+                itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return rowPost(listUnsolvedPosts[index], 0);
                 }
-                listSelectedTypes = lista;
-                print(listSelectedTypes);
-              }
-
-            });
-          }),
-    );
+            )
+                : ListView.builder(
+                padding: EdgeInsets.only(bottom: 30.0),
+                itemCount: listFilteredPosts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return rowPost(listFilteredPosts[index], 0);
+                }
+            ),
+          ),
+        ],));
   }
 }

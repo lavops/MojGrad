@@ -7,28 +7,26 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
-import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:frontend_web/widgets/post/singlePostInsWidget.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
-
-import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class ViewPostDesktop extends StatefulWidget {
+class ViewPostInsMobile extends StatefulWidget {
 
   final FullPost post;
-  ViewPostDesktop(this.post);
+  ViewPostInsMobile(this.post);
 
   @override
-  _ViewPostDesktopState createState() => _ViewPostDesktopState(post);
+  _ViewPostMobileState createState() => _ViewPostMobileState(post);
 }
 
-class _ViewPostDesktopState extends State<ViewPostDesktop> {
+class _ViewPostMobileState extends State<ViewPostInsMobile> {
   FullPost post;
   List<Comment> listComents;
   List<ChallengeSolving> listSolutions;
 
-  _ViewPostDesktopState(FullPost post1){
+  _ViewPostMobileState(FullPost post1){
     this.post = post1;
   }
 
@@ -64,27 +62,23 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
   @override
   Widget build(BuildContext context) {
     
-    return Stack(children: <Widget>[
-      CenteredViewPost(
-          child: TabBarView(
-            children: <Widget>[
-            Column(children: <Widget>[
-              backButton(),
-              SinglePostWidget(post),
-            ],),
-            Column(children: <Widget>[
-              backButton(),
-              Flexible(child: makeCommentsList(listComents)),
-            ],),
-            Column(children: <Widget>[
-              backButton(),
-              Flexible(child: makeSolvedPostList(listSolutions)),
-            ],),
-          ]
-          ),
-      ),
-      CollapsingNavigationDrawer(),
+    return CenteredViewPost(
+      child: TabBarView(
+        children: <Widget>[
+        Column(children: <Widget>[
+          backButton(),
+          SinglePostInsWidget(post),
+        ],),
+        Column(children: <Widget>[
+          backButton(),
+          Flexible(child: makeCommentsList(listComents)),
+        ],),
+        Column(children: <Widget>[
+          backButton(),
+          Flexible(child: makeSolvedPostList(listSolutions)),
+        ],),
       ]
+      ),
     );
   }
 
@@ -99,7 +93,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
         side: BorderSide(color: greenPastel)
       ),
       child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
-    ).showCursorOnHover;
+    );
   }
 
   Widget makeCommentsList(List<Comment> listComments){
@@ -131,13 +125,6 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                 
               ],
             )),
-            Expanded(child: SizedBox()),
-            IconButton(
-              icon: Icon(Icons.restore_from_trash, color: Colors.red,),
-              onPressed: (){
-                showAlertDialogDeleteComment(context, listComents[index].id, index);
-              },
-            ).showCursorOnHover,
             SizedBox(width: 10,)
           ],),
         );
@@ -145,49 +132,10 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
     );
   }
 
-  showAlertDialogDeleteComment(BuildContext context, int id, int index) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.deleteComment(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
-            print("Uspesno brisanje komentara.");
-            setState(() {
-              listComents.removeAt(index);
-            });
-          }
-        });
-        Navigator.pop(context);
-        },
-    ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ).showCursorOnHover;
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Brisanje komentara"),
-      content: Text("Da li ste sigurni da želite da obrišete komentar?"),
-      actions: [
-        okButton,
-        notButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   Widget makeSolvedPostList(List<ChallengeSolving> listSolutions){
+
+
+
     return ListView.builder(
       padding: EdgeInsets.only(bottom: 30.0),
       itemCount: listSolutions == null ? 0 : listSolutions.length,
@@ -196,10 +144,10 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
           child: Row(children: <Widget>[
             Container(
               constraints: BoxConstraints(
-                maxHeight: 300.0, // changed to 400
-                minHeight: 100.0, // changed to 200
-                maxWidth: 300,
-                minWidth: 300,
+                maxHeight: 120.0, // changed to 400
+                minHeight: 120.0, // changed to 200
+                maxWidth: 120,
+                minWidth: 100,
               ),
               decoration: BoxDecoration(
                 border: Border(
@@ -213,21 +161,15 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
             ),
             Expanded(child: Container(
               constraints: BoxConstraints(
-                maxHeight: 180,
+                maxHeight: 120,
                 minHeight: 100,
               ),
               child: Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      CircleImage(
-                        userPhotoURL + listSolutions[index].userPhoto,
-                        imageSize: 36.0,
-                        whiteMargin: 2.0,
-                        imageMargin: 6.0,
-                      ),
                       Text(
-                        listSolutions[index].username.substring(0,15).replaceRange(13,15, "..."),
+                        listSolutions[index].username.substring(0,10).replaceRange(9,10, "..."),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: SizedBox()),
@@ -238,14 +180,6 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                         style: TextStyle(color: greenPastel, fontWeight: FontWeight.bold),
                       ):
                       SizedBox(),
-                      (listSolutions[index].selected == 1)
-                      ? SizedBox()
-                      : IconButton(
-                          icon: Icon(Icons.restore_from_trash, color: Colors.red,),
-                          onPressed: (){
-                            showAlertDialogDeleteSolution(context, listSolutions[index].id, index);
-                          },
-                        ).showCursorOnHover,
                       SizedBox(width: 10,)
                     ],
                   ),
@@ -263,48 +197,6 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
           ],)
         );
       }
-    );
-  }
-
-  showAlertDialogDeleteSolution(BuildContext context, int id, int index) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.challengeSolvingDelete(TokenSession.getToken, id).then((res) {
-          if(res.statusCode == 200){
-            print("Uspesno brisanje ponudjenog rešenja.");
-            setState(() {
-              listSolutions.removeAt(index);
-            });
-          }
-        });
-        Navigator.pop(context);
-        },
-    ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ).showCursorOnHover;
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Brisanje ponuđenog rešenja"),
-      content: Text("Da li ste sigurni da želite da obrišete ponudjeno rešenje?"),
-      actions: [
-        okButton,
-        notButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }

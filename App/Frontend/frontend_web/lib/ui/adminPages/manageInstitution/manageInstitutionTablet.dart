@@ -107,7 +107,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
   }
 
   _getInstitutionFromCityUnauth(int cityId) {
-    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
+    APIServices.getInstitutionByCityIdUnauth(TokenSession.getToken, cityId)
         .then((res) {
       Iterable list = json.decode(res.body);
       List<Institution> listFU = List<Institution>();
@@ -390,7 +390,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
             ),
             content: Container(
               height: 300,
-              child: descriptionWidget(description),
+              child: ListView(shrinkWrap:true, children: [descriptionWidget(description)],),
             ),
             actions: <Widget>[
               FlatButton(
@@ -512,7 +512,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
             _debouncer.run(() {
               setState(() {
                 filteredInstitution = listInstitutions
-                    .where((u) => (u.name.contains(string)))
+                    .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
               });
             });
@@ -545,7 +545,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
             _debouncer.run(() {
               setState(() {
                 filteredUnauthInstitution = listUnauthInstitutions
-                    .where((u) => (u.name.contains(string)))
+                    .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
               });
             });
@@ -643,7 +643,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                   value: cityU,
                   onChanged: (City newValue) {
                     setState(() {
-                      city = newValue;
+                      cityU = newValue;
                     });
                     if (newValue.name == "Sve institucije") {
                       filteredUnauthInstitution = null;

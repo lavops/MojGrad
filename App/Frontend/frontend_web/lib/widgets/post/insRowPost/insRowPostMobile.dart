@@ -5,6 +5,7 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewPost/viewPostPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
@@ -47,9 +48,9 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
       child: Row(
         children: <Widget>[
           //imageGallery(),
-          Expanded( child: imageGalery3(post.photoPath, post.solvedPhotoPath)),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           Expanded( child: packedThings()),
-          solvedColor(),
+          solvedColor()
         ],
       ),
     );
@@ -57,7 +58,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget solvedColor() => Container(
     constraints: BoxConstraints(
-      minHeight: 180,
+      minHeight: 120,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -67,7 +68,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget packedThings() => Container(
     constraints: BoxConstraints(
-      maxHeight: 180,
+      maxHeight: 120,
       minHeight: 100,
     ),
     child: Column(
@@ -83,22 +84,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget userInfoRow() => Row(
     children: <Widget>[
-      InkWell(
-        child: CircleImage(
-          userPhotoURL + post.userPhoto,
-          imageSize: 36.0,
-          whiteMargin: 2.0,
-          imageMargin: 6.0,
-        ),
-        onTap: (){
-          if(indicator == 1)
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ViewUserProfilePageIns(post.userId)),
-            );
-        },
-      ),
+      SizedBox(width: 10,),
       InkWell(
         child: Text(
           post.username,
@@ -114,7 +100,8 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
         },
       ),
       Expanded(child: SizedBox()),
-      PopupMenuButton<String>(
+      (post.statusId != 1)
+      ? PopupMenuButton<String>(
         onSelected: (String choice) {
           choicePostIns(choice);
         },
@@ -126,14 +113,30 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
             );
           }).toList();
         },
-      ),
-      SizedBox(width: 10,),
+      )
+      : PopupMenuButton<String>(
+        onSelected: (String choice) {
+          choicePostIns(choice);
+        },
+        itemBuilder: (BuildContext context) {
+          return ConstantsPostSolvedIns.choices.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
+            );
+          }).toList();
+        },
+      )
     ],
   );
 
   void choicePostIns(String choice) {
     if (choice == ConstantsPostIns.PogledajObjavu) {
       print("Pogledaj objavu.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewPostInsPage(post)),
+      );
     } else if (choice == ConstantsPostIns.Resi) {
       print("Resi.");
       Navigator.push(
