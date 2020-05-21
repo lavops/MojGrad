@@ -127,7 +127,7 @@ Widget titleColumn(String title, String description) {
     return Row(children: <Widget>[
       SizedBox(width: 10.0,),
       Icon(Icons.location_on),
-      Text(event.address, style: TextStyle(fontSize: 18.0),),
+      Flexible(child: Text(event.address, style: TextStyle(fontSize: 18.0),),),
     ],);
   }
 
