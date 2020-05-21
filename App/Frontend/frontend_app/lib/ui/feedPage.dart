@@ -44,7 +44,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _getUnsolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getUnsolvedPostByCityId(jwt, user.cityId).then((res) {
+    APIServices.getUnsolvedPostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -58,7 +58,7 @@ class _FeedPageState extends State<FeedPage> {
 
     _getNicePosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getNicePostByCityId(jwt, user.cityId).then((res) {
+    APIServices.getNicePostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -72,7 +72,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _getSolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    var res = await APIServices.getSolvedPostByCityId(jwt, user.cityId);
+    var res = await APIServices.getSolvedPostByCityId(jwt, publicUser.cityId);
     print(res.body);
     Iterable list = json.decode(res.body);
     List<FullPost> listP = List<FullPost>();

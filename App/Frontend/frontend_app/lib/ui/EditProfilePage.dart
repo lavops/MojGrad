@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/models/city.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
@@ -348,6 +349,9 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      inputFormatters:[
+                      LengthLimitingTextInputFormatter(31),
+                      ],
                       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       decoration: InputDecoration(
@@ -461,6 +465,9 @@ class EditProfile extends State<EditProfilePage> {
                       height: 5,
                     ),
                     TextFormField(
+                      inputFormatters:[
+                      LengthLimitingTextInputFormatter(15),
+                      ],
                       controller: customController,
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
@@ -562,6 +569,9 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      inputFormatters:[
+                      LengthLimitingTextInputFormatter(40),
+                      ],
                       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController,
                       autofocus: false,
@@ -583,6 +593,9 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      inputFormatters:[
+                      LengthLimitingTextInputFormatter(40),
+                      ],
                       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController2,
                       autofocus: false,
@@ -602,6 +615,9 @@ class EditProfile extends State<EditProfilePage> {
                     ),
                     SizedBox(height: 5),
                     TextField(
+                      inputFormatters:[
+                      LengthLimitingTextInputFormatter(40),
+                      ],
                       cursorColor:MyApp.ind == 0 ? Colors.black : Colors.white,
                       controller: customController3,
                       autofocus: false,
@@ -1144,6 +1160,7 @@ class EditProfile extends State<EditProfilePage> {
                             ? FontWeight.bold
                             : FontWeight.normal,
                       )),
+                  subtitle: Text("*****"),
                   selected: _selectedOption == index - 3,
                   onTap: () {
                     setState(() {

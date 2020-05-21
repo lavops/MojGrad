@@ -308,7 +308,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text("Grad: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          new Text("Vrsta problema: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           types != null
           ? new DropdownButton<PostType>(
               hint: Text("Izaberi"),
