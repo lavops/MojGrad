@@ -251,6 +251,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
                 // TODO : Process the result gotten
                 place.placeName.split(',');
                 String cityNamae = place.placeName;
+                print(place.geometry.coordinates[0].toString() + " " + place.geometry.coordinates[1].toString());
                 lat = place.geometry.coordinates[0];
                 long = place.geometry.coordinates[1];
                 locationController.text = cityNamae;
@@ -510,7 +511,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               locationController.text,
               city.id,
               startDate,
-              endDate, lat, long).then((value){
+              endDate, long, lat).then((value){
                 print(value.statusCode);
                 print(value.body);
                 if(value.statusCode == 200)
