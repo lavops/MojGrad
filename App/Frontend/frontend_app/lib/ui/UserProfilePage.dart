@@ -238,19 +238,15 @@ class HeaderSection extends State<UserProfilePage> {
                   SliverToBoxAdapter(child: UserInfoWidget(user)),
                 ];
               },
-              body: (posts != null)
+              body: (posts != null && posts != [] && posts.length != 0)
                   ? ListView.builder(
                       padding: EdgeInsets.only(bottom: 30.0),
                       itemCount: posts == null ? 0 : posts.length,
                       itemBuilder: (BuildContext context, int index) {
                         return PostWidget(posts[index]);
                       })
-                  : Center(
-                      child: CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                            Color(0xFF00BFA6)),
-                      ),
-                    ))
+                  : Center(child: Text("Trenutno nemate objava"),)
+            )
           : Center(
               child: CircularProgressIndicator(
                 valueColor:

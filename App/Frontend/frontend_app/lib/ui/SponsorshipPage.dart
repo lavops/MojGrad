@@ -25,6 +25,7 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
       if (mounted) {
         setState(() {
           events = events1;
+          print(events);
         });
       }
     });
@@ -66,18 +67,22 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
         ),
         body: TabBarView(
           children: <Widget>[
+            (events != null && events != [] && events.length != 0) ?
             ListView.builder(
                 padding: EdgeInsets.only(bottom: 30.0),
                 itemCount: events == null ? 0 : events.length,
                 itemBuilder: (BuildContext context, int index) {
                   return EventsWidget(events[index]);
-                }),
+                })
+            : Center(child:Text("Trenutno nema nijedan događaj")),
+            (donations != null && donations != [] && donations.length != 0) ?
             ListView.builder(
                 padding: EdgeInsets.only(bottom: 30.0),
                 itemCount: donations == null ? 0 : donations.length,
                 itemBuilder: (BuildContext context, int index) {
                   return DonationsWidget(donations[index]);
                 })
+            : Center(child:Text("Trenutno nema nijedna donacija"))
           ],
         ),
       ),

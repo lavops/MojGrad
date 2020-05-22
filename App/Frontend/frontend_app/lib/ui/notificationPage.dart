@@ -71,7 +71,7 @@ class _NotificationPage extends State<NotificationPage> {
                     )
                     ,
                     Container(
-                      width: 225,
+                      width: 220,
                       padding: EdgeInsets.all(10),
                       child:Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -97,8 +97,8 @@ class _NotificationPage extends State<NotificationPage> {
                       Text(listN[index].createdAtString , style: TextStyle(fontStyle: FontStyle.italic),)])
                     ),
                   Container(
-                  width: 80,
-                  height: 50,
+                  width: 70,
+                  height: 45,
                   decoration: new BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       shape: BoxShape.rectangle,

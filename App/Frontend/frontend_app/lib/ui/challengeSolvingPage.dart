@@ -111,13 +111,15 @@ class _ChallengeSolvingPageState extends State<ChallengeSolvingPage> {
                 size: Theme.of(context).copyWith().iconTheme.size),
           ),
         ),
-        body:ListView.builder(
+        body: (listChallengeSolving != null && listChallengeSolving != [] && listChallengeSolving.length != 0) ? 
+        ListView.builder(
           padding: EdgeInsets.only(bottom: 30.0),
           itemCount: listChallengeSolving == null ? 0 : listChallengeSolving.length,
           itemBuilder: (BuildContext context, int index) {
             return SolvingPostWidget(listChallengeSolving[index], ownerId, key: RIKeys.riKey1, function: _setIsSolved,);
           }
         )
+        : Center(child: Text("Trenutno nema ponuđenih rešenja\npritisnite \"REŠI\" u gornjem desnom uglu")),
     );
   }
 
