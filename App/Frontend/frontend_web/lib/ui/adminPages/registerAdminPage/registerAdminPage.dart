@@ -311,7 +311,7 @@ class _AdminRegisterPageWidgetState extends State<AdminRegisterPageWidget>{
   _register(String firstName, String lastName, String email,String password) {
     final flNameRegex = RegExp(r'^[a-zA-Z]{1,10}$');
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
-    final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
+    final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
    
     if (flNameRegex.hasMatch(firstName)) {
       if (flNameRegex.hasMatch(lastName)) {

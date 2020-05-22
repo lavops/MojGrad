@@ -818,7 +818,7 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
   }
   
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
-  final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
+  final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
 
   edit(String nname, String nlastname, String nemail, Admin admin, int nadminId,
       String pass1, String pass2) {

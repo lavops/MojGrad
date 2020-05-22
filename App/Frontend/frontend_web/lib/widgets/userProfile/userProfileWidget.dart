@@ -219,7 +219,6 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
       onPressed: () {
         APIServices.deleteUser(TokenSession.getToken, id).then((res) {
           if(res.statusCode == 200){
-            print("Uspesno brisanje donacije.");
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => ManageUserPage()),
@@ -237,8 +236,8 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Brisanje Donacije"),
-      content: Text("Da li ste sigurni da želite da obrišete donaciju?"),
+      title: Text("Brisanje Korisnika"),
+      content: Text("Da li ste sigurni da želite da obrišete korisnika?"),
       actions: [
         okButton,
         notButton,

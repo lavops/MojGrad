@@ -9,6 +9,7 @@ import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -153,6 +154,17 @@ class _ReportedUserMobilePageState extends State<ReportedUserMobilePage>{
     return CenteredViewManageUser(
         child: 
           Column(children: [
+            RaisedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  color: greenPastel,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)
+                  ),
+                  child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
+                ),
             Text("Spisak žalbi", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), ),
             Flexible(child: buildReportsList() ),
           ]),
@@ -274,6 +286,17 @@ class _ReportedUserDesktopPageState extends State<ReportedUserDesktopPage>{
         CenteredViewManageUser(
           child: 
             Column(children: [
+               RaisedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  color: greenPastel,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)
+                  ),
+                  child: Text("Vrati se nazad", style: TextStyle(color: Colors.white),),
+                ).showCursorOnHover,
               Text("Spisak žalbi", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), ),
               Flexible(
                   child: buildReportsList()),

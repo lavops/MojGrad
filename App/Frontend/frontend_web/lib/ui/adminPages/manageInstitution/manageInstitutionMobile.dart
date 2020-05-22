@@ -465,7 +465,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ),
             content: Container(
               height: 300,
-              child: ListView(shrinkWrap:true, children: [descriptionWidget(description)],),
+              child: descriptionWidget(description),
             ),
             actions: <Widget>[
               FlatButton(

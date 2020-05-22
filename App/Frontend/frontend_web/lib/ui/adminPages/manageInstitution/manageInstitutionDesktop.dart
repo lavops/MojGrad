@@ -297,6 +297,20 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   shrinkWrap: true,
                   children: <Widget>[
                     Text(description, style: TextStyle(fontSize: 14)),
+                     SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            "Izađi",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ).showCursorOnHover,
+                      ],
+                    )
                   ],
                 ),
               ),

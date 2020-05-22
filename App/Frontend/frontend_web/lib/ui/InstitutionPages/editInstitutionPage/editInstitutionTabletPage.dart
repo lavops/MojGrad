@@ -860,7 +860,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                             color: greenPastel)),
                     color: greenPastel,
                     child: Text(
-                      "Sacuvaj izmene",
+                      "Sačuvaj izmene",
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {

@@ -379,7 +379,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
   void choiceActionAllInstitutions(
       String choice, int institutionId, String description, int index) {
     if (choice == ConstantsAllInstitutions.OpisInstitucije) {
-      showDialog(
+       showDialog(
           context: context,
           child: AlertDialog(
             title: Text(
@@ -389,7 +389,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
             ),
             content: Container(
               height: 300,
-              child: ListView(shrinkWrap:true, children: [descriptionWidget(description)],),
+              child: descriptionWidget(description),
             ),
             actions: <Widget>[
               FlatButton(
