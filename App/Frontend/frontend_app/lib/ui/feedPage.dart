@@ -134,19 +134,16 @@ class _FeedPageState extends State<FeedPage> {
         ),
         body: RefreshIndicator(
             onRefresh: _handleRefresh,
-            child: (listPosts != null)
+            child: (listPosts != null && listPosts != [] && listPosts.length != 0)
                 ? ListView.builder(
                     padding: EdgeInsets.only(bottom: 30.0),
                     itemCount: listPosts == null ? 0 : listPosts.length,
                     itemBuilder: (BuildContext context, int index) {
                       return PostWidget(listPosts[index]);
                     })
-                : Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
-                    ),
-                  )));
+                : Center(child: Text("Trenutno nema objava"),)
+            )
+      );
   }
 
   Future<Null> _handleRefresh() async {

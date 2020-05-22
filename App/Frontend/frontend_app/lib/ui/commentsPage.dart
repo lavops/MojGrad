@@ -169,7 +169,7 @@ class StateComents extends State<CommentsPage> {
                       child: Row(children: [
                         CircleImage(
                           serverURLPhoto + listComents[index].photoPath,
-                          imageSize: 56.0,
+                          imageSize: 35.0,
                           whiteMargin: 2.0,
                           imageMargin: 6.0,
                         ),
@@ -235,7 +235,8 @@ class StateComents extends State<CommentsPage> {
                                         }).toList();
                                       },
                                     ),
-                        )
+                        ),
+                        SizedBox(width: 5,)
                       ])),
                 ],
               ),
