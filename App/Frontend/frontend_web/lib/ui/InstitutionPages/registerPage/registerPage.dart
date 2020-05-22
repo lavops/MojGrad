@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
@@ -176,10 +177,11 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
   _register(String name, String description, String email, String mobile,
       String password, int cityId) {
     
-    final nameRegex = RegExp(r'^[a-zA-Z]{1,30}$');
-    final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,}');
-    final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,6}[.][a-z]{2,3}$');
-    final mobRegex = RegExp(r'^06[0-9]{7,8}$');
+
+    final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
+    final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
+    final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+    final nameRegex = RegExp(r'^[a-zA-Z\s]{1,25}$');
 
     
     if (cityId == 0) {
@@ -280,6 +282,9 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
       elevation: 6.0,
       child: TextField(
+        inputFormatters:[
+          LengthLimitingTextInputFormatter(18),
+          ],
         cursorColor: Colors.black,
         controller: name,
         style: TextStyle(
@@ -310,6 +315,9 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     child: Padding(
     padding: const EdgeInsets.all(15.0),
     child: TextField(
+      inputFormatters:[
+          LengthLimitingTextInputFormatter(100),
+          ],
       cursorColor: Colors.black,
       controller: description,
       minLines: 5,

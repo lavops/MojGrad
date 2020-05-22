@@ -5,8 +5,8 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/reportedUser/reportedUser.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
-import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
@@ -123,14 +123,13 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         setState(() {
           filteredRepUsers = listFRU;
         });
-        _sortRepListBy();
       }
     });
   }
 
   _sortListBy(){
     if(filteredUsers == null){
-      if(catF.name == "Id"){
+      if(catF == null || catF.name == "Id"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listUsers.sort((x, y) => x.id.compareTo(y.id));
         else if(maxMinF.name == "Opadajući")
@@ -153,7 +152,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
       }
     }
     else{
-      if(catF.name == "Id"){
+      if(catF == null || catF.name == "Id"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           filteredUsers.sort((x, y) => x.id.compareTo(y.id));
         else if(maxMinF.name == "Opadajući")
@@ -179,7 +178,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
 
   _sortRepListBy(){
     if(filteredRepUsers == null){
-      if(repNumF.name == "Svi"){
+      if(repNumF == null || repNumF.name == "Svi"){
         filteredRepUsers = listRepUsers;
       } else if(repNumF.name == "Više od 10"){
         filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
@@ -190,7 +189,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
       }
     }
     else{
-      if(repNumF.name == "Svi"){
+      if(repNumF == null || repNumF.name == "Svi"){
         filteredRepUsers = listRepUsers;
       } else if(repNumF.name == "Više od 10"){
         filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
@@ -497,10 +496,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ReportedUserDetailsPage(
-                            id: listRepUsers[index].id,
-                            firstName: listRepUsers[index].firstName,
-                            lastName: listRepUsers[index].lastName,
+                      builder: (context) => ReportedUserPage(listRepUsers[index].id,
                           )),
                 );
               },
@@ -607,6 +603,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               onChanged: (City newValue) {
                 if (newValue.name == "Svi korisnici") {
                   filteredUsers = null;
+                  _sortListBy();
                 } else {
                   _getUsersFromCity(newValue.id);
                   _sortListBy();
@@ -637,16 +634,12 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               });
 
               if (newValue.name == "Objave") {
-                print("Objave");
                 _sortListBy();
               } else if(newValue.name == "Poeni"){
-                print("Poeni");
                 _sortListBy();
               } else if(newValue.name == "Nivoi"){
-                print("Nivoi");
                 _sortListBy();
               } else if(newValue.name == "Id"){
-                print("Id");
                 _sortListBy();
               }
             },
@@ -666,10 +659,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                 maxMinF = newValue;
               });
               if(newValue.name == "Rastući"){
-                print("Rastući");
                 _sortListBy();
               } else if(newValue.name == "Opadajući"){
-                print("Opadajući");
                 _sortListBy();
               }
             },
@@ -683,6 +674,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         ]);
   }
 
+  City cityR;
+
   Widget dropdownFRU(List<City> listCities) {
     return new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -695,15 +688,17 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           listCities != null
           ? new DropdownButton<City>(
               hint: Text("Izaberi"),
-              value: city,
+              value: cityR,
               onChanged: (City newValue) {
                 if (newValue.name == "Svi korisnici") {
                   filteredRepUsers = null;
+                  _sortRepListBy();
                 } else {
                   _getReportedUsersFromCity(newValue.id);
+                  _sortRepListBy();
                 }
                 setState(() {
-                  city = newValue;
+                  cityR = newValue;
                 });
               },
               items: listCities.map((City option) {
@@ -727,20 +722,16 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                 repNumF = newValue;
               });
               if (newValue.name == "Svi") {
-                print("Svi");
                 filteredRepUsers = null;
                 _sortRepListBy();
               } else if(newValue.name == "Više od 10"){
-                print("Više od 10");
                 setState(() {
                   filteredRepUsers = listRepUsers;
                 });
                 _sortRepListBy();
               } else if(newValue.name == "Više od 20"){
-                print("Više od 20");
                 _sortRepListBy();
               } else if(newValue.name == "Više od 50"){
-                print("Više od 50");
                 _sortRepListBy();
               }
             },

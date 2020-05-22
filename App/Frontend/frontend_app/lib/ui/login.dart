@@ -275,7 +275,9 @@ class _LoginPageState extends State<LoginPage> {
     ));
 
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: MyApp.ind == 0
+            ? Colors.white
+            : Theme.of(context).copyWith().backgroundColor,
         body: Center(
             child: Container(
           width: 400,

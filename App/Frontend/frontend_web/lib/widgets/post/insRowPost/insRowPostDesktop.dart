@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewPost/viewPostPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
@@ -229,6 +230,22 @@ class _InsRowPostDesktopWidgetState extends State<InsRowPostDesktopWidget> {
               ),
               Text(post.commNum.toString()),
               Expanded(child: SizedBox()),
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(11.0),
+                    side: BorderSide(color: greenPastel)),
+                color: greenPastel,
+                child: Text(
+                  "Više informacija",
+                  style: TextStyle(color: Colors.white),
+                ).showCursorOnHover,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewPostInsPage(post)),
+                  );
+                },
+              ),
               SizedBox(width: 10.0), // For padding
             ],
           ),

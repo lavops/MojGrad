@@ -122,7 +122,7 @@ Widget titleColumn(String title, String description) {
     return Row(children: <Widget>[
       SizedBox(width: 10.0,),
       Icon(Icons.location_on),
-      Text(event.address, style: TextStyle(fontSize: 15.0),),
+      Flexible(child: Text(event.address, style: TextStyle(fontSize: 15.0),),),
     ],);
   }
 
@@ -137,7 +137,7 @@ Widget titleColumn(String title, String description) {
             Navigator.pop(context);
           }),
       Expanded(child: SizedBox()),
-      event.id==insId 
+      event.institutionId==insId 
         ? Row(children: <Widget>[
           editButton(event),
           SizedBox(width: 10.0,),

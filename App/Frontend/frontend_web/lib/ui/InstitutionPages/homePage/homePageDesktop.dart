@@ -8,6 +8,7 @@ import 'package:frontend_web/models/postType.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
+import 'package:frontend_web/ui/InstitutionPages/homePage/viewPost/viewPostPage.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/viewProfile/viewProfilePageIns.dart';
 import 'package:frontend_web/ui/InstitutionPages/solvePage/solvePage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
@@ -68,18 +69,19 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
     if (mounted) {
       setState(() {
         listTypes = postTypes;
+        PostType alltypes = new PostType(9999, "Sve");
+        listTypes.add(alltypes);
       });
     }
   }
 
-  _getFiltered(int cid) async {
-    if (listSelectedBoxes != null) {
-      if (listSelectedBoxes.length > listSelectedTypes.length) {
-        listSelectedTypes = listSelectedBoxes;
-      }
-    }
+  _getFilteredNew(int cid, int selectedType) async {
 
-    await APIServices.getFiltered(TokenSession.getToken, listSelectedTypes, cid).then((res) {
+    List<int> newList = [];
+    newList.add(selectedType);
+
+    await APIServices.getFiltered(TokenSession.getToken, newList, cid).then((res) {
+      print(res.body);
       Iterable list = json.decode(res.body);
       List<FullPost> posts =  List<FullPost>();
       posts = list.map((model) => FullPost.fromObject(model)).toList();
@@ -99,26 +101,6 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
     super.initState();
     _getUnsolvedPosts();
     _getPostType();
-    if (listSelectedTypes != null) {
-      if (listSelectedTypes.length > 0) {
-
-        _getFiltered(icityId);
-        listSelectedTypes.clear();
-
-      }
-    }
-  }
-
-  Widget buildList() {
-    return ListView.builder(
-        itemCount: listTypes == null ? 0 : listTypes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Box(
-            title: listTypes[index].typeName,
-            id: listTypes[index].id,
-          );
-        }
-    );
   }
 
 
@@ -358,6 +340,22 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
               ),
               Text(post.commNum.toString()),
               Expanded(child: SizedBox()),
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(11.0),
+                    side: BorderSide(color: Color(0xFF00BFA6))),
+                color: Color(0xFF00BFA6),
+                child: Text(
+                  "Više informacija",
+                  style: TextStyle(color: Colors.white),
+                ).showCursorOnHover,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewPostInsPage(post)),
+                  );
+                },
+              ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
@@ -381,58 +379,72 @@ class _HomeInstitutionDesktopState extends State<HomeInstitutionDesktop> {
 
   @override
   Widget build(BuildContext context) {
-    print(listSelectedTypes.toString());
-    print(indikator.toString());
     return Stack(children: <Widget>[
       CenteredViewPost(
-        child:  indikator == 0 ?
-        ListView.builder(
-            padding: EdgeInsets.only(bottom: 30.0),
-            itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
-            itemBuilder: (BuildContext context, int index) {
-              return rowPost(listUnsolvedPosts[index], 0);
-            }
-        )
+        child:  Column(
+          children: [
+            dropdownFU(listTypes),
+            Flexible(child: 
+            listFilteredPosts == null ?
+            ListView.builder(
+              padding: EdgeInsets.only(bottom: 30.0),
+              itemCount: listUnsolvedPosts == null ? 0 : listUnsolvedPosts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return rowPost(listUnsolvedPosts[index], 0);
+              }
+            )
             : ListView.builder(
-            padding: EdgeInsets.only(bottom: 30.0),
-            itemCount:  listFilteredPosts == null ? 0 : listFilteredPosts.length,
-            itemBuilder: (BuildContext context, int index) {
-              return rowPost(listFilteredPosts[index], 0);
-            }
-        ),
+              padding: EdgeInsets.only(bottom: 30.0),
+              itemCount:  listFilteredPosts == null ? 0 : listFilteredPosts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return rowPost(listFilteredPosts[index], 0);
+              }
+            ),)
+          ],
+        )
       ),
       CollapsingInsNavigationDrawer(),
-      Container(
-        padding: EdgeInsets.only(left: 150, top: 50),
-        width: 500,
-        child: listTypes != null ?
-        buildList()
-            : Text('Neki tekst'),
-      ),
-      Container(
-          padding: EdgeInsets.only(left: 250, top: 10),
-          child: FlatButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(11.0),
-                side: BorderSide(color: Color(0xFF00BFA6))),
-            color: Color(0xFF00BFA6),
-            child: Text(
-              "Primeni filter",
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {
-              _getFiltered(institution.cityId);
-            },
-          )
-      )
     ]);
   }
-}
 
+  PostType ptSelect;
 
+  Widget dropdownFU(List<PostType> types) {
+    return new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Vrsta problema: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          types != null
+          ? new DropdownButton<PostType>(
+              hint: Text("Izaberi"),
+              value: ptSelect,
+              onChanged: (PostType newValue) {
+                if (newValue.typeName == "Sve") {
+                  listFilteredPosts = null;
+                } else {
+                  _getFilteredNew(icityId, newValue.id);
+                }
+                setState(() {
+                  ptSelect = newValue;
+                });
+              },
+              items: types.map((PostType option) {
+                return DropdownMenuItem(
+                  child: new Text(option.typeName),
+                  value: option,
+                );
+              }).toList(),
+            ).showCursorOnHover
+          : new DropdownButton<String>(
+              hint: Text("Izaberi"),
+              onChanged: null,
+              items: null,
+            ).showCursorOnHover,
+        ]);
+  }
 
-
-Widget location(FullPost post) => Container(
+  Widget location(FullPost post) => Container(
     child: Row(
       children: <Widget>[
         SizedBox(
@@ -459,73 +471,4 @@ Widget category(FullPost post) => Container(
       ],
     )
 );
-
-
-
-
-
-
-
-
-class Box extends StatefulWidget {
-  final String title;
-  final int id;
-
-  Box({this.title, this.id});
-
-  @override
-  _BoxState createState() => _BoxState();
 }
-
-class _BoxState extends State<Box> {
-  bool selected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(widget.title),
-      trailing: Checkbox(
-          value: listSelectedBoxes.contains(widget.id) ? true :selected,
-          onChanged: (bool val) {
-            setState(() {
-              selected = val;
-              if (selected == true) {
-                listSelectedTypes.add(widget.id);
-                if (listSelectedTypes != null) {
-                  if (listSelectedTypes.length > 0) {
-                    indikator = 1;
-                  }
-                  listSelectedBoxes.add(widget.id);
-                }
-
-              }
-              else {
-                List<int> lista = new List();
-                if (listSelectedTypes != null) {
-                  for (int i = 0; i < listSelectedTypes.length; i++) {
-                    if (listSelectedTypes[i] != widget.id) {
-                      lista.add(listSelectedTypes[i]);
-                    }
-                  }
-                  listSelectedTypes = lista;
-                  if (listSelectedTypes.length == 0) {
-                    indikator = 0;
-                  }
-                  List<int> listBox = new List();
-                  if (listSelectedBoxes != null) {
-                    for (int i = 0; i < listSelectedBoxes.length; i++) {
-                      if (listSelectedBoxes[i] != widget.id) {
-                        listBox.add(listSelectedBoxes[i]);
-                      }
-                    }
-                    listSelectedBoxes = listBox;
-                  }
-                }
-              }
-
-            });
-          }),
-    );
-  }
-}
-

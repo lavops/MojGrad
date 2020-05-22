@@ -10,15 +10,15 @@ import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class SinglePostWidget extends StatefulWidget {
+class SinglePostInsWidget extends StatefulWidget {
   final FullPost posts;
-  SinglePostWidget(this.posts);
+  SinglePostInsWidget(this.posts);
 
   @override
   _SinglePostWidgetState createState() => _SinglePostWidgetState(posts);
 }
 
-class _SinglePostWidgetState extends State<SinglePostWidget> {
+class _SinglePostWidgetState extends State<SinglePostInsWidget> {
   FullPost post;
 
   _SinglePostWidgetState(FullPost post1) {
@@ -32,48 +32,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return newPost(); //buildPostList()
-  }
-
-  showAlertDialog(BuildContext context, int id) {
-      // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        APIServices.deletePost(TokenSession.getToken,id);
-        setState(() {
-          post = null;
-        });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManagePostPage()),
-        );
-        },
-    ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-        },
-    ).showCursorOnHover;
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Brisanje objave"),
-      content: Text("Da li ste sigurni da želite da obrišete objavu?"),
-      actions: [
-        okButton,
-        notButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+    return (post == null) ? Center() : newPost(); //buildPostList()
   }
 
   Widget newPost() {
@@ -115,20 +74,6 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
           ),
           Expanded(child: SizedBox()),
           Text((category.length > 10) ? category.substring(0,10).replaceRange(9,10, "...") : category),
-          SizedBox(width: 15,),
-          FlatButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(11.0),
-                side: BorderSide(color: Colors.redAccent)),
-            color: Colors.redAccent,
-            child: Text(
-              "Obriši objavu",
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {
-              showAlertDialog(context, postId);
-            },
-          ).showCursorOnHover,
           SizedBox(width: 15,)
         ],
       );
@@ -138,7 +83,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
     imgList.add(userPhotoURL + image);
     image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
     return SizedBox(
-      height: 400.0,
+      height: 300.0,
       width: double.infinity,
       child: Carousel(
         boxFit: BoxFit.cover,
@@ -165,7 +110,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
-          maxHeight: 300.0, // changed to 400
+          maxHeight: 400.0, // changed to 400
           minHeight: 200.0, // changed to 200
           maxWidth: double.infinity,
           minWidth: double.infinity,

@@ -7,6 +7,7 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/loginPage/loginPage.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
 
@@ -130,21 +131,9 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -153,6 +142,14 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                             setState(() {
                               name = check;
                             });
+                            Navigator.pop(context);
+                          },
+                        ),
+                           FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
@@ -192,7 +189,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                         Text("Cilj institucije",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                               ))
                       ],
                     ),
                     SizedBox(
@@ -218,21 +215,9 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         SizedBox(width: 50),
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -241,6 +226,14 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                             setState(() {
                               description = check;
                             });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
@@ -280,7 +273,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                         Text("Broj telefona",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                                ))
                       ],
                     ),
                     SizedBox(
@@ -300,22 +293,10 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+                      children: <Widget>[     
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -335,6 +316,14 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
+                          },
+                        ),
+                         FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
                         ),
                       ],
@@ -373,7 +362,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                         Text("Email",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                               ))
                       ],
                     ),
                     SizedBox(
@@ -394,21 +383,9 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -427,6 +404,14 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                               });
                               Navigator.of(context).pop(check.toString());
                             }
+                          },
+                        ),
+                          FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
                         ),
                       ],
@@ -462,7 +447,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                         Text("Šifra",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: greenPastel))
+                                ))
                       ],
                     ),
                     SizedBox(height: 5),
@@ -474,8 +459,6 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                       decoration: InputDecoration(
                         hoverColor: Colors.grey,
                         hintText: "Trenutna šifra",
-                        hintStyle: TextStyle(
-                            color: greenPastel),
                         labelStyle: TextStyle(
                             color: greenPastel,
                             fontStyle: FontStyle.italic),
@@ -519,21 +502,9 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Otkaži",
-                            style: TextStyle(
-                                color: greenPastel),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(
-                                color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -564,6 +535,14 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                             }
                           },
                         ),
+                          FlatButton(
+                          child: Text(
+                            "Otkaži",
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ],
                     )
                   ],
@@ -577,6 +556,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
    Future<String> editCity(BuildContext context, String cityName) async {
     // show the dialog
    return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         City pomCity;
@@ -598,7 +578,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                   Text("Grad",
                       style: TextStyle(
                           fontSize: 24,
-                          color: greenPastel))
+                          ))
                 ],
               ),
               SizedBox(height: 5),
@@ -608,10 +588,10 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: greenPastel))),
+               )),
         _city != null
             ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: greenPastel)),
+                hint: Text("Izaberi",),
                 value: pomCity,
                 onChanged: (City value) {
                   setState(() {
@@ -638,11 +618,21 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
               Row(
                  mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
+                   MaterialButton(
+                    child: Text(
+                      "Izmeni",
+                      textAlign: TextAlign.center,
+                    ),
+                    onPressed: () {
+                      if(pomCity != null){
+                        Navigator.pop(context,pomCity.name);
+                      }
+                      
+                    },
+                  ),
                   FlatButton(
                     child: Text(
                       "Otkaži",
-                      style: TextStyle(
-                          color: greenPastel),
                     ),
                     onPressed: () {
                       setState(() {
@@ -651,20 +641,6 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
                       });
                      
                       Navigator.pop(context,'');
-                    },
-                  ),
-                   MaterialButton(
-                    child: Text(
-                      "Izmeni",
-                      style: TextStyle(
-                          color: greenPastel),
-                      textAlign: TextAlign.center,
-                    ),
-                    onPressed: () {
-                      if(pomCity != null){
-                        Navigator.pop(context,pomCity.name);
-                      }
-                      
                     },
                   ),
                 ],
@@ -676,26 +652,47 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
       },
     );
   }
+ _removeToken() async {
+    TokenSession.setToken = "";
+  }
+   showDeactivateDialog(BuildContext context, int id) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("Potvrdi",),
+      onPressed: () {
+        APIServices.deleteInstitution(TokenSession.getToken, id);
+        _removeToken();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => InstitutionLoginPage()),
+        );
+      },
+    );
 
- 
+    Widget notButton = FlatButton(
+      child: Text("Otkaži", style: TextStyle(color: Colors.red),),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text('Deaktivacija naloga'),
+      content: Text("Potvrdite deaktivaciju naloga"),
+      actions: [
+        okButton,
+        notButton,
+      ],
+    );
 
-  final deactLabelWidget = Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Text('Želite da deaktivirate nalog Vaše institucije? '),
-      SizedBox(
-        width: 5.0,
-      ),
-      InkWell(
-        child: Text(
-          'Deaktiviraj nalog.',
-          style: TextStyle(
-              color: Colors.redAccent[800], fontWeight: FontWeight.bold),
-        ),
-        onTap: () {},
-      ),
-    ],
-  );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -833,7 +830,7 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
             ),
           ),
            ListTile(
-              leading: Icon(Icons.phonelink_lock,
+              leading: Icon(Icons.location_city,
                   color:Color.fromRGBO(15, 32, 67,100)),
               title: Text('Grad'),
               subtitle: Text(city1 == '' ? institution.cityName : city1),
@@ -882,7 +879,16 @@ class _EditInstitutionTabletPageState extends State<EditInstitutionTabletPage> {
               fontSize: 25,
             ),
           )),
-          deactLabelWidget,
+          FlatButton(
+            child: Text('Da li želite da deaktivirate Vaš nalog?',
+            style: TextStyle(
+                color: Colors.redAccent[800], fontWeight: FontWeight.bold
+            )
+            ),
+            onPressed: () {
+              showDeactivateDialog(context, institution.id);
+            },
+          ),
         ],
       ),
     ));

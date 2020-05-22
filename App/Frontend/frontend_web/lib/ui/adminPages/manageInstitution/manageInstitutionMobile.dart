@@ -103,7 +103,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   }
 
   _getInstitutionFromCityUnauth(int cityId) {
-    APIServices.getInstitutionByCityIdAuth(TokenSession.getToken, cityId)
+    APIServices.getInstitutionByCityIdUnauth(TokenSession.getToken, cityId)
         .then((res) {
       Iterable list = json.decode(res.body);
       List<Institution> listFU = List<Institution>();
@@ -299,7 +299,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           Text(
-            "${listInstitutions[index].postsNum}",
+            "$index",
           )
         ],
       ));
@@ -333,7 +333,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                                         listInst[index].email)),
                                 Container(
                                     width: 200,
-                                    child: institutionSolvedPosts(index)),
+                                    child: institutionSolvedPosts(listInst[index].postsNum)),
                               ],
                             ),
                             PopupMenuButton<String>(
@@ -367,7 +367,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   void choiceActionAllInstitutions(
       String choice, int institutionId, String description, int index) {
     if (choice == ConstantsAllInstitutions.OpisInstitucije) {
-      print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
@@ -393,7 +392,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ],
           ));
     } else if (choice == ConstantsAllInstitutions.ObrisiInstitutciju) {
-      print("Brisanje institucije.");
       showAlertDialog(context, institutionId, index, 1);
     }
   }
@@ -457,7 +455,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   void choiceActionRequestsInstitutions(String choice, int institutionId,
       String description, String email, int index) {
     if (choice == ConstantsRequestsInstitutions.OpisInstitucije) {
-      print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
@@ -468,7 +465,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ),
             content: Container(
               height: 300,
-              child: descriptionWidget(description),
+              child: ListView(shrinkWrap:true, children: [descriptionWidget(description)],),
             ),
             actions: <Widget>[
               FlatButton(
@@ -483,10 +480,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ],
           ));
     } else if (choice == ConstantsRequestsInstitutions.ObrisiInstitutciju) {
-      print("Brisanje institucije.");
       showAlertDialog(context, institutionId, index, 2);
     } else if (choice == ConstantsRequestsInstitutions.PrihvatiInstitutciju) {
-      print("Prihvati instituciju.");
       showAlertDialogAccept(context, institutionId, email, index, 2);
     }
   }
@@ -502,7 +497,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             _debouncer.run(() {
               setState(() {
                 filteredInstitution = listInstitutions
-                    .where((u) => (u.name.contains(string)))
+                    .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
               });
             });
@@ -535,7 +530,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             _debouncer.run(() {
               setState(() {
                 filteredUnauthInstitution = listUnauthInstitutions
-                    .where((u) => (u.name.contains(string)))
+                    .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
               });
             });
@@ -563,6 +558,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               new Text("Grad: ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -576,7 +573,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                         });
                         if (newValue.name == "Sve institucije") {
                           filteredInstitution = null;
-                          _getInstitutions();
+                          //_getInstitutions();
                           _sortListBy();
                         } else {
                           _getInstitutionFromCity(newValue.id);
@@ -598,6 +595,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ],
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               new Text("Rešene objave: ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -609,10 +608,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                     maxMinF = newValue;
                   });
                   if (newValue.name == "Rastući") {
-                    print("Rastući");
                     _sortListBy();
                   } else if (newValue.name == "Opadajući") {
-                    print("Opadajući");
                     _sortListBy();
                   }
                 },
@@ -641,7 +638,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                   value: cityU,
                   onChanged: (City newValue) {
                     setState(() {
-                      city = newValue;
+                      cityU = newValue;
                     });
                     if (newValue.name == "Sve institucije") {
                       filteredUnauthInstitution = null;

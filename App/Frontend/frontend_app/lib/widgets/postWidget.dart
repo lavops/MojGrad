@@ -534,7 +534,7 @@ Widget imageGallery(String image, String image2) {
                     ))
                   : Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: MyApp.ind == 0 ? Colors.white :  Colors.black26,
                       border: Border.all(
                       width: 0.3,
                       color:  Color(0xFF00BFA6)

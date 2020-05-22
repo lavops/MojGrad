@@ -6,8 +6,8 @@ import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/reportedUser/reportedUser.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
-import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 
@@ -120,14 +120,13 @@ List<User> listUsers;
         setState(() {
           filteredRepUsers = listFRU;
         });
-        _sortRepListBy();
       }
     });
   }
 
   _sortListBy(){
     if(filteredUsers == null){
-      if(catF.name == "Id"){
+      if(catF == null || catF.name == "Id"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listUsers.sort((x, y) => x.id.compareTo(y.id));
         else if(maxMinF.name == "Opadajući")
@@ -150,7 +149,7 @@ List<User> listUsers;
       }
     }
     else{
-      if(catF.name == "Id"){
+      if(catF == null || catF.name == "Id"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           filteredUsers.sort((x, y) => x.id.compareTo(y.id));
         else if(maxMinF.name == "Opadajući")
@@ -176,7 +175,7 @@ List<User> listUsers;
 
   _sortRepListBy(){
     if(filteredRepUsers == null){
-      if(repNumF.name == "Svi"){
+      if(repNumF == null || repNumF.name == "Svi"){
         filteredRepUsers = listRepUsers;
       } else if(repNumF.name == "Više od 10"){
         filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
@@ -187,7 +186,7 @@ List<User> listUsers;
       }
     }
     else{
-      if(repNumF.name == "Svi"){
+      if(repNumF == null || repNumF.name == "Svi"){
         filteredRepUsers = listRepUsers;
       } else if(repNumF.name == "Više od 10"){
         filteredRepUsers = listRepUsers.where((x) => x.reportsNum >= 10).toList();
@@ -355,13 +354,11 @@ List<User> listUsers;
 
   void choiceActionAllUsers(String choice, int userId, User user) {
     if (choice == ConstantsAllUsers.PosetiProfil) {
-      print("Poseti profil korisnika.");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ViewUserProfilePage(user)),
       );
     } else if (choice == ConstantsAllUsers.ObrisiKorisnika) {
-      print("Obrisi profil korisnika.");
       showAlertDialog(context, userId);
     }
   }
@@ -440,16 +437,13 @@ List<User> listUsers;
 
   void choiceActionReportedUsers(String choice, int userId, String firstname, String lastname, User user) {
     if (choice == ConstantsReportedUsers.DetaljiPrijave) {
-      print("Poseti detalje prijave.");
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ReportedUserDetailsPage(id: userId, firstName: firstname, lastName: lastname,)),
+        MaterialPageRoute(builder: (context) => ReportedUserPage(userId)),
       );
     } else if (choice == ConstantsReportedUsers.ObrisiKorisnika) {
-      print("Obrisi profil korisnika.");
       showAlertDialog(context, userId);
     } else if (choice == ConstantsReportedUsers.PosetiProfil){
-      print("Poseti profil korisnika.");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ViewUserProfilePage(user)),
@@ -540,16 +534,12 @@ List<User> listUsers;
             });
 
             if (newValue.name == "Objave") {
-              print("Objave");
               _sortListBy();
             } else if(newValue.name == "Poeni"){
-              print("Poeni");
               _sortListBy();
             } else if(newValue.name == "Nivoi"){
-              print("Nivoi");
               _sortListBy();
             } else if(newValue.name == "Id"){
-              print("Id");
               _sortListBy();
             }
           },
@@ -571,10 +561,8 @@ List<User> listUsers;
                 maxMinF = newValue;
               });
               if(newValue.name == "Rastući"){
-                print("Rastući");
                 _sortListBy();
               } else if(newValue.name == "Opadajući"){
-                print("Opadajući");
                 _sortListBy();
               }
             },
@@ -590,6 +578,8 @@ List<User> listUsers;
       ]);
   }
 
+  City cityR;
+
   Widget dropdownFRU(List<City> listCities) {
     return new Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -599,15 +589,17 @@ List<User> listUsers;
         listCities != null
         ? new DropdownButton<City>(
             hint: Text("Izaberi"),
-            value: city,
+            value: cityR,
             onChanged: (City newValue) {
               if (newValue.name == "Svi korisnici") {
                 filteredRepUsers = null;
+                _sortRepListBy();
               } else {
                 _getReportedUsersFromCity(newValue.id);
+                _sortRepListBy();
               }
               setState(() {
-                city = newValue;
+                cityR = newValue;
               });
             },
             items: listCities.map((City option) {
@@ -631,20 +623,16 @@ List<User> listUsers;
               repNumF = newValue;
             });
             if (newValue.name == "Svi") {
-              print("Svi");
               filteredRepUsers = null;
               _sortRepListBy();
             } else if(newValue.name == "Više od 10"){
-              print("Više od 10");
               setState(() {
                 filteredRepUsers = listRepUsers;
               });
               _sortRepListBy();
             } else if(newValue.name == "Više od 20"){
-              print("Više od 20");
               _sortRepListBy();
             } else if(newValue.name == "Više od 50"){
-              print("Više od 50");
               _sortRepListBy();
             }
           },

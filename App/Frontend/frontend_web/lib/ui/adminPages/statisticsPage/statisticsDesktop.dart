@@ -126,7 +126,7 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _handleRefresh,
-      child: (stat != null && donation != null && monthlyUsers!= null && _seriesPieData != null  && _seriesPieData1 != null)
+      child: (stat != null && donation != null && monthlyUsers!= null && _seriesPieData != null  && _seriesPieData1 != null && _seriesPieData != [] && _seriesPieData1 != [] )
           ? Stack(children: <Widget>[
               Container(
                   padding: const EdgeInsets.only(left: 50, right: 50, top: 20),

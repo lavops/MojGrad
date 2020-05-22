@@ -89,7 +89,9 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
     return Row(children: <Widget>[
       SizedBox(width: 20.0,),
       Icon(Icons.location_on),
-      Text(event.address),
+      Flexible(
+            child:Text(event.address),
+          ),
     ],);
   }
 
@@ -172,7 +174,7 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
     Widget okButton = FlatButton(
       child: Text("Obriši", style: TextStyle(color: Colors.red),),
       onPressed: () {
-        APIServices.deleteDonation(TokenSession.getToken, eventId).then((res) {
+        APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
           if(res.statusCode == 200){
             print("Događaj je uspešno obrisan.");
             setState(() {

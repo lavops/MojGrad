@@ -158,7 +158,8 @@ class StateComents extends State<CommentsPage> {
           itemCount: listComents == null ? 0 : listComents.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-                child: Center(
+              width : MediaQuery.of(context).size.width - 10,
+               child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -176,7 +177,7 @@ class StateComents extends State<CommentsPage> {
                           //OBRISATI AKO NE VALJA
                           color:
                               MyApp.ind == 0 ? Colors.white : Colors.grey[600],
-                          width: 260,
+                          width: 240,
                           padding: EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
