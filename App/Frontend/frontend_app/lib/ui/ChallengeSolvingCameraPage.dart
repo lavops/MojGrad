@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
@@ -132,6 +134,9 @@ class _ChallengeSolvingCameraPageState
 
     // Description of assigment or praise
     final opis = TextField(
+      inputFormatters:[
+      LengthLimitingTextInputFormatter(100),
+      ],
       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
       controller: description,
       decoration: InputDecoration(
@@ -176,7 +181,8 @@ class _ChallengeSolvingCameraPageState
               if (res.statusCode == 200) {
                 print("Uspešno ste objavili rešenje.");
                 print(res.body);
-                sendNotification("Rešenje", "Predloženo je rešenje za Vaš problem",1, ownerId);
+                if(ownerId != publicUser.id)
+                  sendNotification("Rešenje", "Predloženo je rešenje za Vaš problem",1, ownerId);
                 Navigator.pop(context);
               }
             });

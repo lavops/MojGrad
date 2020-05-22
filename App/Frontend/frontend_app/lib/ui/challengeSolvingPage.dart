@@ -7,6 +7,7 @@ import 'package:frontend/ui/ChallengeSolvingCameraPage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/institutionProfile.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:frontend/models/constants.dart';
 import '../services/api.services.dart';
@@ -325,7 +326,8 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                           solvingPost.postStatusId = 1;
                           isSolved = 1;
                         });
-                        sendNotification("Rešenje", "Vaše rešenje je odabrano kao pobedničko",1, solvingPost.userId);
+                        if(publicUser.id != solvingPost.userId)
+                          sendNotification("Rešenje", "Vaše rešenje je odabrano kao pobedničko",1, solvingPost.userId);
                       }
                     });
                     

@@ -46,6 +46,7 @@ class _NotificationPage extends State<NotificationPage> {
       itemCount: listN == null ? 0 : listN.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
+          width : MediaQuery.of(context).size.width - 10,
             child: Center(
           child: Column(
            
@@ -70,7 +71,7 @@ class _NotificationPage extends State<NotificationPage> {
                     )
                     ,
                     Container(
-                      width: 260,
+                      width: 225,
                       padding: EdgeInsets.all(10),
                       child:Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -81,23 +82,23 @@ class _NotificationPage extends State<NotificationPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           listN[index].typeNotification == 1 ?
-                         Flexible(child: Text("Korisnik " + listN[index].username + "je postavio predlog rešenja za Vaš problem "))
+                         Flexible(child: Text("Korisnik " + listN[index].username + " je postavio predlog rešenja za Vaš problem "))
                          : listN[index].typeNotification == 2 ?
                          Flexible(child: Text("Čestitamo! Vaše rešenje je odabrano kao pobedničko. Dobili ste 10 poena"))
                          : listN[index].typeNotification == 4 ?
-                         Flexible(child: Text("Korisnik " + listN[index].username + "je pozitivno reagovao na Vašu objavu"))
+                         Flexible(child: Text("Korisnik " + listN[index].username + " je pozitivno reagovao na Vašu objavu"))
                          : listN[index].typeNotification == 3 ?
-                         Flexible(child: Text("Korisnik " + listN[index].username + "je negativno reagovao na Vašu objavu"))
+                         Flexible(child: Text("Korisnik " + listN[index].username + " je negativno reagovao na Vašu objavu"))
                          : 
-                         Flexible(child: Text("Korisnik " + listN[index].username + "je komentarisao Vašu objavu")),
+                         Flexible(child: Text("Korisnik " + listN[index].username + " je komentarisao Vašu objavu")),
                         ],
                       ),
                       SizedBox(height: 3,),
                       Text(listN[index].createdAtString , style: TextStyle(fontStyle: FontStyle.italic),)])
                     ),
                   Container(
-                  width: MediaQuery.of(context).size.width / 6,
-                  height: MediaQuery.of(context).size.height / 14,
+                  width: 80,
+                  height: 50,
                   decoration: new BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       shape: BoxShape.rectangle,
