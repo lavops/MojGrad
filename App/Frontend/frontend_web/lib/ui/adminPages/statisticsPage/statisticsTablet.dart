@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
-import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/models/statistics.dart';
 import 'package:frontend_web/models/user.dart';
@@ -27,6 +24,8 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
   Donation donation;
   List<charts.Series<Task, String>> _seriesPieData;
   List<charts.Series<Task, String>> _seriesPieData1;
+  List<charts.Series<TimeSeriesSimple, DateTime>> seriesList;
+  var data;
 
   _getUsers() {
     APIServices.getTop10(TokenSession.getToken).then((res) {
@@ -38,6 +37,7 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
           listUsers = listU;
         });
       }
+      _getStatistics();
     });
   }
 
@@ -60,45 +60,173 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
     Statistics statistics = Statistics.fromObject(jsonUser);
     setState(() {
       stat = statistics;
-         
+
       var piedata = [
-      new Task('Sve donacije',statistics.numberOfActiveDonations.toDouble(), Color(0xFF99BFA6)),
-      new Task('Aktivne donacije',statistics.numberOfDonations.toDouble(), Color(0xFF6060A6)),
-      new Task('Svi događaji', statistics.numberOfEvents.toDouble(), Color(0xFF00BFA6)),
-      new Task('Nezavršeni događaji',statistics.numberOfActiveEvents.toDouble(), Color(0xfffdbe19)),
+        new Task('Sve donacije', statistics.numberOfActiveDonations.toDouble(),
+            Color(0xFF99BFA6)),
+        new Task('Aktivne donacije', statistics.numberOfDonations.toDouble(),
+            Color(0xFF6060A6)),
+        new Task('Svi događaji', statistics.numberOfEvents.toDouble(),
+            Color(0xFF00BFA6)),
+        new Task('Nezavršeni događaji',
+            statistics.numberOfActiveEvents.toDouble(), Color(0xfffdbe19)),
+      ];
+
+      var piedata1 = [
+        new Task('Rešene objave', statistics.numberOfSolvedPosts.toDouble(),
+            Color(0xFF99BFA6)),
+        new Task('Nerešene objave', statistics.numberOfUnsolvedPosts.toDouble(),
+            Color(0xFF00BFA6)),
+      ];
+
+      _seriesPieData = List<charts.Series<Task, String>>();
+      _seriesPieData1 = List<charts.Series<Task, String>>();
+
+      seriesList = List<charts.Series<TimeSeriesSimple, DateTime>>();
+
+      _seriesPieData.add(
+        charts.Series(
+          domainFn: (Task task, _) => task.task,
+          measureFn: (Task task, _) => task.taskvalue,
+          colorFn: (Task task, _) =>
+              charts.ColorUtil.fromDartColor(task.colorval),
+          id: 'Događaji i donacije',
+          data: piedata,
+          labelAccessorFn: (Task row, _) => '${row.taskvalue}',
+        ),
+      );
+      _seriesPieData1.add(
+        charts.Series(
+          domainFn: (Task task, _) => task.task,
+          measureFn: (Task task, _) => task.taskvalue,
+          colorFn: (Task task, _) =>
+              charts.ColorUtil.fromDartColor(task.colorval),
+          id: 'Objave',
+          data: piedata1,
+          labelAccessorFn: (Task row, _) => '${row.taskvalue}',
+        ),
+      );
+    });
+
+    DateTime month12 = new DateTime(
+        DateTime.now().month - 12 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 12 <= 0
+            ? DateTime.now().month + 12 - 12
+            : DateTime.now().month - 12,
+        DateTime.now().day);
+    DateTime month11 = new DateTime(
+        DateTime.now().month - 11 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 11 <= 0
+            ? DateTime.now().month + 12 - 11
+            : DateTime.now().month - 11,
+        DateTime.now().day);
+    DateTime month10 = new DateTime(
+        DateTime.now().month - 10 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 10 <= 0
+            ? DateTime.now().month + 12 - 10
+            : DateTime.now().month - 10,
+        DateTime.now().day);
+    DateTime month9 = new DateTime(
+        DateTime.now().month - 9 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 9 <= 0
+            ? DateTime.now().month + 12 - 9
+            : DateTime.now().month - 9,
+        DateTime.now().day);
+    DateTime month8 = new DateTime(
+        DateTime.now().month - 8 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 8 <= 0
+            ? DateTime.now().month + 12 - 8
+            : DateTime.now().month - 8,
+        DateTime.now().day);
+    DateTime month7 = new DateTime(
+        DateTime.now().month - 7 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 7 <= 0
+            ? DateTime.now().month + 12 - 7
+            : DateTime.now().month - 7,
+        DateTime.now().day);
+    DateTime month6 = new DateTime(
+        DateTime.now().month - 6 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 6 <= 0
+            ? DateTime.now().month + 12 - 6
+            : DateTime.now().month - 6,
+        DateTime.now().day);
+    DateTime month5 = new DateTime(
+        DateTime.now().month - 5 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 5 <= 0
+            ? DateTime.now().month + 12 - 5
+            : DateTime.now().month - 5,
+        DateTime.now().day);
+    DateTime month4 = new DateTime(
+        DateTime.now().month - 4 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 4 <= 0
+            ? DateTime.now().month + 12 - 4
+            : DateTime.now().month - 4,
+        DateTime.now().day);
+    DateTime month3 = new DateTime(
+        DateTime.now().month - 3 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 3 <= 0
+            ? DateTime.now().month + 12 - 3
+            : DateTime.now().month - 3,
+        DateTime.now().day);
+    DateTime month2 = new DateTime(
+        DateTime.now().month - 2 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 2 <= 0
+            ? DateTime.now().month + 12 - 2
+            : DateTime.now().month - 2,
+        DateTime.now().day);
+    DateTime month1 = new DateTime(
+        DateTime.now().month - 1 <= 0
+            ? DateTime.now().year - 1
+            : DateTime.now().year,
+        DateTime.now().month - 1 <= 0
+            ? DateTime.now().month + 12 - 1
+            : DateTime.now().month - 1,
+        DateTime.now().day);
+
+    data = [
+      new TimeSeriesSimple(time: month12, novi: monthlyUsers[11].toInt()),
+      new TimeSeriesSimple(time: month11, novi: monthlyUsers[10].toInt()),
+      new TimeSeriesSimple(time: month10, novi: monthlyUsers[9].toInt()),
+      new TimeSeriesSimple(time: month9, novi: monthlyUsers[8].toInt()),
+      new TimeSeriesSimple(time: month8, novi: monthlyUsers[7].toInt()),
+      new TimeSeriesSimple(time: month7, novi: monthlyUsers[6].toInt()),
+      new TimeSeriesSimple(time: month6, novi: monthlyUsers[5].toInt()),
+      new TimeSeriesSimple(time: month5, novi: monthlyUsers[4].toInt()),
+      new TimeSeriesSimple(time: month4, novi: monthlyUsers[3].toInt()),
+      new TimeSeriesSimple(time: month3, novi: monthlyUsers[2].toInt()),
+      new TimeSeriesSimple(time: month2, novi: monthlyUsers[1].toInt()),
+      new TimeSeriesSimple(time: month1, novi: monthlyUsers[0].toInt()),
     ];
 
-     var piedata1 = [
-      new Task('Rešene objave',statistics.numberOfSolvedPosts.toDouble(), Color(0xFF99BFA6)),
-      new Task('Nerešene objave',statistics.numberOfUnsolvedPosts.toDouble(), Color(0xFF00BFA6)),
-     ];
-
-        _seriesPieData = List<charts.Series<Task, String>>();
-    _seriesPieData1 = List<charts.Series<Task, String>>();
-
-    _seriesPieData.add(
-      charts.Series(
-        domainFn: (Task task, _) => task.task,
-        measureFn: (Task task, _) => task.taskvalue,
-        colorFn: (Task task, _) =>
-            charts.ColorUtil.fromDartColor(task.colorval),
-        id: 'Događaji i donacije',
-        data: piedata,
-         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
-      ),
-    );
-    _seriesPieData1.add(
-      charts.Series(
-        domainFn: (Task task, _) => task.task,
-        measureFn: (Task task, _) => task.taskvalue,
-        colorFn: (Task task, _) =>
-            charts.ColorUtil.fromDartColor(task.colorval),
-        id: 'Objave',
-        data: piedata1,
-         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
-      ),
-    );
-    });
+    seriesList.add(charts.Series<TimeSeriesSimple, DateTime>(
+      id: 'Balance',
+      colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+      domainFn: (TimeSeriesSimple sales, _) => sales.time,
+      measureFn: (TimeSeriesSimple sales, _) => sales.novi,
+      data: data,
+    ));
   }
 
   _getDonation() async {
@@ -113,7 +241,7 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
   void initState() {
     super.initState();
     _getUsers();
-    _getStatistics();
+    //_getStatistics();
     _getMonthlyUsers();
     _getDonation();
   }
@@ -122,7 +250,13 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _handleRefresh,
-      child: (stat != null && donation != null && monthlyUsers != null && _seriesPieData != null  && _seriesPieData1 != null && _seriesPieData != [] && _seriesPieData1 != [])
+      child: (stat != null &&
+              donation != null &&
+              monthlyUsers != null &&
+              _seriesPieData != null &&
+              _seriesPieData1 != null &&
+              _seriesPieData != [] &&
+              _seriesPieData1 != [])
           ? Stack(children: <Widget>[
               Container(
                   padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
@@ -173,7 +307,7 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
                           height: 20,
                         ),
                         eventPost(),
-                         SizedBox(
+                        SizedBox(
                           height: 20,
                         ),
                         piePost1()
@@ -247,52 +381,60 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
   }
 
   Widget newDonation() {
-    return  Card(
-        child: Column(
-      children: <Widget>[
-         Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Container(
-                  width: 400,
-                  height: 400,
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                            'Događaji i donacije',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.w200),),
-                            SizedBox(height: 10.0,),
-                        Expanded(
-                          child: charts.PieChart(
-                            _seriesPieData,
-                             behaviors: [
-                            new charts.DatumLegend(
-                              outsideJustification: charts.OutsideJustification.endDrawArea,
-                              horizontalFirst: false,
-                              desiredMaxRows: 2,
-                              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-                              entryTextStyle: charts.TextStyleSpec(
-                                  color: charts.MaterialPalette.gray.shadeDefault,
-                                  fontFamily: 'Georgia',
-                                  fontSize: 11),
-                            )
-                          ],
-                           defaultRenderer: new charts.ArcRendererConfig(
-                              arcWidth: 100,
-                             arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
-              labelPosition: charts.ArcLabelPosition.inside)
-        ])),
-                        ),
-                      ],
-                    ),
-                ),
-              )]));
+    return Card(
+        child: Column(children: <Widget>[
+      Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Container(
+          width: 400,
+          height: 400,
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Događaji i donacije',
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w200),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Expanded(
+                child: charts.PieChart(_seriesPieData,
+                    behaviors: [
+                      new charts.DatumLegend(
+                        outsideJustification:
+                            charts.OutsideJustification.endDrawArea,
+                        horizontalFirst: false,
+                        desiredMaxRows: 2,
+                        cellPadding:
+                            new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                        entryTextStyle: charts.TextStyleSpec(
+                            color: charts.MaterialPalette.gray.shadeDefault,
+                            fontFamily: 'Georgia',
+                            fontSize: 11),
+                      )
+                    ],
+                    defaultRenderer: new charts.ArcRendererConfig(
+                        arcWidth: 100,
+                        arcRendererDecorators: [
+                          new charts.ArcLabelDecorator(
+                              labelPosition: charts.ArcLabelPosition.inside)
+                        ])),
+              ),
+            ],
+          ),
+        ),
+      )
+    ]));
   }
 
   Widget buildUserList(List<User> listUsers) {
     return Card(
         child: Column(
       children: [
-        Text('Top 10 korisnika',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.w200),),
+        Text(
+          'Top 10 korisnika',
+          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w200),
+        ),
         Container(
             width: 350,
             height: 400,
@@ -355,42 +497,54 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
       ],
     ));
   }
+
   Widget eventPost() {
     return Card(
       color: Colors.white,
-       child: Container(
-        height: 250,
+      child: Container(
+        height: 350,
         child: Center(
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Column(
-                  
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(5.0),
-                      child: 
-                      Text('Novi korisnici u prethodnih godinu dana',style: TextStyle(fontSize: 21.0,fontWeight: FontWeight.w200),),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: new Sparkline(
-                        fallbackWidth: 300,
-                        data: monthlyUsers,
-                        lineColor: Color(0xFF00BFA6),
-                        pointsMode: PointsMode.all,
-                        pointSize: 8.0,
+                      child: Text(
+                        'Novi korisnici u prethodnih godinu dana',
+                        style: TextStyle(
+                            fontSize: 21.0, fontWeight: FontWeight.w200),
                       ),
-                  ),
-                ],
-              ),
-            ],
+                    ),
+                    Container(
+                        constraints:
+                            BoxConstraints(maxHeight: 350, maxWidth: 300),
+                        child: Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Container(
+                              constraints:
+                                  BoxConstraints(maxHeight: 250, maxWidth: 250),
+                              child: new charts.TimeSeriesChart(
+                                seriesList,
+                                defaultRenderer:
+                                    new charts.LineRendererConfig(),
+                                customSeriesRenderers: [
+                                  new charts.PointRendererConfig(
+                                      customRendererId: 'customPoint')
+                                ],
+                                dateTimeFactory:
+                                    const charts.LocalDateTimeFactory(),
+                              ),
+                            ))),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
-     ),
     );
   }
 
@@ -398,45 +552,49 @@ class _StatisticsTabletState extends State<StatisticsTablet> {
     return Card(
       color: Colors.white,
       child: Center(
-        child:  Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Container(
-                  width: 300,
-                  height: 250,
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                            'Objave ',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.w200),),
-                            SizedBox(height: 10.0,),
-                        Expanded(
-                          child: charts.PieChart(
-                            _seriesPieData1,
-                             behaviors: [
-                            new charts.DatumLegend(
-                              outsideJustification: charts.OutsideJustification.endDrawArea,
-                              horizontalFirst: false,
-                              desiredMaxRows: 2,
-                              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-                              entryTextStyle: charts.TextStyleSpec(
-                                  color: charts.MaterialPalette.gray.shadeDefault,
-                                  fontFamily: 'Georgia',
-                                  fontSize: 11),
-                            )
-                          ],
-                           defaultRenderer: new charts.ArcRendererConfig(
-                              arcWidth: 100,
-                             arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
-              labelPosition: charts.ArcLabelPosition.inside)
-        ])),
-                        ),
-                      ],
-                    ),
-                  ),
+          child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Container(
+          width: 300,
+          height: 250,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Objave ',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w200),
                 ),
-              )
-      ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Expanded(
+                  child: charts.PieChart(_seriesPieData1,
+                      behaviors: [
+                        new charts.DatumLegend(
+                          outsideJustification:
+                              charts.OutsideJustification.endDrawArea,
+                          horizontalFirst: false,
+                          desiredMaxRows: 2,
+                          cellPadding:
+                              new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                          entryTextStyle: charts.TextStyleSpec(
+                              color: charts.MaterialPalette.gray.shadeDefault,
+                              fontFamily: 'Georgia',
+                              fontSize: 11),
+                        )
+                      ],
+                      defaultRenderer: new charts.ArcRendererConfig(
+                          arcWidth: 100,
+                          arcRendererDecorators: [
+                            new charts.ArcLabelDecorator(
+                                labelPosition: charts.ArcLabelPosition.inside)
+                          ])),
+                ),
+              ],
+            ),
+          ),
+        ),
+      )),
     );
   }
 }
