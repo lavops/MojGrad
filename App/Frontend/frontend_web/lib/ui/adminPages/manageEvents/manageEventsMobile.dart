@@ -184,7 +184,7 @@ class ManageEventsPageMobileState extends State<ManageEventsPageMobile>{
         Row(children: <Widget>[
           Expanded(child: SizedBox(),),
           RaisedButton(onPressed: () {
-            Navigator.pushReplacement(context, 
+            Navigator.push(context, 
               MaterialPageRoute(builder: (context) => CreateEventPage()),
             );
             },
