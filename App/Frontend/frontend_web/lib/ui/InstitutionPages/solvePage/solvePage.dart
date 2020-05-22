@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
@@ -281,6 +282,9 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
     return Container(
       width: 500,
       child: TextFormField(
+        inputFormatters:[
+          LengthLimitingTextInputFormatter(70),
+          ],
         maxLines: 5,
         style: TextStyle(
           fontSize: 16,

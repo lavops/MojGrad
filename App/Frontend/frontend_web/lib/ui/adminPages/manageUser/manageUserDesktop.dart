@@ -5,8 +5,8 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/reportedUser/reportedUser.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
-import 'package:frontend_web/ui/reportedUserDetailsPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
@@ -497,10 +497,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ReportedUserDetailsPage(
-                            id: listRepUsers[index].id,
-                            firstName: listRepUsers[index].firstName,
-                            lastName: listRepUsers[index].lastName,
+                      builder: (context) => ReportedUserPage(listRepUsers[index].id,
                           )),
                 );
               },
