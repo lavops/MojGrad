@@ -72,7 +72,7 @@ class _ViewPostDesktopState extends State<ViewPostInsDesktop> {
             children: <Widget>[
             Column(children: <Widget>[
               backButton(),
-              SinglePostInsWidget(post),
+              ListView(children: [SinglePostInsWidget(post)],),
             ],),
             Column(children: <Widget>[
               backButton(),
@@ -180,7 +180,7 @@ class _ViewPostDesktopState extends State<ViewPostInsDesktop> {
                         imageMargin: 6.0,
                       ),
                       Text(
-                        listSolutions[index].username.substring(0,10).replaceRange(9,10, "..."),
+                        (listSolutions[index].username.length > 15) ? listSolutions[index].username.substring(0,15).replaceRange(13,15, "...") : listSolutions[index].username,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: SizedBox()),

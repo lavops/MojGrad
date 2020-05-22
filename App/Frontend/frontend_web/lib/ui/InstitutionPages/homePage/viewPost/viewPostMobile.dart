@@ -67,7 +67,7 @@ class _ViewPostMobileState extends State<ViewPostInsMobile> {
         children: <Widget>[
         Column(children: <Widget>[
           backButton(),
-          SinglePostInsWidget(post),
+          ListView(shrinkWrap: true, children: [SinglePostInsWidget(post)],),
         ],),
         Column(children: <Widget>[
           backButton(),
@@ -169,7 +169,7 @@ class _ViewPostMobileState extends State<ViewPostInsMobile> {
                   Row(
                     children: <Widget>[
                       Text(
-                        listSolutions[index].username.substring(0,10).replaceRange(9,10, "..."),
+                        (listSolutions[index].username.length > 10) ? listSolutions[index].username.substring(0,10).replaceRange(9,10, "...") : listSolutions[index].username,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: SizedBox()),

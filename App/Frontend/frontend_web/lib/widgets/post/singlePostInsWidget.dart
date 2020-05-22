@@ -69,11 +69,11 @@ class _SinglePostWidgetState extends State<SinglePostInsWidget> {
             imageMargin: 6.0,
           ),
           Text(
-            username.substring(0,10).replaceRange(9,10, "..."),
+            (username.length > 10) ? username.substring(0,10).replaceRange(9,10, "...") : username,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Expanded(child: SizedBox()),
-          Text(category.substring(0,10).replaceRange(9,10, "...")),
+          Text((category.length > 10) ? category.substring(0,10).replaceRange(9,10, "...") : category),
           SizedBox(width: 15,)
         ],
       );
@@ -83,7 +83,7 @@ class _SinglePostWidgetState extends State<SinglePostInsWidget> {
     imgList.add(userPhotoURL + image);
     image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
     return SizedBox(
-      height: 400.0,
+      height: 300.0,
       width: double.infinity,
       child: Carousel(
         boxFit: BoxFit.cover,

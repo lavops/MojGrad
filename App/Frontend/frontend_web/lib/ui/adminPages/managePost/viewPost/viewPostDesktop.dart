@@ -227,7 +227,7 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
                         imageMargin: 6.0,
                       ),
                       Text(
-                        listSolutions[index].username.substring(0,15).replaceRange(13,15, "..."),
+                        (listSolutions[index].username.length > 15) ? listSolutions[index].username.substring(0,15).replaceRange(13,15, "...") : listSolutions[index].username,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: SizedBox()),

@@ -32,7 +32,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return (post == null) ? Center() : newPost(); //buildPostList()
+    return newPost(); //buildPostList()
   }
 
   showAlertDialog(BuildContext context, int id) {
@@ -110,11 +110,11 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
             imageMargin: 6.0,
           ),
           Text(
-            username.substring(0,10).replaceRange(9,10, "..."),
+            (username.length > 10) ? username.substring(0,10).replaceRange(9,10, "...") : username,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Expanded(child: SizedBox()),
-          Text(category.substring(0,10).replaceRange(9,10, "...")),
+          Text((category.length > 10) ? category.substring(0,10).replaceRange(9,10, "...") : category),
           SizedBox(width: 15,),
           FlatButton(
             shape: RoundedRectangleBorder(
@@ -165,7 +165,7 @@ class _SinglePostWidgetState extends State<SinglePostWidget> {
 
   Widget imageGallery(String image) => Container(
         constraints: BoxConstraints(
-          maxHeight: 400.0, // changed to 400
+          maxHeight: 300.0, // changed to 400
           minHeight: 200.0, // changed to 200
           maxWidth: double.infinity,
           minWidth: double.infinity,
