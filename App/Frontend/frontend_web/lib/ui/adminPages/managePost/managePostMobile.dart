@@ -765,7 +765,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
       SizedBox(width: 10,),
       InkWell(
         child: Text(
-          username,
+          (username.length > 15) ? username.substring(0,15).replaceRange(13,15, "...") : username,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
