@@ -98,13 +98,9 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
       children: <Widget>[
       SizedBox(width: 10.0,),
       Icon(Icons.location_on),
-<<<<<<< HEAD
-      Flexible(child: Text(event.address),),
-=======
       Flexible(
             child:Text(event.address),
           ),
->>>>>>> 9dc980b4885f79e40549fbc445acd055fa5c9516
     ],);
   }
 

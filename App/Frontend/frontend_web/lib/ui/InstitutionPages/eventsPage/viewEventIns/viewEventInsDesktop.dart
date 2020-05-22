@@ -142,7 +142,7 @@ Widget titleColumn(String title, String description) {
             Navigator.pop(context);
           }).showCursorOnHover,
       Expanded(child: SizedBox()),
-      event.id==insId 
+      event.institutionId==insId 
         ? Row(children: <Widget>[
           editButton(event),
           SizedBox(width: 10.0,),
