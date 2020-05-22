@@ -165,7 +165,6 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -183,7 +182,6 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -252,7 +250,6 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -276,7 +273,6 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -453,19 +449,15 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
                             var temp2 = password1.text; //trenutna
                             var check = password2.text; //nova
                             var checkAgain = password3.text;
-                            print(temp2);
-                            print(adminPassword);
 
                             if (check == checkAgain) {
                               if (passRegex.hasMatch(check)) {
-                                print(check);
                                 setState(() {
                                   password = check;
                                   oldPassword = temp2;
@@ -488,7 +480,6 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -504,7 +495,7 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
   showAlertDialog(BuildContext context, int id) {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
+      child: Text("Obriši"),
       onPressed: () {
         APIServices.deleteAdmin(TokenSession.getToken,id);
         deleteFromList(id);
@@ -512,7 +503,7 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
         },
     );
      Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+      child: Text("Otkaži",),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -576,7 +567,7 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
                       pickImage();
                     },
                     child: Text(
-                      "Color(0xFF00BFA6)",
+                      "Promeni profilnu sliku",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -719,7 +710,7 @@ class _ManageAdminMobileState extends State<ManageAdminMobile> with SingleTicker
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                    listAdmins[index].id != idA
+                    listUsers[index].id != idA
                   ? 
                   Container(
                       color: Colors.white,

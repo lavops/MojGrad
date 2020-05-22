@@ -166,7 +166,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -184,7 +183,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -253,7 +251,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -277,7 +274,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -466,7 +462,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         MaterialButton(
                           child: Text(
                             "Izmeni",
-                            style: TextStyle(color: greenPastel),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -501,7 +496,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         FlatButton(
                           child: Text(
                             "Otkaži",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -519,7 +513,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
     Widget okButton = FlatButton(
       child: Text(
         "Obriši",
-        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         APIServices.deleteAdmin(TokenSession.getToken, id);
@@ -530,7 +523,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
     Widget notButton = FlatButton(
       child: Text(
         "Otkaži",
-        style: TextStyle(color: greenPastel),
       ),
       onPressed: () {
         Navigator.pop(context);
@@ -715,7 +707,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
                         FlatButton(
                           child: Text(
                             "OK",
-                            style: TextStyle(color: greenPastel),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -730,7 +721,6 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
   }
 
   Widget buildAdminList(List<Admin> listUsers) {
-
     return ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
@@ -740,7 +730,7 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                   listAdmins[index].id != idA
+                   listUsers[index].id != idA
                   ? 
                   Container(
                       color: Colors.white,
@@ -800,10 +790,12 @@ class _ManageAdminDesktopState extends State<ManageAdminDesktop>
         onChanged: (string) {
           _debouncer.run(() { 
             setState(() {
-              filteredAdmins = listAdmins
-                    .where((u) => (((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
+        filteredAdmins = listAdmins
+                    .where((u) => (u.firstName.toLowerCase().contains(string.toLowerCase()) ||
+                        ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
                             .contains(string.toLowerCase()))))
                     .toList();
+
             });
           });
         },
