@@ -141,34 +141,30 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   _sortListBy(){
     if(listPostsFilt == null){
-      if(catF.name == "Sve"){
+      if(catF == null || catF.name == "Sve"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listPosts.sort((x, y) => x.postId.compareTo(y.postId));
         else if(maxMinF.name == "Opadajući")
           listPosts.sort((x, y) => y.postId.compareTo(x.postId));
-        print("Sve 2");
       } else if(catF.name == "Lajkovi"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listPosts.sort((x, y) => x.likeNum.compareTo(y.likeNum));
         else if(maxMinF.name == "Opadajući")
           listPosts.sort((x, y) => y.likeNum.compareTo(x.likeNum));
-        print("Lajkovi 2");
       } else if(catF.name == "Dislajkovi"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listPosts.sort((x, y) => x.dislikeNum.compareTo(y.dislikeNum));
         else if(maxMinF.name == "Opadajući")
           listPosts.sort((x, y) => y.dislikeNum.compareTo(x.dislikeNum));
-        print("Dislajkovi 2");
       } else if(catF.name == "Komentari"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listPosts.sort((x, y) => x.commNum.compareTo(y.commNum));
         else if(maxMinF.name == "Opadajući")
           listPosts.sort((x, y) => y.commNum.compareTo(x.commNum));
-        print("Komentari 2");
       }
     }
     else{
-      if(catF.name == "Sve"){
+      if(catF == null || catF.name == "Sve"){
         if(maxMinF == null || maxMinF.name == "Rastući")
           listPostsFilt.sort((x, y) => x.postId.compareTo(y.postId));
         else if(maxMinF.name == "Opadajući")
@@ -194,52 +190,48 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   _sortSolvedListBy(){
     if(listSolvedPostsFilt == null){
-      if(catF.name == "Sve"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      if(catFS == null || catFS.name == "Sve"){
+        if(maxMinFS == null || maxMinFS.name == "Rastući")
           listSolvedPosts.sort((x, y) => x.postId.compareTo(y.postId));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPosts.sort((x, y) => y.postId.compareTo(x.postId));
-        print("Sve 2");
-      } else if(catF.name == "Lajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFS.name == "Broj lajkova"){
+        if(maxMinFS == null || maxMinFS.name == "Rastući")
           listSolvedPosts.sort((x, y) => x.likeNum.compareTo(y.likeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPosts.sort((x, y) => y.likeNum.compareTo(x.likeNum));
-        print("Lajkovi 2");
-      } else if(catF.name == "Dislajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFS.name == "Broj dislajkova"){
+        if(maxMinF == null || maxMinFS.name == "Rastući")
           listSolvedPosts.sort((x, y) => x.dislikeNum.compareTo(y.dislikeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPosts.sort((x, y) => y.dislikeNum.compareTo(x.dislikeNum));
-        print("Dislajkovi 2");
-      } else if(catF.name == "Komentari"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFS.name == "Broj komentara"){
+        if(maxMinF == null || maxMinFS.name == "Rastući")
           listSolvedPosts.sort((x, y) => x.commNum.compareTo(y.commNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPosts.sort((x, y) => y.commNum.compareTo(x.commNum));
-        print("Komentari 2");
       }
     }
     else{
-      if(catF.name == "Sve"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      if(catFS == null || catFS.name == "Sve"){
+        if(maxMinFS == null || maxMinFS.name == "Rastući")
           listSolvedPostsFilt.sort((x, y) => x.postId.compareTo(y.postId));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPostsFilt.sort((x, y) => y.postId.compareTo(x.postId));
-      } else if(catF.name == "Lajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFS.name == "Broj lajkova"){
+        if(maxMinFS == null || maxMinFS.name == "Rastući")
           listSolvedPostsFilt.sort((x, y) => x.likeNum.compareTo(y.likeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPostsFilt.sort((x, y) => y.likeNum.compareTo(x.likeNum));
-      } else if(catF.name == "Dislajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFS.name == "Broj dislajkova"){
+        if(maxMinFS == null || maxMinFS.name == "Rastući")
           listSolvedPostsFilt.sort((x, y) => x.dislikeNum.compareTo(y.dislikeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPostsFilt.sort((x, y) => y.dislikeNum.compareTo(x.dislikeNum));
-      } else if(catF.name == "Komentari"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFS.name == "Broj komentara"){
+        if(maxMinFS == null || maxMinFS.name == "Rastući")
           listSolvedPostsFilt.sort((x, y) => x.commNum.compareTo(y.commNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFS.name == "Opadajući")
           listSolvedPostsFilt.sort((x, y) => y.commNum.compareTo(x.commNum));
       }
     }
@@ -247,52 +239,48 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   _sortUnsolvedListBy(){
     if(listUnsolvedPostsFilt == null){
-      if(catF.name == "Sve"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      if(catFU == null || catFU.name == "Sve"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPosts.sort((x, y) => x.postId.compareTo(y.postId));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPosts.sort((x, y) => y.postId.compareTo(x.postId));
-        print("Sve 2");
-      } else if(catF.name == "Lajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFU.name == "Broj lajkova"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPosts.sort((x, y) => x.likeNum.compareTo(y.likeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPosts.sort((x, y) => y.likeNum.compareTo(x.likeNum));
-        print("Lajkovi 2");
-      } else if(catF.name == "Dislajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFU.name == "Broj dislajkova"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPosts.sort((x, y) => x.dislikeNum.compareTo(y.dislikeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPosts.sort((x, y) => y.dislikeNum.compareTo(x.dislikeNum));
-        print("Dislajkovi 2");
-      } else if(catF.name == "Komentari"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFU.name == "Broj komentara"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPosts.sort((x, y) => x.commNum.compareTo(y.commNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPosts.sort((x, y) => y.commNum.compareTo(x.commNum));
-        print("Komentari 2");
       }
     }
     else{
-      if(catF.name == "Sve"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      if(catFU == null || catFU.name == "Sve"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPostsFilt.sort((x, y) => x.postId.compareTo(y.postId));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPostsFilt.sort((x, y) => y.postId.compareTo(x.postId));
-      } else if(catF.name == "Lajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFU.name == "Broj lajkova"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPostsFilt.sort((x, y) => x.likeNum.compareTo(y.likeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPostsFilt.sort((x, y) => y.likeNum.compareTo(x.likeNum));
-      } else if(catF.name == "Dislajkovi"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFU.name == "Broj dislajkova"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPostsFilt.sort((x, y) => x.dislikeNum.compareTo(y.dislikeNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPostsFilt.sort((x, y) => y.dislikeNum.compareTo(x.dislikeNum));
-      } else if(catF.name == "Komentari"){
-        if(maxMinF == null || maxMinF.name == "Rastući")
+      } else if(catFU.name == "Broj komentara"){
+        if(maxMinFU == null || maxMinFU.name == "Rastući")
           listUnsolvedPostsFilt.sort((x, y) => x.commNum.compareTo(y.commNum));
-        else if(maxMinF.name == "Opadajući")
+        else if(maxMinFU.name == "Opadajući")
           listUnsolvedPostsFilt.sort((x, y) => y.commNum.compareTo(x.commNum));
       }
     }
@@ -459,16 +447,12 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
               catF = newValue;
             });
             if (newValue.name == "Lajkovi") {
-              print("Lajkovi");
               _sortListBy();
             } else if(newValue.name == "Dislajkovi"){
-              print("Dislajkovi");
               _sortListBy();
             } else if(newValue.name == "Komentari"){
-              print("Komentari");
               _sortListBy();
             } else if(newValue.name == "Sve"){
-              print("Sve");
               _sortListBy();
             }
           },
@@ -490,10 +474,8 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
                 maxMinF = newValue;
               });
               if(newValue.name == "Rastući"){
-                print("Rastući");
                 _sortListBy();
               } else if(newValue.name == "Opadajući"){
-                print("Opadajući");
                 _sortListBy();
               }
             },
@@ -555,16 +537,12 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
               catFS = newValue;
             });
             if (newValue.name == "Lajkovi") {
-              print("Lajkovi");
                 _sortSolvedListBy();
             } else if(newValue.name == "Dislajkovi"){
-              print("Dislajkovi");
                 _sortSolvedListBy();
             } else if(newValue.name == "Komentari"){
-              print("Komentari");
                 _sortSolvedListBy();
             } else if(newValue.name == "Sve"){
-              print("Sve");
                 _sortSolvedListBy();
             }
           },
@@ -586,10 +564,8 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
                 maxMinFS = newValue;
               });
               if(newValue.name == "Rastući"){
-                print("Rastući");
                   _sortSolvedListBy();
               } else if(newValue.name == "Opadajući"){
-                print("Opadajući");
                   _sortSolvedListBy();
               }
             },
@@ -651,16 +627,12 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
               catFU = newValue;
             });
             if (newValue.name == "Lajkovi") {
-              print("Lajkovi");
               _sortUnsolvedListBy();
             } else if(newValue.name == "Dislajkovi"){
-              print("Dislajkovi");
               _sortUnsolvedListBy();
             } else if(newValue.name == "Komentari"){
-              print("Komentari");
               _sortUnsolvedListBy();
             } else if(newValue.name == "Sve"){
-              print("Sve");
               _sortUnsolvedListBy();
             }
           },
@@ -682,10 +654,8 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
                 maxMinFU = newValue;
               });
               if(newValue.name == "Rastući"){
-                print("Rastući");
                 _sortUnsolvedListBy();
               } else if(newValue.name == "Opadajući"){
-                print("Opadajući");
                 _sortUnsolvedListBy();
               }
             },
@@ -780,15 +750,12 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   void choicePostAdmin(String choice, FullPost post) {
     if (choice == ConstantsPostAdmin.PogledajObjavu) {
-      print("Pogledaj objavu.");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ViewPostPage(post)),
       );
     } else if (choice == ConstantsPostAdmin.PogledajResenja) {
-      print("Pogledaj resenja.");
     } else if (choice == ConstantsPostAdmin.ObrisiObjavu){
-      print("Obrisi resenja.");
       showAlertDialog(context,post.postId);
     }
   }

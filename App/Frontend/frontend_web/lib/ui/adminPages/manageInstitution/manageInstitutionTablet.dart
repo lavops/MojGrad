@@ -309,7 +309,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
               style: TextStyle(
                 color: Colors.black,
               )),
-          Text("${listInstitutions[index].postsNum}",
+          Text("$index",
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
         ],
@@ -346,7 +346,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                               child: contactWidget(listInst[index].phone,
                                   listInst[index].email)),
                           Container(
-                              width: 100, child: institutionSolvedPosts(index)),
+                              width: 100, child: institutionSolvedPosts(listInst[index].postsNum)),
                           PopupMenuButton<String>(
                             onSelected: (String choice) {
                               choiceActionAllInstitutions(
@@ -379,7 +379,6 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
   void choiceActionAllInstitutions(
       String choice, int institutionId, String description, int index) {
     if (choice == ConstantsAllInstitutions.OpisInstitucije) {
-      print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
@@ -405,7 +404,6 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
             ],
           ));
     } else if (choice == ConstantsAllInstitutions.ObrisiInstitutciju) {
-      print("Brisanje institucije.");
       showAlertDialog(context, institutionId, index, 1);
     }
   }
@@ -467,7 +465,6 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
   void choiceActionRequestsInstitutions(String choice, int institutionId,
       String description, String email, int index) {
     if (choice == ConstantsRequestsInstitutions.OpisInstitucije) {
-      print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
@@ -493,10 +490,8 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
             ],
           ));
     } else if (choice == ConstantsRequestsInstitutions.ObrisiInstitutciju) {
-      print("Brisanje institucije.");
       showAlertDialog(context, institutionId, index, 2);
     } else if (choice == ConstantsRequestsInstitutions.PrihvatiInstitutciju) {
-      print("Prihvati instituciju.");
       showAlertDialogAccept(context, institutionId, email, index, 2);
     }
   }
@@ -584,7 +579,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                     });
                     if (newValue.name == "Sve institucije") {
                       filteredInstitution = null;
-                      _getInstitutions();
+                      //_getInstitutions();
                       _sortListBy();
                     } else {
                       _getInstitutionFromCity(newValue.id);
@@ -613,10 +608,8 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                 maxMinF = newValue;
               });
               if (newValue.name == "Rastući") {
-                print("Rastući");
                 _sortListBy();
               } else if (newValue.name == "Opadajući") {
-                print("Opadajući");
                 _sortListBy();
               }
             },

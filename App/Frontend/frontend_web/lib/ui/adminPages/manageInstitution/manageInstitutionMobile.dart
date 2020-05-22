@@ -299,7 +299,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           Text(
-            "${listInstitutions[index].postsNum}",
+            "$index",
           )
         ],
       ));
@@ -333,7 +333,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                                         listInst[index].email)),
                                 Container(
                                     width: 200,
-                                    child: institutionSolvedPosts(index)),
+                                    child: institutionSolvedPosts(listInst[index].postsNum)),
                               ],
                             ),
                             PopupMenuButton<String>(
@@ -367,7 +367,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   void choiceActionAllInstitutions(
       String choice, int institutionId, String description, int index) {
     if (choice == ConstantsAllInstitutions.OpisInstitucije) {
-      print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
@@ -393,7 +392,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ],
           ));
     } else if (choice == ConstantsAllInstitutions.ObrisiInstitutciju) {
-      print("Brisanje institucije.");
       showAlertDialog(context, institutionId, index, 1);
     }
   }
@@ -457,7 +455,6 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   void choiceActionRequestsInstitutions(String choice, int institutionId,
       String description, String email, int index) {
     if (choice == ConstantsRequestsInstitutions.OpisInstitucije) {
-      print("Opis institucije.");
       showDialog(
           context: context,
           child: AlertDialog(
@@ -483,10 +480,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             ],
           ));
     } else if (choice == ConstantsRequestsInstitutions.ObrisiInstitutciju) {
-      print("Brisanje institucije.");
       showAlertDialog(context, institutionId, index, 2);
     } else if (choice == ConstantsRequestsInstitutions.PrihvatiInstitutciju) {
-      print("Prihvati instituciju.");
       showAlertDialogAccept(context, institutionId, email, index, 2);
     }
   }
@@ -578,7 +573,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                         });
                         if (newValue.name == "Sve institucije") {
                           filteredInstitution = null;
-                          _getInstitutions();
+                          //_getInstitutions();
                           _sortListBy();
                         } else {
                           _getInstitutionFromCity(newValue.id);
@@ -613,10 +608,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                     maxMinF = newValue;
                   });
                   if (newValue.name == "Rastući") {
-                    print("Rastući");
                     _sortListBy();
                   } else if (newValue.name == "Opadajući") {
-                    print("Opadajući");
                     _sortListBy();
                   }
                 },

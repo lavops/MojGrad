@@ -390,7 +390,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                     });
                     if (newValue.name == "Sve institucije") {
                       filteredInstitution = null;
-                      _getInstitutions();
+                      //_getInstitutions();
                       _sortListBy();
                     } else {
                       _getInstitutionFromCity(newValue.id);
@@ -419,10 +419,8 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                 maxMinF = newValue;
               });
               if (newValue.name == "Rastući") {
-                print("Rastući");
                 _sortListBy();
               } else if (newValue.name == "Opadajući") {
-                print("Opadajući");
                 _sortListBy();
               }
             },
@@ -480,7 +478,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
               style: TextStyle(
                 color: Colors.black,
               )),
-          Text("${listInstitutions[index].postsNum}",
+          Text("$index",
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
         ],
@@ -515,7 +513,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                                     listInst[index].email)),
                             Container(
                                 width: 100,
-                                child: institutionSolvedPosts(index)),
+                                child: institutionSolvedPosts(listInst[index].postsNum)),
                             descInst(listInst[index].description, context),
                             deleteInst(context, listInst[index].id, index),
                           ])
