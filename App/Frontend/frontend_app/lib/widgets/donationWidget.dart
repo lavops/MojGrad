@@ -220,7 +220,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne možete donirati 0 poena.\n ")),));
+                  ..showSnackBar(SnackBar(content: Row(children: [ Flexible(child:Text("Ne možete donirati 0 poena.\n "))],),));
 
                   setState(() {
                     donateController.text = "";
@@ -230,7 +230,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne možete donirati više poena nego što ste sakupili.\n ")),));
+                  ..showSnackBar(SnackBar(content: Row(children: [Flexible(child:Text("Ne možete donirati više poena nego što ste sakupili.\n "))],),));
                   
                   setState(() {
                     donateController.text = "";

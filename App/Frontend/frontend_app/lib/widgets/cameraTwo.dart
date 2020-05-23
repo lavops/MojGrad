@@ -430,7 +430,7 @@ class _CameraTwoState extends State<CameraTwo>{
       maxLength: 150,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        hintText: 'Opis pohvale',
+        hintText: 'Opis',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
           borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
