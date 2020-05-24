@@ -24,27 +24,69 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpGet("userId={userID}")]
-        public ActionResult<IEnumerable<EventViewModel>> GetEvents(int userId)
+        public ActionResult<IEnumerable<EventViewModel>> GetAllEvents(int userId)
         {
             var events = _iEventUI.getAllEvents();
             List<EventViewModel> listEvents = new List<EventViewModel>();
             foreach (var eve in events)
             {
-                listEvents.Add(new EventViewModel(eve, userId));
+                listEvents.Add(new EventViewModel(eve, userId, null));
             }
 
             return listEvents;
         }
 
         [Authorize]
-        [HttpGet("byCityId={cityId}/userId={userID}")]
+        [HttpGet("ForWeb/instId={instId}")]
+        public ActionResult<IEnumerable<EventViewModel>> GetAllEventsForWeb(int instId)
+        {
+            var events = _iEventUI.getAllEvents();
+            List<EventViewModel> listEvents = new List<EventViewModel>();
+            foreach (var eve in events)
+            {
+                listEvents.Add(new EventViewModel(eve, null, instId));
+            }
+
+            return listEvents;
+        }
+
+        [Authorize]
+        [HttpGet("FinishedEvent")]
+        public ActionResult<IEnumerable<EventViewModel>> GetFinishedEvents()
+        {
+            var events = _iEventUI.getFinishedEvents();
+            List<EventViewModel> listEvents = new List<EventViewModel>();
+            foreach (var eve in events)
+            {
+                listEvents.Add(new EventViewModel(eve, 0, null));
+            }
+
+            return listEvents;
+        }
+
+        [Authorize]
+        [HttpGet("byCityId={cityId}/userId={userId}")]
         public ActionResult<IEnumerable<EventViewModel>> GetFromCityId(int cityId,int userId)
         {
             var events = _iEventUI.getAllEventsByCityId(cityId);
             List<EventViewModel> listEvents = new List<EventViewModel>();
             foreach (var eve in events)
             {
-                listEvents.Add(new EventViewModel(eve, userId));
+                listEvents.Add(new EventViewModel(eve, userId, null));
+            }
+
+            return listEvents;
+        }
+
+        [Authorize]
+        [HttpGet("ByCityForWeb/cityId={cityId}/instId={instId}")]
+        public ActionResult<IEnumerable<EventViewModel>> GetFromCityIdForWeb(int cityId, int instId)
+        {
+            var events = _iEventUI.getAllEventsByCityId(cityId);
+            List<EventViewModel> listEvents = new List<EventViewModel>();
+            foreach (var eve in events)
+            {
+                listEvents.Add(new EventViewModel(eve, null, instId));
             }
 
             return listEvents;
@@ -55,10 +97,19 @@ namespace Backend.Controllers
         public ActionResult<EventViewModel> GetById(int id, int userId)
         {
             Event events = _iEventUI.getByID(id);
-            EventViewModel fullEvent = new EventViewModel(events, userId);
+            EventViewModel fullEvent = new EventViewModel(events, userId, null);
             return fullEvent;
         }
-      
+
+        [Authorize]
+        [HttpGet("ByIdForWeb/id={id}/instId={instId}")]
+        public ActionResult<EventViewModel> GetByIdForWeb(int id, int instId)
+        {
+            Event events = _iEventUI.getByID(id);
+            EventViewModel fullEvent = new EventViewModel(events, null, instId);
+            return fullEvent;
+        }
+
         [Authorize]
         [HttpPost]
         public IActionResult InsertEvent(EventViewModel events)
@@ -79,7 +130,7 @@ namespace Backend.Controllers
             Event e = _iEventUI.editEvent(eve);
             if (e != null)
             {
-                EventViewModel event1 = new EventViewModel(e, null);
+                EventViewModel event1 = new EventViewModel(e, null, null);
                 return Ok(event1);
             }
             else
@@ -117,7 +168,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("addGoingToEvent")]
-        public IActionResult GetReportingUser(UserEvent events)
+        public IActionResult AddGoingToEvent(UserEvent events)
         {
             bool ind = _iEventUI.addGoingToEvent(events);
             if (ind == true)
@@ -139,6 +190,22 @@ namespace Backend.Controllers
             }
             else
                 return BadRequest(new { message = "Greska" });
+        }
+
+        [Authorize]
+        [HttpPost("InstitutionsForEvent")]
+        public IEnumerable<Institution> InstitutionsForEvents(Event events)
+        {
+            var institutions = _iEventUI.institutionsGoingToEvent(events.id);
+            List<Institution> listInstitutions = new List<Institution>();
+            foreach (var inst in institutions)
+            {
+                Institution institution = inst.institution;
+                institution.password = null;
+                listInstitutions.Add(institution);
+
+            }
+            return listInstitutions;
         }
     }
 }

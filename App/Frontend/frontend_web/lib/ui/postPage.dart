@@ -4,7 +4,6 @@ import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/models/fullPost.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/managementPage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/postWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -132,14 +131,11 @@ class _PostPageState extends State<PostPage> {
               iconTheme: IconThemeData(color: Colors.white),
               title: Text('Upravljanje objavama',
                   style: TextStyle(color: Colors.white)),
-              backgroundColor: Colors.lightGreen,
+              backgroundColor: Color(0xFF00BFA6),
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ManagementPage()));
+                   
                   }),
               bottom: tabs(),
             ),

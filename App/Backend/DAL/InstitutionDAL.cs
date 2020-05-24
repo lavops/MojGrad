@@ -1,12 +1,14 @@
 ﻿using Backend.DAL.Interfaces;
 using Backend.Helpers;
 using Backend.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -18,10 +20,13 @@ namespace Backend.DAL
     {
         private readonly AppDbContext _context;
         private readonly AppSettings _appSettings;
-        public InstitutionDAL(AppDbContext context, IOptions<AppSettings> appSettings)
+        public static IWebHostEnvironment _environment;
+
+        public InstitutionDAL(AppDbContext context, IOptions<AppSettings> appSettings, IWebHostEnvironment environment)
         {
             _context = context;
             _appSettings = appSettings.Value;
+            _environment = environment;
         }
 
         public Institution acceptInstitution(long id)
@@ -129,7 +134,7 @@ namespace Backend.DAL
                 issuer: _appSettings.Secret,
                 audience: _appSettings.Secret,
                 claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(30),
                 signingCredentials: credentials);
 
             var encodeToken = new JwtSecurityTokenHandler().WriteToken(token);
@@ -202,6 +207,38 @@ namespace Backend.DAL
         public List<Institution> getAllUnauthInstitutions()
         {
             return _context.institution.Where(x => x.authentication == false).Include(x => x.city).ToList();
+        }
+
+        public Institution editInstitutionProfilePhoto(long id, string photoPath)
+        {
+            var exist = _context.institution.Where(x => x.id == id).FirstOrDefault();
+            if (exist != null)
+            {
+                try
+                {
+                    if (exist.photoPath != "Upload//ProfilePhoto//default.jpg")
+                    {
+                        List<String> listStr;
+                        listStr = exist.photoPath.Split('/').ToList();
+                        var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/InstitutionProfilePhoto/", listStr[listStr.Count - 1]);
+
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                    }
+                    exist.photoPath = photoPath;
+                    _context.Update(exist);
+                    _context.SaveChanges();
+                    return _context.institution.Where((u) => u.id == id).Include(x => x.city).FirstOrDefault();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return null;
         }
     }
 }

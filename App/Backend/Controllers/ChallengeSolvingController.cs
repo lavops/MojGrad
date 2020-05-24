@@ -47,6 +47,17 @@ namespace Backend.Controllers
         }
 
         [Authorize]
+        [HttpPost("solutionFromTheInstitution")]
+        public IActionResult InsertSolutionFromTheInstitution(ChallengeSolving sol)
+        {
+            ChallengeSolving p = _iChallengeSolvingUI.solutionFromTheInstitution(sol);
+            if (p != null)
+                return Ok(p);
+            else
+                return BadRequest(new { message = "Unos nije uspeo" });
+        }
+
+        [Authorize]
         [HttpPost("editSolution")]
         public IActionResult EditSolution(ChallengeSolving sol)
         {
@@ -61,7 +72,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("solvingChallenge")]
-        public ActionResult<IEnumerable<ChallengeSolvingViewModel>> solvingChallenge(ChallengeSolving solut)
+        public ActionResult<IEnumerable<ChallengeSolvingViewModel>> SolvingChallenge(ChallengeSolving solut)
         {
             var solvings = _iChallengeSolvingUI.solvingChallenge(solut.id, solut.postId);
             List<ChallengeSolvingViewModel> listSol = new List<ChallengeSolvingViewModel>();

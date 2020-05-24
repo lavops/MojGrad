@@ -35,6 +35,14 @@ namespace Backend.Controllers
 
             return listPosts;
         }
+        [Authorize]
+        [HttpGet("GetById/postId={postId}/userId={userId}")]
+        public ActionResult<PostViewModel> GetPostById(int postId, int userId)
+        {
+            var posts = _iPostUI.getByID(postId);
+            PostViewModel post = new PostViewModel(posts, userId);
+            return post;
+        }
 
         [Authorize]
         [HttpGet("ByCityId/userId={userId}/cityId={cityId}")]
@@ -99,7 +107,7 @@ namespace Backend.Controllers
         }
 
         [Authorize]
-        [HttpGet("UnsolvedPosts/userId={userID}")]
+        [HttpGet("UnsolvedPosts/userId={userId}")]
         public ActionResult<IEnumerable<PostViewModel>> UnsolvedPosts(int userId)
         {
             var posts = _iPostUI.getAllUnsolvedPosts();
@@ -112,7 +120,7 @@ namespace Backend.Controllers
             return listPosts;
         }
         [Authorize]
-        [HttpGet("UnsolvedPostsByCityId/userId={userID}/cityId={cityId}")]
+        [HttpGet("UnsolvedPostsByCityId/userId={userId}/cityId={cityId}")]
         public ActionResult<IEnumerable<PostViewModel>> UnsolvedPostsByCityId(int userId, int cityId)
         {
             var posts = _iPostUI.getAllUnsolvedPostsByCityId(cityId);
@@ -161,6 +169,53 @@ namespace Backend.Controllers
             }
             else
                 return BadRequest(new { message = "Greska" });
+        }
+
+        [Authorize]
+        [HttpPost("PostsSolvedByInstitution")]
+        public ActionResult<IEnumerable<PostViewModel>> PostsSolvedByInstitution(Institution inst)
+        {
+            var posts = _iPostUI.getAllPostsSolvedByOneInstitution(inst.id);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, 0));
+            }
+
+            return listPosts;
+        }
+
+        public class ListOfFilter
+        {
+            public List<int> listFilter { get; set; }
+            public long cityId { get; set; }
+        }
+
+        [Authorize]
+        [HttpPost("UnsolvedPostsByFilter")]
+        public ActionResult<IEnumerable<PostViewModel>> PostsByFilter(ListOfFilter filter)
+        {
+            var posts = _iPostUI.getPostsByFilter(filter.listFilter, filter.cityId, 2);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, 0));
+            }
+            return listPosts;
+        }
+
+        [Authorize]
+        [HttpGet("NicePostsByCityId/userId={userId}/cityId={cityId}")]
+        public ActionResult<IEnumerable<PostViewModel>> NicePostsByCityId(int userId, int cityId)
+        {
+            var posts = _iPostUI.getAllNicePostsByCityId(cityId);
+            List<PostViewModel> listPosts = new List<PostViewModel>();
+            foreach (var post in posts)
+            {
+                listPosts.Add(new PostViewModel(post, userId));
+            }
+
+            return listPosts;
         }
 
     }

@@ -32,6 +32,18 @@ namespace Backend.Controllers
         {
             var city = _iCityUI.getByID(id);
             return city;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult InsertCity(City city1)
+        {
+            var city = _iCityUI.insertCity(city1);
+            if(city != null)
+            {
+                return Ok(city);
+            }
+            return BadRequest("unos nije uspeo");
 
         }
 

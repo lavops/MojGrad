@@ -9,7 +9,9 @@ namespace Backend.BL.Interfaces
     public interface IDonationBL
     {
         List<Donation> getAllDonations();
+        List<Donation> getFinishedDonations();
         Donation addParticipate(UserDonation ue);
+        Donation getLastDonation();
         Donation getByID(long id);
         Donation insertDonation(Donation donation);
         bool deleteDonation(long id);

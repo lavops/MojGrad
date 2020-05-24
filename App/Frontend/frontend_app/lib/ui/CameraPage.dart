@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:frontend/models/city.dart';
 import 'package:frontend/models/postType.dart';
 import 'package:frontend/models/user.dart';
@@ -9,8 +10,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
 import 'package:frontend/services/api.services.dart';
+import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
+// import 'package:nominatim_location_picker/nominatim_location_picker.dart';
 import 'package:path/path.dart';
+
+import '../main.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -35,6 +40,7 @@ class _CameraPageState extends State<CameraPage> {
   var id = 0;
   List<City> _city;
   City city;
+  LatLng location;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
 
   _getUser() async {
@@ -85,7 +91,8 @@ class _CameraPageState extends State<CameraPage> {
   // Function for opening a camera
   _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-    print("Kompresovana " + picture.lengthSync().toString());
+    if(picture != null)
+      print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });
@@ -108,7 +115,8 @@ class _CameraPageState extends State<CameraPage> {
   // Function for opening a gallery
   _openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
-    print("Kompresovana " + picture.lengthSync().toString());
+    if(picture != null)
+      print("Kompresovana " + picture.lengthSync().toString());
     this.setState(() {
       imageFile = picture;
     });
@@ -149,6 +157,36 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     // Chosing what post type should be
+
+      Future getLocationWithNominatim() async {
+      Map result = await showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            /*return NominatimLocationPicker(
+              searchHint: 'Pretraži',
+              awaitingForLocation: "Čeka se lokacija.",
+              customMapLayer: new TileLayerOptions(
+                urlTemplate:
+                    "https://api.mapbox.com/styles/v1/lavops/ck8m295d701du1iqid1ejoqxu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
+                additionalOptions: {
+                  'accessToken':
+                      'pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ',
+                  'id': 'mapbox.mapbox-streets-v7'
+                }),
+            );*/
+          });
+      if (result != null) {
+        setState(() => location = result['latlng']);
+        setState(() {
+          latitude1 = location.latitude;
+          longitude2 = location.longitude;
+          _getUserLocation();
+        });
+      } else {
+        return;
+      }
+    }
+
     final vrstaObjave = Row(
       children: <Widget>[
         Align(
@@ -168,8 +206,8 @@ class _CameraPageState extends State<CameraPage> {
                 _vrstaObjave = value;
               });
             },
-            focusColor: Colors.green[800],
-            activeColor: Colors.green[800],
+            focusColor: Color(0xFF00BFA6),
+            activeColor: Color(0xFF00BFA6),
           ),
         ),
         Text("Pohvala", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
@@ -182,8 +220,8 @@ class _CameraPageState extends State<CameraPage> {
                 _vrstaObjave = value;
               });
             },
-            focusColor: Colors.green[800],
-            activeColor: Colors.green[800],
+            focusColor: Color(0xFF00BFA6),
+            activeColor: Color(0xFF00BFA6),
           ),
         ),
       ],
@@ -207,8 +245,8 @@ class _CameraPageState extends State<CameraPage> {
                 _problemResava = value;
               });
             },
-            focusColor: Colors.green[800],
-            activeColor: Colors.green[800],
+            focusColor: Color(0xFF00BFA6),
+            activeColor: Color(0xFF00BFA6),
           ),
         ),
         Text("Neko drugi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
@@ -221,8 +259,8 @@ class _CameraPageState extends State<CameraPage> {
                 _problemResava = value;
               });
             },
-            focusColor: Colors.green[800],
-            activeColor: Colors.green[800],
+            focusColor: Color(0xFF00BFA6),
+            activeColor: Color(0xFF00BFA6),
           ),
         ),
       ],
@@ -265,10 +303,10 @@ class _CameraPageState extends State<CameraPage> {
         Align(
             alignment: Alignment.topLeft,
             child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
         _city != null
             ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Colors.black)),
+                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
                 value: city,
                 onChanged: (City value) {
                   setState(() {
@@ -295,7 +333,7 @@ class _CameraPageState extends State<CameraPage> {
       onPressed: () {
         _openCamera();
       },
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -318,7 +356,7 @@ class _CameraPageState extends State<CameraPage> {
       onPressed: () {
         _openGalery();
       },
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       textColor: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -364,7 +402,7 @@ class _CameraPageState extends State<CameraPage> {
         _getUserLocation();
       },
       icon: Icon(Icons.my_location, size: 20),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -375,11 +413,11 @@ class _CameraPageState extends State<CameraPage> {
       label: Flexible(
         child: Text('Izaberi lokaciju', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
-      onPressed: () {
-        currentLocationFunction();
+      onPressed: () async{
+        await getLocationWithNominatim();
       },
       icon: Icon(Icons.location_on,),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),
@@ -405,17 +443,18 @@ class _CameraPageState extends State<CameraPage> {
 
     // Description of assigment or praise
     final opis = TextField(
+      cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
       controller: description,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         hintText: (_vrstaObjave == 1) ? 'Opis problema' : 'Opis pohvale',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 2, color: Colors.green[800]),
+          borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          borderSide: BorderSide(width: 1, color: Colors.green[800]),
+          borderSide: BorderSide(width: 1, color: Color(0xFF00BFA6)),
         ),
       ),
     );
@@ -434,30 +473,31 @@ class _CameraPageState extends State<CameraPage> {
             jwt = res;
           });
           if (_problemResava == 1)
-            statusId = 2;
-          else
             statusId = 1;
+          else
+            statusId = 2;
 
           if (_vrstaObjave == 2) //pohvala
             postTypeId = 1;
           else if (postType != null)
             postTypeId = postType.id;
-          else
-            pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+          else if(_vrstaObjave != 2)
+            pogresanText = "Popunite obavezna polja: tip objave, grad i lokaciju.";
 
           if (imageFile == null || addres == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Popunite obavezna polja: tip posta i lokaciju.";
             });
-            throw Exception('Greskaaaa');
+            throw Exception('Greška');
           }
-          if (res != null && imageFile != null && addres != null) {
+          if (res != null && imageFile != null && addres != null && city!= null) {
             APIServices.addPost(
                 jwt,
                 user.id,
                 postTypeId,
                 description.text,
-                "Upload//" + basename(imageFile.path),
+                "Upload//Post//" + basename(imageFile.path),
+                null,
                 statusId,
                 latitude1,
                 longitude2,
@@ -480,7 +520,7 @@ class _CameraPageState extends State<CameraPage> {
         });
       },
       icon: Icon(Icons.nature_people),
-      color: Colors.green[800],
+      color: Color(0xFF00BFA6),
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(50),
       ),

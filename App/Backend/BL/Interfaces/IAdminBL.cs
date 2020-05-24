@@ -13,6 +13,7 @@ namespace Backend.BL.Interfaces
         Admin insertAdmin(Admin admin);
         string login(Admin admin);
         Admin editAdminData(Admin admin);
+        Admin editAdimnProfilePhoto(long id, string photoPath);
         Admin editAdminPassword(long id, string password, string newPassword);
         bool deleteAdmin(long id);
     }

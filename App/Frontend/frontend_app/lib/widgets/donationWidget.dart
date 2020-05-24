@@ -8,6 +8,9 @@ import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
+import 'package:frontend/ui/splash.page.dart';
+
+import '../main.dart';
 
 class DonationsWidget extends StatefulWidget {
   final Donation donation;
@@ -122,7 +125,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.green[800]
+            side: BorderSide(color: Color(0xFF00BFA6)
           )
         ),
           child: Text("Više informacija"),
@@ -132,10 +135,10 @@ class _DonationsWidgetState extends State<DonationsWidget> {
           onPressed: (){
             donateActionButton();
           },
-          color: Colors.green[800],
+          color: Color(0xFF00BFA6),
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.green[800]
+            side: BorderSide(color: Color(0xFF00BFA6)
           )
         ),
           child: Text("Doniraj", style: TextStyle(color: Colors.white),),
@@ -149,24 +152,36 @@ class _DonationsWidgetState extends State<DonationsWidget> {
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Doniraj poene."),
+        title: Text("Donirajte poene.", style: TextStyle(
+         color: Theme.of(context).textTheme.bodyText1.color),),
         content: Container(
           height: 150.0,
           child: Column(
             children: <Widget>[
               Text("Imate ukupno " + publicUser.points.toString() + " poena!"),
               TextField(
+               cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                 controller: donateController,
                 keyboardType: TextInputType.number,
+                 decoration: InputDecoration(
+                labelStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontStyle: FontStyle.italic),
+                fillColor: Colors.black,
+                contentPadding: const EdgeInsets.all(10.0),
+                focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
+                   ),  
+              ),
               ),
             ],
           ),
         ),
         actions: <Widget>[
-          FlatButton(
+           FlatButton(
             child: Text(
               "Doniraj",
-              style: TextStyle(color: Colors.green[800]),
+              style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
             ),
             onPressed: () {
               int donationAmount = int.parse(donateController.text);
@@ -183,11 +198,17 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                         Map<String, dynamic> list = json.decode(res.body);
                         Donation donation1 = Donation();
                         donation1 = Donation.fromObject(list);
-                        print('Uspesno ste donirali');
+                        print('Uspešno ste izvršili donaciju.');
                         setState(() {
+                          publicUser.donatedPoints = publicUser.donatedPoints + donationAmount;
+                          publicUser.points = publicUser.points - donationAmount;
                           donation.pointsAccumulated = donation1.pointsAccumulated;
                           donateController.text = "";
                         });
+                        Navigator.of(context).pop();
+                      }
+                      else
+                      {
                         Navigator.of(context).pop();
                       }
                     });
@@ -199,7 +220,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne mozete donirati 0 poena.\n ")),));
+                  ..showSnackBar(SnackBar(content: Row(children: [ Flexible(child:Text("Ne možete donirati 0 poena.\n "))],),));
 
                   setState(() {
                     donateController.text = "";
@@ -209,7 +230,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Flexible(child:Text("Ne mozete donirati vise poena nego sto imate.\n ")),));
+                  ..showSnackBar(SnackBar(content: Row(children: [Flexible(child:Text("Ne možete donirati više poena nego što ste sakupili.\n "))],),));
                   
                   setState(() {
                     donateController.text = "";
@@ -218,10 +239,10 @@ class _DonationsWidgetState extends State<DonationsWidget> {
               }
             },
           ),
-          FlatButton(
+           FlatButton(
           child: Text(
             "Otkaži",
-            style: TextStyle(color: Colors.red),
+            style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
           ),
           onPressed: () {
               setState(() {
@@ -277,7 +298,7 @@ class _DonationsPageWidgetState extends State<DonationsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
       ),
       body: Container(

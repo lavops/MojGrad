@@ -37,6 +37,11 @@ namespace Backend.UI
             return _iChallengeSolvingBL.insertSolution(challenge);
         }
 
+        public ChallengeSolving solutionFromTheInstitution(ChallengeSolving challenge)
+        {
+            return _iChallengeSolvingBL.solutionFromTheInstitution(challenge);
+        }
+
         public List<ChallengeSolving> solvingChallenge(long solutionId, long postId)
         {
             return _iChallengeSolvingBL.solvingChallenge(solutionId, postId);

@@ -9,6 +9,8 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:latlong/latlong.dart';
 
+import '../main.dart';
+
 class EventsWidget extends StatefulWidget {
   final Events event;
 
@@ -70,7 +72,7 @@ class _EventsWidgetState extends State<EventsWidget> {
           width: 10.0,
         ),
         Column(
-          children: <Widget>[Text("Datum pocetka:"), Text(event.startDate)],
+          children: <Widget>[Text("Datum početka:"), Text(event.startDate)],
         ),
         Expanded(child: SizedBox()),
         Column(
@@ -132,7 +134,7 @@ class _EventsWidgetState extends State<EventsWidget> {
           },
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(18.0),
-              side: BorderSide(color: Colors.green[800])),
+              side: BorderSide(color: Color(0xFF00BFA6))),
           child: Text("Više informacija"),
         ),
         Expanded(child: SizedBox()),
@@ -141,10 +143,10 @@ class _EventsWidgetState extends State<EventsWidget> {
                 onPressed: () {
                   joinEventActionButton();
                 },
-                color: Colors.green[800],
+                color: Color(0xFF00BFA6),
                 shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(18.0),
-                    side: BorderSide(color: Colors.green[800])),
+                    side: BorderSide(color: Color(0xFF00BFA6))),
                 child:
                     Text("Pridruži se", style: TextStyle(color: Colors.white)),
               )
@@ -172,10 +174,10 @@ class _EventsWidgetState extends State<EventsWidget> {
         child: AlertDialog(
           title: Text("Pridruži se događaju!", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontSize: 18)),
           actions: <Widget>[
-            FlatButton(
+             FlatButton(
               child: Text(
                 "Pridruži se",
-                style: TextStyle(color: Colors.green[800]),
+                 style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -186,9 +188,10 @@ class _EventsWidgetState extends State<EventsWidget> {
                   if (res != null) {
                     APIServices.joinEvent(jwt, event.id, userId).then((res) {
                       if (res.statusCode == 200) {
-                        print('Uspesno ste sepridruzili dogadjaju.');
+                        print('Uspešno ste se pridružili događaju.');
                         setState(() {
                           event.isGoing = 1;
+                          event.userNum++;
                         });
                       }
                     });
@@ -200,7 +203,7 @@ class _EventsWidgetState extends State<EventsWidget> {
             FlatButton(
               child: Text(
                 "Otkaži",
-                style: TextStyle(color: Colors.red),
+                 style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -214,12 +217,12 @@ class _EventsWidgetState extends State<EventsWidget> {
     showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Otkaži prisustvo događaju!", style: TextStyle(fontSize: 18, color: Theme.of(context).textTheme.bodyText1.color)),
+          title: Text("Da li želite da otkažete dolazak?", style: TextStyle(fontSize: 18, color: Theme.of(context).textTheme.bodyText1.color)),
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "Potvrdi",
-                style: TextStyle(color: Colors.red),
+                "Da",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -228,11 +231,12 @@ class _EventsWidgetState extends State<EventsWidget> {
                     jwt = res;
                   });
                   if (res != null) {
-                    APIServices.joinEvent(jwt, event.id, userId).then((res) {
+                    APIServices.leaveEvent(jwt, event.id, userId).then((res) {
                       if (res.statusCode == 200) {
-                        print('Uspesno ste napustili dogadjaj.');
+                        print('Uspešno ste napustili događaj.');
                         setState(() {
                           event.isGoing = 0;
+                          event.userNum--;
                         });
                       }
                     });
@@ -243,53 +247,17 @@ class _EventsWidgetState extends State<EventsWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkaži",
-                style: TextStyle(color: Colors.green[800]),
+                "Ne",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            )
+            ) 
           ],
         ));
   }
 
-  showUsers() {
-    showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text("Otkaži prisustvo događaju!"),
-          content: Container(
-            child: ListView.builder(
-                padding: EdgeInsets.only(bottom: 30.0),
-                itemCount: users == null ? 0 : users.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(child: Text(users[index].username));
-                }),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                "Potvrdi",
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
-                print('Uspesno ste otkazali prisustvo dogadjaju.');
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                "Otkaži",
-                style: TextStyle(color: Colors.green[800]),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ));
-  }
 }
 
 class EventsPageWidget extends StatefulWidget {
@@ -334,7 +302,7 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).copyWith().backgroundColor,
+          backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           iconTheme: IconThemeData(
               color: Theme.of(context).copyWith().iconTheme.color),
         ),

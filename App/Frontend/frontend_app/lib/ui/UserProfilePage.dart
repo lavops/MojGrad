@@ -6,11 +6,13 @@ import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/login.dart';
+import 'package:frontend/ui/top10Page.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
 import '../main.dart';
 import 'EditProfilePage.dart';
 import 'package:provider/provider.dart';
+
 
 class UserProfilePage extends StatefulWidget {
   final User user;
@@ -31,7 +33,7 @@ class HeaderSection extends State<UserProfilePage> {
     print("korisnik ${user1.id}");
   }
 
-  final Color green = Colors.green[800];
+  final Color green = Color(0xFF00BFA6);
   List<FullPost> posts;
   bool darkThemeEnabled = MyApp.ind == 0 ? false : true;
 
@@ -66,7 +68,9 @@ class HeaderSection extends State<UserProfilePage> {
     return new Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Theme.of(context).copyWith().backgroundColor,
+        backgroundColor: MyApp.ind == 0
+            ? Colors.white
+            : Theme.of(context).copyWith().backgroundColor,
         iconTheme:
             IconThemeData(color: Theme.of(context).copyWith().iconTheme.color),
       ),
@@ -105,6 +109,26 @@ class HeaderSection extends State<UserProfilePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.star,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
+              title: Text(
+                'Top 10',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.bodyText1.color),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Top10Page(user)),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.brightness_medium,
+                  color: Theme.of(context).copyWith().iconTheme.color,
+                  size: Theme.of(context).copyWith().iconTheme.size),
               title: Text("Tamna tema",
                   style: TextStyle(
                       fontSize: 16,
@@ -134,49 +158,53 @@ class HeaderSection extends State<UserProfilePage> {
               ),
               onTap: () {
                 showDialog(
-                  context: context,
-                  child: AlertDialog(
-                    title: Text("Daktivacija profila?"),
-                    content: Container(
-                      height: 100,
-                      child: Flexible(
-                        child: Text("Deaktivacijom profila brišete vaš profil iz naše baze podataka, kao i sve vaše objave i vasa rešenja."),
-                      ),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
+                    context: context,
+                    child: AlertDialog(
+                      title: Text("Daktivacija profila?"),
+                      content: Container(
+                        height: 100,
                         child: Text(
-                          "Deaktiviraj",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onPressed: () {
-                          APIServices.jwtOrEmpty().then((res) {
-                            String jwt;
-                            setState(() {
-                              jwt = res;
+                            "Deaktivacijom profila brišete Vaš profil, sve Vaše objave i rešenja iz baze podataka."),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            "Deaktiviraj",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onPressed: () {
+                            APIServices.jwtOrEmpty().then((res) {
+                              String jwt;
+                              setState(() {
+                                jwt = res;
+                              });
+                              if (res != null) {
+                                APIServices.deleteUser(jwt, userId);
+                              }
                             });
-                            if (res != null) {
-                              APIServices.deleteUser(jwt, userId);
-                            }
-                          });
-                          _removeToken();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
-                          );
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          "Otkaži",
-                          style: TextStyle(color: Colors.green[800]),
+                            _removeToken();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    ],
-                  ));
+                        FlatButton(
+                          child: Text(
+                            "Otkaži",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
               },
             ),
             ListTile(
@@ -191,7 +219,7 @@ class HeaderSection extends State<UserProfilePage> {
               ),
               onTap: () {
                 _removeToken();
-
+               
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
@@ -210,23 +238,19 @@ class HeaderSection extends State<UserProfilePage> {
                   SliverToBoxAdapter(child: UserInfoWidget(user)),
                 ];
               },
-              body: (posts != null)
+              body: (posts != null && posts != [] && posts.length != 0)
                   ? ListView.builder(
                       padding: EdgeInsets.only(bottom: 30.0),
                       itemCount: posts == null ? 0 : posts.length,
                       itemBuilder: (BuildContext context, int index) {
                         return PostWidget(posts[index]);
                       })
-                  : Center(
-                      child: CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                            Colors.green[800]),
-                      ),
-                    ))
+                  : Center(child: Text("Trenutno nemate objava"),)
+            )
           : Center(
               child: CircularProgressIndicator(
                 valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
               ),
             ),
     );

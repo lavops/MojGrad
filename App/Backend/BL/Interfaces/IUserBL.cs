@@ -17,5 +17,7 @@ namespace Backend.BL.Interfaces
         bool deleteUser(long id);
         User editUserPhoto(long id, string photoPathn);
         List<User> getUsersByCityId(long cityId);
+        IEnumerable<User> getNUserFromCity(long cityId, int n);
+        string forgetPassword(User user);
     }
 }

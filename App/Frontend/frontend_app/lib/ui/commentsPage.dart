@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/comment.dart';
 import 'package:frontend/models/constants.dart';
-import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
 
+import '../main.dart';
 import 'homePage.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -50,7 +50,11 @@ class StateComents extends State<CommentsPage> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje komentara?"),
+            title: Text(
+              "Brisanje komentara?",
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -66,25 +70,24 @@ class StateComents extends State<CommentsPage> {
                     });
                     if (res != null) {
                       print("Delete comment" + comment.id.toString());
-                      APIServices.deleteComment(jwt, comment.id).then((res){
-                        if(res.statusCode == 200){
+                      APIServices.deleteComment(jwt, comment.id).then((res) {
+                        if (res.statusCode == 200) {
                           setState(() {
                             _getComms();
                           });
                         }
                       });
-                      
                     }
                   });
                   _getComms();
                   _getComms();
-                  print('Uspesno ste izbrisali objavu.');
+                  print('Uspešno ste izbrisali objavu.');
                   Navigator.of(context).pop();
                   _getComms();
                   _getComms();
                 },
               ),
-              FlatButton(
+                FlatButton(
                 child: Text(
                   "Otkaži",
                   style: TextStyle(
@@ -104,12 +107,16 @@ class StateComents extends State<CommentsPage> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Želiš da prijaviš komentar?"),
+            title: Text(
+              "Želite da prijavite komentar?",
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
             actions: <Widget>[
-              FlatButton(
+               FlatButton(
                 child: Text(
                   "Prijavi",
-                  style: TextStyle(color: Colors.red),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -125,14 +132,14 @@ class StateComents extends State<CommentsPage> {
                       });
                     }
                   });
-                  print('Uspesno ste prijavili komentar.');
+                  print('Uspešno ste prijavili komentar.');
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style: TextStyle(color: Colors.green[800]),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -146,12 +153,13 @@ class StateComents extends State<CommentsPage> {
   TextEditingController myController = new TextEditingController();
   Widget buildCommentList() {
     return Container(
-        color: Theme.of(context).copyWith().backgroundColor,
+        color: MyApp.ind == 0 ? Colors.white : Colors.grey[800],
         child: ListView.builder(
           itemCount: listComents == null ? 0 : listComents.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-                child: Center(
+              width : MediaQuery.of(context).size.width - 10,
+               child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -161,12 +169,15 @@ class StateComents extends State<CommentsPage> {
                       child: Row(children: [
                         CircleImage(
                           serverURLPhoto + listComents[index].photoPath,
-                          imageSize: 56.0,
+                          imageSize: 35.0,
                           whiteMargin: 2.0,
                           imageMargin: 6.0,
                         ),
                         Container(
-                          width: 260,
+                          //OBRISATI AKO NE VALJA
+                          color:
+                              MyApp.ind == 0 ? Colors.white : Colors.grey[600],
+                          width: 240,
                           padding: EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +235,8 @@ class StateComents extends State<CommentsPage> {
                                         }).toList();
                                       },
                                     ),
-                        )
+                        ),
+                        SizedBox(width: 5,)
                       ])),
                 ],
               ),
@@ -237,7 +249,9 @@ class StateComents extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: MyApp.ind == 0
+            ? Colors.white
+            : Theme.of(context).copyWith().backgroundColor,
         iconTheme: IconThemeData(
             color: Theme.of(context).copyWith().iconTheme.color,
             size: Theme.of(context).copyWith().iconTheme.size),
@@ -254,8 +268,8 @@ class StateComents extends State<CommentsPage> {
         ),
       ),
       body: Container(
+          color: MyApp.ind == 0 ? Colors.white : Colors.grey[600],
           padding: EdgeInsets.only(top: 0),
-          color: Colors.grey[100],
           child: Column(children: [
             Flexible(child: buildCommentList()),
             Row(
@@ -268,7 +282,9 @@ class StateComents extends State<CommentsPage> {
                 ),
                 Flexible(
                   child: TextFormField(
+                    cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                     controller: myController,
+                    maxLength: 150,
                     decoration: InputDecoration(
                       hoverColor: Colors.grey,
                       labelText: 'Dodaj komentar...',
@@ -284,7 +300,7 @@ class StateComents extends State<CommentsPage> {
                   //splashColor: Colors.black,
                   elevation: 7,
                   padding: const EdgeInsets.all(10.0),
-                  color: Colors.green[800],
+                  color: Color(0xFF00BFA6),
                   child: Text(
                     'Komentariši',
                     style: TextStyle(
@@ -292,24 +308,25 @@ class StateComents extends State<CommentsPage> {
                   ),
                   //post comment
                   onPressed: () {
-                    APIServices.jwtOrEmpty().then((res) {
-                      String jwt;
-                      setState(() {
-                        jwt = res;
-                      });
-                      if (res != null) {
-                        print(myController.text);
-                        APIServices.addComment(
-                                jwt, myController.text, 1, postId)
-                            .then((res) {
-                          
-                          setState(() {
-                            _getComms();
-                            myController.text = "";
-                          });
+                    if (myController.text != "") {
+                      APIServices.jwtOrEmpty().then((res) {
+                        String jwt;
+                        setState(() {
+                          jwt = res;
                         });
-                      }
-                    });
+                        if (res != null) {
+                          print(myController.text);
+                          APIServices.addComment(
+                                  jwt, myController.text, userId, postId)
+                              .then((res) {
+                            setState(() {
+                              _getComms();
+                              myController.text = "";
+                            });
+                          });
+                        }
+                      });
+                    }
                     _getComms();
                   },
                 ),

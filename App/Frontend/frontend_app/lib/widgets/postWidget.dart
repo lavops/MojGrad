@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/constantsDeleteEdit.dart';
 import 'package:frontend/models/likeViewModel.dart';
@@ -15,6 +17,7 @@ import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/models/constants.dart';
 import 'dart:convert';
+import '../main.dart';
 import '../services/api.services.dart';
 
 class PostWidget extends StatefulWidget {
@@ -32,11 +35,14 @@ class _PostWidgetState extends State<PostWidget> {
   TextEditingController opisController = new TextEditingController();
   ReportType _selectedId;
   List<DropdownMenuItem<ReportType>> _dropdownMenuItems;
-
+  int _currentImageIndex = 0;
   _PostWidgetState(FullPost post1) {
     this.post = post1;
   }
 
+   void _updateImageIndex(int index) {
+    setState(() => _currentImageIndex = index);
+  }
   getReportTypes() async {
     var jwt = await APIServices.jwtOrEmpty();
     APIServices.getReportType(jwt).then((res) {
@@ -47,6 +53,18 @@ class _PostWidgetState extends State<PostWidget> {
         reportTypes = listRepTypes;
         _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
         _selectedId = _dropdownMenuItems[0].value;
+      });
+    });
+  }
+
+  _getPostById() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getPostById(jwt, post.postId, userId).then((res) {
+      Map<String, dynamic> list = json.decode(res.body);
+      FullPost post1 = FullPost.nothing();
+      post1 = FullPost.fromObject(list);
+      setState(() {
+        post = post1;
       });
     });
   }
@@ -79,10 +97,11 @@ class _PostWidgetState extends State<PostWidget> {
         child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             //mainAxisAlignment: MainAxisAlignment.center,
+            
             children: <Widget>[
           userInfoRow(post.userId, post.username, post.typeName, post.userPhoto,
               post.statusId),
-          imageGallery(post.photoPath),
+          imageGalery3(post.photoPath, post.solvedPhotoPath),
           SizedBox(height: 2.0),
           Align(
               alignment: Alignment.centerLeft,
@@ -194,12 +213,6 @@ class _PostWidgetState extends State<PostWidget> {
             otherUserId: _otherUserId,
           ));
     }
-    else if(choice == Constants.PogledajResenja){
-      Navigator.push(
-        context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-      );
-    }
 
   }
 
@@ -215,12 +228,13 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje objave?"),
+            title: Text("Brisanje objave?", style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),),
             actions: <Widget>[
-              FlatButton(
+                FlatButton(
                 child: Text(
-                  "Izbrisi",
-                  style: TextStyle(color: Colors.red),
+                  "Izbriši",
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -235,14 +249,14 @@ class _PostWidgetState extends State<PostWidget> {
                       });
                     }
                   });
-                  print('Uspesno ste izbrisali objavu.');
+                  print('Uspešno ste izbrisali objavu.');
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style: TextStyle(color: Colors.green[800]),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -255,22 +269,24 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Izmeni opis.", textAlign: TextAlign.center,),
+            title: Text("Izmeni opis.", textAlign: TextAlign.center,style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color),),
             content: Container(
               height: 50.0,
               child: Column(
                 children: <Widget>[
                   TextField(
+                   cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                     controller: opisController,
                   ),
                 ],
               ),
             ),
             actions: <Widget>[
-              FlatButton(
+                FlatButton(
                 child: Text(
                   "Sačuvaj",
-                  style: TextStyle(color: Colors.green[800]),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -286,14 +302,14 @@ class _PostWidgetState extends State<PostWidget> {
                       });
                     }
                   });
-                  print('Uspesno ste izmenili objavu.');
+                  print('Uspešno ste izmenili opis.');
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style: TextStyle(color: Colors.red),
+                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -301,31 +317,108 @@ class _PostWidgetState extends State<PostWidget> {
               )
             ],
           ));
-    }else if(choice == ConstantsDeleteEdit.PogledajResenja){
-      Navigator.push(
-        context,
-        MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-      );
     }
   }
 
-  Widget imageGallery(String image) => Container(
-        constraints: BoxConstraints(
-          maxHeight: 300.0, // changed to 400
-          minHeight: 200.0, // changed to 200
-          maxWidth: double.infinity,
-          minWidth: double.infinity,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey[200],
-              width: 1.0,
-            ),
+  _getSolvedStatus() async {
+    print("");
+    int result = await Navigator.push(
+      context,
+      MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+    );
+    print("Status id ${post.statusId} a result je $result");
+    _getPostById();
+    setState(() {
+      if (result != null && result == 1) post.statusId = 1;
+    });
+  }
+
+Widget imageGallery(String image, String image2) { 
+   List<String> imgList=[]; 
+  imgList.add(serverURLPhoto + image);
+  image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
+  return Column(children: <Widget>[ 
+        GestureDetector(
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              CarouselSlider(
+               options: CarouselOptions(
+                 viewportFraction: 1.0,
+                 onPageChanged: (index, reason) {
+                   _updateImageIndex(index);
+                 },
+                 enableInfiniteScroll: false,
+               ),
+                items: imgList.map((item) => Container(
+                   constraints: BoxConstraints(
+                    maxHeight: 350.0, // changed to 400
+                    minHeight: 250.0, // changed to 200
+                    maxWidth: double.infinity,
+                    minWidth: double.infinity,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey[200],
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Center(
+                    child: Image.network(item, fit: BoxFit.fitWidth, width: MediaQuery.of(context).size.width, )
+                  ),
+                )).toList(),
+                
+              ),
+            ],
           ),
         ),
-        child: Image(image: NetworkImage(serverURLPhoto + image)),
-      );
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          (imgList.length > 1) ?
+          Container(
+            height: 30,
+             child: PhotoCarouselIndicator(
+                photoCount: imgList.length,
+                activePhotoIndex: _currentImageIndex,
+           )) : Container( width: 1, height: 1,),
+        ],)
+        ],
+        );
+}
+
+  Widget imageGalery3(String image, String image2){
+    List<String> imgList=[];
+    imgList.add(serverURLPhoto + image);
+    image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
+    return SizedBox(
+      height: 300.0,
+      width: double.infinity,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        autoplay: false,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        dotSize: 6.0,
+        dotIncreasedColor: Color(0xFF00BFA6),
+        dotBgColor: Colors.transparent,
+        dotPosition: DotPosition.bottomCenter,
+        dotVerticalPadding: 10.0,
+        showIndicator: image2 != "" && image2 != null ? true : false,
+        indicatorBgPadding: 7.0,
+        images: image2 != "" && image2 != null ? [
+          NetworkImage(imgList[0]),
+          NetworkImage(imgList[1])
+        ]
+        : [
+          NetworkImage(imgList[0])
+        ]
+      ),
+    );
+  }
 
   Widget actionsButtons(int statusId, int postId, int likeNum, int dislikeNum,
           int commNum, int isLiked) =>
@@ -337,7 +430,7 @@ class _PostWidgetState extends State<PostWidget> {
             children: <Widget>[
               IconButton(
                 icon: isLiked == 1
-                    ? Icon(MdiIcons.thumbUpOutline, color: Colors.green[800])
+                    ? Icon(MdiIcons.thumbUpOutline, color: Color(0xFF00BFA6))
                     : Icon(MdiIcons.thumbUpOutline, color: Colors.grey),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
@@ -363,12 +456,9 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LikesPage(postId)),
-                  );
+                   _getLikesFromPage(postId);
                 },
-                child: Text(likeNum.toString()),
+                child: Text(likeNum.toString(), style: TextStyle(fontSize: 15)),
               ),
               IconButton(
                 icon: isLiked == 2
@@ -398,42 +488,76 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LikesPage(postId)),
-                  );
+                 _getLikesFromPage(postId);
                 },
-                child: Text(dislikeNum.toString()),
+                child: Text(dislikeNum.toString(), style: TextStyle(fontSize: 15)),
               ),
               IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: Colors.green[800]),
+                icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),
                 onPressed: () {
                   _getCommentsFromPage(postId);
                 },
               ),
-              Text(commNum.toString()),
+              Text(commNum.toString(),  style: TextStyle(fontSize: 15)),
               Expanded(child: SizedBox()),
-              statusId == 2
-                  ? FlatButton(
+              post.postTypeId == 1 ? SizedBox() :
+              statusId == 2 && post.postTypeId != 1
+                  ?
+                  Container( 
+                    width: 95,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF00BFA6),
+                      borderRadius: BorderRadius.circular(11.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      ),
+                    child:
+                   FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Colors.green[800])),
-                      color: Colors.green[800],
+                          side: BorderSide(color: Color(0xFF00BFA6))),
+                      color: Color(0xFF00BFA6),
                       child: Text(
                         "Reši",
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
-                        );
+                        _getSolvedStatus();
                       },
-                    )
-                  : IconButton(
-                      icon: Icon(Icons.done_all, color: Colors.green[800]),
-                      onPressed: () {},
+                    ))
+                  : Container(
+                    decoration: BoxDecoration(
+                      color: MyApp.ind == 0 ? Colors.white :  Colors.black26,
+                      border: Border.all(
+                      width: 0.3,
+                      color:  Color(0xFF00BFA6)
                     ),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(50.0) 
+                      ),
+                       boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                        offset: Offset(0, 2), // changes position of shadow
+                      ),
+                      ],
+                    ),
+                    child:IconButton(
+                      icon: Icon(Icons.done_all, color: Color(0xFF00BFA6)),
+                      onPressed: () {
+                        _getSolvedStatus();
+                      },
+                    ),
+                  ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
@@ -445,9 +569,21 @@ class _PostWidgetState extends State<PostWidget> {
       context,
       MaterialPageRoute(builder: (context) => CommentsPage(postId)),
     );
-
+    
     setState(() {
       if (result != null) post.commNum = result;
+    });
+    _getPostById();
+  }
+
+  _getLikesFromPage(int postId) async {
+    int result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LikesPage(postId)),
+    );
+    
+    setState(() {
+      if (result != null) post.likeNum = result;
     });
   }
 
@@ -459,23 +595,7 @@ class _PostWidgetState extends State<PostWidget> {
       Container(
           child: Row(
         children: <Widget>[
-          SizedBox(
-            width: 10,
-          ),
-          InkWell(
-              onTap: () {
-                if (userId != otherUserId)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OthersProfilePage(otherUserId)),
-                  );
-              },
-              child: Text(username,
-                  style: TextStyle(fontWeight: FontWeight.bold))),
-          SizedBox(
-            width: 10,
-          ),
+         SizedBox(width: 10,),
           Flexible(
             child: Text(description),
           )
@@ -514,6 +634,8 @@ class MyDialogState extends State<MyDialog> {
       title: Text(
         "Prijavljivanje korisnika",
         textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color),
       ),
       content: Container(
         height: 150,
@@ -530,15 +652,24 @@ class MyDialogState extends State<MyDialog> {
             items: widget.reportTypes,
           ),
           TextFormField(
-            maxLines: 2,
-            controller: messageController,
-            decoration: InputDecoration(
-                labelText: "Komentar",
-                hoverColor: Theme.of(context).textTheme.bodyText1.color),
+              controller: messageController,
+              autocorrect: false,
+              decoration: InputDecoration(
+                hoverColor: Colors.grey,
+                hintText: 'Komentar',
+                labelStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontStyle: FontStyle.italic),
+                fillColor: Colors.black,
+                contentPadding: const EdgeInsets.all(10.0),
+                focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
+                   ),  
+              ),
           )
         ])),
       actions: <Widget>[
-        FlatButton(
+         FlatButton(
           child: Text(
             "Prijavi",
             style:
@@ -556,10 +687,7 @@ class MyDialogState extends State<MyDialog> {
                 APIServices.addReport(jwt, userId, widget.otherUserId,
                         _selectedId.id, messageController.text)
                     .then((res) {
-                  Map<String, dynamic> list = json.decode(res);
-                  LikeViewModel likeVM = LikeViewModel();
-                  likeVM = LikeViewModel.fromObject(list);
-                  setState(() {});
+                  
                 });
                 Navigator.of(context).pop();
               }
@@ -577,6 +705,42 @@ class MyDialogState extends State<MyDialog> {
           },
         )
       ],
+    );
+  }
+}
+
+
+class PhotoCarouselIndicator extends StatelessWidget {
+  final int photoCount;
+  final int activePhotoIndex;
+
+  PhotoCarouselIndicator({
+    @required this.photoCount,
+    @required this.activePhotoIndex,
+  });
+
+  Widget _buildDot({bool isActive}) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+        child: Container(
+          height: isActive ? 7.5 : 6.0,
+          width: isActive ? 7.5 : 6.0,
+          decoration: BoxDecoration(
+            color: isActive ? Color(0xFF00BFA6) : Colors.grey,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(photoCount, (i) => i)
+          .map((i) => _buildDot(isActive: i == activePhotoIndex))
+          .toList(),
     );
   }
 }

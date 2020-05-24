@@ -20,7 +20,7 @@ class CircleImage extends StatelessWidget {
     return Container(
       height: this.imageSize,
       width: this.imageSize,
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(left: 10,right: 10),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
       ),

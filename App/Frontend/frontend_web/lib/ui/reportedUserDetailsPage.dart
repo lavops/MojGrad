@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/usersProfilePage.dart';
 import 'package:frontend_web/models/report.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'dart:convert';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
+
+import 'package:frontend_web/extensions/hoverExtension.dart';
 
 
 class ReportedUserDetailsPage extends StatefulWidget {
@@ -131,11 +132,8 @@ class _ReportedUserDetailsPage extends State<ReportedUserDetailsPage> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UsersProfilePage()));
-            }),
+              Navigator.pop(context);
+            }).showCursorOnHover,
       ),
       body: Center(
         child: Container(

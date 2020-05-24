@@ -37,6 +37,11 @@ namespace Backend.UI
             return _iUserBL.editUserPhoto(id, photoPathn);
         }
 
+        public string forgetPassword(User user)
+        {
+            return _iUserBL.forgetPassword(user);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserBL.getAllUsers();
@@ -45,6 +50,11 @@ namespace Backend.UI
         public User getByID(long id)
         {
             return _iUserBL.getByID(id);
+        }
+
+        public IEnumerable<User> getTop10UserFromCity(long cityId)
+        {
+            return _iUserBL.getNUserFromCity(cityId, 10);
         }
 
         public List<User> getUsersByCityId(long cityId)

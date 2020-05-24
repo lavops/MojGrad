@@ -54,9 +54,19 @@ namespace Backend.BL
             return _iEventDAL.getByID(id);
         }
 
+        public List<Event> getFinishedEvents()
+        {
+            return _iEventDAL.getFinishedEvents();
+        }
+
         public Event insertEvent(EventViewModel events)
         {
             return _iEventDAL.insertEvent(events);
+        }
+
+        public List<UserEvent> institutionsGoingToEvent(long eventId)
+        {
+            return _iEventDAL.institutionsGoingToEvent(eventId);
         }
 
         public List<UserEvent> usersGoingToEvent(long eventId)

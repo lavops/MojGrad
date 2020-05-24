@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'package:frontend_web/ui/loginSponsorPage.dart';
+import 'package:frontend_web/ui/home/homeView.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/homePage.dart';
-import 'package:frontend_web/ui/loginPage.dart';
-import 'package:frontend_web/ui/sponsorPage.dart';
+
+import 'ui/InstitutionPages/homePage/homePage.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
             var jwt = str.split(".");
 
             if(jwt.length !=3) {
-              return LoginSponsorPage();
+              return HomeView();//LoginSponsorPage();
             } else {
               var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
               if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
@@ -42,13 +41,13 @@ class MyApp extends StatelessWidget {
                 if(type == 1)
                   return HomePage(str, payload);
                 else
-                  return InstitutionPage(str,payload);
+                  return HomePageInstitution(str,payload);
               } else {
-                return LoginSponsorPage();
+                return HomeView();//LoginSponsorPage();
               }
             }
           } else {
-            return LoginSponsorPage();
+            return HomeView();//LoginSponsorPage();
           }
         }
       ),

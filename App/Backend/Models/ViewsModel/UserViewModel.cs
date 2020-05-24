@@ -18,6 +18,7 @@ namespace Backend.Models.ViewsModel
         public string cityName { get; set; }
         public long cityId { get; set; }
         public int points { get; set; }
+        public int donatedPoints { get; set; }
         public int level { get; set; }
         public string photo { get; set; }
         public int postsNum { get; set; }
@@ -37,10 +38,11 @@ namespace Backend.Models.ViewsModel
             this.createdAt = u.createdAt;
             this.id = u.id;
             this.points = u.points;
-            this.level = u.level;
+            this.level = (u.points + u.donatedPoints)/100 + 1;
             this.cityName = u.city.name;
             this.cityId = u.cityId;
             this.photo = u.photo;
+            this.donatedPoints = u.donatedPoints;
             this.postsNum = u.posts.Where(x => x.userId == u.id).Count();
             this.reportsNum = _context.report.Where(x => x.reportedUserId == u.id).Count();
         }

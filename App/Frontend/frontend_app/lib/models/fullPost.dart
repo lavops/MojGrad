@@ -9,6 +9,7 @@ class FullPost
   DateTime _createAt; //time the post was posted
   String _description;
   String _photoPath; 
+  String _solvedPhotoPath; 
   int _statusId;
   String _status; // 'reseno' or 'nereseno'
   int _likeNum; //number of likes
@@ -20,7 +21,8 @@ class FullPost
   String _address;
   int _isLiked;
   
-  FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum, this._latitude, this._longitude, this._userPhoto, this._address);
+  FullPost.nothing();
+  FullPost(this._postId, this._userId, this._username,this._postTypeId,this._typeName,this._createAt,this._description,this._photoPath,this._statusId,this._status,this._likeNum,this._dislikeNum, this._commNum, this._latitude, this._longitude, this._userPhoto, this._address, this._solvedPhotoPath);
  
 
   int get postId => _postId;
@@ -39,6 +41,8 @@ class FullPost
   set description(String description){_description = description;}
   String get photoPath => _photoPath;
   set photoPath(String photoPath){_photoPath = photoPath;}
+   String get solvedPhotoPath => _solvedPhotoPath;
+  set solvedPhotoPath(String solvedPhotoPath){_solvedPhotoPath = solvedPhotoPath;}
   int get statusId => _statusId;
   set statusId(int statusId){_statusId = statusId;}
   String get status => _status;
@@ -73,6 +77,7 @@ class FullPost
     map["createAt"] = _createAt;
     map["description"] = _description;
     map["photoPath"] = _photoPath;
+    map["solvedPhotoPath"] = _solvedPhotoPath;
     map["statusId"] = _statusId;
     map["status"] = _status;
     map["likeNum"] = _likeNum;
@@ -98,6 +103,7 @@ class FullPost
     this._createAt = data["createAt"];
     this._description = data["description"] ;
     this._photoPath = data["photoPath"];
+    this._solvedPhotoPath = data["solvedPhotoPath"];
     this._statusId = data["statusId"];
     this._status = data["status"];
     this._likeNum = data["likeNum"];

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
-import 'package:frontend/ui/CameraPage.dart';
 import 'package:frontend/ui/SponsorshipPage.dart';
 import 'package:frontend/ui/feedPage.dart';
+import 'package:frontend/ui/login.dart';
 import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/UserProfilePage.dart';
 import 'dart:convert';
 
-User publicUser;
+import 'package:frontend/ui/newCamera.dart';
+import 'package:frontend/ui/splash.page.dart';
+
+
 int userId;
 
 class HomePage extends StatefulWidget {
@@ -38,12 +41,14 @@ class _HomePageState extends State<HomePage> {
      var jwt = await APIServices.jwtOrEmpty();
     userId = int.parse(payload['sub']);
     var res = await APIServices.getUser(jwt, userId);
+    print(res.body);
     Map<String, dynamic> jsonUser = jsonDecode(res.body);
     User user = User.fromObject(jsonUser);
     setState(() {
       user1 = user;
       publicUser = user;
     });
+  
   }
 
   @override
@@ -57,9 +62,9 @@ class _HomePageState extends State<HomePage> {
     final _kTabPages = <Widget>[
       FeedPage(user1),
       MapPage(),
-      CameraPage(),
+      NewCameraPage(),//CameraPage()
       SponsorshipPage(),
-      UserProfilePage(user1),
+      UserProfilePage(publicUser),
     ];
 
     final _kBottomNavBarItems = <BottomNavigationBarItem>[
@@ -74,15 +79,24 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      body: _kTabPages[_currentTabIndex],
+      body:
+      RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: (user1 != null) ?
+             _kTabPages[_currentTabIndex] : Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
+                    ),
+                  )) ,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
             _currentTabIndex = 2;
           });
         },
-        child: Icon(Icons.nature_people),
-        backgroundColor: Colors.green[800],
+        child: Icon(Icons.nature_people, color: Theme.of(context).copyWith().iconTheme.color),
+        backgroundColor: Color(0xFF00BFA6),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
@@ -97,10 +111,19 @@ class _HomePageState extends State<HomePage> {
               _currentTabIndex = index;
             });
           },
-          selectedItemColor: Colors.green[800],
+          selectedItemColor: Color(0xFF00BFA6),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+    Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 3));
+    setState(() {
+      user1 = new User();
+    });
+    _getUser();
+    return null;
   }
 }

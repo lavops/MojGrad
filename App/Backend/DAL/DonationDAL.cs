@@ -21,7 +21,8 @@ namespace Backend.DAL
         {
             bool ret = false;
             var exist = _context.userDonation.Where(x => x.userId == ue.userId && x.donationId == ue.donationId).FirstOrDefault();
-            if (exist == null)
+            var exist1 = _context.user.Where(x => x.id == ue.userId).FirstOrDefault();
+            if (exist == null && exist1.points >= ue.donatedPoints)
             {
                 UserDonation eve = new UserDonation();
                 eve.userId = ue.userId;
@@ -34,7 +35,7 @@ namespace Backend.DAL
                     ret = true;
                 }
             }
-            else
+            else if(exist1.points >= ue.donatedPoints)
             {
                 try
                 {
@@ -54,6 +55,20 @@ namespace Backend.DAL
                 existDon.collectedMoney += ue.donatedPoints * 10;
                 if (existDon.monetaryAmount >= existDon.collectedMoney)
                     this.editDonation(existDon);
+               
+                try
+                {
+                    exist1.donatedPoints += ue.donatedPoints;
+                    exist1.points -= ue.donatedPoints;
+                    exist1.level = exist1.donatedPoints / 100 + 1;
+                    _context.Update(exist1);
+                    _context.SaveChanges();
+                    ret = true;
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             if (ret == true)
                 return _context.donation.Where(x => x.id == ue.donationId).FirstOrDefault();
@@ -87,8 +102,6 @@ namespace Backend.DAL
                     exist.title = donation.title;
                     exist.monetaryAmount = donation.monetaryAmount;
                     exist.organizationName = donation.organizationName;
-                    exist.description = donation.description;
-                    exist.collectedMoney = donation.collectedMoney;
                     _context.Update(exist);
                     _context.SaveChanges();
                     return _context.donation.Where((u) => u.id == donation.id).FirstOrDefault();
@@ -112,6 +125,17 @@ namespace Backend.DAL
             return _context.donation.Where(x => x.id == id).FirstOrDefault();
         }
 
+        public List<Donation> getFinishedDonations()
+        {
+            return _context.donation.Where(x => x.collectedMoney == x.monetaryAmount).ToList();
+        }
+
+        public Donation getLastDonation()
+        {
+            var donations = _context.donation.OrderByDescending(x=> x.id).ToList();
+            return donations.FirstOrDefault();
+        }
+
         public Donation insertDonation(Donation donation)
         {
             Donation exist = new Donation();
@@ -122,7 +146,7 @@ namespace Backend.DAL
             exist.monetaryAmount = donation.monetaryAmount;
             exist.organizationName = donation.organizationName;
             exist.description = donation.description;
-            exist.collectedMoney = donation.collectedMoney;
+            exist.collectedMoney = 0;
             if (exist != null)
             {
                 _context.donation.Add(exist);

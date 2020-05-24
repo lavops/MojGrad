@@ -37,6 +37,11 @@ namespace Backend.BL
             return _iChallengeSolvingDAL.insertSolution(challenge);
         }
 
+        public ChallengeSolving solutionFromTheInstitution(ChallengeSolving challenge)
+        {
+            return _iChallengeSolvingDAL.solutionFromTheInstitution(challenge);
+        }
+
         public List<ChallengeSolving> solvingChallenge(long solutionId, long postId)
         {
             return _iChallengeSolvingDAL.solvingChallenge(solutionId, postId);

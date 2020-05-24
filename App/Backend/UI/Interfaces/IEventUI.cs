@@ -11,6 +11,7 @@ namespace Backend.UI.Interfaces
     public interface IEventUI
     {
         List<Event> getAllEvents();
+        List<Event> getFinishedEvents();
         List<Event> getAllEventsByCityId(long id);
         bool addGoingToEvent(UserEvent ue);
         Event getByID(long id);
@@ -18,6 +19,7 @@ namespace Backend.UI.Interfaces
         bool deleteEvent(long id);
         Event editEvent(EventViewModel events);
         List<UserEvent> usersGoingToEvent(long eventId);
+        List<UserEvent> institutionsGoingToEvent(long eventId);
         bool cancelArrival(UserEvent ue);
     }
 }

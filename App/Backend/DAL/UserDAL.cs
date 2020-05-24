@@ -1,14 +1,17 @@
 ﻿using Backend.DAL.Interfaces;
 using Backend.Helpers;
 using Backend.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,15 +21,17 @@ namespace Backend.DAL
     {
         private readonly AppDbContext _context;
         private readonly AppSettings _appSettings;
-        public UserDAL (AppDbContext context, IOptions<AppSettings> appSettings)
+        public static IWebHostEnvironment _environment;
+        public UserDAL(AppDbContext context, IOptions<AppSettings> appSettings, IWebHostEnvironment environment)
         {
             _context = context;
             _appSettings = appSettings.Value;
+            _environment = environment;
         }
 
         public List<User> getAllUsers()
         {
-            return _context.user.Include(x=> x.city).Include(p=> p.posts).ToList();
+            return _context.user.Include(x => x.city).Include(p => p.posts).ToList();
         }
 
         public User getByID(long id)
@@ -54,8 +59,9 @@ namespace Backend.DAL
                     u1.password = user.password;
                     u1.phone = user.phone;
                     u1.username = user.username;
-                    u1.photo = "default.png";
+                    u1.photo = "Upload//ProfilePhoto//default.jpg";
                     u1.points = 0;
+                    u1.donatedPoints = 0;
                     u1.level = 1;
 
                     _context.user.Add(u1);
@@ -90,7 +96,7 @@ namespace Backend.DAL
                     exist.cityId = user.cityId;
                     _context.Update(exist);
                     _context.SaveChanges();
-                    return exist;
+                    return _context.user.Where(x=>x.id == user.id).Include(x=> x.city).Include(p => p.posts).FirstOrDefault();
                 }
                 catch (DbUpdateException ex)
                 {
@@ -124,7 +130,7 @@ namespace Backend.DAL
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-           
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),
@@ -135,7 +141,7 @@ namespace Backend.DAL
                 issuer: _appSettings.Secret,
                 audience: _appSettings.Secret,
                 claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(30),
                 signingCredentials: credentials);
 
             var encodeToken = new JwtSecurityTokenHandler().WriteToken(token);
@@ -165,7 +171,7 @@ namespace Backend.DAL
 
         public bool deleteUser(long id)
         {
-            var user = _context.user.Where(x=> x.id == id).FirstOrDefault();
+            var user = _context.user.Where(x => x.id == id).FirstOrDefault();
             if (user == null)
             {
                 return false;
@@ -184,6 +190,17 @@ namespace Backend.DAL
             {
                 try
                 {
+                    if(exist.photo != "Upload//ProfilePhoto//default.jpg")
+                    {
+                        List<String> listStr;
+                        listStr = exist.photo.Split('/').ToList();
+                        var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/ProfilePhoto/", listStr[listStr.Count - 1]);
+
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                    }
                     exist.photo = photoPathn;
                     _context.Update(exist);
                     _context.SaveChanges();
@@ -200,7 +217,64 @@ namespace Backend.DAL
 
         public List<User> getUsersByCityId(long cityId)
         {
-            return _context.user.Where(u=> u.cityId == cityId).Include(x => x.city).Include(p => p.posts).ToList();
+            return _context.user.Where(u => u.cityId == cityId).Include(x => x.city).Include(p => p.posts).ToList();
+        }
+
+        public IEnumerable<User> getNUserFromCity(long cityId, int n)
+        {
+            var users = _context.user.Where(u => u.cityId == cityId).Include(x => x.city).Include(p => p.posts).OrderByDescending(x => x.donatedPoints + x.points).ToList();
+            return users.Take(n);
+        }
+
+        public string RandomString(int length)
+        {
+            Random random = new Random();
+            const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";
+            var builder = new StringBuilder();
+
+            for (var i = 0; i < length; i++)
+            {
+                var c = pool[random.Next(0, pool.Length)];
+                builder.Append(c);
+            }
+
+            return builder.ToString();
+        }
+        public string SHA1HashStringForUTF8String(string s)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
+
+            var sha1 = SHA1.Create();
+            byte[] hashBytes = sha1.ComputeHash(bytes);
+
+            return HexStringFromBytes(hashBytes);
+        }
+        public string HexStringFromBytes(byte[] bytes)
+        {
+            var sb = new StringBuilder();
+            foreach (byte b in bytes)
+            {
+                var hex = b.ToString("x2");
+                sb.Append(hex);
+            }
+            return sb.ToString();
+        }
+
+        public string forgetPassword(User user)
+        {
+            var exist = _context.user.Where(x => x.email == user.email).FirstOrDefault();
+            if (exist != null)
+            {
+                string newPassword = this.RandomString(6);
+                string Sha1Password = this.SHA1HashStringForUTF8String(newPassword);
+                exist.password = Sha1Password;
+                _context.Update(exist);
+                _context.SaveChanges();
+                return newPassword;
+            }
+            else
+                return null;
+
         }
     }
 }

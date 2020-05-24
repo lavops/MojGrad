@@ -8,6 +8,8 @@ using Backend.UI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace Backend.Controllers
 {
@@ -42,8 +44,12 @@ namespace Backend.Controllers
         public UserViewModel GetUser(long id)
         {
             var user = _iUserUI.getByID(id);
-            UserViewModel userr = new UserViewModel(user);
-            return userr;
+            if(user != null)
+            { 
+                UserViewModel userr = new UserViewModel(user);
+                return userr;
+            }
+            return null;
 
         }
 
@@ -72,6 +78,34 @@ namespace Backend.Controllers
                 return BadRequest(new { message = "Nevalidni podaci" });
         }
 
+        [HttpPost("ForgetPassword")]
+        public IActionResult ForgetPassword(User u)
+        {
+            string password = _iUserUI.forgetPassword(u);
+            if (password != null)
+            {
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Moj grad", "mojgrad.info@gmail.com"));
+                message.To.Add(new MailboxAddress("Moj grad", u.email));
+                message.Subject = "Moj grad";
+                message.Body = new TextPart("plain")
+                {
+                    Text = "Vaša šifra je uspešno promenjena. Nova šifra Vašeg naloga je " + password + "\nPredlažemo da nakon prijave promenite šifru."
+                };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("mojgrad.info@gmail.com", "MojGrad22");
+                    client.Send(message);
+
+                    client.Disconnect(true);
+                }
+                return Ok("sifra promenjena");
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+
         [Authorize]
         [HttpPost("EditUserData")]
         public IActionResult EditUserData(User u)
@@ -80,7 +114,8 @@ namespace Backend.Controllers
             if (user != null)
             {
                 user.password = null;
-                return Ok(user);
+                UserViewModel user1 = new UserViewModel(user);
+                return Ok(user1);
             }
             else
                 return BadRequest(new { message = "Nevalidni podaci" });
@@ -141,6 +176,21 @@ namespace Backend.Controllers
         public IEnumerable<UserViewModel> GetUsersByCityId(User user1)
         {
             var users = _iUserUI.getUsersByCityId(user1.cityId);
+            List<UserViewModel> user = new List<UserViewModel>();
+            foreach (var u in users)
+            {
+                user.Add(new UserViewModel(u));
+            }
+
+            return user;
+
+        }
+
+        [Authorize]
+        [HttpPost("Top10")]
+        public IEnumerable<UserViewModel> GetTop10UsersByCityId(User user1)
+        {
+            var users = _iUserUI.getTop10UserFromCity(user1.cityId);
             List<UserViewModel> user = new List<UserViewModel>();
             foreach (var u in users)
             {

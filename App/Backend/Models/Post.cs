@@ -13,6 +13,7 @@ namespace Backend.Models
         public DateTime createdAt { get; set; }
         public string description { get; set; }
         public string photoPath { get; set; }
+        public string solvedPhotoPath { get; set; }
         public long statusId { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }

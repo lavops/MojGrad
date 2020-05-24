@@ -87,7 +87,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
           ?
           Text(
             "REŠENJE",
-            style: TextStyle(color:Colors.green[800], fontWeight: FontWeight.bold),
+            style: TextStyle(color:Color(0xFF00BFA6), fontWeight: FontWeight.bold),
           ):
           SizedBox(),
           (ownerId == userId)
@@ -123,12 +123,12 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Brisanje resenja?"),
+          title: Text("Brisanje rešenja?"),
           actions: <Widget>[
-            FlatButton(
+                FlatButton(
               child: Text(
-                "Izbrisi",
-                style: TextStyle(color: Colors.red),
+                "Izbriši",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -139,7 +139,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                   if (res != null) {
                     APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
                       if(res.statusCode == 200){
-                        print('Uspesno ste izbrisali resenje.');
+                        print('Uspešno ste izbrisali rešenje.');
                         setState(() {
                           solvingPost = null;
                         });
@@ -153,8 +153,8 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.green[800]),
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -166,12 +166,12 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Prihvati resenje?"),
+          title: Text("Prihvati rešenje?"),
           actions: <Widget>[
-            FlatButton(
+                FlatButton(
               child: Text(
                 "Izaberi",
-                style: TextStyle(color: Colors.green[800]),
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -182,10 +182,11 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                   if (res != null) {
                     APIServices.challengeSolving(jwt, solvingPost.id, solvingPost.postId).then((res){
                       if(res.statusCode == 200){
-                        print('Uspesno ste izabrali resenje.');
+                        print('Uspešno ste izabrali rešenje.');
                         setState(() {
                           solvingPost.selected = 1;
                           solvingPost.postStatusId = 1;
+                          isSolved = 1;
                         });
                       }
                     });
@@ -197,8 +198,8 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.red),
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -210,12 +211,12 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text("Brisanje resenja?"),
+          title: Text("Brisanje rešenja?"),
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "Izbrisi",
-                style: TextStyle(color: Colors.red),
+                "Izbriši",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 APIServices.jwtOrEmpty().then((res) {
@@ -226,7 +227,7 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                   if (res != null) {
                     APIServices.challengeSolvingDelete(jwt, solvingPost.id).then((res){
                       if(res.statusCode == 200){
-                        print('Uspesno ste izbrisali resenje.');
+                        print('Uspešno ste izbrisali rešenje.');
                         setState(() {
                           solvingPost = null;
                         });
@@ -240,8 +241,8 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
             ),
             FlatButton(
               child: Text(
-                "Otkazi",
-                style: TextStyle(color: Colors.green[800]),
+                "Otkaži",
+                style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

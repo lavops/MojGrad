@@ -5,7 +5,11 @@ import 'package:frontend/models/filters.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/models/fullPost.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/ui/notificationPage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/postWidget.dart';
+
+import '../main.dart';
 
 class FeedPage extends StatefulWidget {
   final User user;
@@ -23,8 +27,24 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   _getPosts() async {
+    if(publicUser != null){
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getPost(jwt).then((res) {
+    APIServices.getPostByCityId(jwt, publicUser.cityId).then((res) {
+      Iterable list = json.decode(res.body);
+      List<FullPost> listP = List<FullPost>();
+      listP = list.map((model) => FullPost.fromObject(model)).toList();
+      if (mounted) {
+        setState(() {
+          listPosts = listP;
+        });
+      }
+    });
+    }
+  }
+
+  _getUnsolvedPosts() async {
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getUnsolvedPostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -36,9 +56,9 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
-  _getUnsolvedPosts() async {
+    _getNicePosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getUnsolvedPosts(jwt).then((res) {
+    APIServices.getNicePostByCityId(jwt, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<FullPost> listP = List<FullPost>();
       listP = list.map((model) => FullPost.fromObject(model)).toList();
@@ -52,7 +72,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _getSolvedPosts() async {
     var jwt = await APIServices.jwtOrEmpty();
-    var res = await APIServices.getSolvedPosts(jwt);
+    var res = await APIServices.getSolvedPostByCityId(jwt, publicUser.cityId);
     print(res.body);
     Iterable list = json.decode(res.body);
     List<FullPost> listP = List<FullPost>();
@@ -75,13 +95,13 @@ class _FeedPageState extends State<FeedPage> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Theme.of(context).copyWith().backgroundColor,
+          backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           iconTheme: IconThemeData(
               color: Theme.of(context).copyWith().iconTheme.color),
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
-              color: Colors.green[800],
+              color: Color(0xFF00BFA6),
               fontSize: 22.0,
               fontStyle: FontStyle.normal,
               fontFamily: 'pirulen rg',
@@ -100,27 +120,30 @@ class _FeedPageState extends State<FeedPage> {
                     );
                   }).toList();
                 }),
-            Icon(
-              Icons.notifications,
+            IconButton(
+              icon: Icon(Icons.notifications), 
               color:Theme.of(context).copyWith().iconTheme.color,
+              onPressed: () {
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()));
+              },
             ),
           ],
         ),
         body: RefreshIndicator(
             onRefresh: _handleRefresh,
-            child: (listPosts != null)
+            child: (listPosts != null && listPosts != [] && listPosts.length != 0)
                 ? ListView.builder(
                     padding: EdgeInsets.only(bottom: 30.0),
                     itemCount: listPosts == null ? 0 : listPosts.length,
                     itemBuilder: (BuildContext context, int index) {
                       return PostWidget(listPosts[index]);
                     })
-                : Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
-                    ),
-                  )));
+                : Center(child: Text("Trenutno nema objava"),)
+            )
+      );
   }
 
   Future<Null> _handleRefresh() async {
@@ -141,7 +164,9 @@ class _FeedPageState extends State<FeedPage> {
       _getSolvedPosts();
     } else if (choice == Filteri.nereseni) {
       _getUnsolvedPosts();
-    } else if (choice == Filteri.svi) {
+    }else if(choice == Filteri.pohvale){
+      _getNicePosts();
+    }else if (choice == Filteri.svi) {
       _getPosts();
     }
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/donation.dart';
 import 'package:frontend/models/event.dart';
 import 'package:frontend/services/api.services.dart';
-import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/donationWidget.dart';
 import 'package:frontend/widgets/eventWidget.dart';
 
@@ -18,13 +18,14 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
 
   _getEvents() async {
     var jwt = await APIServices.jwtOrEmpty();
-    APIServices.getEvents(jwt, publicUser.id).then((res) {
+    APIServices.getEventsByCityId(jwt, publicUser.id, publicUser.cityId).then((res) {
       Iterable list = json.decode(res.body);
       List<Events> events1 = List<Events>();
       events1 = list.map((model) => Events.fromObject(model)).toList();
       if (mounted) {
         setState(() {
           events = events1;
+          print(events);
         });
       }
     });
@@ -66,18 +67,22 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
         ),
         body: TabBarView(
           children: <Widget>[
+            (events != null && events != [] && events.length != 0) ?
             ListView.builder(
                 padding: EdgeInsets.only(bottom: 30.0),
                 itemCount: events == null ? 0 : events.length,
                 itemBuilder: (BuildContext context, int index) {
                   return EventsWidget(events[index]);
-                }),
+                })
+            : Center(child:Text("Trenutno nema nijedan događaj")),
+            (donations != null && donations != [] && donations.length != 0) ?
             ListView.builder(
                 padding: EdgeInsets.only(bottom: 30.0),
                 itemCount: donations == null ? 0 : donations.length,
                 itemBuilder: (BuildContext context, int index) {
                   return DonationsWidget(donations[index]);
                 })
+            : Center(child:Text("Trenutno nema nijedna donacija"))
           ],
         ),
       ),
@@ -86,12 +91,14 @@ class _SponsorshipPageState extends State<SponsorshipPage> {
 
   Widget tabs() {
     return TabBar(
-        labelColor: Colors.green[800],
-        indicatorColor: Colors.green[800],
-        unselectedLabelColor: Colors.black,
+        labelColor: Color(0xFF00BFA6),
+        indicatorColor: Color(0xFF00BFA6),
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
         tabs: <Widget>[
           Tab(
-            child: Text("Događaji"),
+            child: Text(
+              "Događaji",
+            ),
           ),
           Tab(
             child: Text(

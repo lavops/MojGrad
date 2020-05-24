@@ -37,6 +37,11 @@ namespace Backend.BL
             return _iUserDAL.editUserPhoto(id, photoPathn);
         }
 
+        public string forgetPassword(User user)
+        {
+            return _iUserDAL.forgetPassword(user);
+        }
+
         public List<User> getAllUsers()
         {
             return _iUserDAL.getAllUsers();
@@ -45,6 +50,11 @@ namespace Backend.BL
         public User getByID(long id)
         {
             return _iUserDAL.getByID(id);
+        }
+
+        public IEnumerable<User> getNUserFromCity(long cityId, int n)
+        {
+            return _iUserDAL.getNUserFromCity(cityId, n);
         }
 
         public List<User> getUsersByCityId(long cityId)

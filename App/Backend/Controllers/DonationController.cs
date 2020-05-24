@@ -46,6 +46,28 @@ namespace Backend.Controllers
         }
 
         [Authorize]
+        [HttpGet("GetLastDonation")]
+        public ActionResult<DonationViewModel> GetLastDonation()
+        {
+            Donation donat = _iDonationUI.getLastDonation();
+            DonationViewModel fullDonation = new DonationViewModel(donat);
+            return fullDonation;
+        }
+
+        [Authorize]
+        [HttpGet("FinishedDonation")]
+        public ActionResult<IEnumerable<DonationViewModel>> GetFinishedDonation()
+        {
+            var donations = _iDonationUI.getFinishedDonations();
+            List<DonationViewModel> listDonation = new List<DonationViewModel>();
+            foreach (var don in donations)
+            {
+                listDonation.Add(new DonationViewModel(don));
+            }
+            return listDonation;
+        }
+
+        [Authorize]
         [HttpPost]
         public IActionResult InsertDonation(Donation donation)
         {
@@ -104,7 +126,7 @@ namespace Backend.Controllers
 
         [Authorize]
         [HttpPost("addParcipate")]
-        public IActionResult GetReportingUser(UserDonation donation)
+        public IActionResult AddParticipate(UserDonation donation)
         {
             Donation don = _iDonationUI.addParticipate(donation);
             if (don != null)

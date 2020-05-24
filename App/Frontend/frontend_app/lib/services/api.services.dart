@@ -6,18 +6,19 @@ import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 
+  String serverURLPhoto = 'http://147.91.204.116:2043/';
   //String serverURLPhoto = 'http://10.0.2.2:60676//';
-  String serverURLPhoto = 'http://192.168.1.2:45455//';
+  //String serverURLPhoto = 'http://192.168.1.8:45455//';
   //String serverURLPhoto = 'http://192.168.1.4:45455//';
   final storage = FlutterSecureStorage();
-  
+
+  String serverURL = 'http://147.91.204.116:2043/api/';
+  //String serverURL = 'http://10.0.2.2:60676/api/';
+  // String serverURL = 'http://192.168.1.8:45455/api/';
+  // String serverURL = 'http://192.168.1.4:45455/api/';
+
 class APIServices
 {
-
-  //static String serverURL = 'http://10.0.2.2:60676/api/';
-  static String serverURL = 'http://192.168.1.2:45455/api/';
-  //static String serverURL = 'http://192.168.1.4:45455/api/';
-
 
 
   static Map<String, String> header = { 
@@ -63,7 +64,7 @@ class APIServices
   }
 
   //send a new post to the database
-  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,  int statusId, double latitude, double longitude, String address, int cityId) async {
+  static Future<String> addPost (String jwt, int userId, int postTypeId, String description, String photoPath,String photoPath2,  int statusId, double latitude, double longitude, String address, int cityId) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Post';
@@ -72,6 +73,7 @@ class APIServices
     data["postTypeId"] = postTypeId;
     data["description"] = description;
     data["photoPath"] = photoPath;
+    data["solvedPhotoPath"] = photoPath2;
     data["statusId"] = statusId;
     data["latitude"] = latitude;
     data["longitude"] = longitude;
@@ -152,6 +154,7 @@ class APIServices
   static Future login(String mail, String password) async{
     String url = serverURL + 'User/Login';
     var body = jsonEncode({ 'email': mail, 'password': password });
+    print(url);
     var res =await http.post(url,headers: {"Content-Type": "application/json"},body: body);
     if(res.statusCode == 200) return res.body;
     return null;
@@ -183,7 +186,7 @@ class APIServices
   }
   
   
-	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone, String city) async  {
+	static Future editUser(String jwt, int id, String firstName, String lastName, String username, String email, String phone, int city) async  {
 		var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'User/EditUserData';
@@ -194,7 +197,7 @@ class APIServices
 		data["username"] = username;
 		data["email"] = email;
 		data["phone"] = phone;
-    data["city"] = city;
+    data["cityId"] = city;
 		var jsonBody = convert.jsonEncode(data);
 		print(jsonBody);
 		return await http.post(url, headers: {
@@ -578,4 +581,120 @@ class APIServices
     print(res.statusCode);
     return res;
   }
+
+    static Future getTop10(String jwt, int cityId1) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'User/Top10';
+    var data = Map();
+    data["cityId"] = cityId1;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    },body: jsonBody);
+  }
+
+  static Future getPostById(String jwt, int postId, int userId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Post/GetById/postId=$postId/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+  static Future forgottenPassword(String email) async  {
+   String url = serverURL + 'User/ForgetPassword';
+    var data = Map();
+    data["email"] = email;
+    var jsonBody = convert.jsonEncode(data);
+    print(jsonBody);
+    return await http.post(url, headers: header, body: jsonBody);
+  }
+
+    static Future getPostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/ByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+  
+    static Future getUnsolvedPostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/UnsolvedPostsByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+  
+    static Future getSolvedPostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/SolvedPostsByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+    static Future getNicePostByCityId(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Post/NicePostsByCityId/userId='+userId.toString()+'/cityId='+id.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+  static Future getEventsByCityId(String jwt, int userId, int cityId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    return await http.get(serverURL + 'Event/byCityId='+cityId.toString()+'/userId=$userId',headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
+    static Future getNotificationForUser(String jwt, int id) async{
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL +'Notification/userId='+userId.toString(),headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });  
+  }
+
+    static Future getPostsSolvedByInstitution(String jwt, int id) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    var jbody = jsonEncode({'id' : id.toString()});
+    return await http.post(serverURL + 'Post/PostsSolvedByInstitution', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body : jbody);
+  }
+
+    static Future getInstitutionById(String jwt, int id) async {
+    var data = jsonDecode(jwt);
+    jwt = data['token'].toString();
+    return await http.get(serverURL + 'Institution/' + id.toString(), headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    });
+  }
+
 }

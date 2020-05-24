@@ -17,6 +17,7 @@ namespace Backend.Models.ViewsModel
         public DateTime createdAt { get; set; }
         public string description { get; set; }
         public string photoPath { get; set; }
+        public string solvedPhotoPath { get; set; }
         public long statusId { get; set; }
         public string status { get; set; }
         public int likeNum { get; set; }
@@ -49,6 +50,7 @@ namespace Backend.Models.ViewsModel
             this.address = p.address;
             this.cityId = p.cityId;
             this.cityName = p.city.name;
+            this.solvedPhotoPath = p.solvedPhotoPath;
             Like like = p.likes.Where(x => x.userId == userId).FirstOrDefault();
             if (like == null)
                 this.isLiked = 0;

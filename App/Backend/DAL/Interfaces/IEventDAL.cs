@@ -11,6 +11,7 @@ namespace Backend.DAL.Interfaces
     public interface IEventDAL
     {
         List<Event> getAllEvents();
+        List<Event> getFinishedEvents();
         bool addGoingToEvent(UserEvent ue);
         List<Event> getAllEventsByCityId(long id);
         Event getByID(long id);
@@ -18,6 +19,7 @@ namespace Backend.DAL.Interfaces
         bool deleteEvent(long id);
         Event editEvent(EventViewModel events);
         List<UserEvent> usersGoingToEvent(long eventId);
+        List<UserEvent> institutionsGoingToEvent(long eventId);
         bool cancelArrival(UserEvent ue);
     }
 }
