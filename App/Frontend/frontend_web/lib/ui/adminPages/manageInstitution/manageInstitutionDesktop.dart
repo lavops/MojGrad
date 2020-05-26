@@ -416,6 +416,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                       _getInstitutionFromCity(newValue.id);
                       _sortListBy();
                     }
+                    setState(() {
+                      _rowsOffset = 0;
+                    });
                   },
                   items: listCities.map((City option) {
                     return DropdownMenuItem(
