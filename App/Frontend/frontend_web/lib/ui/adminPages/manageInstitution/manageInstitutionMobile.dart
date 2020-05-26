@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:data_tables/data_tables.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/constants.dart';
 import 'package:frontend_web/models/institution.dart';
@@ -97,6 +98,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
       if (mounted) {
         setState(() {
           filteredInstitution = listFU;
+          _rowsOffset = 0;
         });
       }
     });
@@ -111,6 +113,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
       if (mounted) {
         setState(() {
           filteredUnauthInstitution = listFU;
+          _rowsOffsetUnauth = 0;
         });
       }
     });
@@ -499,6 +502,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                 filteredInstitution = listInstitutions
                     .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
+                _rowsOffset = 0;
               });
             });
           },
@@ -532,6 +536,7 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                 filteredUnauthInstitution = listUnauthInstitutions
                     .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
+                _rowsOffsetUnauth = 0;
               });
             });
           },
@@ -575,10 +580,16 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                           filteredInstitution = null;
                           //_getInstitutions();
                           _sortListBy();
+                          setState(() {
+                            _rowsOffset = 0;
+                          });
                         } else {
                           _getInstitutionFromCity(newValue.id);
                           _sortListBy();
                         }
+                        setState(() {
+                          _rowsOffset = 0;
+                        });
                       },
                       items: listCities.map((City option) {
                         return DropdownMenuItem(
@@ -643,9 +654,15 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                     if (newValue.name == "Sve institucije") {
                       filteredUnauthInstitution = null;
                       _getUnauthInstitutions();
+                      setState(() {
+                        _rowsOffsetUnauth = 0;
+                      });
                     } else {
                       _getInstitutionFromCityUnauth(newValue.id);
                     }
+                    setState(() {
+                      _rowsOffsetUnauth = 0;
+                    });
                   },
                   items: listCities.map((City option) {
                     return DropdownMenuItem(
@@ -662,6 +679,163 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
         ]);
   }
 
+  int _rowsOffset = 0;
+  int _rowsOffsetUnauth = 0;
+  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  int _sortColumnIndex;
+  bool _sortAscending = true;
+
+  Widget buildDataTable(List<Institution> _list) {
+
+    List<Institution> _items = _list;
+
+    return Container( child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffset,
+          handleNext: () async {
+            setState(() {
+              _rowsOffset += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffset -= _rowsPerPage;
+            });
+          },
+          alwaysShowDataTable: true,
+          itemBuilder: (int index) {
+            Institution ins = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(Text('${ins.name}')),
+                  DataCell(PopupMenuButton<String>(
+                    onSelected: (String choice) {
+                      choiceActionAllInstitutions(
+                          choice,
+                          ins.id,
+                          ins.description,
+                          index);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return ConstantsAllInstitutions.choices
+                          .map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),),
+                  DataCell(Text('${ins.postsNum}')),
+                  DataCell(Text('${ins.email}')),
+                  DataCell(Text('${ins.phone}')),
+                  DataCell(Text('${ins.cityName}')),
+                ]);
+          },
+          header: const Text('Institucije'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: const Text('Naziv', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Rešenja', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Broj', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Grad', style: TextStyle(fontWeight: FontWeight.bold))),
+          ],
+        ),
+      ));
+  }
+
+  Widget buildDataTableUnauth(List<Institution> _list) {
+
+    List<Institution> _items = _list;
+
+    return Container( child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffsetUnauth,
+          handleNext: () async {
+            setState(() {
+              _rowsOffsetUnauth += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffsetUnauth -= _rowsPerPage;
+            });
+          },
+          alwaysShowDataTable: true,
+          itemBuilder: (int index) {
+            Institution ins = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(Text('${ins.name}')),
+                  DataCell(
+                    PopupMenuButton<String>(
+                            onSelected: (String choice) {
+                              choiceActionRequestsInstitutions(
+                                  choice,
+                                  ins.id,
+                                  ins.description,
+                                  ins.email,
+                                  index);
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return ConstantsRequestsInstitutions.choices
+                                  .map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
+                          ),
+                  ),
+                  DataCell(Text('${ins.email}')),
+                  DataCell(Text('${ins.phone}')),
+                  DataCell(Text('${ins.cityName}')),
+                ]);
+          },
+          header: const Text('Zahtevi za registraciju'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: Text('Naziv', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Broj', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Grad', style: TextStyle(fontWeight: FontWeight.bold))),
+          ],
+        ),
+      ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return CenteredViewManageUser(
@@ -676,8 +850,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
           dropdownFirstRow(listCities),
           Flexible(
               child: filteredInstitution == null
-                  ? buildInstList(listInstitutions)
-                  : buildInstList(filteredInstitution)),
+                  ? buildDataTable(listInstitutions)
+                  : buildDataTable(filteredInstitution)),
         ]),
         Column(children: [
           new Row(
@@ -689,8 +863,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
           dropdownSecondRow(listCities),
           Flexible(
               child: filteredUnauthInstitution == null
-                  ? buildUnauthInstList(listUnauthInstitutions)
-                  : buildUnauthInstList(filteredUnauthInstitution)),
+                  ? buildDataTableUnauth(listUnauthInstitutions)
+                  : buildDataTableUnauth(filteredUnauthInstitution)),
         ]),
       ]),
     );
