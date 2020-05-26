@@ -729,6 +729,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                   ),),
                 ]);
           },
+          alwaysShowDataTable: true,
           header: const Text('Institucije'),
           sortColumnIndex: _sortColumnIndex,
           sortAscending: _sortAscending,
@@ -803,6 +804,7 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                   ),
                 ]);
           },
+          alwaysShowDataTable: true,
           header: const Text('Zahtevi za registraciju'),
           sortColumnIndex: _sortColumnIndex,
           sortAscending: _sortAscending,
