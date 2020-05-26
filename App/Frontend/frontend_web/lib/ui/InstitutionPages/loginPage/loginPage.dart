@@ -239,6 +239,9 @@ class _InstitutionLoginPageWidgetState extends State<InstitutionLoginPageWidget>
           borderSide: BorderSide(width: 2,color: greenPastel),
         ),
       ),
+      onSubmitted: (text){
+        _login(_emailController.text, _passwordController.text);
+      },
       controller: _passwordController,
     ).showCursorTextOnHover;
 
