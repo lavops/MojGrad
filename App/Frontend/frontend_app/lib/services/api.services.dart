@@ -697,4 +697,16 @@ class APIServices
     });
   }
 
+  static Future getInstitutionsForEvent(String jwt, int eventId) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var data = Map();
+    data["id"] = eventId;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(serverURL + 'Event/InstitutionsForEvent', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
 }

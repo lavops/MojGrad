@@ -25,7 +25,7 @@ class CenteredViewManageUserDesktop extends StatelessWidget{
       padding: const EdgeInsets.only(left: 100, right: 100, top: 20),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 1000),
+        constraints: BoxConstraints(maxWidth: 1200),
         child: child,
       ),
     );
