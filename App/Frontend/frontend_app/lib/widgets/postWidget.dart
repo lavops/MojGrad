@@ -41,7 +41,9 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
    void _updateImageIndex(int index) {
+      if(mounted){
     setState(() => _currentImageIndex = index);
+      }
   }
   getReportTypes() async {
     var jwt = await APIServices.jwtOrEmpty();
@@ -49,11 +51,13 @@ class _PostWidgetState extends State<PostWidget> {
       Iterable list = json.decode(res.body);
       List<ReportType> listRepTypes = List<ReportType>();
       listRepTypes = list.map((model) => ReportType.fromObject(model)).toList();
+       if(mounted){
       setState(() {
         reportTypes = listRepTypes;
         _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
         _selectedId = _dropdownMenuItems[0].value;
       });
+       }
     });
   }
 
@@ -63,9 +67,11 @@ class _PostWidgetState extends State<PostWidget> {
       Map<String, dynamic> list = json.decode(res.body);
       FullPost post1 = FullPost.nothing();
       post1 = FullPost.fromObject(list);
+       if(mounted){
       setState(() {
         post = post1;
       });
+       }
     });
   }
 
@@ -217,9 +223,11 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   void _onValueChange(ReportType value) {
+     if(mounted){
     setState(() {
       _selectedId = value;
     });
+     }
   }
 
   //Choice for Delete and Edit
@@ -239,14 +247,18 @@ class _PostWidgetState extends State<PostWidget> {
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
+                     if(mounted){
                     setState(() {
                       jwt = res;
                     });
+                     }
                     if (res != null) {
                       APIServices.deletePost(jwt, post.postId);
+                       if(mounted){
                       setState(() {
                         post = null;
                       });
+                       }
                     }
                   });
                   print('Uspešno ste izbrisali objavu.');
@@ -291,15 +303,19 @@ class _PostWidgetState extends State<PostWidget> {
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
+                     if(mounted){
                     setState(() {
                       jwt = res;
                     });
+                     }
                     if (res != null) {
                       APIServices.editPost(
                           jwt, post.postId, opisController.text);
+                           if(mounted){
                       setState(() {
                         post.description = opisController.text;
                       });
+                      }
                     }
                   });
                   print('Uspešno ste izmenili opis.');
@@ -328,9 +344,11 @@ class _PostWidgetState extends State<PostWidget> {
     );
     print("Status id ${post.statusId} a result je $result");
     _getPostById();
+     if(mounted){
     setState(() {
       if (result != null && result == 1) post.statusId = 1;
     });
+     }
   }
 
 Widget imageGallery(String image, String image2) { 
@@ -435,20 +453,24 @@ Widget imageGallery(String image, String image2) {
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
+                     if(mounted){
                     setState(() {
                       jwt = res;
                     });
+                     }
                     if (res != null) {
                       APIServices.addLike(jwt, postId, userId, 2).then((res) {
                         Map<String, dynamic> list = json.decode(res);
                         LikeViewModel likeVM = LikeViewModel();
                         likeVM = LikeViewModel.fromObject(list);
+                         if(mounted){
                         setState(() {
                           post.likeNum = likeVM.likeNum;
                           post.dislikeNum = likeVM.dislikeNum;
                           post.commNum = likeVM.commNum;
                           post.isLiked = likeVM.isLiked;
                         });
+                         }
                       });
                     }
                   });
@@ -467,20 +489,24 @@ Widget imageGallery(String image, String image2) {
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
+                     if(mounted){
                     setState(() {
                       jwt = res;
                     });
+                     }
                     if (res != null) {
                       APIServices.addLike(jwt, postId, userId, 1).then((res) {
                         Map<String, dynamic> list = json.decode(res);
                         LikeViewModel likeVM = LikeViewModel();
                         likeVM = LikeViewModel.fromObject(list);
+                         if(mounted){
                         setState(() {
                           post.likeNum = likeVM.likeNum;
                           post.dislikeNum = likeVM.dislikeNum;
                           post.commNum = likeVM.commNum;
                           post.isLiked = likeVM.isLiked;
                         });
+                         }
                       });
                     }
                   });
@@ -569,10 +595,11 @@ Widget imageGallery(String image, String image2) {
       context,
       MaterialPageRoute(builder: (context) => CommentsPage(postId)),
     );
-    
+     if(mounted){
     setState(() {
       if (result != null) post.commNum = result;
     });
+     }
     _getPostById();
   }
 
@@ -581,10 +608,11 @@ Widget imageGallery(String image, String image2) {
       context,
       MaterialPageRoute(builder: (context) => LikesPage(postId)),
     );
-    
+     if(mounted){
     setState(() {
       if (result != null) post.likeNum = result;
     });
+     }
   }
 
   Widget description(
@@ -644,9 +672,11 @@ class MyDialogState extends State<MyDialog> {
             isExpanded: true,
             value: _selectedId,
             onChanged: (ReportType value) {
+               if(mounted){
               setState(() {
                 _selectedId = value;
               });
+               }
               widget.onValueChange(value);
             },
             items: widget.reportTypes,
@@ -678,9 +708,11 @@ class MyDialogState extends State<MyDialog> {
           onPressed: () {
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
+               if(mounted){
               setState(() {
                 jwt = res;
               });
+               }
               if (res != null) {
                 print(userId.toString() + " " + widget.otherUserId.toString());
                 print(messageController.text);

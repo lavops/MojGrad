@@ -141,24 +141,34 @@ class _FeedPageState extends State<FeedPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return PostWidget(listPosts[index]);
                     })
-                : Center(child: Text("Trenutno nema objava"),)
+                : listPosts == null ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    ),
+                  ):
+              Center(child: Text("Trenutno nema objava"),)
             )
       );
   }
 
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 3));
+     if(mounted){
     setState(() {
       listPosts = [];
     });
+     }
     _getPosts();
     return null;
   }
 
   Future<Null> choiceAction(String choice) async {
+     if(mounted){
     setState(() {
       listPosts = null;
     });
+     }
     await new Future.delayed(new Duration(seconds: 1));
     if (choice == Filteri.reseni) {
       _getSolvedPosts();

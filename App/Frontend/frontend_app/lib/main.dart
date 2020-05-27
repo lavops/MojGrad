@@ -39,8 +39,8 @@ Future<void> main() async {
     }
     selectNotificationSubject.add(payload);
   });
-  //notificationURL = "http://10.0.2.2:60676" + "/notification";
-  notificationURL = "http://147.91.204.116:2043" + "/notification";
+  notificationURL = "http://10.0.2.2:60676" + "/notification";
+  //notificationURL = "http://147.91.204.116:2043" + "/notification";
   connectionIsOpen = false;
 
   openNotificationConnection();
