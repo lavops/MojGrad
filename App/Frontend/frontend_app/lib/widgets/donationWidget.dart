@@ -185,7 +185,7 @@ class _DonationsWidgetState extends State<DonationsWidget> {
             ),
             onPressed: () {
               int donationAmount = int.parse(donateController.text);
-              if(donationAmount != 0 && donationAmount <= publicUser.points)
+              if(donationAmount != 0 && donationAmount <= publicUser.points && donationAmount > 0)
               {
                 APIServices.jwtOrEmpty().then((res) {
                   String jwt;
@@ -226,11 +226,21 @@ class _DonationsWidgetState extends State<DonationsWidget> {
                     donateController.text = "";
                   });
                 }
-                else{
+                else if(donationAmount > publicUser.points){
                   Navigator.of(context).pop();
                   Scaffold.of(context)
                   ..removeCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Row(children: [Flexible(child:Text("Ne možete donirati više poena nego što ste sakupili.\n "))],),));
+                  
+                  setState(() {
+                    donateController.text = "";
+                  });
+                }
+                else if(donationAmount < 0){
+                  Navigator.of(context).pop();
+                  Scaffold.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Row(children: [Flexible(child:Text("Ne možete donirati negativan broj poena.\n "))],),));
                   
                   setState(() {
                     donateController.text = "";
