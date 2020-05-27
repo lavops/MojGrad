@@ -384,7 +384,7 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
                 Text("${event.userNum}" == '1'
                     ? "${event.userNum} korisnik  "
                     : "${event.userNum} korisnika  "),
-                Text("${institutionsForEvent?.length} institucija"),
+                Text("${event.instNum} institucija"),
               ],
             ),
             (users != null) ? listUsers() : SizedBox(),

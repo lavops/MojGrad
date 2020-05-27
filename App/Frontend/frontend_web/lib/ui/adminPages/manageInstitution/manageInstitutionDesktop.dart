@@ -838,9 +838,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   Expanded(child: search(),)
                 ],
               ),
-              filteredInstitution == null
+              Flexible(child: filteredInstitution == null
                 ? (buildDataTable(listInstitutions))
-                : buildDataTable(filteredInstitution),
+                : buildDataTable(filteredInstitution),)
             ]),
             Column(children: [
               new Row(
@@ -850,9 +850,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                   Expanded(child: searchUnath(),)
                 ],
               ),
-              filteredUnauthInstitution == null
+              Flexible(child: filteredUnauthInstitution == null
                 ? buildDataTableUnauth(listUnauthInstitutions)
-                : buildDataTableUnauth(filteredUnauthInstitution),
+                : buildDataTableUnauth(filteredUnauthInstitution),)
             ]),
           ]),
         ),
