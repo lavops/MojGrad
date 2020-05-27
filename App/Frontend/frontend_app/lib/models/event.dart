@@ -16,6 +16,7 @@ class Events{
   String _description;
   int _userNum;
   int _isGoing;
+  int _instNum;
 
 
   Events();
@@ -69,6 +70,9 @@ class Events{
   int get isGoing => _isGoing;
   set isGoing(int isGoing){_isGoing = isGoing;}
 
+  int get instNum => _instNum;
+  set instNum(int instNum){_instNum = instNum;}
+
   Map<String, dynamic> toMap()
   {
     var map = Map<String, dynamic>();
@@ -89,6 +93,7 @@ class Events{
     map["description"] = _description;
     map["userNum"] = _userNum;
     map["isGoing"] = _isGoing;
+    map["instNum"] = _instNum;
     return map;
   }
 
@@ -111,5 +116,6 @@ class Events{
     this._description = data["description"];
     this._userNum = data["userNum"];
     this._isGoing = data["isGoing"];
+    this._instNum = data["instNum"];
   }
 }
