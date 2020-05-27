@@ -15,12 +15,12 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   String wrongRegText = "";
+  String loadingText = "";
 
   TextEditingController firstName = new TextEditingController();
   TextEditingController lastName = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController mobile = new TextEditingController();
-  TextEditingController password = new TextEditingController();
   TextEditingController username = new TextEditingController();
   bool _secureText = true;
 
@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Uspešna registracija"),
-      content: Text("Prijavite se da biste nastavili."),
+      content: Text("Na Vaš e-mail će za nekoliko sekundi stići lozinka koju možete koristiti. Prijavite se da biste nastavili."),
       actions: [
         okButton,
       ],
@@ -65,11 +65,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _register(String firstName, String lastName, String email, String mobile,
       String password, String username, int cityId) {
-    final flNameRegex = RegExp(r'^[a-zA-Z]{1,14}$');
+    final flNameRegex = RegExp(r'^[a-zA-Zšđžčć]{3,14}$');
     final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
-    final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
     final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,8}[.][a-z]{2,3}$');
-    final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,19}');
+    final usernameRegex = RegExp(r'^(?=[a-z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$');
 
     if (flNameRegex.hasMatch(firstName)) {
       if (flNameRegex.hasMatch(lastName)) {
@@ -77,10 +76,10 @@ class _RegisterPageState extends State<RegisterPage> {
           if (mobRegex.hasMatch(mobile)) {
             if (emailRegex.hasMatch(email)) {
               if(city != null){
-              if (passRegex.hasMatch(password)) {
-                var pom = utf8.encode(password);
-                var pass = sha1.convert(pom);
-                User user = User.without(firstName, lastName, username, pass.toString(), email, mobile, cityId,"Upload//ProfilePhoto//default.jpg");
+                setState(() {
+                  loadingText="Podaci se obrađuju...";
+                });
+                User user = User.without(firstName, lastName, username, null, email, mobile, cityId,"Upload//ProfilePhoto//default.jpg");
                 APIServices.registration(user).then((response) {
                   if (response.statusCode == 200) {
                     Map<String, dynamic> jsonObject =
@@ -90,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     User user1;
                     setState(() {
                       user1 = extractedUser;
+                      loadingText = "";
                       wrongRegText = "";
                     });
                     if (user1 != null) {
@@ -97,53 +97,45 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   } else {
                     setState(() {
+                      loadingText = "";
                       wrongRegText = "E-mail adresa ili korisničko ime su zauzeti.".toUpperCase();
                     });
                     throw Exception('E-mail adresa ili korisničko ime su zauzeti.');
                   }
-                });
-              } else {
-                setState(() {
-                  wrongRegText =
-                      "Loša šifra. Šifra mora sadržati najmanje 6 karaktera."
-                          .toUpperCase();
-                });
-                throw Exception(
-                    "Loša šifra. Šifra mora sadržati najmanje 6 karaktera.");
-              }
+                });            
               }else{
                 setState(() {
-                wrongRegText = "Grad nije izabran.".toUpperCase();
+                wrongRegText = "Grad nije izabran.";
               });
               throw Exception("Grad nije izabran.");
               }
             } else {
               setState(() {
-                wrongRegText = "Neispravna e-mail adresa.".toUpperCase();
+                wrongRegText = "Neispravna e-mail adresa.";
               });
               throw Exception("Neispravna e-mail adresa.");
             }
           } else {
             setState(() {
-              wrongRegText = "Ponovo unesite broj telefona.".toUpperCase();
+              wrongRegText = "Ponovo unesite broj telefona.\nTelefon može biti u formatu 064 111111";
             });
             throw Exception("Ponovo unesite broj telefona.");
           }
         } else {
           setState(() {
-            wrongRegText = "Ponovo unesite korisničko ime.".toUpperCase();
+            wrongRegText = "Korisničko ime mora imati najmanje 5 karaktera.\nKoriste se samo mala slova, brojevi i simboli(. _ )";
           });
           throw Exception("Ponovo unesite korisničko ime.");
         }
       } else {
         setState(() {
-          wrongRegText = "Unesite ispravno prezime.".toUpperCase();
+          wrongRegText = "Unesite ispravno prezime.\nPrezime mora imati najmanje 3 slova.";
         });
         throw Exception("Unesite drugo prezime.");
       }
     } else {
       setState(() {
-        wrongRegText = "Unestite ispravno ime.".toUpperCase();
+        wrongRegText = "Unestite ispravno ime.\nIme mora imati najmanje 3 slova.";
       });
       throw Exception("Unesite drugo ime.");
     }
@@ -326,39 +318,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
-    final passwordWidget = Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-      elevation: 6.0,
-      child: TextField(
-       cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
-        obscureText: _secureText,
-        controller: password,
-        style: TextStyle(
-          //color: Colors.grey,
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
-          suffixIcon: IconButton(
-            onPressed: showHide,
-            icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility,
-                color: Color(0xFF00BFA6)),
-          ),
-          prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 20, right: 15),
-            child: Icon(Icons.phonelink_lock, color: Color(0xFF00BFA6)),
-          ),
-          contentPadding: EdgeInsets.all(18),
-          hintText: "Šifra",
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(width: 2, color: Color(0xFF00BFA6)),
-          ),
-        ),
-      ),
-    );
-
     final dropdownWidget = new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -406,10 +365,10 @@ class _RegisterPageState extends State<RegisterPage> {
           onPressed: () {
             if (city != null)
               _register(firstName.text, lastName.text, email.text, mobile.text,
-                  password.text, username.text, city.id);
+                  null, username.text, city.id);
             else
               _register(firstName.text, lastName.text, email.text, mobile.text,
-                  password.text, username.text, 1);
+                  null, username.text, 1);
           }),
     );
 
@@ -440,6 +399,13 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Text(
       '$wrongRegText',
       style: TextStyle(color: Colors.red),
+      textAlign: TextAlign.center,
+    ));
+
+      final loader = Center(
+        child: Text(
+      '$loadingText',
+      style: TextStyle(color: Color(0xFF00BFA6)),
     ));
 
     return Scaffold(
@@ -466,10 +432,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     usernameWidget,
                     mobileNumberWidget,
                     emailWidget,
-                    passwordWidget,
                     dropdownWidget,
                     SizedBox(
-                      height: 12.0,
+                      height: 9.0,
+                    ),
+                    loader,
+                    SizedBox(
+                      height: 2.0,
                     ),
                     registerButtonWidget,
                     SizedBox(

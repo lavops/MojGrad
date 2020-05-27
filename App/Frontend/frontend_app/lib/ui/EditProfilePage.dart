@@ -104,11 +104,11 @@ class EditProfile extends State<EditProfilePage> {
   List<DropdownMenuItem<City>> _dropdownMenuItems;
   City _selectedId;
 
-  final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,25}$');
+  final flNameRegex = RegExp(r'^[a-zA-Zšđžčć\s]{1,25}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
   final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
-  final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
+  final usernameRegex = RegExp(r'^(?=[a-z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$');
 
   editProfilePhotoo(BuildContext context) {
     // set up the button
@@ -283,7 +283,7 @@ class EditProfile extends State<EditProfilePage> {
         style: TextStyle(color: Color(0xFF00BFA6)),
       ),
       onPressed: () {
-       Navigator.of(context).popUntil((route) => route.isFirst);
+       Navigator.pop(context);
       },
     );
 

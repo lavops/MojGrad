@@ -71,6 +71,23 @@ namespace Backend.Controllers
             User user = _iUserUI.insertUser(u);
             if (user != null)
             {
+              
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Moj grad", "mojgrad.info@gmail.com"));
+                message.To.Add(new MailboxAddress("Moj grad", u.email));
+                message.Subject = "Moj grad";
+                message.Body = new TextPart("plain")
+                {
+                    Text = "Uspešno ste aktivirali nalog na aplikaciji MOJ GRAD. Možete se prijaviti sa podacima:\nusername: "+user.username+ "\nlozinka: " + user.password + "\n\nPredlažemo da nakon prijave promenite šifru."
+                };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("mojgrad.info@gmail.com", "MojGrad22");
+                    client.Send(message);
+
+                    client.Disconnect(true);
+                }
                 user.password = null;
                 return Ok(user);
             }

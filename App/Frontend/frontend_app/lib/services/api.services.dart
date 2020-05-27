@@ -167,7 +167,6 @@ class APIServices
     data["firstName"] = user.firstName;
     data["lastName"] = user.lastName;
     data["username"] = user.username;
-    data["password"] = user.password;
     data["email"] = user.email;
     data["phone"] = user.phone;
     data["cityId"] = user.cityId;

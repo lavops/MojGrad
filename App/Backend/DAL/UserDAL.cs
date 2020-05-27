@@ -56,7 +56,9 @@ namespace Backend.DAL
                     u1.cityId = user.cityId;
                     u1.firstName = user.firstName;
                     u1.lastName = user.lastName;
-                    u1.password = user.password;
+                    string newPassword = this.RandomString(6);
+                    string Sha1Password = this.SHA1HashStringForUTF8String(newPassword);
+                    u1.password = Sha1Password;
                     u1.phone = user.phone;
                     u1.username = user.username;
                     u1.photo = "Upload//ProfilePhoto//default.jpg";
@@ -66,7 +68,7 @@ namespace Backend.DAL
 
                     _context.user.Add(u1);
                     _context.SaveChanges();
-
+                    u1.password = newPassword;
                     return u1;
                 }
                 else
