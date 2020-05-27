@@ -148,6 +148,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController donationSum = TextEditingController();
   String wrongText = "";
 
   double _doubleValue = 0.0;
@@ -162,6 +163,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: name,
+        maxLength: 50,
         decoration: InputDecoration(
           hintText: "Ime ogranizacije",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -185,6 +187,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: titleController,
+        maxLength: 50,
         decoration: InputDecoration(
           hintText: "Naslov",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -207,6 +210,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
           fontSize: 16,
           fontWeight: FontWeight.w300,
         ),
+        maxLength: 300,
         cursorColor: Colors.black,
         controller: description,
         decoration: InputDecoration(
@@ -226,6 +230,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
     return Container(
         width: 500,
         child: TextFormField(
+          controller: donationSum,
           cursorColor: Colors.black,
           decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
@@ -236,18 +241,6 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
               ),
               labelText: 'Novčani iznos',
               labelStyle: TextStyle(color: Colors.black)),
-          maxLines: 1,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            WhitelistingTextInputFormatter.digitsOnly,
-            CurrencyPtBrInputFormatter(maxDigits: 8),
-          ],
-          onChanged: (value) {
-            String _onlyDigits = value.replaceAll(RegExp('[^0-9]'), "");
-            _doubleValue = double.parse(_onlyDigits) / 100;
-
-            return _doubleValue;
-          },
         )).showCursorTextOnHover;
   }
 
@@ -269,14 +262,16 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
             json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
         print(payload);
 
-        if (name.text != '' && _doubleValue.toDouble() != 0.0) {
+        var sum = double.parse(donationSum.text);
+
+        if (name.text != '' && sum != 0.0 && sum > 100) {
           APIServices.createDonation(
               str,
               int.parse(payload["sub"]),
               titleController.text,
               name.text,
               description.text,
-              _doubleValue.toDouble()).then((value){
+              sum).then((value){
                 if(value.statusCode == 200){
                   Navigator.pushReplacement(
                     context,
@@ -338,6 +333,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
   }
 }
 
+/*
 class CurrencyPtBrInputFormatter extends TextInputFormatter {
   CurrencyPtBrInputFormatter({this.maxDigits});
   final int maxDigits;
@@ -354,9 +350,10 @@ class CurrencyPtBrInputFormatter extends TextInputFormatter {
 
     double value = double.parse(newValue.text);
     final formatter = new NumberFormat("0.00", "pt_BR");
-    String newText = "RSD " + formatter.format(value / 100);
+    String newText = "RSD " + formatter.format(value / 10);
     return newValue.copyWith(
         text: newText,
         selection: new TextSelection.collapsed(offset: newText.length));
   }
 }
+*/
