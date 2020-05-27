@@ -6,6 +6,7 @@ import 'package:frontend_web/models/statistics.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
 import 'package:frontend_web/ui/adminPages/statisticsPage/statisticsDesktop.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -367,7 +368,16 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
             child: ListView.builder(
               itemCount: listUsers == null ? 0 : listUsers.length,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ViewUserProfilePage(listUsers[index])),
+                    );
+                  },
+                  child: Container(
                     child: Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -417,7 +427,8 @@ class _StatisticsMobileState extends State<StatisticsMobile> {
                           ])),
                     ],
                   ),
-                ));
+                )),
+                );
               },
             ))
       ],
