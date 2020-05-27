@@ -271,7 +271,6 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     return Container(
       width: 500,
       child: TextField(
-        maxLength: 50,
         cursorColor: Colors.black,
         style: TextStyle(
           fontSize: 16,
@@ -295,7 +294,6 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     return Container(
       width: 500,
       child: TextField(
-        maxLength: 50,
         cursorColor: Colors.black,
         controller: shortDescriptionController,
         style: TextStyle(
@@ -319,7 +317,6 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     return Container(
       width: 500,
       child: TextFormField(
-        maxLength: 300,
         maxLines: 5,
         style: TextStyle(
           fontSize: 16,

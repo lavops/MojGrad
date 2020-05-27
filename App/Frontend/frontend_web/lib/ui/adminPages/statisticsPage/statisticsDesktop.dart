@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/donation.dart';
 import 'package:frontend_web/models/statistics.dart';
-import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePage.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import '../../../models/user.dart';
 import '../../../services/api.services.dart';
@@ -355,16 +354,7 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
             child: ListView.builder(
               itemCount: listUsers == null ? 0 : listUsers.length,
               itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ViewUserProfilePage(listUsers[index])),
-                    );
-                  },
-                  child: Container(
+                return Container(
                     child: Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -414,8 +404,7 @@ class _StatisticsDesktopState extends State<StatisticsDesktop> {
                           ])),
                     ],
                   ),
-                )),
-                );
+                ));
               },
             ))
       ],

@@ -181,8 +181,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
     final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
     final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
-    final nameRegex = RegExp(r'^[a-zA-Z\s]{1,15}$');
-    final hotmailRegex = RegExp(r'@hotmail.com$');
+    final nameRegex = RegExp(r'^[a-zA-Z\s]{1,25}$');
 
     
     if (cityId == 0) {
@@ -191,18 +190,12 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       });
       throw Exception("Izaberite grad.");
     }
-    if (description == "" || description.length > 150){
+    if (description == ""){
         setState(() {
-              wrongRegText ="Unesite ponovo opis Vaše institucije.";
+              wrongRegText ="Unesite ponovo podatke o Vašoj instituciji.";
                });
-              throw Exception("Unesite ponovo opis Vaše institucije.");
+              throw Exception("Unesite ponovo podatke o Vašoj instituciji.");
             }
-      if (hotmailRegex.hasMatch(email)) {
-        setState(() {
-          wrongRegText ="Unesite ponovo mail Vaše institucije.";
-        });
-        throw Exception("Unesite ponovo mail Vaše institucije.");
-      }
       if (nameRegex.hasMatch(name)) {
         if (passRegex.hasMatch(password)){
           if(emailRegex.hasMatch(email)) {
