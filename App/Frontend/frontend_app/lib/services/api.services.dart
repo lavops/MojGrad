@@ -7,15 +7,15 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
   //String serverURLPhoto = 'http://147.91.204.116:2043/';
-  String serverURLPhoto = 'http://10.0.2.2:60676//';
+ // String serverURLPhoto = 'http://10.0.2.2:60676//';
   //String serverURLPhoto = 'http://192.168.1.8:45455//';
-  //String serverURLPhoto = 'http://192.168.1.4:45455//';
+  String serverURLPhoto = 'http://192.168.1.10:45455//';
   final storage = FlutterSecureStorage();
 
   //String serverURL = 'http://147.91.204.116:2043/api/';
-  String serverURL = 'http://10.0.2.2:60676/api/';
+  //String serverURL = 'http://10.0.2.2:60676/api/';
   // String serverURL = 'http://192.168.1.8:45455/api/';
-  // String serverURL = 'http://192.168.1.4:45455/api/';
+   String serverURL = 'http://192.168.1.10:45455/api/';
 
 class APIServices
 {
@@ -306,7 +306,7 @@ class APIServices
     });  
   }
 
-   static Future<String> addReport(String jwt, int userId, int reportedUserId, int reportTypeId, String description) async {
+   static Future addReport(String jwt, int userId, int reportedUserId, int reportTypeId, String description) async {
     var datas = jsonDecode(jwt);
     jwt = datas['token'].toString();
     String url = serverURL + 'Report/Insert';
@@ -321,8 +321,8 @@ class APIServices
       'Accept': 'application/json',
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
-    String data2 = res.body.toString();    
-    return data2;
+    //String data2 = res.body.toString();    
+    return res;
   }
   
    static Future getCityById(String jwt, int cityId) async{
