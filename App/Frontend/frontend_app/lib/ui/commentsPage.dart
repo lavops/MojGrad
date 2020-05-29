@@ -322,6 +322,10 @@ class StateComents extends State<CommentsPage> {
                             setState(() {
                               _getComms();
                               myController.text = "";
+                              FocusScopeNode currentFocus = FocusScope.of(context);
+                               if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                               }
                             });
                           });
                         }
