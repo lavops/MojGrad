@@ -277,7 +277,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: nameController,
+        maxLength: 50,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Ime događaja",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -296,11 +299,14 @@ class _CreateEventWidget extends State<CreateEventWidget> {
       child: TextField(
         cursorColor: Colors.black,
         controller: shortDescriptionController,
+        maxLength: 50,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Kratak opis",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -323,8 +329,11 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: descriptionController,
+        maxLength: 300,
         cursorColor: Colors.black,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Opis događaja",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
