@@ -33,6 +33,7 @@ class User{
   String get token => _token;
   String get photo => _photo;
   int get postsNum => _postsNum;
+  set postsNum(int postsNum){_postsNum = postsNum;}
   int get points => _points;
   set points(int points){_points = points;}
   int get donatedPoints => _donatedPoints;
