@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _register(String firstName, String lastName, String email, String mobile,
       String password, String username, int cityId) {
-    final flNameRegex = RegExp(r'^[a-zA-Zšđžčć]{3,14}$');
+    final flNameRegex = RegExp(r'^[a-zA-ZŠšĐđŽžČčĆć]{3,14}$');
     final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
     final emailRegex = RegExp(r'^[a-z0-9._]{2,}[@][a-z]{3,8}[.][a-z]{2,3}$');
     final usernameRegex = RegExp(r'^(?=[a-z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$');
