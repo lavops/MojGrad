@@ -44,10 +44,12 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
     var res = await APIServices.getInstitutionById(TokenSession.getToken, insId);
     Map<String, dynamic> jsonInst = jsonDecode(res.body);
     Institution inst = Institution.fromObject(jsonInst);
-    setState(() {
-      institution = inst;
-      icityId = institution.cityId;
-    });
+    if(mounted) {
+        setState(() {
+        institution = inst;
+        icityId = institution.cityId;
+      });
+    }
 
     res =  await APIServices.getInstitutionUnsolvedFromCityId(TokenSession.getToken, icityId).then((res) {
       Iterable list = json.decode(res.body);
@@ -89,7 +91,8 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
       setState(() {
         listTypes = postTypes;
         PostType alltypes = new PostType(9999, "Sve");
-        listTypes.add(alltypes);
+        listTypes.sort((a,b) => a.typeName.toString().compareTo(b.typeName.toString()));
+        listTypes.insert(0, alltypes);
       });
     }
   }

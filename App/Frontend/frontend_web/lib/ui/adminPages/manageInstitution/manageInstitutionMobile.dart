@@ -83,7 +83,8 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
           listCities = listC;
           City allinst = new City(9999, "Sve institucije");
           city = allinst;
-          listCities.add(allinst);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allinst);
         });
       }
     });

@@ -93,7 +93,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
         setState(() {
           listCities = listC;
           City allusers = new City(9999, "Svi korisnici");
-          listCities.add(allusers);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allusers);
         });
       }
     });
