@@ -7,6 +7,7 @@ import 'package:frontend/models/city.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
 import 'package:frontend/ui/UserProfilePage.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,7 +36,8 @@ class EditProfile extends State<EditProfilePage> {
   }
   
   Future<File> _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    
     this.setState(() {
       imageFile = picture;
       return picture;
@@ -44,7 +46,8 @@ class EditProfile extends State<EditProfilePage> {
   }
 
   Future<File> _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    
     this.setState(() {
       imageFile = picture;
       return picture;
@@ -104,7 +107,7 @@ class EditProfile extends State<EditProfilePage> {
   List<DropdownMenuItem<City>> _dropdownMenuItems;
   City _selectedId;
 
-  final flNameRegex = RegExp(r'^[a-zA-Zšđžčć\s]{1,25}$');
+  final flNameRegex = RegExp(r'^[a-zA-ZŠšĐđŽžČčĆć]{3,14}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
   final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
@@ -275,7 +278,7 @@ class EditProfile extends State<EditProfilePage> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
+  showAlertDialog(BuildContext context, String jwt) {
     // set up the button
     Widget okButton = FlatButton(
       child: Text(
@@ -284,6 +287,15 @@ class EditProfile extends State<EditProfilePage> {
       ),
       onPressed: () {
        Navigator.pop(context);
+       /*Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage.fromBase64(jwt)),
+      );*/
+       Navigator.pushAndRemoveUntil(context,   
+                        MaterialPageRoute(builder: (BuildContext context) => HomePage.fromBase64(jwt)),    
+                        (Route<dynamic> route) => route is HomePage);
+       
       },
     );
 
@@ -387,7 +399,6 @@ class EditProfile extends State<EditProfilePage> {
 
                               print(check);
                               print(array[0] + ", " + array[1]);
-
                               setState(() {
                                 firstName = array[0];
                                 lastName = array[1];
@@ -1336,7 +1347,7 @@ class EditProfile extends State<EditProfilePage> {
                                 oldPass.toString(), newPass.toString())
                             .then((response) {
                           if (response.statusCode == 200) {
-                            showAlertDialog(context);
+                            showAlertDialog(context, jwt);
                           }
                         });
                       }
@@ -1366,7 +1377,7 @@ class EditProfile extends State<EditProfilePage> {
                               setState(() {
                                 publicUser = user1;
                               });
-                            showAlertDialog(context);
+                            showAlertDialog(context, jwt);
                           }
                         });
                       }

@@ -101,6 +101,7 @@ class HeaderSection extends State<UserProfilePage> {
                     color: Theme.of(context).textTheme.bodyText1.color),
               ),
               onTap: () {
+                Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

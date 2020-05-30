@@ -13,6 +13,7 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
 import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/models/constants.dart';
@@ -262,6 +263,7 @@ class _PostWidgetState extends State<PostWidget> {
                       if (mounted) {
                         setState(() {
                           post = null;
+                          publicUser.postsNum = publicUser.postsNum - 1;
                         });
                       }
                     }
