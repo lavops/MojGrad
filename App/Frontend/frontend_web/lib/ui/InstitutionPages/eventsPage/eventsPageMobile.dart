@@ -122,20 +122,26 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
 
   Widget deleteEditButtons(Events event, index) {
     return Row(children: <Widget>[
-      RaisedButton(
-        onPressed: () {},
-        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-        child: Text("Izmeni", style: TextStyle(color: Colors.white),),
-        color: Colors.blueAccent,
+      ButtonTheme(
+        minWidth: 45.0,
+        child: RaisedButton(
+          onPressed: () {},
+          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+          child: Text("Izmeni", style: TextStyle(color: Colors.white),),
+          color: Colors.blueAccent,
+        ),
       ),
-      SizedBox(width: 10.0,),
-      RaisedButton(
-        onPressed: () {
-          showAlertDialog(context, event.id, index);
-        },
-        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
-        child: Text("Obriši", style: TextStyle(color: Colors.white),),
-        color: Colors.red,
+      SizedBox(width: 5.0,),
+      ButtonTheme(
+        minWidth: 45.0,
+        child: RaisedButton(
+          onPressed: () {
+            showAlertDialog(context, event.id, index);
+          },
+          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
+          child: Text("Obriši", style: TextStyle(color: Colors.white),),
+          color: Colors.red,
+        ),
       ),
     ],);
   }

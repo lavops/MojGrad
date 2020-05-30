@@ -146,7 +146,9 @@ Widget titleColumn(String title, String description) {
   }
 
   Widget editButton(event) {
-    return RaisedButton(
+    return ButtonTheme(
+      minWidth: 45.0,
+      child: RaisedButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -157,18 +159,22 @@ Widget titleColumn(String title, String description) {
         color: Colors.blue,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Izmeni", style: TextStyle(color: Colors.white,),),
-      );
+      ),
+    );
   }
 
   Widget deleteButton(Events event) {
-    return RaisedButton(
+    return ButtonTheme(
+      minWidth: 45.0,
+      child: RaisedButton(
         child: Text("Obriši", style: TextStyle(color: Colors.white),),
         color: Colors.red,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         onPressed: () {
           showAlertDialog(event.id);
         },
-      );
+      )
+    );
   }
 
   Widget joinButton() {

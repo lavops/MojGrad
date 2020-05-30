@@ -93,7 +93,8 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
           listCities = listC;
           City allusers = new City(9999, "Sve objave");
           city = allusers;
-          listCities.add(allusers);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allusers);
         });
       }
     });
