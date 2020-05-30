@@ -125,6 +125,7 @@ class InstitutionRegisterPageWidget extends StatefulWidget{
 
 class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageWidget>{
   String wrongRegText = "";
+  String loadingText = "";
 
   TextEditingController name = new TextEditingController();
   TextEditingController description = new TextEditingController();
@@ -159,7 +160,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Uspešna registracija"),
-      content: Text("Putem mail-a će Vam stići povratna informacija o odobrenju registracije."),
+      content: Text("Putem mail-a će Vam stići povratna informacija kada administrator odobri Vaš zahtev i od tada možete koristiti aplikaciju."),
       actions: [
         okButton,
       ],
@@ -181,7 +182,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
     final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
     final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
-    final nameRegex = RegExp(r'^[a-zA-Z\s]{1,25}$');
+    final nameRegex = RegExp(r'^[a-zA-Z0-9šđžčć\s]{1,25}$');
 
     
     if (cityId == 0) {
@@ -200,6 +201,9 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
         if (passRegex.hasMatch(password)){
           if(emailRegex.hasMatch(email)) {
             if (mobRegex.hasMatch(mobile)) {
+                 setState(() {
+                  loadingText="Podaci se obrađuju...";
+                });
                 var tempPass = utf8.encode(password);
                 var shaPass = sha1.convert(tempPass);
                 Institution ins = new  Institution.without(name, description, shaPass.toString(), email, mobile, cityId);
@@ -207,7 +211,14 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
                 APIServices.registerInstitution(ins).then((response) {
                   if (response.statusCode == 200) {
                     setState(() {
+                        loadingText = "";
                         showAlertDialog(context);                    });
+                  }
+                  else{
+                    setState(() {
+                      wrongRegText = "Došlo je do greške prilikom registracije. Molimo Vas pokušajte kasnije.";
+                       loadingText = "";
+                    });
                   }
                 });
 
@@ -275,6 +286,11 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
           fontSize: 25,
       ),
     ));
+    final loader = Center(
+        child: Text(
+      '$loadingText',
+      style: TextStyle(color: Color(0xFF00BFA6), fontSize: 15,),
+    ));
 
     final institutionNameWidget = Container(
       width: 600,
@@ -283,7 +299,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       elevation: 6.0,
       child: TextField(
         inputFormatters:[
-          LengthLimitingTextInputFormatter(18),
+          LengthLimitingTextInputFormatter(30),
           ],
         cursorColor: Colors.black,
         controller: name,
@@ -532,7 +548,11 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
                     passwordWidget,
                     dropdownWidget,
                     SizedBox(
-                      height: 12.0,
+                      height: 8.0,
+                    ),
+                    loader,
+                    SizedBox(
+                      height: 2.0,
                     ),
                     registerButtonWidget,
                     SizedBox(

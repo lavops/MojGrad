@@ -145,7 +145,7 @@ class StateTop10 extends State<Top10Page> {
                       children: <Widget>[
                       Image.asset("assets/podium.png",width: 50, height: 50),
                       SizedBox(width: 20,),
-                      Text("Najaktivniji ljudi u Vašem gradu", style:  TextStyle(fontSize: 20, fontWeight: FontWeight.w600),)
+                      Text("Najaktivniji korisnici u Vašem gradu", style:  TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
                     ],),
                     ),
                     Flexible(child: buildList()),

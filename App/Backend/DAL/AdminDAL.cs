@@ -189,7 +189,7 @@ namespace Backend.DAL
         public Institution AuthenticateInstitution(Admin admin)
         {
             var existingInst = _context.institution.Where(k => k.email.Equals(admin.email)
-                  && k.password.Equals(admin.password)).FirstOrDefault();
+                  && k.password.Equals(admin.password) && k.authentication == true).FirstOrDefault();
             return existingInst;
         }
 
