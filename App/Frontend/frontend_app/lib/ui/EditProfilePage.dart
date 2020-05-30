@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:frontend/models/city.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
-import 'package:frontend/ui/UserProfilePage.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
@@ -107,45 +106,22 @@ class EditProfile extends State<EditProfilePage> {
   List<DropdownMenuItem<City>> _dropdownMenuItems;
   City _selectedId;
 
-  final flNameRegex = RegExp(r'^[a-zA-ZŠšĐđŽžČčĆć]{3,14}$');
+  final flNameRegex = RegExp(r'^[a-zA-Z\sŠšĐđŽžČčĆć]{1,25}$');
+ // final flNameRegex = RegExp(r'^[a-zA-ZŠšĐđŽžČčĆć\s]{3,30}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
   final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
   final usernameRegex = RegExp(r'^(?=[a-z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$');
 
   editProfilePhotoo(BuildContext context) {
-    // set up the button
     Widget okButton = FlatButton(
       child: Text(
-        "Izmeni",
+        "Potvrdi",
         style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onPressed: () {
-        if (imageFile != null) {
-          imageUploadProfilePhoto(imageFile);
-          APIServices.jwtOrEmpty().then((res) {
-            String jwt;
-            setState(() {
-              jwt = res;
-            });
-            if (res != null) {
-              APIServices.editProfilePhoto(jwt, user.id,
-                      "Upload//ProfilePhoto//" + basename(imageFile.path))
-                  .then((response) {
-                Map<String, dynamic> jsonUser = jsonDecode(response);
-                User user1 = User.fromObject(jsonUser);
-                if (user1 != null) {
-                  /* Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UserProfilePage(user1)),
-                        
-                  );*/
-                  Navigator.of(context).pop();
-                }
-              });
-            }
-          });
+        if (imageFile != null) {     
+           Navigator.of(context).pop();
         }
       },
     );
@@ -156,14 +132,13 @@ class EditProfile extends State<EditProfilePage> {
         style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onPressed: () {
-        /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => UserProfilePage(user)),
-        );*/
+        setState(() {
+          imageFile = null;
+        });
         Navigator.pop(context);
       },
     );
-
+    
     // show the dialog
     showDialog(
       context: context,
@@ -265,7 +240,8 @@ class EditProfile extends State<EditProfilePage> {
                               width: 150.0,
                               fit: BoxFit.cover,
                             ),
-                    )
+                    ),
+                    SizedBox(height: 2,),
                   ],
                 )),
             actions: [
@@ -1058,12 +1034,21 @@ class EditProfile extends State<EditProfilePage> {
                     onTap: () {
                       editProfilePhotoo(context);
                     },
-                    child: CircleImage(
-                      serverURLPhoto + user.photo,
-                      imageSize: 90.0,
-                      whiteMargin: 2.0,
-                      imageMargin: 20.0,
-                    ),
+                    child: ClipOval(
+                      child: imageFile != null
+                          ? Image.file(
+                              imageFile,
+                              height: 100.0,
+                              width: 100.0,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              serverURLPhoto + user.photo,
+                              height: 100.0,
+                              width: 100.0,
+                              fit: BoxFit.cover,
+                            ),
+                    )
                   ),
                   GestureDetector(
                     onTap: () {
@@ -1302,6 +1287,29 @@ class EditProfile extends State<EditProfilePage> {
                     borderRadius: new BorderRadius.circular(50.0),
                     side: BorderSide(color: Colors.transparent)),
                 onPressed: () async {
+
+                    if (imageFile != null) {
+                    imageUploadProfilePhoto(imageFile);
+                    APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        print("uslo u app");
+
+                        APIServices.editProfilePhoto(jwt, user.id,
+                                "Upload//ProfilePhoto//" + basename(imageFile.path))
+                            .then((response) {
+                          Map<String, dynamic> jsonUser = jsonDecode(response);
+                          User user1 = User.fromObject(jsonUser);
+                          if (user1 != null) {
+                            //uspesno menjanje slike
+                          }
+                        });
+                      }
+                    });
+                  }
                   print(city1);
                   if (firstName == '') {
                     firstName = user.firstName;
