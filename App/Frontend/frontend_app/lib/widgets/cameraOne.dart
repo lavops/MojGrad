@@ -40,6 +40,7 @@ class _CameraOneState extends State<CameraOne>{
   double longitude2 = 0;
   String addres = '';
   LatLng location;
+  bool isDisable = false;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
 
   _getPostType() async {
@@ -127,6 +128,7 @@ class _CameraOneState extends State<CameraOne>{
     setState(() {
       latitude1 = _locationData.latitude;
       longitude2 = _locationData.longitude;
+      isDisable = true;
     });
     first = _getUserLocation();
   }
@@ -304,7 +306,9 @@ class _CameraOneState extends State<CameraOne>{
         child: Text('Izaberi lokaciju', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
-        Mapa mapa;
+        if(isDisable == false) currentLocationFunction();
+        else{
+          Mapa mapa;
         if(mapa == null){
           mapa = (latitude1 != null && longitude2 != null) ? Mapa(latitude1, longitude2) : Mapa(0, 0);
           latitude1 = mapa.izabranaX;
@@ -321,6 +325,7 @@ class _CameraOneState extends State<CameraOne>{
                 _getUserLocation();
               });
             });
+        }
       },
       icon: Icon(Icons.location_on,),
       color: Color(0xFF00BFA6),

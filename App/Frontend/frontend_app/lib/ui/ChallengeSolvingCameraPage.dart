@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/splash.page.dart';
+import 'package:frontend/widgets/uploadScreen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frontend/services/images.dart';
 import 'dart:io';
@@ -159,7 +160,7 @@ class _ChallengeSolvingCameraPageState
       label: Flexible(
         child: Text('Objavi'),
       ),
-      onPressed: () {
+      onPressed: () async{
         imageUpload(imageFile);
 
         APIServices.jwtOrEmpty().then((res) {
@@ -177,13 +178,20 @@ class _ChallengeSolvingCameraPageState
           if (res != null && imageFile != null) {
             APIServices.insertSolution(jwt, userId, postId, description.text,
                     "Upload//Post//" + basename(imageFile.path), 0)
-                .then((res) {
+                .then((res) async {
               if (res.statusCode == 200) {
                 print("Uspešno ste objavili rešenje.");
                 print(res.body);
                 if(ownerId != publicUser.id)
                   sendNotification("Rešenje", "Predloženo je rešenje za Vaš problem",1, ownerId);
-                Navigator.pop(context);
+                
+                int nmm = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UploadScreenSolver()),
+                );
+                if(nmm == 1)
+                  Navigator.pop(context);
               }
             });
           }
