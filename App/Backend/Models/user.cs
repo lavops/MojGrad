@@ -20,6 +20,7 @@ namespace Backend.Models
         public int points { get; set; }
         public int donatedPoints { get; set; }
         public int level { get; set; }
+        public bool darkTheme { get; set; }
         public virtual City city { get; set; }
         public IList<Like> likes { get; set; }
         public IList<Post> posts { get; set; }

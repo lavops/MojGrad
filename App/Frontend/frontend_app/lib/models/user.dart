@@ -15,6 +15,7 @@ class User{
   int _points;
   int _donatedPoints;
   int _level;
+  bool _darkTheme;
 
   User();
   User.without(this._firstName, this._lastName, this._username, this._password, this._email, this._phone, this._cityId, this._photo);
@@ -39,6 +40,8 @@ class User{
   int get donatedPoints => _donatedPoints;
   set donatedPoints(int points){_donatedPoints = points;}
   int get level => _level;
+  bool get darkTheme => _darkTheme;
+  set darkTheme(bool theme){_darkTheme = theme;}
 
   //Convert a User into a Map object
   Map<String, dynamic> toMap(){
@@ -59,6 +62,7 @@ class User{
     data["points"] = _points;
     data["donatedPoints"] = _donatedPoints;
     data["level"] = _level;
+    data["darkTheme"] = _darkTheme;
  
     if(_id != null){
       data["id"] = _id;
@@ -85,6 +89,7 @@ class User{
     this._points = data["points"];
     this._donatedPoints = data["donatedPoints"];
     this._level = data["level"];
+    this._darkTheme = data["darkTheme"];
   }
 
 }

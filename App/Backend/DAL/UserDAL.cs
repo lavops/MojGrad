@@ -65,6 +65,7 @@ namespace Backend.DAL
                     u1.points = 0;
                     u1.donatedPoints = 0;
                     u1.level = 1;
+                    u1.darkTheme = false;
 
                     _context.user.Add(u1);
                     _context.SaveChanges();
@@ -277,6 +278,23 @@ namespace Backend.DAL
             else
                 return null;
 
+        }
+
+        public User switchTheme(User user)
+        {
+            var user1 = _context.user.Where(x => x.id == user.id).FirstOrDefault();
+            if(user1 != null)
+            {
+                if (user1.darkTheme)
+                    user1.darkTheme = false;
+                else
+                    user1.darkTheme = true;
+                _context.Update(user1);
+                _context.SaveChanges();
+                return user1;
+
+            }
+            return null;
         }
     }
 }

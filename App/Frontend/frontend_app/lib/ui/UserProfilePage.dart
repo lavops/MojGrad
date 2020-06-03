@@ -137,6 +137,15 @@ class HeaderSection extends State<UserProfilePage> {
               trailing: Switch(
                 value: darkThemeEnabled,
                 onChanged: (changedTheme) {
+                  APIServices.jwtOrEmpty().then((res) {
+                              String jwt;
+                              setState(() {
+                                jwt = res;
+                              });
+                              if (res != null) {
+                                APIServices.switchThemeForUser(jwt, userId);
+                              }
+                            });
                   setState(() {
                     darkThemeEnabled = changedTheme;
                     MyApp.ind = changedTheme ? 1 : 0;

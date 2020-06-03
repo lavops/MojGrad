@@ -23,6 +23,7 @@ namespace Backend.Models.ViewsModel
         public string photo { get; set; }
         public int postsNum { get; set; }
         public int reportsNum { get; set; }
+        public bool darkTheme { get; set; }
 
         private AppDbContext _context = new AppDbContext();
 
@@ -42,6 +43,7 @@ namespace Backend.Models.ViewsModel
             this.cityName = u.city.name;
             this.cityId = u.cityId;
             this.photo = u.photo;
+            this.darkTheme = u.darkTheme;
             this.donatedPoints = u.donatedPoints;
             this.postsNum = u.posts.Where(x => x.userId == u.id).Count();
             this.reportsNum = _context.report.Where(x => x.reportedUserId == u.id).Count();

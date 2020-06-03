@@ -182,7 +182,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
     final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
     final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
     final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
-    final nameRegex = RegExp(r'^[a-zA-Z0-9šđžčć\s]{1,25}$');
+    final nameRegex = RegExp(r'^[a-zA-Z0-9ŠšĐđŽžČčĆć\s]{1,50}$');
 
     
     if (cityId == 0) {
@@ -299,7 +299,7 @@ class _InstitutionRegisterPageWidgetState extends State<InstitutionRegisterPageW
       elevation: 6.0,
       child: TextField(
         inputFormatters:[
-          LengthLimitingTextInputFormatter(30),
+          LengthLimitingTextInputFormatter(50),
           ],
         cursorColor: Colors.black,
         controller: name,

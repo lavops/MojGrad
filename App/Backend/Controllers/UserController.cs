@@ -218,5 +218,19 @@ namespace Backend.Controllers
 
         }
 
+        [Authorize]
+        [HttpPost("SwitchTheme")]
+        public IActionResult SwitchTheme(User u)
+        {
+            User user = _iUserUI.switchTheme(u);
+            if (user != null)
+            {
+                user.password = null;
+                return Ok(user);
+            }
+            else
+                return BadRequest(new { message = "Nevalidni podaci" });
+        }
+
     }
 }

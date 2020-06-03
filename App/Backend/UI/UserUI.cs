@@ -71,5 +71,10 @@ namespace Backend.UI
         {
             return _iUserBL.login(user);
         }
+
+        public User switchTheme(User user)
+        {
+            return _iUserBL.switchTheme(user);
+        }
     }
 }

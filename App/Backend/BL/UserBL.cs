@@ -71,5 +71,10 @@ namespace Backend.BL
         {
             return _iUserDAL.login(user);
         }
+
+        public User switchTheme(User user)
+        {
+            return _iUserDAL.switchTheme(user);
+        }
     }
 }
