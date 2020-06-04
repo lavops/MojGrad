@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:data_tables/data_tables.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/user.dart';
@@ -238,8 +239,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               ),
               Flexible(
                   child: filteredUsers == null
-                      ? buildUserList(listUsers)
-                      : buildUserList(filteredUsers)),
+                      ? buildDataTable(listUsers)
+                      : buildDataTable(filteredUsers)),
             ]),
             Column(children: [
               new Row(
@@ -250,8 +251,8 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               ),
               Flexible(
                   child: filteredRepUsers == null
-                      ? buildReportedUserList(listRepUsers)
-                      : buildReportedUserList(filteredRepUsers)),
+                      ? buildDataTableReported(listRepUsers)
+                      : buildDataTableReported(filteredRepUsers)),
             ]),
           ]),
         ),
@@ -569,6 +570,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                         ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
                             .contains(string.toLowerCase()))))
                     .toList();
+                _rowsOffset = 0;
               });
             });
           },
@@ -605,12 +607,18 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                 if (newValue.name == "Svi korisnici") {
                   filteredUsers = null;
                   _sortListBy();
+                  setState(() {
+                    _rowsOffset = 0;
+                  });
                 } else {
                   _getUsersFromCity(newValue.id);
                   _sortListBy();
                 }
                 setState(() {
                   city = newValue;
+                });
+                setState(() {
+                  _rowsOffset = 0;
                 });
               },
               items: listCities.map((City option) {
@@ -643,6 +651,9 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               } else if(newValue.name == "Id"){
                 _sortListBy();
               }
+              setState(() {
+                _rowsOffset = 0;
+              });
             },
             items: categories.map((CategoryDropDown option) {
               return DropdownMenuItem(
@@ -664,6 +675,9 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               } else if(newValue.name == "Opadajući"){
                 _sortListBy();
               }
+              setState(() {
+                _rowsOffset = 0;
+              });
             },
             items: maxMinFilter.map((MaxMinDropDown option) {
               return DropdownMenuItem(
@@ -694,12 +708,18 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                 if (newValue.name == "Svi korisnici") {
                   filteredRepUsers = null;
                   _sortRepListBy();
+                  setState(() {
+                    _rowsOffsetUnauth = 0;
+                  });
                 } else {
                   _getReportedUsersFromCity(newValue.id);
                   _sortRepListBy();
                 }
                 setState(() {
                   cityR = newValue;
+                });
+                setState(() {
+                  _rowsOffsetUnauth = 0;
                 });
               },
               items: listCities.map((City option) {
@@ -735,6 +755,9 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               } else if(newValue.name == "Više od 50"){
                 _sortRepListBy();
               }
+              setState(() {
+                _rowsOffsetUnauth = 0;
+              });
             },
             items: repNums.map((NumRepDropDown option) {
               return DropdownMenuItem(
@@ -764,6 +787,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                         ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
                             .contains(string.toLowerCase()))))
                     .toList();
+                _rowsOffsetUnauth = 0;
               });
             });
           },
@@ -782,6 +806,183 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
           ),
           controller: searchRepController,
         )).showCursorTextOnHover;
+  }
+
+  int _rowsOffset = 0;
+  int _rowsOffsetUnauth = 0;
+  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  int _sortColumnIndex;
+  bool _sortAscending = true;
+
+  Widget buildDataTable(List<User> _list) {
+
+    List<User> _items = _list;
+
+    return Container(width: 1100, height: 670, child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffset,
+          handleNext: () async {
+            setState(() {
+              _rowsOffset += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffset -= _rowsPerPage;
+            });
+          },
+          itemBuilder: (int index) {
+            User tableUser = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(CircleImage(
+                    userPhotoURL + tableUser.photo,
+                    imageSize: 36.0,
+                    whiteMargin: 2.0,
+                    imageMargin: 6.0,
+                  ),),
+                  DataCell(Text('${tableUser.firstName} ${tableUser.lastName}')),
+                  DataCell(Text('${tableUser.email}')),
+                  DataCell(Center(child: Text('${tableUser.postsNum}'))),
+                  DataCell(Center(child: Text('${tableUser.donatedPoints + tableUser.points}'))),
+                  DataCell(Center(child: Text('${tableUser.level}'))),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.person, color: greenPastel,),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ViewUserProfilePage(tableUser)),
+                      );
+                    },
+                  ),),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.cancel, color: Colors.red,),
+                    onPressed: () {
+                      showAlertDialog(context, tableUser.id, index, 1);
+                    },
+                  ),),
+                ]);
+          },
+          alwaysShowDataTable: true,
+          header: const Text('Korisnici'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: const Text('', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Ime', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Objave', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Poeni', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Nivo', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+          ],
+        ),
+      ));
+  }
+
+  Widget buildDataTableReported(List<User> _list) {
+
+    List<User> _items = _list;
+
+    return Container(width: 1000, height: 670, child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffsetUnauth,
+          handleNext: () async {
+            setState(() {
+              _rowsOffsetUnauth += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffsetUnauth -= _rowsPerPage;
+            });
+          },
+          itemBuilder: (int index) {
+            User tableUser = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(CircleImage(
+                    userPhotoURL + tableUser.photo,
+                    imageSize: 36.0,
+                    whiteMargin: 2.0,
+                    imageMargin: 6.0,
+                  ),),
+                  DataCell(Text('${tableUser.firstName} ${tableUser.lastName}')),
+                  DataCell(Text('${tableUser.email}')),
+                  DataCell(Center(child: Text('${tableUser.reportsNum}', style: TextStyle(color: Colors.red)),)),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.report, color: Colors.red,),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ReportedUserPage(tableUser.id,)),
+                      );
+                    },
+                  ),),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.person, color: greenPastel,),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ViewUserProfilePage(tableUser)),
+                      );
+                    },
+                  ),),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.cancel, color: Colors.red,),
+                    onPressed: () {
+                      showAlertDialog(context, tableUser.id, index, 2);
+                    },
+                  ),),
+                ]);
+          },
+          alwaysShowDataTable: true,
+          header: const Text('Prijavljeni korisnici'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: const Text('', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Ime', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Broj prijava', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+          ],
+        ),
+      ));
   }
 }
 

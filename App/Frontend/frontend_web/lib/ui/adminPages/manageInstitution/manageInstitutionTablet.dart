@@ -622,6 +622,9 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
               } else if (newValue.name == "Opadajući") {
                 _sortListBy();
               }
+              setState(() {
+                _rowsOffset = 0;
+              });
             },
             items: maxMinFilter.map((MaxMinDropDown option) {
               return DropdownMenuItem(
@@ -779,7 +782,6 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
                 cells: <DataCell>[
                   DataCell(Text('${ins.name}')),
                   DataCell(Text('${ins.email}')),
-                  DataCell(Text('${ins.phone}')),
                   DataCell(Text('${ins.cityName}')),
                   DataCell(
                     PopupMenuButton<String>(
@@ -821,7 +823,6 @@ class _ManageInstitutionTabletState extends State<ManageInstitutionTablet>
           columns: <DataColumn>[
             DataColumn(label: Text('Naziv', style: TextStyle(fontWeight: FontWeight.bold))),
             DataColumn(label: Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold))),
-            DataColumn(label: Text('Broj', style: TextStyle(fontWeight: FontWeight.bold))),
             DataColumn(label: Text('Grad', style: TextStyle(fontWeight: FontWeight.bold))),
             DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold))),
           ],
