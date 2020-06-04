@@ -624,6 +624,9 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
                   } else if (newValue.name == "Opadajući") {
                     _sortListBy();
                   }
+                  setState(() {
+                    _rowsOffset = 0;
+                  });
                 },
                 items: maxMinFilter.map((MaxMinDropDown option) {
                   return DropdownMenuItem(
