@@ -675,6 +675,9 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
               } else if(newValue.name == "Opadajući"){
                 _sortListBy();
               }
+              setState(() {
+                _rowsOffset = 0;
+              });
             },
             items: maxMinFilter.map((MaxMinDropDown option) {
               return DropdownMenuItem(
@@ -925,7 +928,7 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
                   ),),
                   DataCell(Text('${tableUser.firstName} ${tableUser.lastName}')),
                   DataCell(Text('${tableUser.email}')),
-                  DataCell(Center(child: Text('${tableUser.reportsNum}'),)),
+                  DataCell(Center(child: Text('${tableUser.reportsNum}', style: TextStyle(color: Colors.red)),)),
                   DataCell(IconButton(
                     icon: Icon(Icons.report, color: Colors.red,),
                     onPressed: () {
