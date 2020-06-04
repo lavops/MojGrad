@@ -709,4 +709,32 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
   }
+
+  	static Future switchThemeForUser(String jwt, int id) async  {
+		var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    String url = serverURL + 'User/SwitchTheme';
+		var data = Map();
+		data["id"] = id;
+		var jsonBody = convert.jsonEncode(data);
+		print(jsonBody);
+		return await http.post(url, headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+	}
+ 
+    static Future  getCityFromName(String jwt, String name) async{
+    var datas = jsonDecode(jwt);
+    jwt = datas['token'].toString();
+    var data = Map();
+    data["name"] = name;
+    var jsonBody = convert.jsonEncode(data);
+    return await http.post(serverURL + 'City/GetCityFromName', headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $jwt'
+    }, body: jsonBody);
+  }
 }

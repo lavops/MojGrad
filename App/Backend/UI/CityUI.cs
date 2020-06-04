@@ -27,6 +27,11 @@ namespace Backend.UI
             return _iCityBL.getByID(id);
         }
 
+        public City getCityFromName(string name)
+        {
+            return _iCityBL.getCityFromName(name);
+        }
+
         public City insertCity(City city)
         {
             return _iCityBL.insertCity(city);

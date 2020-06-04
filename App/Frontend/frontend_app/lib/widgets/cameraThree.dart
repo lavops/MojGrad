@@ -24,12 +24,11 @@ class CameraThree extends StatefulWidget {
 
 class _CameraThreeState extends State<CameraThree>{
   
-  List<City> _city;
-  City city;
   
   File imageFile;
   var description = TextEditingController();
   String pogresanText = '';
+  String loadingText = "";
 
   var first;
   double latitude1 = 0;
@@ -38,17 +37,6 @@ class _CameraThreeState extends State<CameraThree>{
   LatLng location;
   bool isDisable = false;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
-
-  _getCity() async {
-    APIServices.getCity().then((res) {
-      Iterable list = json.decode(res.body);
-      List<City> cities = new List<City>();
-      cities = list.map((model) => City.fromObject(model)).toList();
-      setState(() {
-        _city = cities;
-      });
-    });
-  }
 
   _openGalery() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
@@ -120,42 +108,16 @@ class _CameraThreeState extends State<CameraThree>{
   @override
   void initState() {
     super.initState();
-    _getCity();
     currentLocationFunction();
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    final _dropDownCity = Row(
-      children: <Widget>[
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
-        _city != null
-            ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
-                value: city,
-                onChanged: (City value) {
-                  setState(() {
-                    city = value;
-                  });
-                },
-                items: _city.map((City option) {
-                  return DropdownMenuItem<City>(
-                    value: option,
-                    child: Text(option.name),
-                  );
-                }).toList(),
-              )
-            : DropdownButton<String>(
-                hint: Text("Izaberi"),
-                onChanged: null,
-                items: null,
-              ),
-      ],
-    );
+      final loader = Center(
+      child: Text(
+    '$loadingText',
+    style: TextStyle(color: Color(0xFF00BFA6)),
+    ));
 
     // Pick image from your camera live
     final cameraPhone = MaterialButton(
@@ -343,7 +305,7 @@ class _CameraThreeState extends State<CameraThree>{
         child: Text('Objavi', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
-        imageUpload(imageFile);
+        
 
         APIServices.jwtOrEmpty().then((res) {
           String jwt;
@@ -353,12 +315,25 @@ class _CameraThreeState extends State<CameraThree>{
 
           if (imageFile == null || addres == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Potrebno je uneti sliku i lokaciju.";
             });
             throw Exception('Greskaaaa');
           }
-          if (res != null && imageFile != null && addres != null && city!= null) {
-            APIServices.addPost(
+          if (res != null && imageFile != null && addres != null ) {
+             var name = addres.split(",");
+              setState(() {
+                  loadingText="Podaci se obrađuju...";
+                });
+            APIServices.getCityFromName(jwt, name[0].trim()).then((res) {
+               setState(() {
+                  loadingText="";
+                });
+              if(res.statusCode == 200)
+              {
+                 Map<String, dynamic> jsonCity = jsonDecode(res.body);
+                City cityFromBackend = City.fromObject(jsonCity);
+                imageUpload(imageFile);
+                 APIServices.addPost(
                 jwt,
                 userId,
                 1,
@@ -368,7 +343,7 @@ class _CameraThreeState extends State<CameraThree>{
                 1,
                 latitude1,
                 longitude2,
-                addres, city.id);
+                addres, cityFromBackend.id);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState(() {
@@ -382,6 +357,16 @@ class _CameraThreeState extends State<CameraThree>{
                 );
               }
             });
+              }
+              else
+              {
+                setState(() {
+                  pogresanText = "Aplikacija nije dostupna u Vašem gradu. ";
+                  loadingText = "";
+                });
+              }
+            });
+       
           }
         });
       },
@@ -422,7 +407,6 @@ class _CameraThreeState extends State<CameraThree>{
                   height: 300,
                 )
               : null,
-          _dropDownCity,
           SizedBox(
             height: 20.0,
           ),
@@ -435,8 +419,10 @@ class _CameraThreeState extends State<CameraThree>{
           ),
           opis,
           SizedBox(
-            height: 20.0,
+            height: 15.0,
           ),
+          loader,
+          SizedBox(height: 5,),
           submitObjavu,
           wrongData
         ].where(notNull).toList(),

@@ -11,5 +11,6 @@ namespace Backend.BL.Interfaces
         List<City> getAllCities();
         City getByID(long id);
         City insertCity(City city);
+        City getCityFromName(string name);
     }
 }

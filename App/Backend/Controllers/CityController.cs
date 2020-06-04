@@ -47,5 +47,18 @@ namespace Backend.Controllers
 
         }
 
+        [HttpPost]
+        [HttpPost("GetCityFromName")]
+        public IActionResult getCityFromName(City city1)
+        {
+            var city = _iCityUI.getCityFromName(city1.name);
+            if (city != null)
+            {
+                return Ok(city);
+            }
+            return BadRequest("Grad nije u bazi");
+
+        }
+
     }
 }

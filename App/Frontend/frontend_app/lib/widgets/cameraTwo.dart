@@ -24,9 +24,7 @@ class CameraTwo extends StatefulWidget {
 }
 
 class _CameraTwoState extends State<CameraTwo>{
-  List<City> _city;
-  City city;
-  
+
   PostType postType;
   List<PostType> _postType;
   
@@ -34,6 +32,7 @@ class _CameraTwoState extends State<CameraTwo>{
   File imageFile2;
   var description = TextEditingController();
   String pogresanText = '';
+  String loadingText = "";
 
   var first;
   double latitude1 = 0;
@@ -54,17 +53,6 @@ class _CameraTwoState extends State<CameraTwo>{
           _postType = postTypes;
         });
       }
-    });
-  }
-
-  _getCity() async {
-    APIServices.getCity().then((res) {
-      Iterable list = json.decode(res.body);
-      List<City> cities = new List<City>();
-      cities = list.map((model) => City.fromObject(model)).toList();
-      setState(() {
-        _city = cities;
-      });
     });
   }
 
@@ -145,12 +133,17 @@ class _CameraTwoState extends State<CameraTwo>{
   void initState() {
     super.initState();
     _getPostType();
-    _getCity();
     currentLocationFunction();
   }
 
   @override
   Widget build(BuildContext context) {
+
+   final loader = Center(
+     child: Text(
+    '$loadingText',
+        style: TextStyle(color: Color(0xFF00BFA6)),
+    ));
 
     final _dropDown = Row(
       children: <Widget>[
@@ -183,36 +176,6 @@ class _CameraTwoState extends State<CameraTwo>{
       ],
     );
     
-    final _dropDownCity = Row(
-      children: <Widget>[
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
-        _city != null
-            ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
-                value: city,
-                onChanged: (City value) {
-                  setState(() {
-                    city = value;
-                  });
-                },
-                items: _city.map((City option) {
-                  return DropdownMenuItem<City>(
-                    value: option,
-                    child: Text(option.name),
-                  );
-                }).toList(),
-              )
-            : DropdownButton<String>(
-                hint: Text("Izaberi"),
-                onChanged: null,
-                items: null,
-              ),
-      ],
-    );
-
     // Pick image from your camera live
     final cameraPhone1 = MaterialButton(
       onPressed: () {
@@ -453,8 +416,7 @@ class _CameraTwoState extends State<CameraTwo>{
         child: Text('Objavi', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
-        imageUpload(imageFile);
-        imageUpload(imageFile2);
+     
 
         APIServices.jwtOrEmpty().then((res) {
           String jwt;
@@ -462,13 +424,27 @@ class _CameraTwoState extends State<CameraTwo>{
             jwt = res;
           });
 
-          if (imageFile == null || addres == null || city == null || postType == null || imageFile2 == null) {
+          if (imageFile == null || addres == null  || postType == null || imageFile2 == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Potrebno je uneti slike, tip problema i lokaciju.";
             });
             throw Exception('Greskaaaa');
           }
-          if (res != null && imageFile != null && imageFile2 != null && addres != null && city!= null && postType != null) {
+          if (res != null && imageFile != null && imageFile2 != null && addres != null  && postType != null) {
+             var name = addres.split(",");
+              setState(() {
+                  loadingText = "Podaci se obrađuju...";
+                });
+            APIServices.getCityFromName(jwt, name[0].trim()).then((res) {
+                setState(() {
+                  loadingText = "";
+                });
+              if(res.statusCode == 200)
+              {
+                 Map<String, dynamic> jsonCity = jsonDecode(res.body);
+                City cityFromBackend = City.fromObject(jsonCity);
+                imageUpload(imageFile);
+               imageUpload(imageFile2);
             APIServices.addPost(
                 jwt,
                 userId,
@@ -479,7 +455,7 @@ class _CameraTwoState extends State<CameraTwo>{
                 1,
                 latitude1,
                 longitude2,
-                addres, city.id);
+                addres, cityFromBackend.id);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState(() {
@@ -493,6 +469,16 @@ class _CameraTwoState extends State<CameraTwo>{
                 );
               }
             });
+             }
+              else
+              {
+                setState(() {
+                  pogresanText = "Aplikacija nije dostupna u Vašem gradu. ";
+                  loadingText = "";
+                });
+              }
+            });
+       
           }
         });
       },
@@ -544,7 +530,6 @@ class _CameraTwoState extends State<CameraTwo>{
               : SizedBox(),
           ],),
           _dropDown,
-          _dropDownCity,
           SizedBox(
             height: 20.0,
           ),
@@ -557,7 +542,11 @@ class _CameraTwoState extends State<CameraTwo>{
           ),
           opis,
           SizedBox(
-            height: 20.0,
+            height: 15.0,
+          ),
+          loader,
+           SizedBox(
+            height: 5.0,
           ),
           submitObjavu,
           wrongData
