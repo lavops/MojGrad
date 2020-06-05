@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+
 
 class ManagePostDesktop extends StatefulWidget {
   @override
@@ -709,9 +712,21 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
 
   showAlertDialog(BuildContext context, int id) {
       // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
-      onPressed: () {
+       final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+ 
+    Widget okButton = RoundedLoadingButton(
+      color: greenPastel,
+      width: 60,
+      height: 40,
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+    controller: _btnController,    
+    onPressed: () {
+      void _doSomething() async {
+    Timer(Duration(seconds: 3), () {
+        _btnController.success();
+    });
+};
+        _doSomething;
         APIServices.deletePost(TokenSession.getToken,id);
         deleteFromList(id);
         Navigator.pop(context);
@@ -721,8 +736,11 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
         );*/
         },
     ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+     Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
         },
