@@ -91,7 +91,7 @@ class _SplashPageState extends State<SplashPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
-                child: Container(color: Colors.white),
+                child: Container(color: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor),
                 flex: 1,
               ),
               Expanded(

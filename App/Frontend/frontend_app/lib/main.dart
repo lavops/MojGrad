@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/splash.page.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signalr_client/signalr_client.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'bloc/themes.dart';
@@ -46,20 +48,52 @@ Future<void> main() async {
 
   openNotificationConnection();
 
-  runApp(new MyApp());
+  //runApp(new MyApp());
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
+    SharedPreferences.getInstance().then((prefs) {
+  var darkModeOn = prefs.getBool('darkMode') ?? true;
+  var indOn = prefs.getBool('ind') ?? true;
+  if(indOn) 
+    MyApp.ind = 1;
+  else
+    MyApp.ind = 0; 
+  runApp(
+     ChangeNotifierProvider<ThemeChanger>(
+      create: (_) => ThemeChanger(darkModeOn ? ThemeData.dark() :ThemeData.light()),
+      child: new MaterialAppWithTheme(),
+    ),
+  );
+});
+  });
 }
 
-class MyApp extends StatelessWidget {
-  
-  
+class MyApp extends StatelessWidget { 
   static int ind = 0;
 
   @override
   Widget build(BuildContext context) {
+   /*
     return ChangeNotifierProvider<ThemeChanger>(
       create: (_) => ThemeChanger(ThemeData.light()),
       child: new MaterialAppWithTheme(),
     );
+    */
+   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
+    SharedPreferences.getInstance().then((prefs) {
+  var darkModeOn = prefs.getBool('darkMode') ?? true;
+  var indOn = prefs.getBool('ind') ?? true;
+  if(indOn) 
+    MyApp.ind = 1;
+  else
+    MyApp.ind = 0; 
+  runApp(
+     ChangeNotifierProvider<ThemeChanger>(
+      create: (_) => ThemeChanger(darkModeOn ? ThemeData.dark() :ThemeData.light()),
+      child: new MaterialAppWithTheme(),
+    ),
+  );
+});
+  });
   }
 
   static themeLight() {
