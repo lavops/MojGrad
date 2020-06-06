@@ -583,8 +583,9 @@ class _CreateEventWidget extends State<CreateEventWidget> {
             margin: EdgeInsets.only(
                 left: 50, right: 20, top: 10, bottom: 10),
           ),
+          wrong(),
           createEventButton(),
-          wrong()
+          
         ],
       ));
   }

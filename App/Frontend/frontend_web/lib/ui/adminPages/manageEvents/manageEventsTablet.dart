@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
@@ -8,7 +8,7 @@ import 'package:frontend_web/ui/adminPages/manageEvents/createEvent/createEventP
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventTablet.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ManageEventsPageTablet extends StatefulWidget {
   @override
@@ -56,7 +56,7 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
     _getFinishedEvents();
   }
 
-  Widget buildEventsList(List<Events> listEvents){
+  Widget buildEventsList(List<Events> listEvents, int ind){
     return ListView.builder(
       padding: EdgeInsets.only(bottom: 30.0),
       itemCount: listEvents == null ? 0 : listEvents.length,
@@ -70,7 +70,7 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
                   titleColumn(listEvents[index].title, listEvents[index].shortDescription),
                   startEndDateRow(listEvents[index]),
                   locationRow(listEvents[index]),
-                  buttonsRow(listEvents[index], index),
+                  buttonsRow(listEvents[index], index, ind),
                  ],
                 ),
               ),
@@ -114,7 +114,7 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
     ],);
   }
  
-  Widget buttonsRow(Events event, index) {
+  Widget buttonsRow(Events event, int index, int ind) {
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
       RaisedButton(
@@ -135,34 +135,52 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
         color: Colors.red,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         onPressed: () {
-          showAlertDialog(context, event.id, index);
+          showAlertDialog(context, event.id, index, ind);
         },
       ),
       SizedBox(width: 15.0,),
     ],);
   }
 
-  showAlertDialog(BuildContext context, int eventId, int index) {
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
-          if(res.statusCode == 200){
-            print("Događaj je uspešno obrisan.");
-            setState(() {
-              events.removeAt(index);
-            });
-          }
-        });
-        Navigator.pop(context);
-        },
+  showAlertDialog(BuildContext context, int eventId, int index, int ind) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    
+    void _doSomething() async {
+      APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
+        if(res.statusCode == 200){
+          print("Događaj je uspešno obrisan.");
+          setState(() {
+            if(ind == 1)
+                events.removeAt(index);
+            else
+              finishedEvents.removeAt(index);
+          });
+        }
+      });
+
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+    
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     );
     
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Color(0xFF00BFA6)),),
+    Widget notButton = RoundedLoadingButton(
+       color: Color(0xFF00BFA6),
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     );
 
     AlertDialog alert = AlertDialog(
@@ -200,10 +218,10 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
             color: Color(0xFF00BFA6),
           ),
           ],),
-            Flexible(child: buildEventsList(events),),
+            Flexible(child: buildEventsList(events, 1),),
           ]),
           Column(children: <Widget>[
-          Flexible(child: buildEventsList(finishedEvents),),
+          Flexible(child: buildEventsList(finishedEvents, 2),),
           ]),
           ],),
           constraints: BoxConstraints(maxWidth: 500),
