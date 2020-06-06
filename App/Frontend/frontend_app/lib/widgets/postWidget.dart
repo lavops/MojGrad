@@ -732,24 +732,6 @@ class MyDialogState extends State<MyDialog> {
                 TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
           ),
           onPressed: () {
-            /*APIServices.jwtOrEmpty().then((res) {
-              String jwt;
-               if(mounted){
-              setState(() {
-                jwt = res;
-              });
-               }
-              if (res != null) {
-                print(userId.toString() + " " + widget.otherUserId.toString());
-                print(messageController.text);
-                APIServices.addReport(jwt, userId, widget.otherUserId,
-                        _selectedId.id, messageController.text)
-                    .then((res) {
-                  if(res.)
-                });
-                Navigator.of(context).pop();
-              }
-            });*/
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState(() {
@@ -765,7 +747,7 @@ class MyDialogState extends State<MyDialog> {
                     Fluttertoast.showToast(
                         msg: "Uspešno ste prijavili korisnika.",
                         toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
+                        gravity: ToastGravity.BOTTOM,
                         backgroundColor: Colors.green,
                         textColor: Colors.white,
                         fontSize: 16.0,
@@ -776,7 +758,7 @@ class MyDialogState extends State<MyDialog> {
                     Fluttertoast.showToast(
                         msg: "Već ste prijavili korisnika.",
                         toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
+                        gravity: ToastGravity.BOTTOM,
                         backgroundColor: Colors.red,
                         textColor: Colors.white,
                         fontSize: 16.0,
