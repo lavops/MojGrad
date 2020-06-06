@@ -503,10 +503,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           endDate = _endDateString + ' ' + _selectedTipEnd.toString();
 
           var newStartDate = startDate.split('/');
-          var startDateTemp = (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" +newStartDate[2];
+          var startDateTemp = (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" + (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + newStartDate[2];
 
           var newEndDate = endDate.split('/');
-          var endDateTemp = (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" +(int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" +newEndDate[2];
+          var endDateTemp = (int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" + (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" + newEndDate[2];
           print(startDateTemp);
           print(endDateTemp);
 
@@ -519,8 +519,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               descriptionController.text,
               locationController.text,
               city.id,
-              startDate,
-              endDate, long, lat).then((value){
+              startDateTemp,
+              endDateTemp, long, lat).then((value){
                 print(value.statusCode);
                 print(value.body);
                 if(value.statusCode == 200)

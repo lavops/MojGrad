@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frontend_web/editEventPage.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
@@ -115,6 +116,10 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
   }
  
   Widget buttonsRow(Events event, int index, int ind) {
+    var str = TokenSession.getToken;
+    var jwt = str.split(".");
+    var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
       RaisedButton(
@@ -130,6 +135,7 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
       ),
       Expanded(child: SizedBox()),
+      (event.adminId == int.parse(payload["sub"])) ? editButton(event) : SizedBox(),
       RaisedButton(
         child: Text("Obriši", style: TextStyle(color: Colors.white),),
         color: Colors.red,
@@ -140,6 +146,21 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
       ),
       SizedBox(width: 15.0,),
     ],);
+  }
+
+  Widget editButton(event) {
+    return RaisedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventPage(event)),
+          );
+        },
+        color: Colors.blue,
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        child: Text("Izmeni", style: TextStyle(color: Colors.white,),),
+      );
   }
 
   showAlertDialog(BuildContext context, int eventId, int index, int ind) {

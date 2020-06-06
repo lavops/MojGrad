@@ -712,30 +712,25 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
 
   showAlertDialog(BuildContext context, int id) {
       // set up the button
-       final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
- 
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deletePost(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+
     Widget okButton = RoundedLoadingButton(
-      color: greenPastel,
+      color: Colors.red,
       width: 60,
       height: 40,
       child: Text("Obriši", style: TextStyle(color: Colors.white),),
     controller: _btnController,    
-    onPressed: () {
-      void _doSomething() async {
-    Timer(Duration(seconds: 3), () {
-        _btnController.success();
-    });
-};
-        _doSomething;
-        APIServices.deletePost(TokenSession.getToken,id);
-        deleteFromList(id);
-        Navigator.pop(context);
-        /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManagePostPage()),
-        );*/
-        },
+    onPressed: _doSomething,
     ).showCursorOnHover;
+
      Widget notButton = RoundedLoadingButton(
        color:greenPastel,
        width: 60,
