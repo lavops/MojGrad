@@ -611,10 +611,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           endDate = _endDateString + ' ' + _selectedTipEnd.toString();
 
           var newStartDate = startDate.split('/');
-          var startDateTemp = (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" +newStartDate[2];
+          var startDateTemp = (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" + (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + newStartDate[2];
 
           var newEndDate = endDate.split('/');
-          var endDateTemp = (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" +(int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" +newEndDate[2];
+          var endDateTemp = (int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" + (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" + newEndDate[2];
 
 
           if (event.startDate.compareTo(startDateTemp) == 0  && event.endDate.compareTo(endDateTemp) == 0) {
@@ -635,8 +635,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
                   description.text,
                   locationController.text,
                   city.id,
-                  startDate,
-                  endDate,
+                  startDateTemp,
+                  endDateTemp,
                   44.007392,
                   20.925238)
               .then((value) {
