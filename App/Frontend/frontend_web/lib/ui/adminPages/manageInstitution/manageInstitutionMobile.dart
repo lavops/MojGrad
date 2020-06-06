@@ -9,6 +9,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageInstitution/manageInstitutionDesktop.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import '../../../models/city.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ManageInstitutionMobile extends StatefulWidget {
   @override
@@ -148,14 +149,9 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
   }
 
   showAlertDialog(BuildContext context, int id, int index, int page) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text(
-        "Obriši",
-        style: TextStyle(color: Colors.red),
-      ),
-      onPressed: () {
-        APIServices.deleteInstitution(TokenSession.getToken, id);
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deleteInstitution(TokenSession.getToken, id);
         setState(() {
           if (page == 1) {
             listInstitutions.removeAt(index);
@@ -163,14 +159,27 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             listUnauthInstitutions.removeAt(index);
           }
         });
-        Navigator.pop(context);
-      },
+
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething
     );
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: greenPastel),
-      ),
+
+    Widget notButton = RoundedLoadingButton(
+      color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -196,14 +205,10 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
 
   showAlertDialogAccept(
       BuildContext context, int id, String email, int index, int page) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text(
-        "Prihvati",
-        style: TextStyle(color: greenPastel),
-      ),
-      onPressed: () {
-        APIServices.acceptInstitution(TokenSession.getToken, id, email)
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+
+    void _doSomething() async {
+      APIServices.acceptInstitution(TokenSession.getToken, id, email)
             .then((res) {
           if (res.statusCode == 200) {
             setState(() {
@@ -212,14 +217,29 @@ class _ManageInstitutionMobileState extends State<ManageInstitutionMobile>
             });
           }
         });
+
+      Timer(Duration(seconds: 3), () {
+          
+        _btnController.success();
         Navigator.pop(context);
-      },
+        
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Prihvati", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: greenPastel,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething
     );
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: Colors.red),
-      ),
+
+    Widget notButton = RoundedLoadingButton(
+      color: Colors.red,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
       },

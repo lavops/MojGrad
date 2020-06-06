@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
@@ -9,7 +10,7 @@ import 'package:frontend_web/ui/adminPages/manageDonation/createDonation/createD
 import 'package:frontend_web/ui/adminPages/manageDonation/viewDonation/viewDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -101,12 +102,12 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
                       ),
                     ],
                   ),
-                  Flexible(child: buildDonationList(donations),)
+                  Flexible(child: buildDonationList(donations,1),)
                   ],
                 ),
                  Column(
                   children: <Widget>[
-                Flexible(child: buildDonationList(finishedDonations),)
+                Flexible(child: buildDonationList(finishedDonations,2),)
                   ]),
               ],
             )
@@ -116,7 +117,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
     );
   }
 
-  Widget buildDonationList(List<Donation> listDonations) {
+  Widget buildDonationList(List<Donation> listDonations, int ind) {
     return ListView.builder(
         padding: EdgeInsets.only(bottom: 30.0),
         itemCount: listDonations == null ? 0 : listDonations.length,
@@ -136,7 +137,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
                       listDonations[index].pointsNeeded),
                   pointsRow(listDonations[index].pointsAccumulated,
                       listDonations[index].pointsNeeded),
-                  actionButtonRow(listDonations[index], listDonations[index].id, index)
+                  actionButtonRow(listDonations[index], listDonations[index].id, index, ind)
                 ]),
               ),
               Container(
@@ -230,7 +231,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
     ));
   }
 
-  Widget actionButtonRow(Donation don, int id, int index) {
+  Widget actionButtonRow(Donation don, int id, int index, int ind) {
     return Row(
       children: <Widget>[
         SizedBox(
@@ -255,7 +256,7 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
         ),
         RaisedButton(
           onPressed: () {
-            showAlertDialog(context, id, index);
+            showAlertDialog(context, id, index, ind);
           },
           color: Colors.red,
           shape: RoundedRectangleBorder(
@@ -273,33 +274,44 @@ class _ManageDonationTabletState extends State<ManageDonationTablet> {
     );
   }
 
-  showAlertDialog(BuildContext context, int id, int index) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text(
-        "Obriši",
-        style: TextStyle(color: Colors.red),
-      ),
-      onPressed: () {
-        APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
+  showAlertDialog(BuildContext context, int id, int index, int ind) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    
+    void _doSomething() async {
+      APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
           if (res.statusCode == 200) {
             print("Uspesno brisanje donacije.");
             setState(() {
-              donations.removeAt(index);
+              if(ind==1)
+                donations.removeAt(index);
+              else
+                finishedDonations.removeAt(index);
             });
           }
         });
-        Navigator.pop(context);
-      },
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+    // set up the button
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     );
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: greenPastel),
-      ),
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     );
 
     // set up the AlertDialog

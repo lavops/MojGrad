@@ -11,7 +11,7 @@ import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePag
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -282,26 +282,34 @@ class _ManageUserDesktopState extends State<ManageUserDesktop>
   }
 
   showAlertDialog(BuildContext context, int id, int index, int page) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deleteUser(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+    
     // set up the button
-    Widget okButton = FlatButton(
-      child: Text(
-        "Obriši",
-        style: TextStyle(color: greenPastel),
-      ),
-      onPressed: () {
-        APIServices.deleteUser(TokenSession.getToken, id);
-        deleteFromList(id);
-        Navigator.pop(context);
-      },
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     ).showCursorOnHover;
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: greenPastel),
-      ),
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     ).showCursorOnHover;
 
     // set up the AlertDialog

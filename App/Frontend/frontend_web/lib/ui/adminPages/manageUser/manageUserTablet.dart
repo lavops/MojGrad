@@ -12,6 +12,7 @@ import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePag
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -265,20 +266,34 @@ List<User> listUsers;
   }
 
   showAlertDialog(BuildContext context, int id) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deleteUser(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+    
     // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
+    );
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
-        APIServices.deleteUser(TokenSession.getToken,id);
-        deleteFromList(id);
         Navigator.pop(context);
         },
-    );
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-      },
     );
 
     // set up the AlertDialog
