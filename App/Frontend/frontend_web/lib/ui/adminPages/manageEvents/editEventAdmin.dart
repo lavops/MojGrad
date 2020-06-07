@@ -5,12 +5,10 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
-import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:intl/intl.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -18,15 +16,15 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
-class EditEventPage extends StatefulWidget {
+class EditEventAdmin extends StatefulWidget {
   final Events event;
-  EditEventPage(this.event);
+  EditEventAdmin(this.event);
 
   @override
   _EditEventPage createState() => _EditEventPage(event);
 }
 
-class _EditEventPage extends State<EditEventPage> {
+class _EditEventPage extends State<EditEventAdmin> {
   Events event;
 
   _EditEventPage(Events event1) {
@@ -39,7 +37,7 @@ class _EditEventPage extends State<EditEventPage> {
         builder: (context, sizingInformation) => Scaffold(
               drawer:
                   sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-                      ? DrawerInstitution(4)
+                      ? DrawerAdmin(6)
                       : null,
               appBar:
                   sizingInformation.deviceScreenType != DeviceScreenType.Mobile
@@ -52,7 +50,7 @@ class _EditEventPage extends State<EditEventPage> {
               body: Row(
                 children: <Widget>[
                   sizingInformation.deviceScreenType != DeviceScreenType.Mobile
-                      ? CollapsingInsNavigationDrawer()
+                      ? CollapsingNavigationDrawer()
                       : SizedBox(),
                   Expanded(
                     child: ScreenTypeLayout(
@@ -227,6 +225,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     locationController = new TextEditingController(text: event.address);
     lat=event.latitude;
     long=event.longitude;
+
 
     stringEndDate = event.endDate;
     listEndDate = stringEndDate.split(' ');
@@ -519,7 +518,6 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     ).showCursorOnHover;
   }
 
-  
   Widget wrong() {
     return Container(
         child: Center(
@@ -579,7 +577,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EventsPage()),
+                    builder: (context) => ManageEventsPage()),
               );
           });
 

@@ -108,12 +108,20 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
       RaisedButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: ()async {
+          print("");
+          int result = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ViewEventIns(event)),
           );
+
+          print("Vracam koji isGoing:" + result.toString());
+
+          setState(() {
+              if(event.institutionId!=insId && result != null)
+                  event.isGoing = result;
+            });
         },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
