@@ -9,6 +9,7 @@ import 'package:frontend_web/ui/InstitutionPages/eventsPage/viewEventIns/viewEve
 import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventMobile.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import '../../../editEventPage.dart';
 import '../homePage/homePage.dart';
 import 'viewEventIns/viewEventInsMobile.dart';
 
@@ -125,7 +126,13 @@ class _EventsPageMobileState extends State<EventsPageMobile> {
       ButtonTheme(
         minWidth: 45.0,
         child: RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventPage(event)),
+          );
+          },
           shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
           child: Text("Izmeni", style: TextStyle(color: Colors.white),),
           color: Colors.blueAccent,

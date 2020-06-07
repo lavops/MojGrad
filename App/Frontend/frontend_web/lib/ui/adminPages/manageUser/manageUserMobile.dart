@@ -549,7 +549,7 @@ List<User> listUsers;
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catF,
@@ -580,7 +580,7 @@ List<User> listUsers;
         ),
         ],),
         Row(children: <Widget>[
-          new Text("Redosled: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          new Expanded(child: Text("Redosled: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
           DropdownButton<MaxMinDropDown>(
             hint: Text("Izaberi"),
             value: maxMinF,
@@ -651,7 +651,7 @@ List<User> listUsers;
             onChanged: null,
             items: null,
           ),
-        new Text("Broj prijava: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        new Expanded(child: Text("Broj prijava: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
         DropdownButton<NumRepDropDown>(
           hint: Text("Izaberi"),
           value: repNumF,

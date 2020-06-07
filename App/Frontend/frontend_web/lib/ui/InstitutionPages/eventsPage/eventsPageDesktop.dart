@@ -240,25 +240,6 @@ class _EventsPageDesktopState extends State<EventsPageDesktop> {
     );
   }
 
-  /*bool isJoined(Events event){
-    bool join = false;
-    APIServices.getInstitutionsForEvent(TokenSession.getToken, event.id).then((res) {
-      Iterable list = json.decode(res.body);
-      print(res.body);
-      List<Institution> institutions;
-      institutions = list.map((model) => Institution.fromObject(model)).toList();
-      var l = institutions==null ? 0 : institutions.length;
-      for (var i = 0; i < l; i++) {
-        if(institutions[i]!=null && institutions[i].id==insId)
-        {
-         join = true;
-         break;
-        }
-      }
-    });
-    return join;
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
