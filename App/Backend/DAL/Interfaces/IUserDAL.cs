@@ -13,6 +13,7 @@ namespace Backend.DAL.Interfaces
         User insertUser(User user);
         string login(User user);
         User editUserData(User user);
+        User switchTheme (User user);
         User editUserPassword(long id, string password, string newPassword);
         User editUserPhoto(long id, string photoPathn);
         bool deleteUser(long id);

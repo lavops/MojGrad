@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:frontend/models/city.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/images.dart';
-import 'package:frontend/ui/UserProfilePage.dart';
+import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,7 +35,8 @@ class EditProfile extends State<EditProfilePage> {
   }
   
   Future<File> _openGalery() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    
     this.setState(() {
       imageFile = picture;
       return picture;
@@ -44,7 +45,8 @@ class EditProfile extends State<EditProfilePage> {
   }
 
   Future<File> _openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    
     this.setState(() {
       imageFile = picture;
       return picture;
@@ -104,45 +106,22 @@ class EditProfile extends State<EditProfilePage> {
   List<DropdownMenuItem<City>> _dropdownMenuItems;
   City _selectedId;
 
-  final flNameRegex = RegExp(r'^[a-zA-Z\s]{1,25}$');
+  final flNameRegex = RegExp(r'^[a-zA-Z\sŠšĐđŽžČčĆć]{1,30}$');
+ // final flNameRegex = RegExp(r'^[a-zA-ZŠšĐđŽžČčĆć\s]{3,30}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
   final emailRegex = RegExp(r'[a-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}');
-  final usernameRegex = RegExp(r'^[a-z0-9]{1,1}[._a-z0-9]{1,}');
+  final usernameRegex = RegExp(r'^(?=[a-z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$');
 
   editProfilePhotoo(BuildContext context) {
-    // set up the button
     Widget okButton = FlatButton(
       child: Text(
-        "Izmeni",
+        "Potvrdi",
         style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onPressed: () {
-        if (imageFile != null) {
-          imageUploadProfilePhoto(imageFile);
-          APIServices.jwtOrEmpty().then((res) {
-            String jwt;
-            setState(() {
-              jwt = res;
-            });
-            if (res != null) {
-              APIServices.editProfilePhoto(jwt, user.id,
-                      "Upload//ProfilePhoto//" + basename(imageFile.path))
-                  .then((response) {
-                Map<String, dynamic> jsonUser = jsonDecode(response);
-                User user1 = User.fromObject(jsonUser);
-                if (user1 != null) {
-                  /* Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UserProfilePage(user1)),
-                        
-                  );*/
-                  Navigator.of(context).pop();
-                }
-              });
-            }
-          });
+        if (imageFile != null) {     
+           Navigator.of(context).pop();
         }
       },
     );
@@ -153,14 +132,13 @@ class EditProfile extends State<EditProfilePage> {
         style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onPressed: () {
-        /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => UserProfilePage(user)),
-        );*/
+        setState(() {
+          imageFile = null;
+        });
         Navigator.pop(context);
       },
     );
-
+    
     // show the dialog
     showDialog(
       context: context,
@@ -262,7 +240,8 @@ class EditProfile extends State<EditProfilePage> {
                               width: 150.0,
                               fit: BoxFit.cover,
                             ),
-                    )
+                    ),
+                    SizedBox(height: 2,),
                   ],
                 )),
             actions: [
@@ -275,7 +254,7 @@ class EditProfile extends State<EditProfilePage> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
+  showAlertDialog(BuildContext context, String jwt) {
     // set up the button
     Widget okButton = FlatButton(
       child: Text(
@@ -283,7 +262,16 @@ class EditProfile extends State<EditProfilePage> {
         style: TextStyle(color: Color(0xFF00BFA6)),
       ),
       onPressed: () {
-       Navigator.of(context).popUntil((route) => route.isFirst);
+       Navigator.pop(context);
+       /*Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage.fromBase64(jwt)),
+      );*/
+       Navigator.pushAndRemoveUntil(context,   
+                        MaterialPageRoute(builder: (BuildContext context) => HomePage.fromBase64(jwt)),    
+                        (Route<dynamic> route) => route is HomePage);
+       
       },
     );
 
@@ -387,7 +375,6 @@ class EditProfile extends State<EditProfilePage> {
 
                               print(check);
                               print(array[0] + ", " + array[1]);
-
                               setState(() {
                                 firstName = array[0];
                                 lastName = array[1];
@@ -395,6 +382,9 @@ class EditProfile extends State<EditProfilePage> {
                               Navigator.of(context).pop();
                             } else {
                               check = "Greška";
+                              setState(() {
+                              _selectedOption = 0;
+                             });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -505,6 +495,9 @@ class EditProfile extends State<EditProfilePage> {
                               Navigator.of(context).pop();
                             } else {
                               check = "Greška";
+                              setState(() {
+                              _selectedOption = 0;
+                            });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -664,6 +657,9 @@ class EditProfile extends State<EditProfilePage> {
                                 Navigator.of(context).pop();
                               } else {
                                 check = "Greska regEx";
+                                setState(() {
+                              _selectedOption = 0;
+                               });
                                 print(check);
                                 Navigator.of(context).pop(check.toString());
                               }
@@ -773,6 +769,9 @@ class EditProfile extends State<EditProfilePage> {
                               Navigator.of(context).pop();
                             } else {
                               check = "Greška";
+                              setState(() {
+                              _selectedOption = 0;
+                            });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -987,6 +986,9 @@ class EditProfile extends State<EditProfilePage> {
                             } else {
                               check = "Greška";
                               print(check);
+                              setState(() {
+                              _selectedOption = 0;
+                            });
                               Navigator.of(context).pop(check.toString());
                             }
                           },
@@ -1047,12 +1049,21 @@ class EditProfile extends State<EditProfilePage> {
                     onTap: () {
                       editProfilePhotoo(context);
                     },
-                    child: CircleImage(
-                      serverURLPhoto + user.photo,
-                      imageSize: 90.0,
-                      whiteMargin: 2.0,
-                      imageMargin: 20.0,
-                    ),
+                    child: ClipOval(
+                      child: imageFile != null
+                          ? Image.file(
+                              imageFile,
+                              height: 100.0,
+                              width: 100.0,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              serverURLPhoto + user.photo,
+                              height: 100.0,
+                              width: 100.0,
+                              fit: BoxFit.cover,
+                            ),
+                    )
                   ),
                   GestureDetector(
                     onTap: () {
@@ -1291,6 +1302,29 @@ class EditProfile extends State<EditProfilePage> {
                     borderRadius: new BorderRadius.circular(50.0),
                     side: BorderSide(color: Colors.transparent)),
                 onPressed: () async {
+
+                    if (imageFile != null) {
+                    imageUploadProfilePhoto(imageFile);
+                    APIServices.jwtOrEmpty().then((res) {
+                      String jwt;
+                      setState(() {
+                        jwt = res;
+                      });
+                      if (res != null) {
+                        print("uslo u app");
+
+                        APIServices.editProfilePhoto(jwt, user.id,
+                                "Upload//ProfilePhoto//" + basename(imageFile.path))
+                            .then((response) {
+                          Map<String, dynamic> jsonUser = jsonDecode(response);
+                          User user1 = User.fromObject(jsonUser);
+                          if (user1 != null) {
+                            //uspesno menjanje slike
+                          }
+                        });
+                      }
+                    });
+                  }
                   print(city1);
                   if (firstName == '') {
                     firstName = user.firstName;
@@ -1336,7 +1370,7 @@ class EditProfile extends State<EditProfilePage> {
                                 oldPass.toString(), newPass.toString())
                             .then((response) {
                           if (response.statusCode == 200) {
-                            showAlertDialog(context);
+                            showAlertDialog(context, jwt);
                           }
                         });
                       }
@@ -1366,7 +1400,7 @@ class EditProfile extends State<EditProfilePage> {
                               setState(() {
                                 publicUser = user1;
                               });
-                            showAlertDialog(context);
+                            showAlertDialog(context, jwt);
                           }
                         });
                       }

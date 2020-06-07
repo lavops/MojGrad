@@ -93,7 +93,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('SVE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+              Text('SVE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13.0),),
             ],
           ),
         ),
@@ -101,7 +101,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('REŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+              Text('REŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13.0),),
             ],
           ),
         ),
@@ -109,7 +109,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('NEREŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+              Text('NEREŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13.0,),),
             ],
           ),
         ),

@@ -13,12 +13,14 @@ import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/likesPage.dart';
 import 'package:frontend/ui/mapPage.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
+import 'package:frontend/ui/splash.page.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/models/constants.dart';
 import 'dart:convert';
 import '../main.dart';
 import '../services/api.services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PostWidget extends StatefulWidget {
   final FullPost post;
@@ -40,20 +42,25 @@ class _PostWidgetState extends State<PostWidget> {
     this.post = post1;
   }
 
-   void _updateImageIndex(int index) {
-    setState(() => _currentImageIndex = index);
+  void _updateImageIndex(int index) {
+    if (mounted) {
+      setState(() => _currentImageIndex = index);
+    }
   }
+
   getReportTypes() async {
     var jwt = await APIServices.jwtOrEmpty();
     APIServices.getReportType(jwt).then((res) {
       Iterable list = json.decode(res.body);
       List<ReportType> listRepTypes = List<ReportType>();
       listRepTypes = list.map((model) => ReportType.fromObject(model)).toList();
-      setState(() {
-        reportTypes = listRepTypes;
-        _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
-        _selectedId = _dropdownMenuItems[0].value;
-      });
+      if (mounted) {
+        setState(() {
+          reportTypes = listRepTypes;
+          _dropdownMenuItems = buildDropDownMenuItems(reportTypes);
+          _selectedId = _dropdownMenuItems[0].value;
+        });
+      }
     });
   }
 
@@ -63,9 +70,11 @@ class _PostWidgetState extends State<PostWidget> {
       Map<String, dynamic> list = json.decode(res.body);
       FullPost post1 = FullPost.nothing();
       post1 = FullPost.fromObject(list);
-      setState(() {
-        post = post1;
-      });
+      if (mounted) {
+        setState(() {
+          post = post1;
+        });
+      }
     });
   }
 
@@ -97,7 +106,7 @@ class _PostWidgetState extends State<PostWidget> {
         child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             //mainAxisAlignment: MainAxisAlignment.center,
-            
+
             children: <Widget>[
           userInfoRow(post.userId, post.username, post.typeName, post.userPhoto,
               post.statusId),
@@ -213,13 +222,14 @@ class _PostWidgetState extends State<PostWidget> {
             otherUserId: _otherUserId,
           ));
     }
-
   }
 
   void _onValueChange(ReportType value) {
-    setState(() {
-      _selectedId = value;
-    });
+    if (mounted) {
+      setState(() {
+        _selectedId = value;
+      });
+    }
   }
 
   //Choice for Delete and Edit
@@ -228,25 +238,34 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Brisanje objave?", style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color),),
+            title: Text(
+              "Brisanje objave?",
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
             actions: <Widget>[
-                FlatButton(
+              FlatButton(
                 child: Text(
                   "Izbriši",
-                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
-                    setState(() {
-                      jwt = res;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        jwt = res;
+                      });
+                    }
                     if (res != null) {
                       APIServices.deletePost(jwt, post.postId);
-                      setState(() {
-                        post = null;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          post = null;
+                          publicUser.postsNum = publicUser.postsNum - 1;
+                        });
+                      }
                     }
                   });
                   print('Uspešno ste izbrisali objavu.');
@@ -256,7 +275,8 @@ class _PostWidgetState extends State<PostWidget> {
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -269,37 +289,46 @@ class _PostWidgetState extends State<PostWidget> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text("Izmeni opis.", textAlign: TextAlign.center,style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color),),
+            title: Text(
+              "Izmeni opis.",
+              textAlign: TextAlign.center,
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
             content: Container(
               height: 50.0,
               child: Column(
                 children: <Widget>[
                   TextField(
-                   cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
+                    cursorColor: MyApp.ind == 0 ? Colors.black : Colors.white,
                     controller: opisController,
                   ),
                 ],
               ),
             ),
             actions: <Widget>[
-                FlatButton(
+              FlatButton(
                 child: Text(
                   "Sačuvaj",
-                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
-                    setState(() {
-                      jwt = res;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        jwt = res;
+                      });
+                    }
                     if (res != null) {
                       APIServices.editPost(
                           jwt, post.postId, opisController.text);
-                      setState(() {
-                        post.description = opisController.text;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          post.description = opisController.text;
+                        });
+                      }
                     }
                   });
                   print('Uspešno ste izmenili opis.');
@@ -309,7 +338,8 @@ class _PostWidgetState extends State<PostWidget> {
               FlatButton(
                 child: Text(
                   "Otkaži",
-                  style:TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -324,99 +354,111 @@ class _PostWidgetState extends State<PostWidget> {
     print("");
     int result = await Navigator.push(
       context,
-      MaterialPageRoute( builder: (context) => ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
+      MaterialPageRoute(
+          builder: (context) =>
+              ChallengeSolvingPage(post.postId, post.userId, post.statusId)),
     );
     print("Status id ${post.statusId} a result je $result");
     _getPostById();
-    setState(() {
-      if (result != null && result == 1) post.statusId = 1;
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null && result == 1) post.statusId = 1;
+      });
+    }
   }
 
-Widget imageGallery(String image, String image2) { 
-   List<String> imgList=[]; 
-  imgList.add(serverURLPhoto + image);
-  image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
-  return Column(children: <Widget>[ 
+  Widget imageGallery(String image, String image2) {
+    List<String> imgList = [];
+    imgList.add(serverURLPhoto + image);
+    image2 != "" && image2 != null
+        ? imgList.add(serverURLPhoto + image2)
+        : image2 = "";
+    return Column(
+      children: <Widget>[
         GestureDetector(
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
               CarouselSlider(
-               options: CarouselOptions(
-                 viewportFraction: 1.0,
-                 onPageChanged: (index, reason) {
-                   _updateImageIndex(index);
-                 },
-                 enableInfiniteScroll: false,
-               ),
-                items: imgList.map((item) => Container(
-                   constraints: BoxConstraints(
-                    maxHeight: 350.0, // changed to 400
-                    minHeight: 250.0, // changed to 200
-                    maxWidth: double.infinity,
-                    minWidth: double.infinity,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Colors.grey[200],
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  child: Center(
-                    child: Image.network(item, fit: BoxFit.fitWidth, width: MediaQuery.of(context).size.width, )
-                  ),
-                )).toList(),
-                
+                options: CarouselOptions(
+                  viewportFraction: 1.0,
+                  onPageChanged: (index, reason) {
+                    _updateImageIndex(index);
+                  },
+                  enableInfiniteScroll: false,
+                ),
+                items: imgList
+                    .map((item) => Container(
+                          constraints: BoxConstraints(
+                            maxHeight: 350.0, // changed to 400
+                            minHeight: 250.0, // changed to 200
+                            maxWidth: double.infinity,
+                            minWidth: double.infinity,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.grey[200],
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                          child: Center(
+                              child: Image.network(
+                            item,
+                            fit: BoxFit.fitWidth,
+                            width: MediaQuery.of(context).size.width,
+                          )),
+                        ))
+                    .toList(),
               ),
             ],
           ),
         ),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-          (imgList.length > 1) ?
-          Container(
-            height: 30,
-             child: PhotoCarouselIndicator(
-                photoCount: imgList.length,
-                activePhotoIndex: _currentImageIndex,
-           )) : Container( width: 1, height: 1,),
-        ],)
-        ],
-        );
-}
+            (imgList.length > 1)
+                ? Container(
+                    height: 30,
+                    child: PhotoCarouselIndicator(
+                      photoCount: imgList.length,
+                      activePhotoIndex: _currentImageIndex,
+                    ))
+                : Container(
+                    width: 1,
+                    height: 1,
+                  ),
+          ],
+        )
+      ],
+    );
+  }
 
-  Widget imageGalery3(String image, String image2){
-    List<String> imgList=[];
+  Widget imageGalery3(String image, String image2) {
+    List<String> imgList = [];
     imgList.add(serverURLPhoto + image);
-    image2 != "" && image2 != null ?  imgList.add(serverURLPhoto + image2) : image2="";
+    image2 != "" && image2 != null
+        ? imgList.add(serverURLPhoto + image2)
+        : image2 = "";
     return SizedBox(
       height: 300.0,
       width: double.infinity,
       child: Carousel(
-        boxFit: BoxFit.cover,
-        autoplay: false,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 1000),
-        dotSize: 6.0,
-        dotIncreasedColor: Color(0xFF00BFA6),
-        dotBgColor: Colors.transparent,
-        dotPosition: DotPosition.bottomCenter,
-        dotVerticalPadding: 10.0,
-        showIndicator: image2 != "" && image2 != null ? true : false,
-        indicatorBgPadding: 7.0,
-        images: image2 != "" && image2 != null ? [
-          NetworkImage(imgList[0]),
-          NetworkImage(imgList[1])
-        ]
-        : [
-          NetworkImage(imgList[0])
-        ]
-      ),
+          boxFit: BoxFit.cover,
+          autoplay: false,
+          animationCurve: Curves.fastOutSlowIn,
+          animationDuration: Duration(milliseconds: 1000),
+          dotSize: 6.0,
+          dotIncreasedColor: Color(0xFF00BFA6),
+          dotBgColor: Colors.transparent,
+          dotPosition: DotPosition.bottomCenter,
+          dotVerticalPadding: 10.0,
+          showIndicator: image2 != "" && image2 != null ? true : false,
+          indicatorBgPadding: 7.0,
+          images: image2 != "" && image2 != null
+              ? [NetworkImage(imgList[0]), NetworkImage(imgList[1])]
+              : [NetworkImage(imgList[0])]),
     );
   }
 
@@ -435,20 +477,24 @@ Widget imageGallery(String image, String image2) {
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
-                    setState(() {
-                      jwt = res;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        jwt = res;
+                      });
+                    }
                     if (res != null) {
                       APIServices.addLike(jwt, postId, userId, 2).then((res) {
                         Map<String, dynamic> list = json.decode(res);
                         LikeViewModel likeVM = LikeViewModel();
                         likeVM = LikeViewModel.fromObject(list);
-                        setState(() {
-                          post.likeNum = likeVM.likeNum;
-                          post.dislikeNum = likeVM.dislikeNum;
-                          post.commNum = likeVM.commNum;
-                          post.isLiked = likeVM.isLiked;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            post.likeNum = likeVM.likeNum;
+                            post.dislikeNum = likeVM.dislikeNum;
+                            post.commNum = likeVM.commNum;
+                            post.isLiked = likeVM.isLiked;
+                          });
+                        }
                       });
                     }
                   });
@@ -456,7 +502,7 @@ Widget imageGallery(String image, String image2) {
               ),
               GestureDetector(
                 onTap: () {
-                   _getLikesFromPage(postId);
+                  _getLikesFromPage(postId);
                 },
                 child: Text(likeNum.toString(), style: TextStyle(fontSize: 15)),
               ),
@@ -467,20 +513,24 @@ Widget imageGallery(String image, String image2) {
                 onPressed: () {
                   APIServices.jwtOrEmpty().then((res) {
                     String jwt;
-                    setState(() {
-                      jwt = res;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        jwt = res;
+                      });
+                    }
                     if (res != null) {
                       APIServices.addLike(jwt, postId, userId, 1).then((res) {
                         Map<String, dynamic> list = json.decode(res);
                         LikeViewModel likeVM = LikeViewModel();
                         likeVM = LikeViewModel.fromObject(list);
-                        setState(() {
-                          post.likeNum = likeVM.likeNum;
-                          post.dislikeNum = likeVM.dislikeNum;
-                          post.commNum = likeVM.commNum;
-                          post.isLiked = likeVM.isLiked;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            post.likeNum = likeVM.likeNum;
+                            post.dislikeNum = likeVM.dislikeNum;
+                            post.commNum = likeVM.commNum;
+                            post.isLiked = likeVM.isLiked;
+                          });
+                        }
                       });
                     }
                   });
@@ -488,9 +538,10 @@ Widget imageGallery(String image, String image2) {
               ),
               GestureDetector(
                 onTap: () {
-                 _getLikesFromPage(postId);
+                  _getLikesFromPage(postId);
                 },
-                child: Text(dislikeNum.toString(), style: TextStyle(fontSize: 15)),
+                child:
+                    Text(dislikeNum.toString(), style: TextStyle(fontSize: 15)),
               ),
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),
@@ -498,66 +549,66 @@ Widget imageGallery(String image, String image2) {
                   _getCommentsFromPage(postId);
                 },
               ),
-              Text(commNum.toString(),  style: TextStyle(fontSize: 15)),
+              Text(commNum.toString(), style: TextStyle(fontSize: 15)),
               Expanded(child: SizedBox()),
-              post.postTypeId == 1 ? SizedBox() :
-              statusId == 2 && post.postTypeId != 1
-                  ?
-                  Container( 
-                    width: 95,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF00BFA6),
-                      borderRadius: BorderRadius.circular(11.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 4,
-                          offset: Offset(0, 3), // changes position of shadow
+              post.postTypeId == 1
+                  ? SizedBox()
+                  : statusId == 2 && post.postTypeId != 1
+                      ? Container(
+                          width: 95,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF00BFA6),
+                            borderRadius: BorderRadius.circular(11.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(11.0),
+                                side: BorderSide(color: Color(0xFF00BFA6))),
+                            color: Color(0xFF00BFA6),
+                            child: Text(
+                              "Reši",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              _getSolvedStatus();
+                            },
+                          ))
+                      : Container(
+                          decoration: BoxDecoration(
+                            color:
+                                MyApp.ind == 0 ? Colors.white : Colors.black26,
+                            border: Border.all(
+                                width: 0.3, color: Color(0xFF00BFA6)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 3,
+                                blurRadius: 5,
+                                offset:
+                                    Offset(0, 2), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon:
+                                Icon(Icons.done_all, color: Color(0xFF00BFA6)),
+                            onPressed: () {
+                              _getSolvedStatus();
+                            },
+                          ),
                         ),
-                      ],
-                      ),
-                    child:
-                   FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(11.0),
-                          side: BorderSide(color: Color(0xFF00BFA6))),
-                      color: Color(0xFF00BFA6),
-                      child: Text(
-                        "Reši",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        _getSolvedStatus();
-                      },
-                    ))
-                  : Container(
-                    decoration: BoxDecoration(
-                      color: MyApp.ind == 0 ? Colors.white :  Colors.black26,
-                      border: Border.all(
-                      width: 0.3,
-                      color:  Color(0xFF00BFA6)
-                    ),
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(50.0) 
-                      ),
-                       boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 5,
-                        offset: Offset(0, 2), // changes position of shadow
-                      ),
-                      ],
-                    ),
-                    child:IconButton(
-                      icon: Icon(Icons.done_all, color: Color(0xFF00BFA6)),
-                      onPressed: () {
-                        _getSolvedStatus();
-                      },
-                    ),
-                  ),
               SizedBox(width: 10.0), // For padding
             ],
           ),
@@ -569,10 +620,11 @@ Widget imageGallery(String image, String image2) {
       context,
       MaterialPageRoute(builder: (context) => CommentsPage(postId)),
     );
-    
-    setState(() {
-      if (result != null) post.commNum = result;
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null) post.commNum = result;
+      });
+    }
     _getPostById();
   }
 
@@ -581,10 +633,11 @@ Widget imageGallery(String image, String image2) {
       context,
       MaterialPageRoute(builder: (context) => LikesPage(postId)),
     );
-    
-    setState(() {
-      if (result != null) post.likeNum = result;
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null) post.likeNum = result;
+      });
+    }
   }
 
   Widget description(
@@ -595,7 +648,9 @@ Widget imageGallery(String image, String image2) {
       Container(
           child: Row(
         children: <Widget>[
-         SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Flexible(
             child: Text(description),
           )
@@ -634,24 +689,25 @@ class MyDialogState extends State<MyDialog> {
       title: Text(
         "Prijavljivanje korisnika",
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       content: Container(
-        height: 150,
-        child: Column(children: <Widget>[
-          new DropdownButton<ReportType>(
-            isExpanded: true,
-            value: _selectedId,
-            onChanged: (ReportType value) {
-              setState(() {
-                _selectedId = value;
-              });
-              widget.onValueChange(value);
-            },
-            items: widget.reportTypes,
-          ),
-          TextFormField(
+          height: 150,
+          child: Column(children: <Widget>[
+            new DropdownButton<ReportType>(
+              isExpanded: true,
+              value: _selectedId,
+              onChanged: (ReportType value) {
+                if (mounted) {
+                  setState(() {
+                    _selectedId = value;
+                  });
+                }
+                widget.onValueChange(value);
+              },
+              items: widget.reportTypes,
+            ),
+            TextFormField(
               controller: messageController,
               autocorrect: false,
               decoration: InputDecoration(
@@ -663,13 +719,13 @@ class MyDialogState extends State<MyDialog> {
                 fillColor: Colors.black,
                 contentPadding: const EdgeInsets.all(10.0),
                 focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF00BFA6)),
-                   ),  
+                  borderSide: BorderSide(color: Color(0xFF00BFA6)),
+                ),
               ),
-          )
-        ])),
+            )
+          ])),
       actions: <Widget>[
-         FlatButton(
+        FlatButton(
           child: Text(
             "Prijavi",
             style:
@@ -682,14 +738,33 @@ class MyDialogState extends State<MyDialog> {
                 jwt = res;
               });
               if (res != null) {
-                print(userId.toString() + " " + widget.otherUserId.toString());
-                print(messageController.text);
                 APIServices.addReport(jwt, userId, widget.otherUserId,
                         _selectedId.id, messageController.text)
                     .then((res) {
-                  
+                  if (res.statusCode == 200) {
+                    print('Uspešno ste prijavili korisnika.');
+                    Navigator.of(context).pop();
+                    Fluttertoast.showToast(
+                        msg: "Uspešno ste prijavili korisnika.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                        timeInSecForIos: 2);
+                  } else {
+                    print('Već ste prijavili korisnika.');
+                    Navigator.of(context).pop();
+                    Fluttertoast.showToast(
+                        msg: "Već ste prijavili korisnika.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                        timeInSecForIos: 2);
+                  }
                 });
-                Navigator.of(context).pop();
               }
             });
           },
@@ -708,7 +783,6 @@ class MyDialogState extends State<MyDialog> {
     );
   }
 }
-
 
 class PhotoCarouselIndicator extends StatelessWidget {
   final int photoCount;

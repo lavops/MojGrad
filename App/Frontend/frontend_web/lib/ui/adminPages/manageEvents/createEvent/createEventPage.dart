@@ -277,7 +277,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: nameController,
+        maxLength: 50,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Ime događaja",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -296,11 +299,14 @@ class _CreateEventWidget extends State<CreateEventWidget> {
       child: TextField(
         cursorColor: Colors.black,
         controller: shortDescriptionController,
+        maxLength: 50,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Kratak opis",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -323,8 +329,11 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: descriptionController,
+        maxLength: 300,
         cursorColor: Colors.black,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Opis događaja",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -494,10 +503,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           endDate = _endDateString + ' ' + _selectedTipEnd.toString();
 
           var newStartDate = startDate.split('/');
-          var startDateTemp = (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" +newStartDate[2];
+          var startDateTemp = (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" + (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + newStartDate[2];
 
           var newEndDate = endDate.split('/');
-          var endDateTemp = (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" +(int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" +newEndDate[2];
+          var endDateTemp = (int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" + (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" + newEndDate[2];
           print(startDateTemp);
           print(endDateTemp);
 
@@ -510,8 +519,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               descriptionController.text,
               locationController.text,
               city.id,
-              startDate,
-              endDate, long, lat).then((value){
+              startDateTemp,
+              endDateTemp, long, lat).then((value){
                 print(value.statusCode);
                 print(value.body);
                 if(value.statusCode == 200)
@@ -574,8 +583,9 @@ class _CreateEventWidget extends State<CreateEventWidget> {
             margin: EdgeInsets.only(
                 left: 50, right: 20, top: 10, bottom: 10),
           ),
+          wrong(),
           createEventButton(),
-          wrong()
+          
         ],
       ));
   }

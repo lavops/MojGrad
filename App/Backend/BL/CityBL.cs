@@ -27,6 +27,11 @@ namespace Backend.BL
             return _iCityDAL.getByID(id);
         }
 
+        public City getCityFromName(string name)
+        {
+            return _iCityDAL.getCityFromName(name);
+        }
+
         public City insertCity(City city)
         {
             return _iCityDAL.insertCity(city);

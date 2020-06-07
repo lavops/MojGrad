@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:data_tables/data_tables.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/fullPost.dart';
@@ -9,7 +10,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 import 'manageInstitutionMobile.dart';
@@ -90,7 +91,8 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
           listCities = listC;
           City allinst = new City(9999, "Sve institucije");
           city = allinst;
-          listCities.add(allinst);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allinst);
         });
       }
     });
@@ -105,6 +107,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
       if (mounted) {
         setState(() {
           filteredInstitution = listFU;
+          _rowsOffset = 0;
         });
       }
     });
@@ -119,6 +122,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
       if (mounted) {
         setState(() {
           filteredUnauthInstitution = listFU;
+          _rowsOffsetUnauth = 0;
         });
       }
     });
@@ -152,13 +156,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
   }
 
   showAlertDialog(BuildContext context, int id, int index, int page) {
-    Widget okButton = FlatButton(
-      child: Text(
-        "Obriši",
-        style: TextStyle(color: Colors.red),
-      ),
-      onPressed: () {
-        APIServices.deleteInstitution(TokenSession.getToken, id);
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deleteInstitution(TokenSession.getToken, id);
         setState(() {
           if (page == 1) {
             listInstitutions.removeAt(index);
@@ -166,15 +166,27 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
             listUnauthInstitutions.removeAt(index);
           }
         });
-        Navigator.pop(context);
-      },
+
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething
     ).showCursorOnHover;
 
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: greenPastel),
-      ),
+    Widget notButton = RoundedLoadingButton(
+      color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -200,13 +212,10 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
 
   showAlertDialogAccept(
       BuildContext context, int id, String email, int index, int page) {
-    Widget okButton = FlatButton(
-      child: Text(
-        "Prihvati",
-        style: TextStyle(color: greenPastel),
-      ),
-      onPressed: () {
-        APIServices.acceptInstitution(TokenSession.getToken, id, email)
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+
+    void _doSomething() async {
+      APIServices.acceptInstitution(TokenSession.getToken, id, email)
             .then((res) {
           if (res.statusCode == 200) {
             setState(() {
@@ -215,14 +224,29 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
             });
           }
         });
+
+      Timer(Duration(seconds: 3), () {
+          
+        _btnController.success();
         Navigator.pop(context);
-      },
+        
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Prihvati", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: greenPastel,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething
     ).showCursorOnHover;
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: Colors.red),
-      ),
+
+    Widget notButton = RoundedLoadingButton(
+      color: Colors.red,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -405,11 +429,17 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                     if (newValue.name == "Sve institucije") {
                       filteredInstitution = null;
                       //_getInstitutions();
+                      setState(() {
+                        _rowsOffset = 0;
+                      });
                       _sortListBy();
                     } else {
                       _getInstitutionFromCity(newValue.id);
                       _sortListBy();
                     }
+                    setState(() {
+                      _rowsOffset = 0;
+                    });
                   },
                   items: listCities.map((City option) {
                     return DropdownMenuItem(
@@ -437,6 +467,9 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
               } else if (newValue.name == "Opadajući") {
                 _sortListBy();
               }
+              setState(() {
+                _rowsOffset = 0;
+              });
             },
             items: maxMinFilter.map((MaxMinDropDown option) {
               return DropdownMenuItem(
@@ -466,9 +499,15 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                     if (newValue.name == "Sve institucije") {
                       filteredUnauthInstitution = null;
                       _getUnauthInstitutions();
+                      setState(() {
+                        _rowsOffsetUnauth = 0;
+                      });
                     } else {
                       _getInstitutionFromCityUnauth(newValue.id);
                     }
+                    setState(() {
+                      _rowsOffsetUnauth = 0;
+                    });
                   },
                   items: listCities.map((City option) {
                     return DropdownMenuItem(
@@ -596,6 +635,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                 filteredInstitution = listInstitutions
                     .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
+                _rowsOffset = 0;
               });
             });
           },
@@ -629,6 +669,7 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
                 filteredUnauthInstitution = listUnauthInstitutions
                     .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
                     .toList();
+                _rowsOffsetUnauth = 0;
               });
             });
           },
@@ -649,6 +690,164 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
         )).showCursorTextOnHover;
   }
 
+  int _rowsOffset = 0;
+  int _rowsOffsetUnauth = 0;
+  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  int _sortColumnIndex;
+  bool _sortAscending = true;
+
+  Widget buildDataTable(List<Institution> _list) {
+
+    List<Institution> _items = _list;
+
+    return Container(width: 1200, height: 670, child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffset,
+          handleNext: () async {
+            setState(() {
+              _rowsOffset += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffset -= _rowsPerPage;
+            });
+          },
+          itemBuilder: (int index) {
+            Institution ins = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(CircleImage(
+                    userPhotoURL + ins.photoPath,
+                    imageSize: 36.0,
+                    whiteMargin: 2.0,
+                    imageMargin: 6.0,
+                  ),),
+                  DataCell(Text('${ins.name}')),
+                  DataCell(Text('${ins.email}')),
+                  DataCell(Text('${ins.phone}')),
+                  DataCell(Text('${ins.cityName}')),
+                  DataCell(Text('${ins.postsNum}')),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.info, color: greenPastel,),
+                    onPressed: () {
+                      showAlertDialogDescription(ins.description, context);
+                    },
+                  ),),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.cancel, color: Colors.red,),
+                    onPressed: () {
+                      showAlertDialog(context, ins.id, index, 1);
+                    },
+                  ),),
+                ]);
+          },
+          alwaysShowDataTable: true,
+          header: const Text('Institucije'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: const Text('Slika', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Naziv', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Broj telefona', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Grad', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Rešenja', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+          ],
+        ),
+      ));
+  }
+
+  Widget buildDataTableUnauth(List<Institution> _list) {
+
+    List<Institution> _items = _list;
+
+    return Container(width: 1000, height: 670, child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffsetUnauth,
+          handleNext: () async {
+            setState(() {
+              _rowsOffsetUnauth += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffsetUnauth -= _rowsPerPage;
+            });
+          },
+          itemBuilder: (int index) {
+            Institution ins = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(Text('${ins.name}')),
+                  DataCell(Text('${ins.email}')),
+                  DataCell(Text('${ins.phone}')),
+                  DataCell(Text('${ins.cityName}')),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.info, color: greenPastel,),
+                    onPressed: () {
+                      showAlertDialogDescription(ins.description, context);
+                    },
+                  ),),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.check, color: greenPastel,),
+                    onPressed: () {
+                      showAlertDialogAccept(context, ins.id, ins.email, index, 2);
+                    },
+                  ),),
+                  DataCell(IconButton(
+                    icon: Icon(Icons.cancel, color: Colors.red,),
+                    onPressed: () {
+                      showAlertDialog(context, ins.id, index, 2);
+                    },
+                  ),),
+                ]);
+          },
+          alwaysShowDataTable: true,
+          header: const Text('Zahtevi za registraciju'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: Text('Naziv', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Mejl', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Broj telefona', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text('Grad', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold))),
+            DataColumn(label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold))),
+          ],
+        ),
+      ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -659,27 +858,25 @@ class _ManageInstitutionDesktopState extends State<ManageInstitutionDesktop>
               new Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  search(),
+                  dropdownFirstRow(listCities),
+                  Expanded(child: search(),)
                 ],
               ),
-              dropdownFirstRow(listCities),
-              Flexible(
-                  child: filteredInstitution == null
-                      ? (buildInstList(listInstitutions))
-                      : buildInstList(filteredInstitution)),
+              Flexible(child: filteredInstitution == null
+                ? (buildDataTable(listInstitutions))
+                : buildDataTable(filteredInstitution),)
             ]),
             Column(children: [
               new Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  searchUnath(),
+                  dropdownSecondRow(listCities),
+                  Expanded(child: searchUnath(),)
                 ],
               ),
-              dropdownSecondRow(listCities),
-              Flexible(
-                  child: filteredUnauthInstitution == null
-                      ? buildUnauthInstList(listUnauthInstitutions)
-                      : buildUnauthInstList(filteredUnauthInstitution)),
+              Flexible(child: filteredUnauthInstitution == null
+                ? buildDataTableUnauth(listUnauthInstitutions)
+                : buildDataTableUnauth(filteredUnauthInstitution),)
             ]),
           ]),
         ),

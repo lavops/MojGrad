@@ -5,9 +5,12 @@ import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/InstitutionPages/eventsPage/eventsPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
+import 'package:frontend_web/widgets/mobileDrawer/drawerInstitution.dart';
 import 'package:intl/intl.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:frontend_web/extensions/hoverExtension.dart';
@@ -36,7 +39,7 @@ class _EditEventPage extends State<EditEventPage> {
         builder: (context, sizingInformation) => Scaffold(
               drawer:
                   sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-                      ? DrawerAdmin(6)
+                      ? DrawerInstitution(4)
                       : null,
               appBar:
                   sizingInformation.deviceScreenType != DeviceScreenType.Mobile
@@ -49,7 +52,7 @@ class _EditEventPage extends State<EditEventPage> {
               body: Row(
                 children: <Widget>[
                   sizingInformation.deviceScreenType != DeviceScreenType.Mobile
-                      ? CollapsingNavigationDrawer()
+                      ? CollapsingInsNavigationDrawer()
                       : SizedBox(),
                   Expanded(
                     child: ScreenTypeLayout(
@@ -195,6 +198,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
   List<Time> times = Time.getTimes();
   List<City> listCities;
   City city;
+  double lat;
+  double long;
 
   String wrongText = "";
   String startDate = "";
@@ -220,6 +225,8 @@ class _CreateEventWidget extends State<CreateEventWidget> {
         new TextEditingController(text: event.shortDescription);
     description = new TextEditingController(text: event.description);
     locationController = new TextEditingController(text: event.address);
+    lat=event.latitude;
+    long=event.longitude;
 
     stringEndDate = event.endDate;
     listEndDate = stringEndDate.split(' ');
@@ -319,44 +326,6 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     setState(() {
       _selectedTipEnd = selectedTip;
     });
-  }
-
-  Widget locationWidget() {
-    return Container(
-        width: 500,
-        child: Column(
-          children: <Widget>[
-            Align(
-              alignment: Alignment(-0.95, -0.95),
-              child: Text(
-                'Lokacija',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              cursorColor: Colors.black,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-              controller: locationController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16.0)),
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 15),
-                  child: Icon(Icons.location_on, color: greenPastel),
-                ),
-                contentPadding: EdgeInsets.all(18),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                  borderSide: BorderSide(width: 2, color: greenPastel),
-                ),
-              ),
-            ),
-          ],
-        )).showCursorTextOnHover;
   }
 
   Widget nameEvent() {
@@ -550,43 +519,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     ).showCursorOnHover;
   }
 
-  Widget dropdownCity(List<City> listCities) {
-    return new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 50, right: 10, top: 20, bottom: 10),
-          ),
-          Text("Izaberite grad: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Container(
-            padding: EdgeInsets.all(5.0),
-          ),
-          listCities != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                    setState(() {
-                      city = newValue;
-                    });
-                  },
-                  items: listCities.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
-        ]).showCursorOnHover;
-  }
-
+  
   Widget wrong() {
     return Container(
         child: Center(
@@ -611,10 +544,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
           endDate = _endDateString + ' ' + _selectedTipEnd.toString();
 
           var newStartDate = startDate.split('/');
-          var startDateTemp = (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" +newStartDate[2];
+          var startDateTemp = (int.parse(newStartDate[0]) < 10 ? "0"+newStartDate[0] : newStartDate[0]) + "/" + (int.parse(newStartDate[1]) < 10 ? "0"+newStartDate[1] : newStartDate[1]) + "/" + newStartDate[2];
 
           var newEndDate = endDate.split('/');
-          var endDateTemp = (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" +(int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" +newEndDate[2];
+          var endDateTemp = (int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" + (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" + newEndDate[2];
 
 
           if (event.startDate.compareTo(startDateTemp) == 0  && event.endDate.compareTo(endDateTemp) == 0) {
@@ -635,10 +568,10 @@ class _CreateEventWidget extends State<CreateEventWidget> {
                   description.text,
                   locationController.text,
                   city.id,
-                  startDate,
-                  endDate,
-                  44.007392,
-                  20.925238)
+                  startDateTemp,
+                  endDateTemp,
+                  lat,
+                  long)
               .then((value) {
             print(value.statusCode);
             print(value.body);
@@ -646,7 +579,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ManageEventsPage()),
+                    builder: (context) => EventsPage()),
               );
           });
 
@@ -686,12 +619,7 @@ class _CreateEventWidget extends State<CreateEventWidget> {
             Container(
               margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
             ),
-            locationWidget(),
-            Container(
-              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
-            ),
             calendar(),
-            dropdownCity(listCities),
             dropdownTime(times),
             Container(
               margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),

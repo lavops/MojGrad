@@ -162,7 +162,10 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: name,
+        maxLength: 50,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Ime ogranizacije",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -185,7 +188,10 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
           fontWeight: FontWeight.w300,
         ),
         controller: titleController,
+        maxLength: 50,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Naslov",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -209,7 +215,10 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
         ),
         cursorColor: Colors.black,
         controller: description,
+        maxLength: 300,
         decoration: InputDecoration(
+          counterText: '',
+          counterStyle: TextStyle(fontSize: 0),
           hintText: "Opis donacije",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
           contentPadding: EdgeInsets.all(18),
@@ -269,7 +278,7 @@ class _CreateDonationWidget extends State<CreateDonationWidget> {
             json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
         print(payload);
 
-        if (name.text != '' && _doubleValue.toDouble() != 0.0) {
+        if (name.text != '' && _doubleValue.toDouble() != 0.0 && _doubleValue.toDouble() >= 1.0) {
           APIServices.createDonation(
               str,
               int.parse(payload["sub"]),

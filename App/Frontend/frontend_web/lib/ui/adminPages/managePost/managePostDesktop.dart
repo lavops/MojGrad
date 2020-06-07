@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+
 
 class ManagePostDesktop extends StatefulWidget {
   @override
@@ -93,7 +96,8 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
           listCities = listC;
           City allusers = new City(9999, "Sve objave");
           city = allusers;
-          listCities.add(allusers);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allusers);
         });
       }
     });
@@ -708,20 +712,30 @@ class _ManagePostDesktopState extends State<ManagePostDesktop> {
 
   showAlertDialog(BuildContext context, int id) {
       // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        APIServices.deletePost(TokenSession.getToken,id);
-        deleteFromList(id);
-        Navigator.pop(context);
-        /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManagePostPage()),
-        );*/
-        },
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deletePost(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+    controller: _btnController,    
+    onPressed: _doSomething,
     ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+
+     Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
         },

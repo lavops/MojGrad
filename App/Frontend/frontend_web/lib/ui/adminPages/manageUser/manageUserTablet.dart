@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:data_tables/data_tables.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
 import 'package:frontend_web/models/constants.dart';
@@ -11,6 +12,7 @@ import 'package:frontend_web/ui/adminPages/manageUser/viewProfile/viewProfilePag
 import 'package:frontend_web/widgets/centeredView/centeredViewManageUser.dart';
 import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -91,7 +93,8 @@ List<User> listUsers;
         setState(() {
           listCities = listC;
           City allusers = new City(9999, "Svi korisnici");
-          listCities.add(allusers);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allusers);
         });
       }
     });
@@ -227,13 +230,13 @@ List<User> listUsers;
           Column(children: [
               dropdownFU(listCities),                 
               search(),
-            Flexible(child: filteredUsers==null ?  buildUserList(listUsers) : buildUserList(filteredUsers)),
+            Flexible(child: filteredUsers==null ?  buildDataTable(listUsers) : buildDataTable(filteredUsers)),
           ]),
           Column(children: [
             new Row(children:[
             dropdownFRU(listCities),                 
             searchRep(),],),
-            Flexible(child: filteredRepUsers==null ? buildReportedUserList(listRepUsers) : buildReportedUserList(filteredRepUsers)),
+            Flexible(child: filteredRepUsers==null ? buildDataTableReported(listRepUsers) : buildDataTableReported(filteredRepUsers)),
           ]),
         ]
         ),
@@ -263,20 +266,34 @@ List<User> listUsers;
   }
 
   showAlertDialog(BuildContext context, int id) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deleteUser(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+    
     // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
+    );
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
-        APIServices.deleteUser(TokenSession.getToken,id);
-        deleteFromList(id);
         Navigator.pop(context);
         },
-    );
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        Navigator.pop(context);
-      },
     );
 
     // set up the AlertDialog
@@ -515,6 +532,7 @@ List<User> listUsers;
                         ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
                             .contains(string.toLowerCase()))))
                     .toList();
+              _rowsOffset = 0;
             });
           });
         },
@@ -552,12 +570,18 @@ Widget dropdownFU(List<City> listCities) {
             onChanged: (City newValue) {
               if (newValue.name == "Svi korisnici") {
                 filteredUsers = null;
+                setState(() {
+                  _rowsOffset = 0;
+                });
               } else {
                 _getUsersFromCity(newValue.id);
                 _sortListBy();
               }
               setState(() {
                 city = newValue;
+              });
+              setState(() {
+                _rowsOffset = 0;
               });
             },
             items: listCities.map((City option) {
@@ -590,6 +614,9 @@ Widget dropdownFU(List<City> listCities) {
             } else if(newValue.name == "Id"){
               _sortListBy();
             }
+            setState(() {
+              _rowsOffset = 0;
+            });
           },
           items: categories.map((CategoryDropDown option) {
             return DropdownMenuItem(
@@ -611,6 +638,9 @@ Widget dropdownFU(List<City> listCities) {
             } else if(newValue.name == "Opadajući"){
               _sortListBy();
             }
+            setState(() {
+              _rowsOffset = 0;
+            });
           },
           items: maxMinFilter.map((MaxMinDropDown option) {
             return DropdownMenuItem(
@@ -637,6 +667,9 @@ Widget dropdownFU(List<City> listCities) {
             onChanged: (City newValue) {
               if (newValue.name == "Svi korisnici") {
                 filteredRepUsers = null;
+                setState(() {
+                  _rowsOffsetUnauth = 0;
+                });
                 _sortRepListBy();
               } else {
                 _getReportedUsersFromCity(newValue.id);
@@ -644,6 +677,9 @@ Widget dropdownFU(List<City> listCities) {
               }
               setState(() {
                 cityR = newValue;
+              });
+              setState(() {
+                _rowsOffsetUnauth = 0;
               });
             },
             items: listCities.map((City option) {
@@ -679,6 +715,9 @@ Widget dropdownFU(List<City> listCities) {
             } else if(newValue.name == "Više od 50"){
               _sortRepListBy();
             }
+            setState(() {
+              _rowsOffsetUnauth = 0;
+            });
           },
           items: repNums.map((NumRepDropDown option) {
             return DropdownMenuItem(
@@ -705,6 +744,7 @@ Widget dropdownFU(List<City> listCities) {
                         ((u.firstName.toLowerCase() + " " + u.lastName.toLowerCase())
                             .contains(string.toLowerCase()))))
                     .toList();
+              _rowsOffsetUnauth = 0;
             });
           });
         },
@@ -726,6 +766,161 @@ Widget dropdownFU(List<City> listCities) {
     );
   }
   
+
+  int _rowsOffset = 0;
+  int _rowsOffsetUnauth = 0;
+  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  int _sortColumnIndex;
+  bool _sortAscending = true;
+
+  Widget buildDataTable(List<User> _list) {
+
+    List<User> _items = _list;
+
+    return Container(width: 1000, height: 670, child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffset,
+          handleNext: () async {
+            setState(() {
+              _rowsOffset += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffset -= _rowsPerPage;
+            });
+          },
+          itemBuilder: (int index) {
+            User tableUser = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  
+                  DataCell(Text('${tableUser.firstName} ${tableUser.lastName}')),
+                  DataCell(Center(child: Text('${tableUser.postsNum}'))),
+                  DataCell(Center(child: Text('${tableUser.donatedPoints + tableUser.points}'))),
+                  DataCell(Center(child: Text('${tableUser.level}'))),
+                  DataCell(PopupMenuButton<String>(
+                      onSelected: (String choice) {
+                        choiceActionAllUsers(choice, tableUser.id, tableUser);
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return ConstantsAllUsers.choices.map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      },
+                    ),),
+                  DataCell(CircleImage(
+                    userPhotoURL + tableUser.photo,
+                    imageSize: 36.0,
+                    whiteMargin: 2.0,
+                    imageMargin: 6.0,
+                  ),),
+                ]);
+          },
+          alwaysShowDataTable: true,
+          header: const Text('Korisnici'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            
+            
+            DataColumn(label: const Text('Ime', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Objave', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Poeni', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: const Text('Nivo', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(tooltip: 'Više opcija', label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(label: Text('', style: TextStyle(fontWeight: FontWeight.bold),),),
+          ],
+        ),
+      ));
+  }
+
+  Widget buildDataTableReported(List<User> _list) {
+
+    List<User> _items = _list;
+
+    return Container(width: 550, height: 670, child: Card(
+      child: NativeDataTable.builder(
+          rowsPerPage: _rowsPerPage,
+          itemCount: _items?.length ?? 0,
+          firstRowIndex: _rowsOffsetUnauth,
+          handleNext: () async {
+            setState(() {
+              _rowsOffsetUnauth += _rowsPerPage;
+            });
+          },
+          handlePrevious: () {
+            setState(() {
+              _rowsOffsetUnauth -= _rowsPerPage;
+            });
+          },
+          itemBuilder: (int index) {
+            User tableUser = _items[index];
+            return DataRow.byIndex(
+                index: index,
+                cells: <DataCell>[
+                  DataCell(CircleImage(
+                    userPhotoURL + tableUser.photo,
+                    imageSize: 36.0,
+                    whiteMargin: 2.0,
+                    imageMargin: 6.0,
+                  ),),
+                  DataCell(Text('${tableUser.firstName} ${tableUser.lastName}')),
+                  DataCell(Center(child: Text('${tableUser.reportsNum}', style: TextStyle(color: Colors.red)),)),
+                  DataCell(PopupMenuButton<String>(
+                    onSelected: (String choice) {
+                      choiceActionReportedUsers(choice, tableUser.id, tableUser.firstName, tableUser.lastName, tableUser);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return ConstantsReportedUsers.choices.map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),),
+                ]);
+          },
+          alwaysShowDataTable: true,
+          header: const Text('Prijavljeni korisnici'),
+          sortColumnIndex: _sortColumnIndex,
+          sortAscending: _sortAscending,
+          onRowsPerPageChanged: (int value) {
+            setState(() {
+              _rowsPerPage = value;
+            });
+          },
+          rowCountApproximate: false,
+          actions: <Widget>[
+          ],
+          selectedActions: <Widget>[
+          ],
+          columns: <DataColumn>[
+            DataColumn(label: const Text('', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Ime', style: TextStyle(fontWeight: FontWeight.bold),),),
+            DataColumn(label: const Text('Broj prijava', style: TextStyle(fontWeight: FontWeight.bold)),),
+            DataColumn(tooltip: 'Više opcija', label: Text(' ', style: TextStyle(fontWeight: FontWeight.bold)),),
+          ],
+        ),
+      ));
+  }
 }
 
 class CategoryDropDown{

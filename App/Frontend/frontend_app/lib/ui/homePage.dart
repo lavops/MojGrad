@@ -107,9 +107,18 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _currentTabIndex,
           type: BottomNavigationBarType.fixed,
           onTap: (int index) {
+            if (mounted){
             setState(() {
               _currentTabIndex = index;
+              if(index == 0 ){
+                 Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage.fromBase64(jwt)),
+                );
+              }
             });
+            }
           },
           selectedItemColor: Color(0xFF00BFA6),
         ),

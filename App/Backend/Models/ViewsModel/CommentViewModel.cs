@@ -15,6 +15,8 @@ namespace Backend.Models.ViewsModel
         public string username { get; set; }
         public string photoPath { get; set; }
         public string date { get; set; }
+        public int reportNum { get; set; }
+        private AppDbContext _context = new AppDbContext();
 
         public CommentViewModel (Comment com)
         {
@@ -25,6 +27,7 @@ namespace Backend.Models.ViewsModel
             this.username = com.user.username;
             this.photoPath = com.user.photo;
             this.date = com.createdAt.ToString("dd/MM/yyyy");
+            this.reportNum = _context.reportComment.Where(x => x.commentId == com.id).Count();
         }
     }
 }

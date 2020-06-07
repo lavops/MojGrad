@@ -327,9 +327,12 @@ class _SolvingPostWidgetState extends State<SolvingPostWidget> {
                           solvingPost.selected = 1;
                           solvingPost.postStatusId = 1;
                           isSolved = 1;
+                          if (publicUser.id == solvingPost.userId){
+                            publicUser.points += 10;
+                          }
                         });
-                        if(publicUser.id != solvingPost.userId)
-                          sendNotification("Rešenje", "Vaše rešenje je odabrano kao pobedničko",1, solvingPost.userId);
+                       // if(publicUser.id != solvingPost.userId)
+                          //sendNotification("Rešenje", "Vaše rešenje je odabrano kao pobedničko",1, solvingPost.userId);
                       }
                     });
                     

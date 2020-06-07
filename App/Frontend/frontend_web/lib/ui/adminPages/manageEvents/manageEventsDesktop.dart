@@ -1,16 +1,18 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/createEvent/createEventPage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/editEventAdmin.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventDesktop.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewDonation.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../../../editEventPage.dart';
 
 class ManageEventsPageDesktop extends StatefulWidget {
@@ -127,6 +129,10 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
   }
 
   Widget buttonsRow(Events event, index, List<Events> listEvents, int ind) {
+    var str = TokenSession.getToken;
+    var jwt = str.split(".");
+    var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+    
     return Row(children: <Widget>[
       SizedBox(width: 15.0,),
       RaisedButton(
@@ -134,7 +140,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ViewEventDesktop(listEvents[index])),
+                builder: (context) => ViewEventPage(listEvents[index])),
           );
         },
         color: Color(0xFF00BFA6),
@@ -142,6 +148,7 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
         child: Text("Više informacija", style: TextStyle(color: Colors.white,),),
       ).showCursorOnHover,
       Expanded(child: SizedBox()),
+      (event.adminId == int.parse(payload["sub"])) ? editButton(event) : SizedBox(),
       RaisedButton(
         child: Text("Obriši", style: TextStyle(color: Colors.white),),
         color: Colors.red,
@@ -153,31 +160,62 @@ class ManageEventsPageDesktopState extends State<ManageEventsPageDesktop>{
       SizedBox(width: 15.0,),
     ],);
   }
+  
+  Widget editButton(event) {
+    return RaisedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventAdmin(event)),
+          );
+        },
+        color: Colors.blue,
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        child: Text("Izmeni", style: TextStyle(color: Colors.white,),),
+      ).showCursorOnHover;
+  }
 
   showAlertDialog(BuildContext context, int eventId, int index, int ind) {
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
-          if(res.statusCode == 200){
-            print("Događaj je uspešno obrisan.");
-            setState(() {
-              if(ind == 1)
-                 events.removeAt(index);
-              else
-                finishedEvents.removeAt(index);
-            });
-          }
-        });
-        Navigator.pop(context);
-        },
+    
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    
+    void _doSomething() async {
+      APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
+        if(res.statusCode == 200){
+          print("Događaj je uspešno obrisan.");
+          setState(() {
+            if(ind == 1)
+                events.removeAt(index);
+            else
+              finishedEvents.removeAt(index);
+          });
+        }
+      });
+
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+    
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     );
     
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Color(0xFF00BFA6)),),
+    Widget notButton = RoundedLoadingButton(
+       color: Color(0xFF00BFA6),
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     );
 
     AlertDialog alert = AlertDialog(

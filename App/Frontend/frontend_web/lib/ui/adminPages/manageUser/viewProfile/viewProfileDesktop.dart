@@ -9,6 +9,7 @@ import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/post/rowPostWidget.dart';
 import 'package:frontend_web/widgets/userProfile/userProfileWidget.dart';
 
+
 Color greenPastel = Color(0xFF00BFA6);
 
 class ViewUserProfileDesktop extends StatefulWidget {

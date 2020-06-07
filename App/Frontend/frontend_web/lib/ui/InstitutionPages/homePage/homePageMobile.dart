@@ -44,10 +44,12 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
     var res = await APIServices.getInstitutionById(TokenSession.getToken, insId);
     Map<String, dynamic> jsonInst = jsonDecode(res.body);
     Institution inst = Institution.fromObject(jsonInst);
-    setState(() {
-      institution = inst;
-      icityId = institution.cityId;
-    });
+    if(mounted) {
+        setState(() {
+        institution = inst;
+        icityId = institution.cityId;
+      });
+    }
 
     res =  await APIServices.getInstitutionUnsolvedFromCityId(TokenSession.getToken, icityId).then((res) {
       Iterable list = json.decode(res.body);
@@ -89,7 +91,8 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
       setState(() {
         listTypes = postTypes;
         PostType alltypes = new PostType(9999, "Sve");
-        listTypes.add(alltypes);
+        listTypes.sort((a,b) => a.typeName.toString().compareTo(b.typeName.toString()));
+        listTypes.insert(0, alltypes);
       });
     }
   }
@@ -112,7 +115,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
   Widget solvedColor(FullPost post) => Container(
     constraints: BoxConstraints(
-      minHeight: 120,
+      minHeight: 128,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -123,7 +126,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
 
   Widget packedThings(FullPost post, int ind) => Container(
     constraints: BoxConstraints(
-      maxHeight: 120,
+      maxHeight: 128,
       minHeight: 100,
     ),
     child: Column(
@@ -142,7 +145,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
       SizedBox(width: 10,),
       InkWell(
         child: Text(
-          post.username,
+          (post.username.length > 14) ? post.username.substring(0,14).replaceRange(12,14, "...") : post.username,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
@@ -229,7 +232,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
     imgList.add(userPhotoURL + image);
     image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
     return SizedBox(
-      height: 120.0,
+      height: 128.0,
       width: 120.0,
       child: Carousel(
         boxFit: BoxFit.cover,
@@ -261,32 +264,32 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
           // Actions buttons/icons
           Row(
             children: <Widget>[
-              IconButton(
+              Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbUpOutline, color: Color(0xFF00BFA6)),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(post.likeNum.toString()),
+                child:  Text(post.likeNum.toString()),
               ),
-              IconButton(
+              Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(post.dislikeNum.toString()),
+                child:  Text(post.dislikeNum.toString()),
               ),
-              IconButton(
+              Expanded(child: IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),
                 onPressed: () {
                   //showCommentsDialog(context, post.postId);
                 },
-              ),
-              Text(post.commNum.toString()),
-              Expanded(child: SizedBox()),
+              ),),
+              Expanded(child: Text(post.commNum.toString()),),
+              //Expanded(child: SizedBox()),
               SizedBox(width: 10.0), // For padding
             ],
           ),

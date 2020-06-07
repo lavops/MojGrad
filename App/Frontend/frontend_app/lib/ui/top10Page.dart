@@ -3,6 +3,7 @@ import 'package:frontend/models/like.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:frontend/widgets/circleImageWidget.dart';
 import 'dart:convert';
 
@@ -48,7 +49,17 @@ class StateTop10 extends State<Top10Page> {
     return ListView.builder(
       itemCount: listUsers == null ? 0 : listUsers.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
+        return InkWell(
+          onTap: (){
+            if(userId != listUsers[index].id){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OthersProfilePage(listUsers[index].id)),
+                );
+            }
+          },
+          child: Container(
             child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,7 +107,8 @@ class StateTop10 extends State<Top10Page> {
                   ])),
             ],
           ),
-        ));
+        )),
+        );
       },
     );
   }
@@ -133,7 +145,7 @@ class StateTop10 extends State<Top10Page> {
                       children: <Widget>[
                       Image.asset("assets/podium.png",width: 50, height: 50),
                       SizedBox(width: 20,),
-                      Text("Najaktivniji ljudi u Vašem gradu", style:  TextStyle(fontSize: 20, fontWeight: FontWeight.w600),)
+                      Text("Najaktivniji korisnici u Vašem gradu", style:  TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
                     ],),
                     ),
                     Flexible(child: buildList()),

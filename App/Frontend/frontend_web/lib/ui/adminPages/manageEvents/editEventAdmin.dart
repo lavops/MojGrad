@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
 import 'package:frontend_web/models/city.dart';
+import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
-import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/manageEventsPage.dart';
+import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
 import 'package:intl/intl.dart';
@@ -14,60 +14,73 @@ import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:frontend_web/extensions/hoverExtension.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import '../../../widgets/collapsingInsNavigationDrawer.dart';
-import '../../../widgets/mobileDrawer/drawerInstitution.dart';
-import 'eventsPage.dart';
-
 Color greenPastel = Color(0xFF00BFA6);
 
+class EditEventAdmin extends StatefulWidget {
+  final Events event;
+  EditEventAdmin(this.event);
 
-class CreateEventPageIns extends StatefulWidget {
   @override
-  _CreateEventPageState createState() => _CreateEventPageState();
+  _EditEventPage createState() => _EditEventPage(event);
 }
 
-class _CreateEventPageState extends State<CreateEventPageIns> {
-  
+class _EditEventPage extends State<EditEventAdmin> {
+  Events event;
+
+  _EditEventPage(Events event1) {
+    this.event = event1;
+  }
+
   @override
   Widget build(BuildContext context) {
-     return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Scaffold(
-        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile 
-          ? DrawerInstitution(4)
-          : null,
-        appBar: sizingInformation.deviceScreenType != DeviceScreenType.Mobile
-          ? null
-          : AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Colors.black),
-          ),
-        backgroundColor: Colors.white,
-        body: Row(
-            children: <Widget>[
-              sizingInformation.deviceScreenType != DeviceScreenType.Mobile 
-            ? CollapsingInsNavigationDrawer(): SizedBox(),
-              Expanded(
-                child: ScreenTypeLayout(
-                  mobile:CreateEventMobilePage(),
-                  desktop: CreateEventDesktopPage(),
-                  tablet: CreateEventDesktopPage(),
-                ),
-              )
-            ],
-          ),
-        )
-    );
-
+    return ResponsiveBuilder(
+        builder: (context, sizingInformation) => Scaffold(
+              drawer:
+                  sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                      ? DrawerAdmin(6)
+                      : null,
+              appBar:
+                  sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+                      ? null
+                      : AppBar(
+                          backgroundColor: Colors.white,
+                          iconTheme: IconThemeData(color: Colors.black),
+                        ),
+              backgroundColor: Colors.white,
+              body: Row(
+                children: <Widget>[
+                  sizingInformation.deviceScreenType != DeviceScreenType.Mobile
+                      ? CollapsingNavigationDrawer()
+                      : SizedBox(),
+                  Expanded(
+                    child: ScreenTypeLayout(
+                      mobile: CreateEventMobilePage(event),
+                      desktop: CreateEventDesktopPage(event),
+                      tablet: CreateEventDesktopPage(event),
+                    ),
+                  )
+                ],
+              ),
+            ));
   }
 }
 
+class CreateEventMobilePage extends StatefulWidget {
+  Events event;
+  CreateEventMobilePage(this.event);
 
-class CreateEventMobilePage extends StatefulWidget{
   @override
-  _CreateEventMobilePageState createState() => new _CreateEventMobilePageState();
+  _CreateEventMobilePageState createState() =>
+      new _CreateEventMobilePageState(event);
 }
 
-class _CreateEventMobilePageState extends State<CreateEventMobilePage>{
+class _CreateEventMobilePageState extends State<CreateEventMobilePage> {
+  Events event;
+
+  _CreateEventMobilePageState(Events event1) {
+    this.event = event1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -77,7 +90,9 @@ class _CreateEventMobilePageState extends State<CreateEventMobilePage>{
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Align(
               alignment: Alignment(-0.75, -0.50),
               child: RaisedButton(
@@ -93,9 +108,10 @@ class _CreateEventMobilePageState extends State<CreateEventMobilePage>{
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            ).showCursorOnHover,   
-            Container(width: 350, child: 
-            CreateEventWidget(),
+            ).showCursorOnHover,
+            Container(
+              width: 350,
+              child: CreateEventWidget(event),
             ),
           ],
         )
@@ -104,12 +120,22 @@ class _CreateEventMobilePageState extends State<CreateEventMobilePage>{
   }
 }
 
-class CreateEventDesktopPage extends StatefulWidget{
+class CreateEventDesktopPage extends StatefulWidget {
+  Events event;
+  CreateEventDesktopPage(this.event);
+
   @override
-  _CreateEventDesktopPageState createState() => new _CreateEventDesktopPageState();
+  _CreateEventDesktopPageState createState() =>
+      new _CreateEventDesktopPageState(event);
 }
 
-class _CreateEventDesktopPageState extends State<CreateEventDesktopPage>{
+class _CreateEventDesktopPageState extends State<CreateEventDesktopPage> {
+  Events event;
+
+  _CreateEventDesktopPageState(Events event1) {
+    this.event = event1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -120,24 +146,27 @@ class _CreateEventDesktopPageState extends State<CreateEventDesktopPage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Align(
-                    alignment: Alignment(-0.65, -0.65),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: greenPastel,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: greenPastel)),
-                      child: Text(
-                        "Vrati se nazad",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ).showCursorOnHover,
-            SizedBox(height: 10,),
-            Container(width: 500, child: 
-            CreateEventWidget(),
+              alignment: Alignment(-0.65, -0.65),
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                color: greenPastel,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: greenPastel)),
+                child: Text(
+                  "Vrati se nazad",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ).showCursorOnHover,
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: 500,
+              child: CreateEventWidget(event),
             ),
           ],
         )
@@ -146,14 +175,20 @@ class _CreateEventDesktopPageState extends State<CreateEventDesktopPage>{
   }
 }
 
-
-
 class CreateEventWidget extends StatefulWidget {
+  Events event;
+  CreateEventWidget(this.event);
+
   @override
-  _CreateEventWidget createState() => _CreateEventWidget();
+  _CreateEventWidget createState() => _CreateEventWidget(event);
 }
 
 class _CreateEventWidget extends State<CreateEventWidget> {
+  Events event;
+  _CreateEventWidget(Events event1) {
+    this.event = event1;
+  }
+
   DateTime _startDate;
   DateTime _endDate;
   List<DropdownMenuItem<Time>> _dropdownMenuItems;
@@ -161,18 +196,50 @@ class _CreateEventWidget extends State<CreateEventWidget> {
   List<Time> times = Time.getTimes();
   List<City> listCities;
   City city;
-
-  TextEditingController nameController = TextEditingController();
-  TextEditingController shortDescriptionController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+  double lat;
+  double long;
 
   String wrongText = "";
   String startDate = "";
   String endDate = "";
 
-  double lat;
-  double long;
+  TextEditingController nameEventController;
+  TextEditingController shortDescriptionController;
+  TextEditingController description;
+  TextEditingController locationController;
+
+  String stringEndDate, timeEnd, dateEnd, stringStartDate, timeStart, dateStart;
+
+  var listStartDate, listEndDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _dropdownMenuItems = buildDropDownMenuItems(times);
+
+    _getCities();
+    nameEventController = new TextEditingController(text: event.title);
+    shortDescriptionController =
+        new TextEditingController(text: event.shortDescription);
+    description = new TextEditingController(text: event.description);
+    locationController = new TextEditingController(text: event.address);
+    lat=event.latitude;
+    long=event.longitude;
+
+
+    stringEndDate = event.endDate;
+    listEndDate = stringEndDate.split(' ');
+    timeEnd = listEndDate[1];
+    dateEnd = listEndDate[0];
+
+    stringStartDate = event.startDate;
+    listStartDate = stringStartDate.split(' ');
+    timeStart = listStartDate[1];
+    dateStart = listStartDate[0];
+
+    _getTimes();
+    _getDates();
+  }
 
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
@@ -197,9 +264,44 @@ class _CreateEventWidget extends State<CreateEventWidget> {
       if (mounted) {
         setState(() {
           listCities = listC;
+          city = listCities.firstWhere((element) => element.id == event.cityId);
         });
       }
     });
+  }
+
+  _getTimes() {
+    var listaStart = timeStart.split(':');
+    var listaEnd = timeEnd.split(':');
+
+    for (int i = 0; i < times.length; i++) {
+      if (times[i].time ==
+          TimeOfDay(
+              hour: int.parse(listaStart[0]),
+              minute: int.parse(listaStart[1]))) {
+        _selectedTipStart = times[i];
+        break;
+      }
+    }
+
+    for (int i = 0; i < times.length; i++) {
+      if (times[i].time ==
+          TimeOfDay(
+              hour: int.parse(listaEnd[0]), minute: int.parse(listaEnd[1]))) {
+        _selectedTipEnd = times[i];
+        break;
+      }
+    }
+  }
+
+  _getDates() {
+    var listaDateStart = dateStart.split('/');
+    _startDate = new DateTime(int.parse(listaDateStart[2]),
+        int.parse(listaDateStart[1]), int.parse(listaDateStart[0]));
+
+    var listaDateEnd = dateEnd.split('/');
+    _endDate = new DateTime(int.parse(listaDateEnd[2]),
+        int.parse(listaDateEnd[1]), int.parse(listaDateEnd[0]));
   }
 
   List<DropdownMenuItem<Time>> buildDropDownMenuItems(List tips) {
@@ -225,119 +327,108 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _dropdownMenuItems = buildDropDownMenuItems(times);
-    _selectedTipStart = _dropdownMenuItems[0].value;
-    _selectedTipEnd = _dropdownMenuItems[0].value;
-    _getCities();
-  }
-
-  Widget locationWidget() {
-    return Container(
-      width: 600,
-      child: Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-      elevation: 6.0,
-      child: CustomTextField(
-      prefixIcon: Icon(Icons.business, color: greenPastel),
-      hintText: "Lokacija",
-      textController: locationController,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MapBoxAutoCompleteWidget(
-              apiKey: "pk.eyJ1IjoibGF2b3BzIiwiYSI6ImNrOG0yNm05ZDA4ZDcza3F6OWZpZ3pmbHUifQ.FBDBK21WD6Oa4V_5oz5iJQ",
-              hint: "Unesi lokaciju",
-              onSelect: (place) {
-                // TODO : Process the result gotten
-                place.placeName.split(',');
-                String cityNamae = place.placeName;
-                lat = place.geometry.coordinates[0];
-                long = place.geometry.coordinates[1];
-                locationController.text = cityNamae;
-              },
-              limit: 10,
-              country: "RS",
-            ),
-          ),
-        );
-      },
-      enabled: true,
-    ),
-    ),);
-  }
-
   Widget nameEvent() {
     return Container(
       width: 500,
-      child: TextField(
-        cursorColor: Colors.black,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        controller: nameController,
-        decoration: InputDecoration(
-          hintText: "Ime događaja",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
-          contentPadding: EdgeInsets.all(18),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            borderSide: BorderSide(width: 2, color: greenPastel),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment(-0.95, -0.95),
+            child: Text(
+              'Ime događaja',
+              style: TextStyle(fontSize: 20),
+            ),
           ),
-        ),
+          SizedBox(height: 10),
+          TextField(
+            cursorColor: Colors.black,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w300,
+            ),
+            controller: nameEventController,
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+              contentPadding: EdgeInsets.all(18),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide: BorderSide(width: 2, color: greenPastel),
+              ),
+            ),
+          ),
+        ],
       ),
     ).showCursorTextOnHover;
   }
 
   Widget shortDescription() {
     return Container(
-      width: 500,
-      child: TextField(
-        cursorColor: Colors.black,
-        controller: shortDescriptionController,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        decoration: InputDecoration(
-          hintText: "Kratak opis",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
-          contentPadding: EdgeInsets.all(18),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            borderSide: BorderSide(width: 2, color: greenPastel),
-          ),
-        ),
-      ),
-    ).showCursorTextOnHover;
+        width: 500,
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment(-0.95, -0.95),
+              child: Text(
+                'Kratak opis',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              cursorColor: Colors.black,
+              controller: shortDescriptionController,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w300,
+              ),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16.0)),
+                contentPadding: EdgeInsets.all(18),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  borderSide: BorderSide(width: 2, color: greenPastel),
+                ),
+              ),
+            ),
+          ],
+        )).showCursorTextOnHover;
   }
 
   Widget longDescription() {
     return Container(
-      width: 500,
-      child: TextFormField(
-        maxLines: 5,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
-        controller: descriptionController,
-        cursorColor: Colors.black,
-        decoration: InputDecoration(
-          hintText: "Opis događaja",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
-          contentPadding: EdgeInsets.all(18),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            borderSide: BorderSide(width: 2, color: greenPastel),
-          ),
-        ),
-      ),
-    ).showCursorTextOnHover;
+        width: 500,
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment(-0.95, -0.95),
+              child: Text(
+                'Opis događaja',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              maxLines: 5,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w300,
+              ),
+              controller: description,
+              cursorColor: Colors.black,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16.0)),
+                contentPadding: EdgeInsets.all(18),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  borderSide: BorderSide(width: 2, color: greenPastel),
+                ),
+              ),
+            ),
+          ],
+        )).showCursorTextOnHover;
   }
 
   Widget calendar() {
@@ -427,43 +518,6 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     ).showCursorOnHover;
   }
 
-  Widget dropdownCity(List<City> listCities) {
-    return new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 50, right: 10, top: 20, bottom: 10),
-          ),
-          Text("Izaberite grad: ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Container(
-            padding: EdgeInsets.all(5.0),
-          ),
-          listCities != null
-              ? new DropdownButton<City>(
-                  hint: Text("Izaberi"),
-                  value: city,
-                  onChanged: (City newValue) {
-                    setState(() {
-                      city = newValue;
-                    });
-                  },
-                  items: listCities.map((City option) {
-                    return DropdownMenuItem(
-                      child: new Text(option.name),
-                      value: option,
-                    );
-                  }).toList(),
-                )
-              : new DropdownButton<String>(
-                  hint: Text("Izaberi"),
-                  onChanged: null,
-                  items: null,
-                ),
-        ]).showCursorOnHover;
-  }
-
   Widget wrong() {
     return Container(
         child: Center(
@@ -473,23 +527,14 @@ class _CreateEventWidget extends State<CreateEventWidget> {
     )));
   }
 
-  Widget createEventButton() {
+  Widget editEventButton() {
     return RaisedButton(
       onPressed: () {
-        
-        //print(_startDateString + ' ' + _selectedTipStart.toString());
-        // print(_endDateString + ' ' + _selectedTipEnd.toString());
-
         var str = TokenSession.getToken;
-        var jwt = str.split(".");
-        var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
-        
 
-        if (nameController.text != '' &&
+        if (nameEventController.text != '' &&
             locationController.text != '' &&
-            _startDate != null &&
-            _endDate != null && city != null) {
-
+            city != null) {
           String _startDateString = DateFormat.yMd().format(_startDate);
           String _endDateString = DateFormat.yMd().format(_endDate);
 
@@ -501,34 +546,44 @@ class _CreateEventWidget extends State<CreateEventWidget> {
 
           var newEndDate = endDate.split('/');
           var endDateTemp = (int.parse(newEndDate[0]) < 10 ? "0"+newEndDate[0] : newEndDate[0]) + "/" + (int.parse(newEndDate[1]) < 10 ? "0"+newEndDate[1] : newEndDate[1]) + "/" + newEndDate[2];
+
+
+          if (event.startDate.compareTo(startDateTemp) == 0  && event.endDate.compareTo(endDateTemp) == 0) {
+            startDate = null;
+            endDate = null;
+          }
+
+          print(event.startDate);
+          print(event.endDate);
           print(startDateTemp);
           print(endDateTemp);
 
-         APIServices.createEvent(
-              str,
-              insId != null ? 0 : int.parse(payload["sub"]), //adminID
-              insId != null ? insId : 0, //institutionId
-              nameController.text,
-              shortDescriptionController.text,
-              descriptionController.text,
-              locationController.text,
-              city.id,
-              startDateTemp,
-              endDateTemp, long, lat).then((value){
-                print(value.statusCode);
-                print(value.body);
-                if(value.statusCode == 200)
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => EventsPage()),
-                  );
-              });
+          APIServices.editEventData(
+                  str,
+                  event.id,
+                  nameEventController.text,
+                  shortDescriptionController.text,
+                  description.text,
+                  locationController.text,
+                  city.id,
+                  startDateTemp,
+                  endDateTemp,
+                  lat,
+                  long)
+              .then((value) {
+            print(value.statusCode);
+            print(value.body);
+            if (value.statusCode == 200)
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ManageEventsPage()),
+              );
+          });
 
           setState(() {
             wrongText = "";
           });
-
-          
         } else {
           setState(() {
             wrongText = "Unesite sve podatke!";
@@ -539,48 +594,38 @@ class _CreateEventWidget extends State<CreateEventWidget> {
       shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(18.0),
           side: BorderSide(color: greenPastel)),
-      child: Text("Kreiraj", style: TextStyle(color: Colors.white)),
+      child: Text("Izmeni", style: TextStyle(color: Colors.white)),
     ).showCursorOnHover;
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      margin: EdgeInsets.only(top: 15),
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: <Widget>[
-          nameEvent(),
-          Container(
-            margin: EdgeInsets.only(
-                left: 50, right: 20, top: 10, bottom: 10),
-          ),
-          shortDescription(),
-          Container(
-            margin: EdgeInsets.only(
-                left: 50, right: 20, top: 10, bottom: 10),
-          ),
-          longDescription(),
-          Container(
-            margin: EdgeInsets.only(
-                left: 50, right: 20, top: 10, bottom: 10),
-          ),
-          locationWidget(),
-          Container(
-            margin: EdgeInsets.only(
-                left: 50, right: 20, top: 10, bottom: 10),
-          ),
-          calendar(),
-          dropdownCity(listCities),
-          dropdownTime(times),
-          Container(
-            margin: EdgeInsets.only(
-                left: 50, right: 20, top: 10, bottom: 10),
-          ),
-          createEventButton(),
-          wrong()
-        ],
-      ));
+    return Container(
+        margin: EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            nameEvent(),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            shortDescription(),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            longDescription(),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            calendar(),
+            dropdownTime(times),
+            Container(
+              margin: EdgeInsets.only(left: 50, right: 20, top: 10, bottom: 10),
+            ),
+            editEventButton(),
+            wrong()
+          ],
+        ));
   }
 }
 

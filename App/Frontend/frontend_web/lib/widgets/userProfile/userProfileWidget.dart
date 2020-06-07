@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageUser/manageUserPage.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:frontend_web/extensions/hoverExtension.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -213,25 +214,42 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
   }
 
   showAlertDialog(BuildContext context, int id) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.deleteUser(TokenSession.getToken, id).then((res) {
+
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    
+    void _doSomething() async {
+      APIServices.deleteUser(TokenSession.getToken, id).then((res) {
           if(res.statusCode == 200){
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ManageUserPage()),
-            );
+            print("Uspesno obrisan korisnik");
           }
         });
-        },
+
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ManageUserPage()),
+          );
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     ).showCursorOnHover;
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     ).showCursorOnHover;
 
     // set up the AlertDialog

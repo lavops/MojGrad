@@ -48,3 +48,38 @@ class _UploadScreenState extends State<UploadScreen>{
   }
   
 }
+
+class UploadScreenSolver extends StatefulWidget {
+
+  @override
+  _UploadScreenSolverState createState() => _UploadScreenSolverState();
+}
+
+class _UploadScreenSolverState extends State<UploadScreenSolver>{
+
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pop(context,1);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
+            ),
+            Text("Vaše rešenje se šalje na server.")
+          ],
+        ),
+      )
+    );
+  }
+  
+}

@@ -56,17 +56,20 @@ namespace Backend.DAL
                     u1.cityId = user.cityId;
                     u1.firstName = user.firstName;
                     u1.lastName = user.lastName;
-                    u1.password = user.password;
+                    string newPassword = this.RandomString(6);
+                    string Sha1Password = this.SHA1HashStringForUTF8String(newPassword);
+                    u1.password = Sha1Password;
                     u1.phone = user.phone;
                     u1.username = user.username;
                     u1.photo = "Upload//ProfilePhoto//default.jpg";
                     u1.points = 0;
                     u1.donatedPoints = 0;
                     u1.level = 1;
+                    u1.darkTheme = false;
 
                     _context.user.Add(u1);
                     _context.SaveChanges();
-
+                    u1.password = newPassword;
                     return u1;
                 }
                 else
@@ -195,10 +198,10 @@ namespace Backend.DAL
                         List<String> listStr;
                         listStr = exist.photo.Split('/').ToList();
                         var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/ProfilePhoto/", listStr[listStr.Count - 1]);
-
-                        if (System.IO.File.Exists(path))
+                        var PathWithFolder = System.IO.Path.Combine(_environment.WebRootPath, exist.photo);
+                        if (System.IO.File.Exists(PathWithFolder))
                         {
-                            System.IO.File.Delete(path);
+                            System.IO.File.Delete(PathWithFolder);
                         }
                     }
                     exist.photo = photoPathn;
@@ -275,6 +278,23 @@ namespace Backend.DAL
             else
                 return null;
 
+        }
+
+        public User switchTheme(User user)
+        {
+            var user1 = _context.user.Where(x => x.id == user.id).FirstOrDefault();
+            if(user1 != null)
+            {
+                if (user1.darkTheme)
+                    user1.darkTheme = false;
+                else
+                    user1.darkTheme = true;
+                _context.Update(user1);
+                _context.SaveChanges();
+                return user1;
+
+            }
+            return null;
         }
     }
 }

@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:frontend/models/event.dart';
+import 'package:frontend/models/institution.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
+import 'package:frontend/ui/institutionProfile.dart';
 import 'package:frontend/ui/othersProfilePage.dart';
 import 'package:latlong/latlong.dart';
 
@@ -272,6 +274,7 @@ class EventsPageWidget extends StatefulWidget {
 class _EventsPageWidgetState extends State<EventsPageWidget> {
   Events event;
   List<User> users;
+  List<Institution> institutionsForEvent;
   TextEditingController donateController = new TextEditingController();
 
   _EventsPageWidgetState(Events event1) {
@@ -292,10 +295,26 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
     });
   }
 
+  _listInstitutionsForEvent() async{
+    var jwt = await APIServices.jwtOrEmpty();
+    APIServices.getInstitutionsForEvent(jwt, event.id).then((res) {
+      Iterable list = json.decode(res.body);
+      List<Institution> institutions;
+      institutions = list.map((model) => Institution.fromObject(model)).toList();
+      if(mounted)
+      {
+        setState(() {
+          institutionsForEvent = institutions;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _getUsersFromEvent();
+    _listInstitutionsForEvent();
   }
 
   @override
@@ -363,11 +382,13 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
                 Text("Učesnici:"),
                 Expanded(child: SizedBox()),
                 Text("${event.userNum}" == '1'
-                    ? "${event.userNum} korisnik"
-                    : "${event.userNum} korisnika"),
+                    ? "${event.userNum} korisnik  "
+                    : "${event.userNum} korisnika  "),
+                Text("${event.instNum} institucija"),
               ],
             ),
             (users != null) ? listUsers() : SizedBox(),
+            (institutionsForEvent != null) ? listIns() : SizedBox(),
           ]),
         ));
   }
@@ -431,6 +452,38 @@ class _EventsPageWidgetState extends State<EventsPageWidget> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => OthersProfilePage(user.id)),
+                        );
+                    },
+                  ))
+              .toList(),
+        ));
+  }
+
+  Widget listIns() {
+    return Align(
+        alignment: Alignment.topLeft,
+        child: Wrap(
+          spacing: 10.0,
+          runSpacing: 10.0,
+          direction: Axis.horizontal,
+          children: institutionsForEvent
+              .map((Institution ins) => InputChip(
+                    avatar: CircleAvatar(
+                      child: Container(
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(
+                                      serverURLPhoto + ins.photoPath)))),
+                    ),
+                    label: Text(ins.name),
+                    onPressed: () {
+                      if (ins.id != userId)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InstitutionProfile(ins.id)),
                         );
                     },
                   ))

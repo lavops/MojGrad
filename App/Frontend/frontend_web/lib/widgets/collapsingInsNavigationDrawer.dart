@@ -27,6 +27,7 @@ class CollapsingInsNavigationDrawerState extends State<CollapsingInsNavigationDr
 
   _removeToken() async {
     TokenSession.setToken = "";
+    insId=null;
   }
 
   @override

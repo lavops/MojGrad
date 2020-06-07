@@ -15,6 +15,7 @@ class DrawerInstitution extends StatelessWidget{
 
   _removeToken() async {
     TokenSession.setToken = "";
+    insId=null;
   }
   Color greenPastel = Color(0xFF00BFA6);
   @override

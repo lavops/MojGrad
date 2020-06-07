@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/api.services.dart';
 import 'package:frontend/ui/homePage.dart';
 import 'package:frontend/ui/registrationPage.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'dart:convert';
 
 import '../main.dart';
@@ -156,9 +159,32 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
 
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+
+void _doSomething() async {
+    Timer(Duration(seconds: 3), () {
+       _btnController.reset();
+    });
+}
+
+
     emailAlert(BuildContext context) {
+      String errorMessage ="er";
     TextEditingController customController = TextEditingController();
-    String errorMessage ="";
+    TextEditingController customControllerError = TextEditingController(text: "");
+
+
+    Widget notButton = RoundedLoadingButton(
+       color:Colors.red,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
+      onPressed: () {
+        Navigator.pop(context);
+        },
+    );
+
+    
     return showDialog(
         context: context,
         builder: (context) {
@@ -167,6 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.all(Radius.circular(16))),
             content: Container(
                 width: 300,
+                
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -202,36 +229,35 @@ class _LoginPageState extends State<LoginPage> {
                    ), 
                       ),
                     ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Text(
-                    '$errorMessage',
+                    customControllerError.text,
                     style: TextStyle(color: Colors.red),
                   ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: <Widget>[
-                        MaterialButton(
-                          child: Text(
-                            "Pošalji",
-                            style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyText1.color),
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {
-                             APIServices.forgottenPassword(customController.text.trim()).then((response) {
+                    SizedBox(height: 5),
+                   
+                RoundedLoadingButton(
+                    height: 40,
+                    child: Text('Pošalji', style: TextStyle(color: Colors.white)),
+                    color: Color(0xFF00BFA6),
+                    controller: _btnController,
+                    onPressed:(){ 
+                      _doSomething();
+                      APIServices.forgottenPassword(customController.text.trim()).then((response) {
                             if (response.statusCode == 200) {
                               Navigator.pop(context);
                             } else {
                               setState(() {
+                                print("Adresa nije ispravna");
+                                customControllerError.text = "E-mail adresa nije ispravna.";
                                 errorMessage = "E-mail adresa nije ispravna.";
                                 customController.text="";
                               });
                             }
                           });
-                          },
-                        ),
-                        SizedBox(width: 50),
-                        FlatButton(
+                    }
+                ),
+                 FlatButton(
                           child: Text(
                             "Otkaži",
                             style: TextStyle(
@@ -241,10 +267,14 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.pop(context);
                           },
                         )
-                      ],
-                    )
+                
+               
                   ],
                 )),
+                actions: [
+             // okButton,
+             // notButton,
+            ],
           );
         });
   }

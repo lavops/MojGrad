@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
@@ -12,6 +13,7 @@ import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/post/rowPostMobileWidget.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ManagePostMobile extends StatefulWidget {
   @override
@@ -91,7 +93,8 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
         setState(() {
           listCities = listC;
           City allusers = new City(9999, "Sve objave");
-          listCities.add(allusers);
+          listCities.sort((a,b) => a.name.toString().compareTo(b.name.toString()));
+          listCities.insert(0, allusers);
         });
       }
     });
@@ -438,7 +441,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+         Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catF,
@@ -528,7 +531,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catFS,
@@ -618,7 +621,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+         Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catFU,
@@ -686,7 +689,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   Widget solvedColor(int statusId) => Container(
     constraints: BoxConstraints(
-      minHeight: 120,
+      minHeight: 128,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -696,8 +699,8 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   Widget packedThings(FullPost post) => Container(
     constraints: BoxConstraints(
-      maxHeight: 120,
-      minHeight: 100,
+      maxHeight: 128,
+      minHeight: 120,
     ),
     child: Column(
       children: <Widget>[
@@ -709,21 +712,30 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
   );
 
   showAlertDialog(BuildContext context, int id) {
-      // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        APIServices.deletePost(TokenSession.getToken,id);
-        deleteFromList(id);
-        Navigator.pop(context);
-        /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManagePostPage()),
-        );*/
-        },
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deletePost(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+    controller: _btnController,    
+    onPressed: _doSomething,
     );
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+
+     Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
         },
@@ -765,7 +777,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
       SizedBox(width: 10,),
       InkWell(
         child: Text(
-          (username.length > 15) ? username.substring(0,15).replaceRange(13,15, "...") : username,
+          (username.length > 14) ? username.substring(0,14).replaceRange(12,14, "...") : username,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
@@ -793,7 +805,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
     imgList.add(userPhotoURL + image);
     image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
     return SizedBox(
-      height: 120.0,
+      height: 128.0,
       width: 120.0,
       child: Carousel(
         boxFit: BoxFit.cover,
@@ -825,31 +837,31 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
           // Actions buttons/icons
           Row(
             children: <Widget>[
-              IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel),
+              Expanded(child: IconButton(
+                icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel,),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(likeNum.toString()),
+                child: Text(likeNum.toString(),),
               ),
-              IconButton(
-                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+              Expanded(child: IconButton(
+                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red,),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(dislikeNum.toString()),
+                child: Text(dislikeNum.toString(),),
               ),
-              IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
+              Expanded(child: IconButton(
+                icon: Icon(Icons.chat_bubble_outline, color: greenPastel,),
                 onPressed: () {
                 },
-              ),
-              Text(commNum.toString()),
-              Expanded(child: SizedBox()),
+              ),),
+              Expanded(child: Text(commNum.toString(),),),
+              //Expanded(child: SizedBox()),
               SizedBox(width: 10.0), // For padding
             ],
           ),

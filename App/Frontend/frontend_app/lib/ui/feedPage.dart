@@ -97,7 +97,9 @@ class _FeedPageState extends State<FeedPage> {
           elevation: 0.0,
           backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           iconTheme: IconThemeData(
-              color: Theme.of(context).copyWith().iconTheme.color),
+              size: 0.1,
+              color: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor),
+              
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
@@ -141,24 +143,34 @@ class _FeedPageState extends State<FeedPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return PostWidget(listPosts[index]);
                     })
-                : Center(child: Text("Trenutno nema objava"),)
+                : listPosts == null ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.green[800]),
+                    ),
+                  ):
+              Center(child: Text("Trenutno nema objava"),)
             )
       );
   }
 
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 3));
+     if(mounted){
     setState(() {
       listPosts = [];
     });
+     }
     _getPosts();
     return null;
   }
 
   Future<Null> choiceAction(String choice) async {
+     if(mounted){
     setState(() {
       listPosts = null;
     });
+     }
     await new Future.delayed(new Duration(seconds: 1));
     if (choice == Filteri.reseni) {
       _getSolvedPosts();

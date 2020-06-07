@@ -221,10 +221,10 @@ namespace Backend.DAL
                         List<String> listStr;
                         listStr = exist.photoPath.Split('/').ToList();
                         var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/InstitutionProfilePhoto/", listStr[listStr.Count - 1]);
-
-                        if (System.IO.File.Exists(path))
+                        var PathWithFolder = System.IO.Path.Combine(_environment.WebRootPath, exist.photoPath);
+                        if (System.IO.File.Exists(PathWithFolder))
                         {
-                            System.IO.File.Delete(path);
+                            System.IO.File.Delete(PathWithFolder);
                         }
                     }
                     exist.photoPath = photoPath;

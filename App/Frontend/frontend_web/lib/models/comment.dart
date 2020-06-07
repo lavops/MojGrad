@@ -6,6 +6,7 @@ class Comment{
   String _username;
   String _photoPath;
   String _date;
+  int _reportNum;
 
   Comment();
   Comment.full(this._id, this._username, this._postId, this._userId, this._description, this._photoPath, this._date);
@@ -14,6 +15,7 @@ class Comment{
   String get username => _username;
   int get postId => _postId;
   int get userId => _userId;
+  int get reportNum => _reportNum;
   String get description => _description;
   String get photoPath => _photoPath;
   String get date => _date;
@@ -26,6 +28,7 @@ class Comment{
     data["description"] = _description;
     data["photoPath"] = _photoPath;
     data["date"] = _date;
+    data["reportNum"] = _reportNum;
 
     if(_id != null){
       data["id"] = _id;
@@ -42,5 +45,6 @@ class Comment{
     this._username = data["username"];
     this._photoPath = data["photoPath"];
     this._date = data["date"];
+    this._reportNum = data["reportNum"];
   }
 }

@@ -25,8 +25,6 @@ class CameraOne extends StatefulWidget {
 
 class _CameraOneState extends State<CameraOne>{
   
-  List<City> _city;
-  City city;
   
   PostType postType;
   List<PostType> _postType;
@@ -34,12 +32,14 @@ class _CameraOneState extends State<CameraOne>{
   File imageFile;
   var description = TextEditingController();
   String pogresanText = '';
+  String loadingText = "";
 
   var first;
   double latitude1 = 0;
   double longitude2 = 0;
   String addres = '';
   LatLng location;
+  bool isDisable = false;
   Geolocator get geolocator => Geolocator()..forceAndroidLocationManager;
 
   _getPostType() async {
@@ -53,17 +53,6 @@ class _CameraOneState extends State<CameraOne>{
           _postType = postTypes;
         });
       }
-    });
-  }
-
-  _getCity() async {
-    APIServices.getCity().then((res) {
-      Iterable list = json.decode(res.body);
-      List<City> cities = new List<City>();
-      cities = list.map((model) => City.fromObject(model)).toList();
-      setState(() {
-        _city = cities;
-      });
     });
   }
 
@@ -127,6 +116,7 @@ class _CameraOneState extends State<CameraOne>{
     setState(() {
       latitude1 = _locationData.latitude;
       longitude2 = _locationData.longitude;
+      isDisable = true;
     });
     first = _getUserLocation();
   }
@@ -137,12 +127,17 @@ class _CameraOneState extends State<CameraOne>{
   void initState() {
     super.initState();
     _getPostType();
-    _getCity();
     currentLocationFunction();
   }
 
   @override
   Widget build(BuildContext context) {
+
+   final loader = Center(
+      child: Text(
+    '$loadingText',
+    style: TextStyle(color: Color(0xFF00BFA6)),
+    ));
 
     final _dropDown = Row(
       children: <Widget>[
@@ -164,36 +159,6 @@ class _CameraOneState extends State<CameraOne>{
                   return DropdownMenuItem<PostType>(
                     value: option,
                     child: Text(option.typeName),
-                  );
-                }).toList(),
-              )
-            : DropdownButton<String>(
-                hint: Text("Izaberi"),
-                onChanged: null,
-                items: null,
-              ),
-      ],
-    );
-    
-    final _dropDownCity = Row(
-      children: <Widget>[
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text("Grad: ",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color))),
-        _city != null
-            ? DropdownButton<City>(
-                hint: Text("Izaberi", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
-                value: city,
-                onChanged: (City value) {
-                  setState(() {
-                    city = value;
-                  });
-                },
-                items: _city.map((City option) {
-                  return DropdownMenuItem<City>(
-                    value: option,
-                    child: Text(option.name),
                   );
                 }).toList(),
               )
@@ -304,7 +269,9 @@ class _CameraOneState extends State<CameraOne>{
         child: Text('Izaberi lokaciju', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
-        Mapa mapa;
+        if(isDisable == false) currentLocationFunction();
+        else{
+          Mapa mapa;
         if(mapa == null){
           mapa = (latitude1 != null && longitude2 != null) ? Mapa(latitude1, longitude2) : Mapa(0, 0);
           latitude1 = mapa.izabranaX;
@@ -321,6 +288,7 @@ class _CameraOneState extends State<CameraOne>{
                 _getUserLocation();
               });
             });
+        }
       },
       icon: Icon(Icons.location_on,),
       color: Color(0xFF00BFA6),
@@ -372,7 +340,7 @@ class _CameraOneState extends State<CameraOne>{
         child: Text('Objavi', style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
       ),
       onPressed: () {
-        imageUpload(imageFile);
+        
 
         APIServices.jwtOrEmpty().then((res) {
           String jwt;
@@ -380,14 +348,27 @@ class _CameraOneState extends State<CameraOne>{
             jwt = res;
           });
 
-          if (imageFile == null || addres == null || city == null || postType == null) {
+          if (imageFile == null || addres == null  || postType == null) {
             setState(() {
-              pogresanText = "Popuni obavezna polja: tip posta i lokaciju.";
+              pogresanText = "Potrebno je uneti sliku, tip problema i lokaciju.";
             });
             throw Exception('Greskaaaa');
           }
-          if (res != null && imageFile != null && addres != null && city!= null && postType != null) {
-            APIServices.addPost(
+          if (res != null && imageFile != null && addres != null && postType != null) {
+            var name = addres.split(",");
+             setState(() {
+                  loadingText="Podaci se obrađuju...";
+                });
+            APIServices.getCityFromName(jwt, name[0].trim()).then((res) {
+                setState(() {
+                  loadingText = "";
+                });
+              if(res.statusCode == 200)
+              {
+                 Map<String, dynamic> jsonCity = jsonDecode(res.body);
+                City cityFromBackend = City.fromObject(jsonCity);
+                imageUpload(imageFile);
+                 APIServices.addPost(
                 jwt,
                 userId,
                 postType.id,
@@ -397,7 +378,7 @@ class _CameraOneState extends State<CameraOne>{
                 2,
                 latitude1,
                 longitude2,
-                addres, city.id);
+                addres, cityFromBackend.id);
             APIServices.jwtOrEmpty().then((res) {
               String jwt;
               setState(() {
@@ -411,6 +392,16 @@ class _CameraOneState extends State<CameraOne>{
                 );
               }
             });
+              }
+              else
+              {
+                setState(() {
+                  pogresanText = "Aplikacija nije dostupna u Vašem gradu. ";
+                  loadingText = "";
+                });
+              }
+            });
+       
           }
         });
       },
@@ -450,7 +441,6 @@ class _CameraOneState extends State<CameraOne>{
                 )
               : null,
           _dropDown,
-          _dropDownCity,
           SizedBox(
             height: 20.0,
           ),
@@ -463,7 +453,11 @@ class _CameraOneState extends State<CameraOne>{
           ),
           opis,
           SizedBox(
-            height: 20.0,
+            height: 15.0,
+          ),
+          loader,
+          SizedBox(
+            height: 5.0,
           ),
           submitObjavu,
           wrongData

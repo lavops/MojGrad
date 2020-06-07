@@ -1,13 +1,14 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/models/institution.dart';
 import 'package:frontend_web/models/user.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/editEventAdmin.dart';
 import 'package:frontend_web/widgets/mobileDrawer/drawerAdmin.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../../../../editEventPage.dart';
 import '../manageEventsPage.dart';
 
@@ -124,6 +125,10 @@ Widget titleColumn(String title, String description) {
   }
 
   Widget buttonsRow(Events event) {
+    var str = TokenSession.getToken;
+    var jwt = str.split(".");
+    var payload = json.decode(ascii.decode(base64.decode(base64.normalize(jwt[1]))));
+
     return Row(children: <Widget>[
       SizedBox(width: 12.0,),
       RaisedButton(
@@ -134,6 +139,7 @@ Widget titleColumn(String title, String description) {
         Navigator.pop(context);
       }),
       Expanded(child: SizedBox()),
+      (event.adminId == int.parse(payload["sub"])) ? editButton(event) : SizedBox(),
       RaisedButton(
         child: Text("Obriši", style: TextStyle(color: Colors.white),),
         color: Colors.red,
@@ -146,27 +152,57 @@ Widget titleColumn(String title, String description) {
     ],);
   }
 
+  Widget editButton(event) {
+    return RaisedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventAdmin(event)),
+          );
+        },
+        color: Colors.blue,
+        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0),),
+        child: Text("Izmeni", style: TextStyle(color: Colors.white,),),
+      );
+  }
+
   showAlertDialog(int eventId) {
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: Colors.red),),
-      onPressed: () {
-        APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    
+    void _doSomething() async {
+
+      APIServices.removeEvent(TokenSession.getToken, eventId).then((res) {
           if(res.statusCode == 200){
             print("Događaj je uspešno obrisan.");
-            Navigator.pushReplacement(context, 
-            MaterialPageRoute(builder: (context) => ManageEventsPage()),
-          );
+           
           }
         });
-        Navigator.pop(context);
-        },
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+           Navigator.pushReplacement(context, 
+            MaterialPageRoute(builder: (context) => ManageEventsPage()),
+          );
+      });
+    }
+
+     Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     );
-    
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: Color(0xFF00BFA6)),),
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     );
 
     AlertDialog alert = AlertDialog(

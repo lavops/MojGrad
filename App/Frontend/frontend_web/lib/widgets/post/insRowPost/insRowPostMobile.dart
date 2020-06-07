@@ -58,7 +58,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget solvedColor() => Container(
     constraints: BoxConstraints(
-      minHeight: 120,
+      minHeight: 128,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -68,7 +68,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
 
   Widget packedThings() => Container(
     constraints: BoxConstraints(
-      maxHeight: 120,
+      maxHeight: 128,
       minHeight: 100,
     ),
     child: Column(
@@ -87,7 +87,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
       SizedBox(width: 10,),
       InkWell(
         child: Text(
-          post.username,
+          (post.username.length > 14) ? post.username.substring(0,14).replaceRange(12,14, "...") : post.username,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
@@ -151,7 +151,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
     imgList.add(userPhotoURL + image);
     image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
     return SizedBox(
-      height: 120.0,
+      height: 128.0,
       width: 120.0,
       child: Carousel(
         boxFit: BoxFit.cover,
@@ -183,31 +183,31 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
           // Actions buttons/icons
           Row(
             children: <Widget>[
-              IconButton(
+              Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(post.likeNum.toString()),
+                child:Text(post.likeNum.toString()),
               ),
-              IconButton(
+              Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
                 child: Text(post.dislikeNum.toString()),
               ),
-              IconButton(
+              Expanded(child: IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
                 onPressed: () {
                 },
-              ),
-              Text(post.commNum.toString()),
-              Expanded(child: SizedBox()),
+              ),),
+              Expanded(child: Text(post.commNum.toString()),),
+              //Expanded(child: SizedBox()),
               SizedBox(width: 10.0), // For padding
             ],
           ),
