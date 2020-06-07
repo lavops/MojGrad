@@ -190,7 +190,7 @@ class _InsRowPostMobileWidgetState extends State<InsRowPostMobileWidget> {
               ),),
               GestureDetector(
                 onTap: () {},
-                child: Expanded(child :Text(post.likeNum.toString()),),
+                child:Text(post.likeNum.toString()),
               ),
               Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),

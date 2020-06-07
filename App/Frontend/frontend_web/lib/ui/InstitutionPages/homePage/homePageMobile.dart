@@ -271,7 +271,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
               ),),
               GestureDetector(
                 onTap: () {},
-                child: Expanded(child: Text(post.likeNum.toString()),),
+                child:  Text(post.likeNum.toString()),
               ),
               Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
@@ -280,7 +280,7 @@ class _HomeInstitutionMobileState extends State<HomeInstitutionMobile> {
               ),),
               GestureDetector(
                 onTap: () {},
-                child: Expanded(child: Text(post.dislikeNum.toString()),),
+                child:  Text(post.dislikeNum.toString()),
               ),
               Expanded(child: IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: Color(0xFF00BFA6)),

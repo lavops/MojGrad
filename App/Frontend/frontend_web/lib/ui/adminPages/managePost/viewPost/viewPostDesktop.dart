@@ -132,6 +132,10 @@ class _ViewPostDesktopState extends State<ViewPostDesktop> {
               ],
             )),
             Expanded(child: SizedBox()),
+            Column(children: [
+              Text("Prijave"),
+              Text(listComents[index].reportNum.toString())
+            ],),
             IconButton(
               icon: Icon(Icons.restore_from_trash, color: Colors.red,),
               onPressed: (){

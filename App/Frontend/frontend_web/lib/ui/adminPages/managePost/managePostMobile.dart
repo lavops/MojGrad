@@ -441,7 +441,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
+         Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catF,
@@ -531,7 +531,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
+        Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catFS,
@@ -621,7 +621,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
+         Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catFU,
@@ -844,7 +844,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
               ),),
               GestureDetector(
                 onTap: () {},
-                child: Expanded(child: Text(likeNum.toString(),),),
+                child: Text(likeNum.toString(),),
               ),
               Expanded(child: IconButton(
                 icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red,),
@@ -853,7 +853,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
               ),),
               GestureDetector(
                 onTap: () {},
-                child: Expanded(child: Text(dislikeNum.toString(),),),
+                child: Text(dislikeNum.toString(),),
               ),
               Expanded(child: IconButton(
                 icon: Icon(Icons.chat_bubble_outline, color: greenPastel,),

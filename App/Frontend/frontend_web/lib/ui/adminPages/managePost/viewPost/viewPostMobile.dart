@@ -125,7 +125,8 @@ class _ViewPostMobileState extends State<ViewPostMobile> {
                 
               ],
             )),
-            Expanded(child: SizedBox()),
+           // Expanded(child: SizedBox()),
+            
             IconButton(
               icon: Icon(Icons.restore_from_trash, color: Colors.red,),
               onPressed: (){
