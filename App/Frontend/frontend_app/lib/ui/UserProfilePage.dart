@@ -208,11 +208,9 @@ class HeaderSection extends State<UserProfilePage> {
                               }
                             });
                             _removeToken();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
-                            );
+                            Navigator.pushAndRemoveUntil(context,   
+                        MaterialPageRoute(builder: (BuildContext context) => LoginPage()),    
+                        (Route<dynamic> route) => route is LoginPage);
                           },
                         ),
                         FlatButton(
