@@ -38,10 +38,9 @@ class _RegisterPageState extends State<RegisterPage> {
         style: TextStyle(color: Color(0xFF00BFA6)),
       ),
       onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
+        Navigator.pushAndRemoveUntil(context,   
+                        MaterialPageRoute(builder: (BuildContext context) => LoginPage()),    
+                        (Route<dynamic> route) => route is LoginPage);
       },
     );
 
