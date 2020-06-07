@@ -32,19 +32,21 @@ namespace Backend.DAL
             List<String> listStr;
             listStr = post.photoPath.Split('/').ToList();
             var path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/Post/", listStr[listStr.Count - 1]);
+            var PathWithFolder = System.IO.Path.Combine(_environment.WebRootPath, post.photoPath);
 
-            if (System.IO.File.Exists(path))
+            if (System.IO.File.Exists(PathWithFolder))
             {
-                System.IO.File.Delete(path);
+                System.IO.File.Delete(PathWithFolder);
             }
             if(post.solvedPhotoPath != null && post.solvedPhotoPath != "")
             { 
                 listStr = post.solvedPhotoPath.Split('/').ToList();
                 path = Path.Combine($"{_environment.ContentRootPath}/", "wwwroot/Upload/Post/", listStr[listStr.Count - 1]);
+                PathWithFolder = System.IO.Path.Combine(_environment.WebRootPath, post.solvedPhotoPath);
 
-                if (System.IO.File.Exists(path))
+                if (System.IO.File.Exists(PathWithFolder))
                 {
-                    System.IO.File.Delete(path);
+                    System.IO.File.Delete(PathWithFolder);
                 }
             }
             _context.post.Remove(post);

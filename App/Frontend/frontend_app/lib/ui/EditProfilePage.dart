@@ -106,7 +106,7 @@ class EditProfile extends State<EditProfilePage> {
   List<DropdownMenuItem<City>> _dropdownMenuItems;
   City _selectedId;
 
-  final flNameRegex = RegExp(r'^[a-zA-Z\sŠšĐđŽžČčĆć]{1,25}$');
+  final flNameRegex = RegExp(r'^[a-zA-Z\sŠšĐđŽžČčĆć]{1,30}$');
  // final flNameRegex = RegExp(r'^[a-zA-ZŠšĐđŽžČčĆć\s]{3,30}$');
   final mobRegex = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   final passRegex = RegExp(r'[a-zA-Z0-9.!]{6,40}');
@@ -382,6 +382,9 @@ class EditProfile extends State<EditProfilePage> {
                               Navigator.of(context).pop();
                             } else {
                               check = "Greška";
+                              setState(() {
+                              _selectedOption = 0;
+                             });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -492,6 +495,9 @@ class EditProfile extends State<EditProfilePage> {
                               Navigator.of(context).pop();
                             } else {
                               check = "Greška";
+                              setState(() {
+                              _selectedOption = 0;
+                            });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -651,6 +657,9 @@ class EditProfile extends State<EditProfilePage> {
                                 Navigator.of(context).pop();
                               } else {
                                 check = "Greska regEx";
+                                setState(() {
+                              _selectedOption = 0;
+                               });
                                 print(check);
                                 Navigator.of(context).pop(check.toString());
                               }
@@ -760,6 +769,9 @@ class EditProfile extends State<EditProfilePage> {
                               Navigator.of(context).pop();
                             } else {
                               check = "Greška";
+                              setState(() {
+                              _selectedOption = 0;
+                            });
                               print(check);
                               Navigator.of(context).pop(check.toString());
                             }
@@ -974,6 +986,9 @@ class EditProfile extends State<EditProfilePage> {
                             } else {
                               check = "Greška";
                               print(check);
+                              setState(() {
+                              _selectedOption = 0;
+                            });
                               Navigator.of(context).pop(check.toString());
                             }
                           },

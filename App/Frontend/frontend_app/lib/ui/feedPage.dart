@@ -97,7 +97,9 @@ class _FeedPageState extends State<FeedPage> {
           elevation: 0.0,
           backgroundColor: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor,
           iconTheme: IconThemeData(
-              color: Theme.of(context).copyWith().iconTheme.color),
+              size: 0.1,
+              color: MyApp.ind == 0 ? Colors.white :  Theme.of(context).copyWith().backgroundColor),
+              
           title: Text(
             "MOJ GRAD",
             style: TextStyle(
