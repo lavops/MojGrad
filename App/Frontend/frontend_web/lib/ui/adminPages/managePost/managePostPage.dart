@@ -109,7 +109,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('NEREŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+              Expanded(child: Text('NEREŠENO', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),),
             ],
           ),
         ),

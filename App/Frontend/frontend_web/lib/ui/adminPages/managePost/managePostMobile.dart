@@ -439,7 +439,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catF,
@@ -529,7 +529,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catFS,
@@ -619,7 +619,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
             onChanged: null,
             items: null,
           ),
-        new Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        new Expanded(child: Text("Kategorija: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),),
         DropdownButton<CategoryDropDown>(
           hint: Text("Izaberi"),
           value: catFU,
@@ -687,7 +687,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   Widget solvedColor(int statusId) => Container(
     constraints: BoxConstraints(
-      minHeight: 120,
+      minHeight: 128,
       minWidth: 20,
     ),
     decoration: BoxDecoration(
@@ -697,8 +697,8 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
 
   Widget packedThings(FullPost post) => Container(
     constraints: BoxConstraints(
-      maxHeight: 120,
-      minHeight: 100,
+      maxHeight: 128,
+      minHeight: 120,
     ),
     child: Column(
       children: <Widget>[
@@ -766,7 +766,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
       SizedBox(width: 10,),
       InkWell(
         child: Text(
-          (username.length > 15) ? username.substring(0,15).replaceRange(13,15, "...") : username,
+          (username.length > 14) ? username.substring(0,14).replaceRange(12,14, "...") : username,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: (){
@@ -794,7 +794,7 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
     imgList.add(userPhotoURL + image);
     image2 != "" && image2 != null ?  imgList.add(userPhotoURL + image2) : image2="";
     return SizedBox(
-      height: 120.0,
+      height: 128.0,
       width: 120.0,
       child: Carousel(
         boxFit: BoxFit.cover,
@@ -826,31 +826,31 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
           // Actions buttons/icons
           Row(
             children: <Widget>[
-              IconButton(
-                icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel),
+              Expanded(child: IconButton(
+                icon: Icon(MdiIcons.thumbUpOutline, color: greenPastel,),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(likeNum.toString()),
+                child: Expanded(child: Text(likeNum.toString(),),),
               ),
-              IconButton(
-                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red),
+              Expanded(child: IconButton(
+                icon: Icon(MdiIcons.thumbDownOutline, color: Colors.red,),
                 onPressed: () {
                 },
-              ),
+              ),),
               GestureDetector(
                 onTap: () {},
-                child: Text(dislikeNum.toString()),
+                child: Expanded(child: Text(dislikeNum.toString(),),),
               ),
-              IconButton(
-                icon: Icon(Icons.chat_bubble_outline, color: greenPastel),
+              Expanded(child: IconButton(
+                icon: Icon(Icons.chat_bubble_outline, color: greenPastel,),
                 onPressed: () {
                 },
-              ),
-              Text(commNum.toString()),
-              Expanded(child: SizedBox()),
+              ),),
+              Expanded(child: Text(commNum.toString(),),),
+              //Expanded(child: SizedBox()),
               SizedBox(width: 10.0), // For padding
             ],
           ),

@@ -10,6 +10,7 @@ import 'package:frontend_web/ui/InstitutionPages/homePage/homePage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventTablet.dart';
 import 'package:frontend_web/widgets/collapsingInsNavigationDrawer.dart';
 
+import '../../../editEventPage.dart';
 import '../homePage/homePage.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
@@ -119,7 +120,13 @@ class _EventsPageTabletState extends State<EventsPageTablet> {
   Widget deleteEditButtons(Events event, index) {
     return Row(children: <Widget>[
       RaisedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditEventPage(event)),
+          );
+        },
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
         child: Text("Izmeni", style: TextStyle(color: Colors.white),),
         color: Colors.blueAccent,
