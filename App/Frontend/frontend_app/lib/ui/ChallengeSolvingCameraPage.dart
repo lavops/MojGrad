@@ -182,8 +182,8 @@ class _ChallengeSolvingCameraPageState
               if (res.statusCode == 200) {
                 print("Uspešno ste objavili rešenje.");
                 print(res.body);
-                if(ownerId != publicUser.id)
-                  sendNotification("Rešenje", "Predloženo je rešenje za Vaš problem",1, ownerId);
+               // if(ownerId != publicUser.id)
+                //  sendNotification("Rešenje", "Predloženo je rešenje za Vaš problem",1, ownerId);
                 
                 int nmm = await Navigator.push(
                   context,
