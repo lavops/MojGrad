@@ -132,7 +132,7 @@ Widget titleColumn(String title, String description) {
         color: greenPastel,
         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(18.0)),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.pop(context,event.isGoing);
           }),
       Expanded(child: SizedBox()),
       event.institutionId==insId 

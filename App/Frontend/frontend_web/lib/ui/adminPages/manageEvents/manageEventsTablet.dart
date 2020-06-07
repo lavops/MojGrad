@@ -6,6 +6,8 @@ import 'package:frontend_web/models/event.dart';
 import 'package:frontend_web/services/api.services.dart';
 import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/createEvent/createEventPage.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/editEventAdmin.dart';
+import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventPage.dart';
 import 'package:frontend_web/ui/adminPages/manageEvents/viewEvent/viewEventTablet.dart';
 import 'package:frontend_web/widgets/collapsingNavigationDrawer.dart';
 import 'package:universal_html/html.dart';
@@ -127,7 +129,7 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ViewEventTablet(event)),
+                builder: (context) => ViewEventPage(event)),
           );
         },
         color: Color(0xFF00BFA6),
@@ -154,7 +156,7 @@ class ManageEventsPageTabletState extends State<ManageEventsPageTablet>{
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => EditEventPage(event)),
+                builder: (context) => EditEventAdmin(event)),
           );
         },
         color: Colors.blue,
