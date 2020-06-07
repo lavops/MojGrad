@@ -32,8 +32,10 @@ namespace Backend.Models.ViewsModel
             this.cityId = e.cityId;
             this.cityName = e.city.name;
             this.institutionId = e.institutionId;
+            this.adminId = e.adminId;
             if (e.institution == null)
             {
+                
                 this.organizeName = e.admin.firstName +" " + e.admin.lastName;
             }
             else

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_web/models/city.dart';
@@ -12,6 +13,7 @@ import 'package:frontend_web/widgets/circleImageWidget.dart';
 import 'package:frontend_web/widgets/post/rowPostMobileWidget.dart';
 import 'package:frontend_web/widgets/post/singlePostWidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ManagePostMobile extends StatefulWidget {
   @override
@@ -710,21 +712,30 @@ class _ManagePostMobileState extends State<ManagePostMobile> {
   );
 
   showAlertDialog(BuildContext context, int id) {
-      // set up the button
-    Widget okButton = FlatButton(
-      child: Text("Obriši", style: TextStyle(color: greenPastel),),
-      onPressed: () {
-        APIServices.deletePost(TokenSession.getToken,id);
-        deleteFromList(id);
-        Navigator.pop(context);
-        /*Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ManagePostPage()),
-        );*/
-        },
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    void _doSomething() async {
+      APIServices.deletePost(TokenSession.getToken,id);
+      deleteFromList(id);
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pop(context);
+      });
+    }
+
+    Widget okButton = RoundedLoadingButton(
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+    controller: _btnController,    
+    onPressed: _doSomething,
     );
-     Widget notButton = FlatButton(
-      child: Text("Otkaži", style: TextStyle(color: greenPastel),),
+
+     Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
         },

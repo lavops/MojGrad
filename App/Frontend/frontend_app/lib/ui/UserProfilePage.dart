@@ -9,6 +9,7 @@ import 'package:frontend/ui/login.dart';
 import 'package:frontend/ui/top10Page.dart';
 import 'package:frontend/widgets/postWidget.dart';
 import 'package:frontend/widgets/userInfoWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import 'EditProfilePage.dart';
 import 'package:provider/provider.dart';
@@ -136,7 +137,8 @@ class HeaderSection extends State<UserProfilePage> {
                       color: Theme.of(context).textTheme.bodyText1.color)),
               trailing: Switch(
                 value: darkThemeEnabled,
-                onChanged: (changedTheme) {
+                onChanged: (changedTheme) async {
+                  /*
                   APIServices.jwtOrEmpty().then((res) {
                               String jwt;
                               setState(() {
@@ -145,7 +147,7 @@ class HeaderSection extends State<UserProfilePage> {
                               if (res != null) {
                                 APIServices.switchThemeForUser(jwt, userId);
                               }
-                            });
+                            });*/
                   setState(() {
                     darkThemeEnabled = changedTheme;
                     MyApp.ind = changedTheme ? 1 : 0;
@@ -153,6 +155,19 @@ class HeaderSection extends State<UserProfilePage> {
                   changedTheme
                       ? _themeChanger.setTheme(MyApp.themeDark())
                       : _themeChanger.setTheme(MyApp.themeLight());
+                  
+                  if(changedTheme)
+                  {
+                     var prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('darkMode', true);
+                      prefs.setBool('ind', true);
+                  }
+                  else
+                  {
+                     var prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('darkMode', false);
+                      prefs.setBool('ind', false);
+                  }
                 },
               ),
             ),

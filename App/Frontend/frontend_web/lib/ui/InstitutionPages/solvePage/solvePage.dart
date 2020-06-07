@@ -231,7 +231,7 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
               if(value.statusCode == 200)
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePageInstitution.fromBase64(jwt)),
+                  MaterialPageRoute(builder: (context) => UploadScreenSolver()),
                 );
             });
 
@@ -399,4 +399,42 @@ class _InstitutionSolveWidget extends State<InstitutionSolveWidget> {
           ],
         ));
   }
+}
+
+class UploadScreenSolver extends StatefulWidget {
+
+  @override
+  _UploadScreenSolverState createState() => _UploadScreenSolverState();
+}
+
+class _UploadScreenSolverState extends State<UploadScreenSolver>{
+
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageInstitution.fromBase64(TokenSession.getToken)),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF00BFA6)),
+            ),
+            Text("Vaše rešenje se šalje na server.")
+          ],
+        ),
+      )
+    );
+  }
+  
 }

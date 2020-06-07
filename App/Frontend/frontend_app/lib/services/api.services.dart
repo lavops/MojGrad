@@ -7,15 +7,15 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
   //String serverURLPhoto = 'http://147.91.204.116:2043/';
-  String serverURLPhoto = 'http://10.0.2.2:60676//';
+  //String serverURLPhoto = 'http://10.0.2.2:60676//';
   //String serverURLPhoto = 'http://192.168.1.8:45455//';
-  //String serverURLPhoto = 'http://192.168.1.10:45455//';
+  String serverURLPhoto = 'http://192.168.1.4:45457//';
   final storage = FlutterSecureStorage();
 
   //String serverURL = 'http://147.91.204.116:2043/api/';
-  String serverURL = 'http://10.0.2.2:60676/api/';
+  //String serverURL = 'http://10.0.2.2:60676/api/';
   // String serverURL = 'http://192.168.1.8:45455/api/';
-   //String serverURL = 'http://192.168.1.10:45455/api/';
+  String serverURL = 'http://192.168.1.4:45457/api/';
 
 class APIServices
 {
@@ -389,7 +389,7 @@ class APIServices
       'Authorization': 'Bearer $jwt'
     }, body: jsonBody);
     print(res.statusCode);
-    return res.body;
+    return res;
   }
 
   static Future getEvents(String jwt, int userId) async{

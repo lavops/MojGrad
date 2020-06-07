@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_icon_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
@@ -9,7 +10,7 @@ import 'package:frontend_web/services/token.session.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/editDonation/editDonationPage.dart';
 import 'package:frontend_web/ui/adminPages/manageDonation/manageDonationPage.dart';
 import 'package:frontend_web/widgets/centeredView/centeredViewPost.dart';
-
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 Color greenPastel = Color(0xFF00BFA6);
 
@@ -196,32 +197,41 @@ class _ViewDonationMobileState extends State<ViewDonationMobile> {
   }
 
   showAlertDialog(BuildContext context, int id) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text(
-        "Obriši",
-        style: TextStyle(color: Colors.red),
-      ),
-      onPressed: () {
-        APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+    
+    void _doSomething() async {
+      APIServices.deleteDonation(TokenSession.getToken, id).then((res) {
           if (res.statusCode == 200) {
             print("Uspesno brisanje donacije.");
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ManageDonationPage()),
-            );
+            
           }
         });
-      },
+      Timer(Duration(seconds: 1), () {
+          _btnController.success();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ManageDonationPage()),
+          );
+      });
+    }
+    // set up the button
+    Widget okButton = RoundedLoadingButton(
+      child: Text("Obriši", style: TextStyle(color: Colors.white),),
+      controller: _btnController,
+      color: Colors.red,
+      width: 60,
+      height: 40,
+      onPressed: _doSomething,
     );
-    Widget notButton = FlatButton(
-      child: Text(
-        "Otkaži",
-        style: TextStyle(color: greenPastel),
-      ),
+
+    Widget notButton = RoundedLoadingButton(
+       color:greenPastel,
+       width: 60,
+       height: 40,
+       child: Text("Otkaži", style: TextStyle(color: Colors.white),),
       onPressed: () {
         Navigator.pop(context);
-      },
+        },
     );
 
     // set up the AlertDialog
